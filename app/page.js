@@ -328,6 +328,13 @@ return (
 <h2 style={styles.questionTitle}>{current.title}</h2>
 <p style={styles.note}>{current.note}</p>
 
+<div style={styles.multiSelectBox}>
+<span style={styles.multiSelectLabel}>複数選択OK</span>
+<span style={styles.multiSelectText}>
+あてはまるものをいくつでも選んでください
+</span>
+</div>
+
 <div style={styles.options}>
 {current.options.map((option) => {
 const active = selected.includes(option);
@@ -462,7 +469,28 @@ note: {
 fontSize: "15px",
 lineHeight: "1.8",
 color: "rgba(255,255,255,0.75)",
-margin: "0 0 22px",
+margin: "0 0 16px",
+},
+multiSelectBox: {
+display: "grid",
+gap: "4px",
+border: "1px solid rgba(214,181,91,0.55)",
+background: "rgba(214,181,91,0.12)",
+borderRadius: "14px",
+padding: "12px 14px",
+marginBottom: "18px",
+boxSizing: "border-box",
+},
+multiSelectLabel: {
+color: "#d6b55b",
+fontSize: "15px",
+fontWeight: "900",
+},
+multiSelectText: {
+color: "rgba(255,255,255,0.86)",
+fontSize: "13px",
+fontWeight: "700",
+lineHeight: "1.5",
 },
 options: {
 display: "grid",
