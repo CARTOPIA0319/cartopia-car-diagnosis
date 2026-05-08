@@ -2,392 +2,409 @@
 
 import { useState } from "react";
 
-const QUESTIONS = [
+const CATEGORIES = [
 {
 key: "carClass",
-title: "まず、軽自動車と普通車どちらを考えていますか？",
-note: "最初にここを分けると、かなり診断精度が上がります。",
-type: "buttons",
-options: ["軽自動車がいい", "普通車がいい", "まだ迷っている"],
+title: "1. 軽自動車・普通車の希望",
+note: "軽自動車か普通車かは、車選びの大きな分岐です。複数選択できます。",
+placeholder: "例：できれば軽がいいけど、5人乗るなら普通車も考える",
+options: [
+"軽自動車で考えている",
+"普通車で考えている",
+"どちらも候補に入れたい",
+"まだ決めていない",
+"維持費が安ければ軽でもいい",
+"広さが必要なら普通車でもいい",
+"軽自動車は避けたい",
+"大きい車は避けたい",
+],
 },
 {
 key: "usage",
-title: "主な使い方はどれに近いですか？",
-note: "普段の使い方で、車のサイズ感や向き不向きが変わります。",
-type: "buttons",
-options: ["通勤・買い物", "家族で使う", "仕事でも使う", "遠出・レジャー"],
+title: "2. 主な使い方",
+note: "普段どんな場面で使うかを選んでください。",
+placeholder: "例：普段は通勤、週末は子どもの送迎と買い物が多い",
+options: [
+"通勤",
+"買い物",
+"子どもの送迎",
+"家族で使う",
+"夫婦で使う",
+"親の送迎",
+"遠出・旅行",
+"キャンプ・アウトドア",
+"釣り・趣味",
+"スキー・スノーボード",
+"仕事でも使う",
+"農作業・畑で使う",
+"配達・納品",
+"営業・外回り",
+"セカンドカー",
+"初めての車",
+"免許取り立ての人が使う",
+"高齢の家族も乗る",
+],
 },
 {
 key: "people",
-title: "普段は何人で乗ることが多いですか？",
-note: "5人乗りで十分か、6〜7人乗りが必要かを分けます。",
-type: "buttons",
-options: ["1〜2人", "3〜4人", "5人", "たまに6〜7人", "6〜7人をよく使う"],
+title: "3. 乗車人数",
+note: "普段の人数と、たまに乗る最大人数の両方を拾います。",
+placeholder: "例：普段は2人だけど、年に数回だけ家族5人で旅行します",
+options: [
+"普段は1人",
+"普段は1〜2人",
+"普段は3〜4人",
+"普段から5人で乗る",
+"たまに5人で乗る",
+"たまに6〜7人で乗る",
+"6〜7人で乗ることが多い",
+"8人乗れる車がいい",
+"子どもを複数人乗せる",
+"チャイルドシートを使う",
+"高齢者を乗せる",
+"後席はほとんど使わない",
+"後席にも人をよく乗せる",
+],
 },
 {
 key: "cargo",
-title: "よく積みたいものはありますか？",
-note: "例：りんご箱、工具、仕事道具、キャンプ道具、ベビーカーなど。ここがかなり重要です。",
-type: "text",
-placeholder: "例：キャンプ道具を積みたい、りんご箱を積みたい、工具を積みたい",
-},
-{
-key: "priority",
-title: "一番重視したいことは何ですか？",
-note: "維持費・見た目・荷物・雪道など、優先順位で候補が変わります。",
-type: "buttons",
-options: ["維持費の安さ", "運転のしやすさ", "荷物の積みやすさ", "見た目・高級感", "雪道の安心感"],
-},
-{
-key: "budget",
-title: "ご予算感はどれに近いですか？",
-note: "理想候補と現実候補を分けるために使います。",
-type: "buttons",
-options: ["できるだけ抑えたい", "総額100万円前後", "総額150万円前後", "総額200万円以上", "予算は高めでも検討"],
+title: "4. 荷物・積みたいもの",
+note: "りんご箱・仕事道具・キャンプ道具など、何を積むかで候補が大きく変わります。",
+placeholder: "例：りんご箱を20箱くらい積みたい / キャンプ道具とクーラーボックスを積みたい",
+options: [
+"普段の買い物程度",
+"ベビーカー",
+"チャイルドシート",
+"部活道具",
+"キャンプ道具",
+"クーラーボックス",
+"釣り道具",
+"ゴルフバッグ",
+"スキー・スノーボード",
+"自転車",
+"ペット用品",
+"工具",
+"仕事道具",
+"脚立",
+"資材",
+"配達物",
+"りんご箱",
+"コンテナ",
+"農作業用品",
+"汚れ物を積む",
+"長い物を積む",
+"荷物をたくさん積む",
+"車中泊も考えたい",
+"後席を倒して荷室を広く使いたい",
+],
 },
 {
 key: "snow",
-title: "雪道・4WDはどのくらい必要ですか？",
-note: "青森・弘前周辺ではかなり大事な判断軸です。",
-type: "buttons",
-options: ["4WDは必須", "できれば4WD", "2WDでもよい"],
+title: "5. 雪道・4WD",
+note: "弘前・青森周辺ではかなり大事な判断軸です。",
+placeholder: "例：冬の弘前で毎日通勤します。家の前の道が狭くて雪が残りやすいです",
+options: [
+"4WDは必須",
+"できれば4WDがいい",
+"2WDでも問題ない",
+"よく分からない",
+"冬の通勤で使う",
+"山道・坂道を走る",
+"農道・畑道を走る",
+"除雪が弱い道を走る",
+"スキー場に行く",
+"年に数回だけ雪道を走る",
+"雪道より維持費を優先したい",
+"走破性を重視したい",
+"車高が高い車が安心",
+],
+},
+{
+key: "slideDoor",
+title: "6. スライドドア・乗り降り",
+note: "子ども・高齢者・狭い駐車場では重要になります。",
+placeholder: "例：子どもの送迎があるので、できればスライドドアが安心です",
+options: [
+"スライドドアは必須",
+"できればスライドドアが欲しい",
+"スライドドアはなくてもいい",
+"迷っている",
+"子どもの乗り降りで使いたい",
+"高齢者の乗り降りで使いたい",
+"狭い駐車場で便利そう",
+"荷物の出し入れに便利そう",
+"普通のドアの方が好き",
+"スライドドアより見た目を優先したい",
+],
+},
+{
+key: "size",
+title: "7. 車のサイズ感",
+note: "運転しやすさ・駐車場・道路の狭さも考えて選びます。",
+placeholder: "例：運転は苦手なので、大きすぎる車は避けたいです",
+options: [
+"小さい車がいい",
+"運転しやすいサイズがいい",
+"少し大きくても大丈夫",
+"大きくても広さを優先したい",
+"軽自動車くらいのサイズが安心",
+"コンパクトカーくらいがいい",
+"シエンタ・フリードくらいまでならOK",
+"ノア・ヴォクシーくらいでもOK",
+"SUVでも大丈夫",
+"大型SUVでも大丈夫",
+"狭い道をよく走る",
+"駐車場が狭い",
+"会社や家の入口が狭い",
+],
+},
+{
+key: "style",
+title: "8. 見た目・雰囲気",
+note: "高級感・かわいさ・アウトドア感など、好みも大事にします。",
+placeholder: "例：レクサスLXみたいな大きくて高級感のある雰囲気が好きです",
+options: [
+"シンプルで落ち着いた見た目",
+"かわいい雰囲気",
+"やさしい雰囲気",
+"かっこいい見た目",
+"高級感がほしい",
+"存在感がほしい",
+"アウトドアっぽい見た目",
+"SUVっぽい見た目",
+"商用車っぽくない方がいい",
+"実用性重視で見た目は気にしない",
+"レクサスLXみたいな雰囲気が好き",
+"ランドクルーザーみたいな雰囲気が好き",
+"ハリアーみたいな雰囲気が好き",
+"ジムニーみたいな雰囲気が好き",
+"N-BOXみたいな雰囲気が好き",
+],
+},
+{
+key: "budget",
+title: "9. 予算・支払い・新車中古車",
+note: "価格だけでなく、新車・中古車・ローン・リースの考えも拾います。",
+placeholder: "例：安ければ安い方がいいけど、長く乗れるなら高くてもいいです",
+options: [
+"できるだけ安く",
+"総額50万円前後",
+"総額100万円前後",
+"総額150万円前後",
+"総額200万円前後",
+"総額300万円以上も検討",
+"予算は高めでもいい",
+"月々の支払いを抑えたい",
+"ローンで考えている",
+"現金で考えている",
+"新車がいい",
+"新しめの中古車がいい",
+"中古車でも状態が良ければいい",
+"できるだけ安い中古車がいい",
+"未使用車も気になる",
+"新車リースも気になる",
+"良い車なら高くてもいい",
+"安さより状態を重視したい",
+"長く乗れるなら高くてもいい",
+],
+},
+{
+key: "favorite",
+title: "10. 気になる車・最後の自由入力",
+note: "好きな車や、最後に伝えたいことがあれば入れてください。",
+placeholder: "例：レクサスLXみたいな雰囲気が好きだけど、予算的には厳しいかも",
+options: [
+"N-BOX",
+"スペーシア",
+"タント",
+"ハスラー",
+"ジムニー",
+"ソリオ",
+"ルーミー",
+"シエンタ",
+"フリード",
+"ヤリスクロス",
+"ライズ",
+"カローラクロス",
+"ハリアー",
+"ランドクルーザー",
+"レクサスLX",
+"ノア・ヴォクシー",
+"セレナ",
+"プロボックス",
+"エブリイ",
+"N-VAN",
+"特にない",
+],
 },
 ];
 
 export default function Home() {
 const [step, setStep] = useState(0);
 const [answers, setAnswers] = useState({});
-const [textValue, setTextValue] = useState("");
-const [result, setResult] = useState(null);
+const [result, setResult] = useState(false);
 
-const current = QUESTIONS[step];
+const current = CATEGORIES[step];
+const selected = answers[current.key]?.selected || [];
+const memo = answers[current.key]?.memo || "";
 
-function includesAny(text, words) {
-return words.some((word) => text.includes(word));
+function toggleOption(option) {
+const exists = selected.includes(option);
+const nextSelected = exists
+? selected.filter((item) => item !== option)
+: [...selected, option];
+
+setAnswers({
+...answers,
+[current.key]: {
+selected: nextSelected,
+memo,
+},
+});
 }
 
-function saveAnswer(value) {
-const nextAnswers = {
+function updateMemo(value) {
+setAnswers({
 ...answers,
-[current.key]: value,
-};
+[current.key]: {
+selected,
+memo: value,
+},
+});
+}
 
-setAnswers(nextAnswers);
-setTextValue("");
-
-if (step + 1 >= QUESTIONS.length) {
-setResult(makeDiagnosis(nextAnswers));
+function nextStep() {
+if (step + 1 >= CATEGORIES.length) {
+setResult(true);
 } else {
 setStep(step + 1);
+window.scrollTo(0, 0);
 }
 }
 
-function goBack() {
-if (result) {
-setResult(null);
-setStep(QUESTIONS.length - 1);
-return;
-}
-
+function prevStep() {
 if (step > 0) {
-const prevStep = step - 1;
-setStep(prevStep);
-setTextValue(answers[QUESTIONS[prevStep].key] || "");
+setStep(step - 1);
+window.scrollTo(0, 0);
 }
 }
 
 function restart() {
 setStep(0);
 setAnswers({});
-setTextValue("");
-setResult(null);
+setResult(false);
+window.scrollTo(0, 0);
 }
 
-function makeDiagnosis(a) {
-const memo = (a.cargo || "").trim();
-
-const hasAppleBox = includesAny(memo, [
-"りんご",
-"リンゴ",
-"林檎",
-"りんご箱",
-"箱",
-"コンテナ",
-"農家",
-"畑",
-"収穫",
-]);
-
-const hasWorkTools = includesAny(memo, [
-"工具",
-"脚立",
-"仕事道具",
-"資材",
-"配達",
-"現場",
-"仕事",
-"荷台",
-]);
-
-const hasCamp = includesAny(memo, [
-"キャンプ",
-"キャンプ道具",
-"アウトドア",
-"釣り",
-"スキー",
-"スノボ",
-"レジャー",
-"テント",
-"クーラーボックス",
-]);
-
-const hasBaby = includesAny(memo, [
-"ベビーカー",
-"チャイルドシート",
-"子供",
-"子ども",
-"保育園",
-"送迎",
-]);
-
-const wantsKei = a.carClass === "軽自動車がいい";
-const wantsNormal = a.carClass === "普通車がいい";
-const isUnsure = a.carClass === "まだ迷っている";
-const wantsLuxury = a.priority === "見た目・高級感";
-const wantsSnow = a.snow === "4WDは必須" || a.snow === "できれば4WD";
-const highBudget = a.budget === "総額200万円以上" || a.budget === "予算は高めでも検討";
-const manyPeople = a.people === "たまに6〜7人" || a.people === "6〜7人をよく使う";
-const fivePeople = a.people === "5人";
-const leisure = a.usage === "遠出・レジャー";
-const family = a.usage === "家族で使う";
-const work = a.usage === "仕事でも使う";
-
-let title = "";
-let cars = [];
-let reason = "";
-let attention = "";
-let tell = "";
-
-if (wantsKei) {
-if (hasWorkTools || hasAppleBox || work) {
-title = "軽の実用・積載系がおすすめです。";
-cars = ["エブリイ", "N-VAN", "ハイゼットカーゴ", "スペーシアベース"];
-reason =
-"軽自動車希望で、仕事道具・工具・りんご箱などを積みたい場合は、乗用軽よりも荷室の形が大事です。";
-attention =
-"乗り心地や見た目より積載優先なら箱バン系、普段使いも重視するならスペーシアベースや軽ハイト系も候補になります。";
-tell =
-"何を何個くらい積むか、後席を使うかどうかまで伝えると、かなり具体的に絞れます。";
-} else if (hasCamp || leisure || wantsSnow || wantsLuxury) {
-title = "軽SUV・軽ハイト系がおすすめです。";
-cars = ["ハスラー", "タフト", "デリカミニ", "スペーシアギア", "N-BOX"];
-reason =
-"軽自動車でも、レジャー感・雪道・見た目を重視するなら、ハスラーやタフト、デリカミニのような雰囲気のある車種が合いやすいです。";
-attention =
-"本格的な悪路や大きなキャンプ道具まで考えるなら、軽だけでなく普通車SUVも比較した方が安心です。";
-tell =
-"軽にこだわるのか、普通車SUVも見てもいいのかを伝えると提案しやすいです。";
-} else {
-title = "軽ハイトワゴン系がおすすめです。";
-cars = ["N-BOX", "スペーシア", "タント", "ムーヴキャンバス"];
-reason =
-"維持費を抑えながら、通勤・買い物・送迎まで使いやすいのは軽ハイトワゴン系です。室内も広く、日常使いに強いです。";
-attention =
-"高速道路や長距離移動が多い場合は、軽だけに絞ると物足りない場合があります。";
-tell =
-"街乗り中心か、遠出も多いかを伝えると、軽で十分か普通車も見るべきか判断しやすいです。";
-}
-
-return { title, cars, reason, attention, tell };
-}
-
-if (wantsNormal || isUnsure) {
-if (wantsLuxury && highBudget && wantsSnow && (leisure || hasCamp)) {
-title = "高級SUV・大型SUV系がおすすめです。";
-cars = ["レクサスLX", "ランドクルーザー", "ランドクルーザープラド", "ハリアー", "CX-8", "アウトランダーPHEV"];
-reason =
-"遠出・レジャー、4WD、高級感、予算高めが揃う場合は、プロボックスやエブリイではなく大型SUV・上質SUV側に寄せるべきです。";
-attention =
-"レクサスLXやランドクルーザーは理想候補としては強いですが、中古相場は高めです。現実候補としてはプラド、ハリアー、CX-8、アウトランダーPHEVも検討しやすいです。";
-tell =
-"理想はLX・ランクル系なのか、現実的に200万円台から探したいのかを伝えると提案精度が上がります。";
-} else if (hasAppleBox || hasWorkTools) {
-title = "荷物重視の実用車がおすすめです。";
-cars = ["プロボックス", "シエンタ 5人乗り", "フリード＋", "エブリイ", "N-VAN"];
-reason =
-"りんご箱・コンテナ・工具・仕事道具などを積む場合は、荷室の形と開口部の広さが重要です。";
-attention =
-"乗用車としての快適さも欲しいならシエンタ5人乗りやフリード＋、積載重視ならプロボックスや箱バン系が強いです。";
-tell =
-"りんご箱を何個積みたいか、後席を使うか、仕事用か家族兼用かを伝えるとかなり具体的に絞れます。";
-} else if (manyPeople) {
-if (a.people === "6〜7人をよく使う") {
-title = "しっかり使えるミニバン系がおすすめです。";
-cars = ["ノア", "ヴォクシー", "セレナ", "ステップワゴン", "デリカD:5"];
-reason =
-"6〜7人をよく使うなら、シエンタやフリードよりもノア・ヴォクシー・セレナ級の方が後悔しにくいです。";
-attention =
-"車体は大きくなり、維持費も上がります。雪道やアウトドアも重視するならデリカD:5も候補になります。";
-tell =
-"3列目を毎週使うのか、たまに使うだけなのかを伝えると候補が大きく変わります。";
-} else {
-title = "小さめミニバン系がおすすめです。";
-cars = ["シエンタ", "フリード", "ソリオ", "ルーミー"];
-reason =
-"たまに6〜7人乗りたいけど大きすぎる車は避けたい場合は、シエンタ・フリードが有力です。";
-attention =
-"シエンタ・フリードの3列目は常用向きではありません。大人が長時間乗るならノア・ヴォクシー級も検討した方が安心です。";
-tell =
-"5人乗り中心なのか、たまに6〜7人なのかを必ず伝えてください。ここはかなり重要です。";
-}
-} else if (fivePeople) {
-if (wantsLuxury || leisure || hasCamp) {
-title = "5人乗りSUV・上質クロスオーバー系がおすすめです。";
-cars = ["ハリアー", "カローラクロス", "ヤリスクロス", "CX-5", "エクストレイル"];
-reason =
-"5人乗りで十分で、見た目・レジャー・4WDも重視するなら、ミニバンよりSUV系が合いやすいです。";
-attention =
-"荷室の広さは車種差があります。キャンプ道具が多い場合は、見た目だけでなく実際の積載量も確認した方が安心です。";
-tell =
-"5人で乗る頻度、キャンプ道具の量、4WD必須かどうかを伝えると候補を絞れます。";
-} else {
-title = "5人乗り実用車がおすすめです。";
-cars = ["シエンタ 5人乗り", "フリード＋", "ソリオ", "ルーミー"];
-reason =
-"5人乗りで十分なら、無理に3列シートにするより荷室や普段の使いやすさを重視した方が満足度が高いです。";
-attention =
-"同じシエンタ・フリードでも、5人乗りと3列仕様では荷室の使い勝手が変わります。";
-tell =
-"5人乗りで十分なのか、たまに6〜7人乗る可能性があるのかを伝えてください。";
-}
-} else if (family || hasBaby) {
-title = "家族向けスライドドア車がおすすめです。";
-cars = ["シエンタ", "フリード", "ソリオ", "ルーミー", "N-BOX"];
-reason =
-"家族利用では、スライドドア・乗り降りのしやすさ・荷物の積みやすさが大事です。";
-attention =
-"チャイルドシートやベビーカーを使う場合は、スライドドアの便利さがかなり効きます。";
-tell =
-"子どもの人数、チャイルドシートの有無、ベビーカーを積むかを伝えると絞りやすいです。";
-} else if (leisure || hasCamp || wantsSnow) {
-title = "コンパクトSUV・4WD系がおすすめです。";
-cars = wantsSnow
-? ["ヤリスクロス 4WD", "ライズ 4WD", "カローラクロス 4WD", "エクストレイル", "CX-5"]
-: ["ヤリスクロス", "ライズ", "カローラクロス", "CX-5"];
-reason =
-"遠出・レジャー・雪道を考えるなら、コンパクトSUVや4WD設定のある車種が候補になります。";
-attention =
-"SUVは人気が高く、同じ予算だと年式や走行距離の条件が少し落ちる場合があります。";
-tell =
-"雪道をどのくらい走るか、キャンプ道具をどの程度積むかを伝えると候補が絞れます。";
-} else if (wantsLuxury) {
-title = "見た目と質感を重視した車種がおすすめです。";
-cars = ["ハリアー", "カローラクロス", "ヤリスクロス", "MAZDA3", "インプレッサ"];
-reason =
-"見た目や質感を重視するなら、コンパクトSUVや上質系ハッチバックが候補になります。";
-attention =
-"見た目重視に寄せると、維持費や積載性では少し妥協が必要になる場合があります。";
-tell =
-"見た目優先か、維持費優先か、雪道優先かを伝えると提案しやすいです。";
-} else {
-title = "扱いやすいコンパクトカーがおすすめです。";
-cars = ["フィット", "ヤリス", "ノート", "アクア", "ソリオ"];
-reason =
-"日常使い・燃費・運転のしやすさのバランスを考えると、コンパクトカーが無難で失敗しにくいです。";
-attention =
-"荷物が多い、スライドドアが欲しい、雪道が不安という場合は、ソリオ・ルーミー・SUV系も比較した方が良いです。";
-tell =
-"普段の使い方と、軽でもいいのか普通車がいいのかを伝えると絞りやすいです。";
-}
-}
-
-return { title, cars, reason, attention, tell };
+function buildSummary() {
+return CATEGORIES.map((category) => {
+const answer = answers[category.key] || { selected: [], memo: "" };
+return {
+title: category.title,
+selected: answer.selected,
+memo: answer.memo,
+};
+});
 }
 
 return (
 <main style={styles.page}>
 <section style={styles.card}>
 <div style={styles.brand}>CARTOPIA</div>
-
 <h1 style={styles.title}>ぴったり車種診断</h1>
 
 {!result ? (
 <>
 <div style={styles.progress}>
-{step + 1} / {QUESTIONS.length}
+{step + 1} / {CATEGORIES.length}
 </div>
 
 <h2 style={styles.questionTitle}>{current.title}</h2>
 <p style={styles.note}>{current.note}</p>
 
-{current.type === "buttons" && (
 <div style={styles.options}>
-{current.options.map((option) => (
-<button key={option} style={styles.optionButton} onClick={() => saveAnswer(option)}>
-{option}
+{current.options.map((option) => {
+const active = selected.includes(option);
+return (
+<button
+key={option}
+type="button"
+style={{
+...styles.optionButton,
+...(active ? styles.optionButtonActive : {}),
+}}
+onClick={() => toggleOption(option)}
+>
+<span style={styles.checkBox}>{active ? "✓" : ""}</span>
+<span>{option}</span>
 </button>
-))}
+);
+})}
 </div>
-)}
 
-{current.type === "text" && (
-<div style={styles.form}>
+<label style={styles.memoLabel}>
+補足があれば自由に入力してください
 <textarea
 style={styles.textarea}
-value={textValue}
-onChange={(e) => setTextValue(e.target.value)}
+value={memo}
+onChange={(e) => updateMemo(e.target.value)}
 placeholder={current.placeholder}
 />
-
-<button style={styles.button} onClick={() => saveAnswer(textValue || "特になし")}>
-次へ
-</button>
-</div>
-)}
+</label>
 
 <div style={styles.nav}>
 {step > 0 && (
-<button style={styles.backButton} onClick={goBack}>
+<button type="button" style={styles.backButton} onClick={prevStep}>
 戻る
 </button>
 )}
+
+<button type="button" style={styles.button} onClick={nextStep}>
+{step + 1 >= CATEGORIES.length ? "回答をまとめる" : "次へ"}
+</button>
 </div>
 </>
 ) : (
 <>
-<p style={styles.resultLabel}>診断結果</p>
-<h2 style={styles.resultTitle}>{result.title}</h2>
+<p style={styles.resultLabel}>回答内容まとめ</p>
+<h2 style={styles.resultTitle}>
+次の段階で、この内容をAIに渡して車種診断します。
+</h2>
 
-<div style={styles.cars}>
-{result.cars.map((car) => (
-<span key={car} style={styles.carTag}>
-{car}
+<div style={styles.summaryList}>
+{buildSummary().map((item) => (
+<div key={item.title} style={styles.summaryCard}>
+<p style={styles.summaryTitle}>{item.title}</p>
+
+{item.selected.length > 0 ? (
+<div style={styles.tagList}>
+{item.selected.map((selectedItem) => (
+<span key={selectedItem} style={styles.tag}>
+{selectedItem}
 </span>
 ))}
 </div>
+) : (
+<p style={styles.empty}>選択なし</p>
+)}
 
-<p style={styles.sectionTitle}>理由</p>
-<p style={styles.resultText}>{result.reason}</p>
-
-<p style={styles.sectionTitle}>注意点</p>
-<p style={styles.resultText}>{result.attention}</p>
-
-<p style={styles.sectionTitle}>カーとぴあに相談するなら</p>
-<p style={styles.resultText}>{result.tell}</p>
-
-<div style={styles.resultButtons}>
-<button style={styles.button} onClick={restart}>
-もう一度診断する
-</button>
-<button style={styles.backButton} onClick={goBack}>
-前の質問に戻る
-</button>
+{item.memo ? (
+<p style={styles.memoText}>{item.memo}</p>
+) : (
+<p style={styles.empty}>補足なし</p>
+)}
 </div>
+))}
+</div>
+
+<button type="button" style={styles.button} onClick={restart}>
+もう一度入力する
+</button>
 </>
 )}
 
 <p style={styles.small}>
-※これは簡易診断です。実際の在庫状況やご希望条件に合わせて、スタッフがより詳しくご提案します。
+※現在はAI診断前の入力フォーム版です。次の段階で、最後にAIが車種候補・理由・注意点を出す形にします。
 </p>
 </section>
 </main>
@@ -404,7 +421,7 @@ fontFamily:
 '-apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif',
 },
 card: {
-maxWidth: "540px",
+maxWidth: "560px",
 margin: "0 auto",
 border: "1px solid rgba(255,255,255,0.16)",
 borderRadius: "22px",
@@ -416,7 +433,7 @@ brand: {
 color: "#d6b55b",
 fontSize: "14px",
 letterSpacing: "0.18em",
-fontWeight: "800",
+fontWeight: "900",
 marginBottom: "18px",
 },
 title: {
@@ -428,11 +445,11 @@ fontWeight: "900",
 progress: {
 color: "#d6b55b",
 fontSize: "14px",
-fontWeight: "800",
+fontWeight: "900",
 marginBottom: "14px",
 },
 questionTitle: {
-fontSize: "24px",
+fontSize: "23px",
 lineHeight: "1.45",
 margin: "0 0 12px",
 fontWeight: "900",
@@ -445,26 +462,50 @@ margin: "0 0 22px",
 },
 options: {
 display: "grid",
-gap: "12px",
+gap: "10px",
 },
 optionButton: {
 width: "100%",
 border: "1px solid rgba(255,255,255,0.18)",
 borderRadius: "14px",
-padding: "16px",
+padding: "14px",
 background: "#ffffff",
 color: "#111827",
-fontSize: "17px",
+fontSize: "16px",
 fontWeight: "800",
 textAlign: "left",
+display: "flex",
+alignItems: "center",
+gap: "10px",
 },
-form: {
+optionButtonActive: {
+background: "#d6b55b",
+color: "#07111f",
+border: "1px solid #d6b55b",
+},
+checkBox: {
+width: "22px",
+height: "22px",
+borderRadius: "6px",
+border: "1px solid rgba(17,24,39,0.45)",
+display: "inline-flex",
+alignItems: "center",
+justifyContent: "center",
+fontSize: "15px",
+fontWeight: "900",
+flexShrink: 0,
+},
+memoLabel: {
 display: "grid",
-gap: "14px",
+gap: "9px",
+marginTop: "22px",
+fontSize: "15px",
+fontWeight: "900",
+color: "rgba(255,255,255,0.9)",
 },
 textarea: {
 width: "100%",
-minHeight: "120px",
+minHeight: "110px",
 borderRadius: "14px",
 border: "1px solid rgba(255,255,255,0.18)",
 background: "#ffffff",
@@ -472,6 +513,11 @@ color: "#111827",
 padding: "14px",
 fontSize: "16px",
 lineHeight: "1.7",
+},
+nav: {
+display: "grid",
+gap: "12px",
+marginTop: "22px",
 },
 button: {
 border: "none",
@@ -481,9 +527,6 @@ background: "#d6b55b",
 color: "#07111f",
 fontSize: "17px",
 fontWeight: "900",
-},
-nav: {
-marginTop: "18px",
 },
 backButton: {
 border: "1px solid rgba(255,255,255,0.24)",
@@ -501,43 +544,55 @@ fontWeight: "900",
 margin: "0 0 10px",
 },
 resultTitle: {
-fontSize: "24px",
+fontSize: "22px",
 lineHeight: "1.5",
 margin: "0 0 18px",
 fontWeight: "900",
 },
-cars: {
-display: "flex",
-flexWrap: "wrap",
-gap: "10px",
-marginBottom: "20px",
+summaryList: {
+display: "grid",
+gap: "14px",
+marginBottom: "22px",
 },
-carTag: {
-display: "inline-block",
-border: "1px solid rgba(214,181,91,0.6)",
-borderRadius: "999px",
-padding: "9px 13px",
-color: "#f6e7a6",
-fontSize: "14px",
-fontWeight: "900",
-background: "rgba(0,0,0,0.2)",
+summaryCard: {
+border: "1px solid rgba(255,255,255,0.14)",
+borderRadius: "16px",
+padding: "16px",
+background: "rgba(0,0,0,0.18)",
 },
-sectionTitle: {
+summaryTitle: {
 color: "#d6b55b",
 fontSize: "15px",
 fontWeight: "900",
-margin: "18px 0 7px",
+margin: "0 0 10px",
 },
-resultText: {
-fontSize: "15px",
-lineHeight: "1.85",
+tagList: {
+display: "flex",
+flexWrap: "wrap",
+gap: "8px",
+marginBottom: "10px",
+},
+tag: {
+display: "inline-block",
+border: "1px solid rgba(214,181,91,0.6)",
+borderRadius: "999px",
+padding: "7px 10px",
+color: "#f6e7a6",
+fontSize: "13px",
+fontWeight: "800",
+background: "rgba(0,0,0,0.2)",
+},
+memoText: {
+fontSize: "14px",
+lineHeight: "1.7",
+color: "rgba(255,255,255,0.86)",
 margin: 0,
-color: "rgba(255,255,255,0.88)",
+whiteSpace: "pre-line",
 },
-resultButtons: {
-display: "grid",
-gap: "12px",
-marginTop: "24px",
+empty: {
+fontSize: "13px",
+color: "rgba(255,255,255,0.5)",
+margin: "0 0 8px",
 },
 small: {
 marginTop: "24px",
