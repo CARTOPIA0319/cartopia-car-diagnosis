@@ -242,7 +242,9 @@ options: [
 export default function Home() {
 const [step, setStep] = useState(0);
 const [answers, setAnswers] = useState({});
-const [result, setResult] = useState(false);
+const [result, setResult] = useState("");
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState("");
 
 const current = CATEGORIES[step];
 const selected = answers[current.key]?.selected || [];
@@ -275,7 +277,7 @@ memo: value,
 
 function nextStep() {
 if (step + 1 >= CATEGORIES.length) {
-setResult(true);
+runAiDiagnosis();
 } else {
 setStep(step + 1);
 window.scrollTo(0, 0);
@@ -292,7 +294,9 @@ window.scrollTo(0, 0);
 function restart() {
 setStep(0);
 setAnswers({});
-setResult(false);
+setResult("");
+setError("");
+setLoading(false);
 window.scrollTo(0, 0);
 }
 
@@ -307,13 +311,44 @@ memo: answer.memo,
 });
 }
 
+async function runAiDiagnosis() {
+setLoading(true);
+setError("");
+setResult("");
+window.scrollTo(0, 0);
+
+try {
+const response = await fetch("/api/diagnose", {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify({
+answers: buildSummary(),
+}),
+});
+
+const data = await response.json();
+
+if (!response.ok) {
+throw new Error(data.error || "診断に失敗しました");
+}
+
+setResult(data.result || "診断結果を取得できませんでした。");
+} catch (err) {
+setError(err.message || "エラーが発生しました。");
+} finally {
+setLoading(false);
+}
+}
+
 return (
 <main style={styles.page}>
 <section style={styles.card}>
 <div style={styles.brand}>CARTOPIA</div>
 <h1 style={styles.title}>ぴったり車種診断</h1>
 
-{!result ? (
+{!result && !loading && !error ? (
 <>
 <div style={styles.progress}>
 {step + 1} / {CATEGORIES.length}
@@ -360,51 +395,47 @@ placeholder={current.placeholder}
 )}
 
 <button type="button" style={styles.button} onClick={nextStep}>
-{step + 1 >= CATEGORIES.length ? "回答をまとめる" : "次へ"}
+{step + 1 >= CATEGORIES.length ? "AIで診断する" : "次へ"}
 </button>
 </div>
 </>
-) : (
-<>
-<p style={styles.resultLabel}>回答内容まとめ</p>
-<h2 style={styles.resultTitle}>
-次の段階で、この内容をAIに渡して車種診断します。
-</h2>
+) : null}
 
-<div style={styles.summaryList}>
-{buildSummary().map((item) => (
-<div key={item.title} style={styles.summaryCard}>
-<p style={styles.summaryTitle}>{item.title}</p>
+{loading ? (
+<div style={styles.resultBox}>
+<p style={styles.resultLabel}>診断中</p>
+<p style={styles.resultText}>
+回答内容をAIが整理しています。少しだけお待ちください。
+</p>
+</div>
+) : null}
 
-{item.selected.length > 0 ? (
-<div style={styles.tagList}>
-{item.selected.map((selectedItem) => (
-<span key={selectedItem} style={styles.tag}>
-{selectedItem}
-</span>
-))}
+{error ? (
+<div style={styles.resultBox}>
+<p style={styles.resultLabel}>エラー</p>
+<p style={styles.resultText}>{error}</p>
+<button type="button" style={styles.button} onClick={runAiDiagnosis}>
+もう一度診断する
+</button>
+<button type="button" style={styles.backButton} onClick={restart}>
+最初からやり直す
+</button>
 </div>
-) : (
-<p style={styles.empty}>選択なし</p>
-)}
+) : null}
 
-{item.memo ? (
-<p style={styles.memoText}>{item.memo}</p>
-) : (
-<p style={styles.empty}>補足なし</p>
-)}
-</div>
-))}
-</div>
+{result ? (
+<div style={styles.resultBox}>
+<p style={styles.resultLabel}>AI診断結果</p>
+<div style={styles.aiText}>{result}</div>
 
 <button type="button" style={styles.button} onClick={restart}>
-もう一度入力する
+もう一度診断する
 </button>
-</>
-)}
+</div>
+) : null}
 
 <p style={styles.small}>
-※現在はAI診断前の入力フォーム版です。次の段階で、最後にAIが車種候補・理由・注意点を出す形にします。
+※これはAIによる簡易診断です。実際の在庫状況やご希望条件に合わせて、スタッフがより詳しくご提案します。
 </p>
 </section>
 </main>
@@ -527,6 +558,7 @@ background: "#d6b55b",
 color: "#07111f",
 fontSize: "17px",
 fontWeight: "900",
+marginTop: "14px",
 },
 backButton: {
 border: "1px solid rgba(255,255,255,0.24)",
@@ -536,63 +568,30 @@ background: "transparent",
 color: "#ffffff",
 fontSize: "15px",
 fontWeight: "800",
+marginTop: "10px",
+},
+resultBox: {
+border: "1px solid rgba(214,181,91,0.45)",
+borderRadius: "16px",
+padding: "18px",
+background: "rgba(214,181,91,0.1)",
 },
 resultLabel: {
 color: "#d6b55b",
+fontSize: "16px",
+fontWeight: "900",
+margin: "0 0 12px",
+},
+resultText: {
 fontSize: "15px",
-fontWeight: "900",
-margin: "0 0 10px",
+lineHeight: "1.8",
+color: "rgba(255,255,255,0.9)",
 },
-resultTitle: {
-fontSize: "22px",
-lineHeight: "1.5",
-margin: "0 0 18px",
-fontWeight: "900",
-},
-summaryList: {
-display: "grid",
-gap: "14px",
-marginBottom: "22px",
-},
-summaryCard: {
-border: "1px solid rgba(255,255,255,0.14)",
-borderRadius: "16px",
-padding: "16px",
-background: "rgba(0,0,0,0.18)",
-},
-summaryTitle: {
-color: "#d6b55b",
-fontSize: "15px",
-fontWeight: "900",
-margin: "0 0 10px",
-},
-tagList: {
-display: "flex",
-flexWrap: "wrap",
-gap: "8px",
-marginBottom: "10px",
-},
-tag: {
-display: "inline-block",
-border: "1px solid rgba(214,181,91,0.6)",
-borderRadius: "999px",
-padding: "7px 10px",
-color: "#f6e7a6",
-fontSize: "13px",
-fontWeight: "800",
-background: "rgba(0,0,0,0.2)",
-},
-memoText: {
-fontSize: "14px",
-lineHeight: "1.7",
-color: "rgba(255,255,255,0.86)",
-margin: 0,
+aiText: {
 whiteSpace: "pre-line",
-},
-empty: {
-fontSize: "13px",
-color: "rgba(255,255,255,0.5)",
-margin: "0 0 8px",
+fontSize: "15px",
+lineHeight: "1.85",
+color: "rgba(255,255,255,0.92)",
 },
 small: {
 marginTop: "24px",
