@@ -613,11 +613,41 @@ placeholder={current.placeholder}
 ) : null}
 
 {loading ? (
-<div style={styles.resultBox}>
-<p style={styles.resultLabel}>診断中</p>
-<p style={styles.resultText}>
-カーとぴあが、あなたにぴったりの車を考えています。少しだけお待ちください。
+<div style={styles.loadingBox}>
+<p style={styles.loadingLabel}>診断中</p>
+
+<p style={styles.loadingMain}>
+カーとぴあが、あなたにぴったりの車を考えています。
 </p>
+
+<div style={styles.waitBox}>
+<p style={styles.waitTitle}>少しだけお待ちください</p>
+<p style={styles.waitText}>
+診断は30秒程度かかることがあります。
+<br />
+画面はこのままでお待ちください。
+</p>
+</div>
+
+<div style={styles.promoBox}>
+<p style={styles.promoCatch}>弘前から、車選びの新しい形を。</p>
+
+<p style={styles.promoText}>
+カーとぴあは、地元の車屋だからこそできる安心感と、
+これからの時代に合った分かりやすい提案を大切にしています。
+</p>
+
+<div style={styles.promoStrongBox}>
+<p style={styles.promoStrong}>買うときはお得に。</p>
+<p style={styles.promoStrong}>売るときは高く。</p>
+</div>
+
+<p style={styles.promoText}>
+弘前に、青森に、こんな車屋があってよかった。
+<br />
+そう思ってもらえる会社を目指して、あなたと一緒に成長していきます。
+</p>
+</div>
 </div>
 ) : null}
 
@@ -861,6 +891,80 @@ fontSize: "15px",
 fontWeight: "800",
 marginTop: "10px",
 boxSizing: "border-box",
+},
+loadingBox: {
+border: "1px solid rgba(214,181,91,0.45)",
+borderRadius: "18px",
+padding: "20px",
+background: "rgba(214,181,91,0.09)",
+boxSizing: "border-box",
+},
+loadingLabel: {
+color: "#d6b55b",
+fontSize: "18px",
+fontWeight: "900",
+margin: "0 0 14px",
+},
+loadingMain: {
+fontSize: "18px",
+lineHeight: "1.8",
+color: "rgba(255,255,255,0.96)",
+fontWeight: "900",
+margin: "0 0 16px",
+},
+waitBox: {
+border: "1px solid rgba(255,255,255,0.16)",
+borderRadius: "14px",
+padding: "14px",
+background: "rgba(255,255,255,0.06)",
+marginBottom: "18px",
+boxSizing: "border-box",
+},
+waitTitle: {
+color: "#ffffff",
+fontSize: "15px",
+fontWeight: "900",
+margin: "0 0 8px",
+},
+waitText: {
+color: "rgba(255,255,255,0.78)",
+fontSize: "13px",
+fontWeight: "700",
+lineHeight: "1.7",
+margin: 0,
+},
+promoBox: {
+border: "1px solid rgba(214,181,91,0.38)",
+borderRadius: "16px",
+padding: "16px",
+background: "rgba(7,17,31,0.55)",
+boxSizing: "border-box",
+},
+promoCatch: {
+color: "#d6b55b",
+fontSize: "17px",
+fontWeight: "900",
+lineHeight: "1.6",
+margin: "0 0 10px",
+},
+promoText: {
+color: "rgba(255,255,255,0.86)",
+fontSize: "13px",
+fontWeight: "700",
+lineHeight: "1.8",
+margin: "0 0 12px",
+},
+promoStrongBox: {
+borderLeft: "4px solid #d6b55b",
+paddingLeft: "12px",
+margin: "14px 0",
+},
+promoStrong: {
+color: "#ffffff",
+fontSize: "18px",
+fontWeight: "900",
+lineHeight: "1.45",
+margin: "0 0 4px",
 },
 resultBox: {
 border: "1px solid rgba(214,181,91,0.45)",
