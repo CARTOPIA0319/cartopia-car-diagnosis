@@ -583,7 +583,7 @@ onClick={() => toggleOption(option)}
 <div style={styles.freeInputBox}>
 <span style={styles.freeInputLabel}>ぴったり精度アップのポイント！</span>
 <span style={styles.freeInputText}>
-迷っていることや使い方を書いてくれると、カーとぴあがもっとぴったりの車を提案しやすくなります。
+下の自由入力欄に自分の想いを書いてくれると、カーとぴあがよりぴったりの車を提案してくれるよ❣️
 </span>
 <span style={styles.freeInputOptional}>※自由入力は任意です</span>
 </div>
