@@ -616,7 +616,7 @@ placeholder={current.placeholder}
 <div style={styles.resultBox}>
 <p style={styles.resultLabel}>診断中</p>
 <p style={styles.resultText}>
-回答内容をAIが整理しています。少しだけお待ちください。
+カーとぴあが、あなたにぴったりの車を考えています。少しだけお待ちください。
 </p>
 </div>
 ) : null}
