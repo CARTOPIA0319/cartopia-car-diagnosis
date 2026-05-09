@@ -581,17 +581,15 @@ onClick={() => toggleOption(option)}
 </div>
 
 <div style={styles.freeInputBox}>
-<span style={styles.freeInputLabel}>自由入力は任意です</span>
+<span style={styles.freeInputLabel}>ぴったり精度アップのポイント！</span>
 <span style={styles.freeInputText}>
-詳しく書くほど、AI診断の精度が上がります。
+迷っていることや使い方を書いてくれると、カーとぴあがもっとぴったりの車を提案しやすくなります。
 </span>
-<span style={styles.freeInputExample}>
-例：子どもの自転車を積みたい／冬道が不安／今は軽だけど普通車も迷っている
-</span>
+<span style={styles.freeInputOptional}>※自由入力は任意です</span>
 </div>
 
 <label style={styles.memoLabel}>
-補足があれば入力してください
+自由入力欄
 <textarea
 style={styles.textarea}
 value={memo}
@@ -785,7 +783,7 @@ flexShrink: 0,
 },
 freeInputBox: {
 display: "grid",
-gap: "6px",
+gap: "7px",
 border: "1px solid rgba(214,181,91,0.55)",
 background: "rgba(214,181,91,0.12)",
 borderRadius: "14px",
@@ -802,13 +800,13 @@ freeInputText: {
 color: "rgba(255,255,255,0.92)",
 fontSize: "14px",
 fontWeight: "800",
-lineHeight: "1.55",
+lineHeight: "1.65",
 },
-freeInputExample: {
-color: "rgba(255,255,255,0.72)",
+freeInputOptional: {
+color: "rgba(255,255,255,0.68)",
 fontSize: "12px",
 fontWeight: "700",
-lineHeight: "1.7",
+lineHeight: "1.5",
 },
 memoLabel: {
 display: "grid",
