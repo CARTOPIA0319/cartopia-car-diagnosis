@@ -427,10 +427,6 @@ const current = CATEGORIES[step];
 const selected = answers[current.key]?.selected || [];
 const memo = answers[current.key]?.memo || "";
 
-function allOptions(category) {
-return category.groups.flatMap((group) => group.options);
-}
-
 function toggleOption(option) {
 const exists = selected.includes(option);
 const nextSelected = exists
@@ -484,6 +480,7 @@ window.scrollTo(0, 0);
 function buildSummary() {
 return CATEGORIES.map((category) => {
 const answer = answers[category.key] || { selected: [], memo: "" };
+
 return {
 title: category.title,
 groups: category.groups.map((group) => ({
@@ -530,7 +527,14 @@ setLoading(false);
 return (
 <main style={styles.page}>
 <section style={styles.card}>
-<div style={styles.brand}>CARTOPIA</div>
+<div style={styles.logoWrap}>
+<img
+src="/cartopia-logo.png"
+alt="カーとぴあ CARTOPIA"
+style={styles.logoImage}
+/>
+</div>
+
 <h1 style={styles.title}>ぴったり車種診断</h1>
 
 {!result && !loading && !error ? (
@@ -556,6 +560,7 @@ return (
 
 {group.options.map((option) => {
 const active = selected.includes(option);
+
 return (
 <button
 key={option}
@@ -576,9 +581,12 @@ onClick={() => toggleOption(option)}
 </div>
 
 <div style={styles.freeInputBox}>
-<span style={styles.freeInputLabel}>任意入力</span>
+<span style={styles.freeInputLabel}>自由入力は任意です</span>
 <span style={styles.freeInputText}>
-迷っていること・使い方・補足を書くと、診断の精度が上がります
+詳しく書くほど、AI診断の精度が上がります。
+</span>
+<span style={styles.freeInputExample}>
+例：子どもの自転車を積みたい／冬道が不安／今は軽だけど普通車も迷っている
 </span>
 </div>
 
@@ -619,9 +627,11 @@ placeholder={current.placeholder}
 <div style={styles.resultBox}>
 <p style={styles.resultLabel}>エラー</p>
 <p style={styles.resultText}>{error}</p>
+
 <button type="button" style={styles.button} onClick={runAiDiagnosis}>
 もう一度診断する
 </button>
+
 <button type="button" style={styles.backButton} onClick={restart}>
 最初からやり直す
 </button>
@@ -662,23 +672,30 @@ maxWidth: "560px",
 margin: "0 auto",
 border: "1px solid rgba(255,255,255,0.16)",
 borderRadius: "22px",
-padding: "28px 22px",
+padding: "26px 22px 28px",
 background: "rgba(255,255,255,0.03)",
 boxShadow: "0 18px 40px rgba(0,0,0,0.28)",
 boxSizing: "border-box",
 },
-brand: {
-color: "#d6b55b",
-fontSize: "14px",
-letterSpacing: "0.18em",
-fontWeight: "900",
+logoWrap: {
+display: "flex",
+justifyContent: "center",
+alignItems: "center",
 marginBottom: "18px",
+},
+logoImage: {
+width: "240px",
+maxWidth: "82%",
+height: "auto",
+display: "block",
+borderRadius: "12px",
 },
 title: {
 fontSize: "34px",
 lineHeight: "1.25",
 margin: "0 0 22px",
 fontWeight: "900",
+textAlign: "center",
 },
 progress: {
 color: "#d6b55b",
@@ -768,24 +785,30 @@ flexShrink: 0,
 },
 freeInputBox: {
 display: "grid",
-gap: "4px",
-border: "1px solid rgba(255,255,255,0.18)",
-background: "rgba(255,255,255,0.06)",
+gap: "6px",
+border: "1px solid rgba(214,181,91,0.55)",
+background: "rgba(214,181,91,0.12)",
 borderRadius: "14px",
-padding: "12px 14px",
+padding: "14px",
 marginTop: "24px",
 boxSizing: "border-box",
 },
 freeInputLabel: {
 color: "#d6b55b",
-fontSize: "15px",
+fontSize: "16px",
 fontWeight: "900",
 },
 freeInputText: {
-color: "rgba(255,255,255,0.86)",
-fontSize: "13px",
+color: "rgba(255,255,255,0.92)",
+fontSize: "14px",
+fontWeight: "800",
+lineHeight: "1.55",
+},
+freeInputExample: {
+color: "rgba(255,255,255,0.72)",
+fontSize: "12px",
 fontWeight: "700",
-lineHeight: "1.5",
+lineHeight: "1.7",
 },
 memoLabel: {
 display: "grid",
