@@ -71,38 +71,58 @@ function extractInput(html, key) {
   return html.match(regex)?.[1] || null;
 }
 
-function findInputsByKeyword(html, keyword) {
-  const regex = /<input[^>]+>/gi;
-  const results = [];
+function cleanGradeName(text) {
+  if (!text) return null;
 
-  for (const match of html.matchAll(regex)) {
-    const tag = match[0];
-
-    if (tag.toLowerCase().includes(keyword.toLowerCase())) {
-      results.push(tag);
-    }
-  }
-
-  return results.slice(0, 30);
+  return text
+    .replace(/\(5名\)/g, "")
+    .replace(/\(5蜷�\)/g, "")
+    .trim();
 }
 
-function findSelectsByKeyword(html, keyword) {
-  const regex = /<select[\s\S]*?<\/select>/gi;
-  const results = [];
+function mapVehicle(values) {
+  const brandMap = {
+    "1045": "スバル",
+  };
 
-  for (const match of html.matchAll(regex)) {
-    const tag = match[0];
+  const modelMap = {
+    "10451015": "インプレッサスポーツ",
+  };
 
-    if (tag.toLowerCase().includes(keyword.toLowerCase())) {
-      results.push(
-        tag
-          .replace(/\s+/g, " ")
-          .substring(0, 1500)
-      );
-    }
-  }
+  const gradeMap = {
+    "43|5": "２．０ｉ－Ｌアイサイト",
+  };
 
-  return results.slice(0, 10);
+  const bodyColorMap = {
+    "1022": "パールホワイト",
+  };
+
+  const colorCodeMap = {
+    K1X: "クリスタルホワイトパール",
+  };
+
+  return {
+    brand:
+      brandMap[values.brandCode] || values.brandText,
+
+    car:
+      modelMap[values.modelCode] || values.modelText,
+
+    grade:
+      gradeMap[values.gradeCode] || cleanGradeName(values.gradeText),
+
+    kata:
+      values.kataText || values.kataName,
+
+    colorCode:
+      values.colorCode,
+
+    color:
+      colorCodeMap[values.colorCode] || values.catalogColor,
+
+    bodyColor:
+      bodyColorMap[values.bodyColorCode] || values.bodyColorText,
+  };
 }
 
 export async function GET() {
@@ -173,46 +193,65 @@ export async function GET() {
 
     const editHtml = await edit.text();
 
+    const values = {
+      brandCode: extractSelectValue(editHtml, "BrandName"),
+      brandText: extractSelectText(editHtml, "BrandName"),
+
+      modelCode: extractSelectValue(editHtml, "ModelName"),
+      modelText: extractSelectText(editHtml, "ModelName"),
+
+      gradeCode: extractSelectValue(editHtml, "Grade"),
+      gradeText: extractSelectText(editHtml, "Grade"),
+
+      kataCode: extractSelectValue(editHtml, "Kata"),
+      kataText: extractSelectText(editHtml, "Kata"),
+      kataName: extractInput(editHtml, "KataName"),
+
+      colorCode: extractInput(editHtml, "ColorCodeSerch"),
+      catalogColor: extractInput(editHtml, "CatColor"),
+      advertisedColor: extractInput(editHtml, "AdColorName"),
+
+      bodyColorCode: extractSelectValue(editHtml, "ColorBody"),
+      bodyColorText: extractSelectText(editHtml, "ColorBody"),
+
+      year: extractSelectValue(editHtml, "AdY"),
+      month: extractSelectValue(editHtml, "AdM"),
+
+      mileage: extractInput(editHtml, "Soukou"),
+      price: extractInput(editHtml, "Kakaku"),
+      totalPrice: extractInput(editHtml, "TotalPrice"),
+      chassisNumber: extractInput(editHtml, "SyadaiNum"),
+    };
+
+    const mapped = mapVehicle(values);
+
     return Response.json({
       success: true,
-      stockId,
 
-      selectedValues: {
-        BrandName: extractSelectValue(editHtml, "BrandName"),
-        ModelName: extractSelectValue(editHtml, "ModelName"),
-        Grade: extractSelectValue(editHtml, "Grade"),
-        Kata: extractSelectValue(editHtml, "Kata"),
-        AdY: extractSelectValue(editHtml, "AdY"),
-        AdM: extractSelectValue(editHtml, "AdM")
+      vehicle: {
+        stockId,
+        stockStatus,
+
+        brand: mapped.brand,
+        car: mapped.car,
+        grade: mapped.grade,
+        kata: mapped.kata,
+
+        year: values.year,
+        month: values.month,
+
+        mileage: values.mileage,
+        price: values.price,
+        totalPrice: values.totalPrice,
+
+        colorCode: mapped.colorCode,
+        color: mapped.color,
+        bodyColor: mapped.bodyColor,
+
+        chassisNumber: values.chassisNumber,
       },
 
-      selectedTexts: {
-        BrandName: extractSelectText(editHtml, "BrandName"),
-        ModelName: extractSelectText(editHtml, "ModelName"),
-        Grade: extractSelectText(editHtml, "Grade"),
-        Kata: extractSelectText(editHtml, "Kata"),
-        AdY: extractSelectText(editHtml, "AdY"),
-        AdM: extractSelectText(editHtml, "AdM")
-      },
-
-      inputs: {
-        brand: findInputsByKeyword(editHtml, "brand"),
-        model: findInputsByKeyword(editHtml, "model"),
-        grade: findInputsByKeyword(editHtml, "grade"),
-        color: findInputsByKeyword(editHtml, "color"),
-        kata: findInputsByKeyword(editHtml, "kata"),
-        syadai: findInputsByKeyword(editHtml, "syadai"),
-        soukou: findInputsByKeyword(editHtml, "soukou"),
-        kakaku: findInputsByKeyword(editHtml, "kakaku")
-      },
-
-      selects: {
-        brand: findSelectsByKeyword(editHtml, "brand"),
-        model: findSelectsByKeyword(editHtml, "model"),
-        grade: findSelectsByKeyword(editHtml, "grade"),
-        color: findSelectsByKeyword(editHtml, "color"),
-        kata: findSelectsByKeyword(editHtml, "kata")
-      }
+      raw: values,
     });
   } catch (e) {
     return Response.json({
