@@ -36,15 +36,7 @@ export async function GET() {
     const loginUrl = "https://motorgate.jp/login/index";
     const jar = {};
 
-    const page = await fetch(loginUrl, {
-      method: "GET",
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
-        Accept:
-          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-      },
-    });
+    const page = await fetch(loginUrl);
 
     addCookies(jar, page.headers.get("set-cookie") || "");
 
@@ -60,11 +52,8 @@ export async function GET() {
       method: "POST",
       redirect: "manual",
       headers: {
-        "User-Agent":
-          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
-        Accept:
-          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type":
+          "application/x-www-form-urlencoded",
         Origin: "https://motorgate.jp",
         Referer: loginUrl,
         Cookie: jarToCookie(jar),
@@ -75,50 +64,29 @@ export async function GET() {
         client_id: clientId,
         user_id: "",
         client_pw: password,
-        autologin: "",
-        visit_new_search: "",
-        visit_new_register: "",
-        visit_new_est: "",
-        visit_new_messenger: "",
-        visit_new_call: "",
-        group_stock_search: "",
       }),
     });
 
     addCookies(jar, login.headers.get("set-cookie") || "");
 
-    const topUrl = login.headers.get("location") || "https://motorgate.jp/top";
+    const stock = await fetch(
+      "https://motorgate.jp/stock/search",
+      {
+        headers: {
+          Cookie: jarToCookie(jar),
+          Referer: "https://motorgate.jp/top",
+        },
+      }
+    );
 
-    const top = await fetch(topUrl, {
-      method: "GET",
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
-        Accept:
-          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        Referer: loginUrl,
-        Cookie: jarToCookie(jar),
-      },
-    });
-
-    const topHtml = await top.text();
-
-    const urls = Array.from(
-      topHtml.matchAll(/https:\/\/motorgate\.jp\/[^"'<>\\\s]+|href="([^"]+)"/g)
-    )
-      .map((m) => m[1] || m[0])
-      .filter((url) =>
-        url.includes("stock") ||
-        url.includes("car") ||
-        url.includes("search") ||
-        url.includes("new")
-      )
-      .slice(0, 50);
+    const stockHtml = await stock.text();
 
     return Response.json({
       success: true,
-      containsLoginForm: topHtml.includes('name="client_pw"'),
-      urls,
+      stockStatus: stock.status,
+      containsLoginForm:
+        stockHtml.includes('name="client_pw"'),
+      preview: stockHtml.substring(0, 2500),
     });
   } catch (e) {
     return Response.json({
