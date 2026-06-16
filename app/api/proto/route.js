@@ -103,14 +103,22 @@ export async function GET() {
 
     const topHtml = await top.text();
 
+    const urls = Array.from(
+      topHtml.matchAll(/https:\/\/motorgate\.jp\/[^"'<>\\\s]+|href="([^"]+)"/g)
+    )
+      .map((m) => m[1] || m[0])
+      .filter((url) =>
+        url.includes("stock") ||
+        url.includes("car") ||
+        url.includes("search") ||
+        url.includes("new")
+      )
+      .slice(0, 50);
+
     return Response.json({
       success: true,
-      loginStatus: login.status,
-      loginLocation: login.headers.get("location"),
-      topStatus: top.status,
       containsLoginForm: topHtml.includes('name="client_pw"'),
-      cookieNames: Object.keys(jar),
-      htmlPreview: topHtml.substring(0, 1500),
+      urls,
     });
   } catch (e) {
     return Response.json({
