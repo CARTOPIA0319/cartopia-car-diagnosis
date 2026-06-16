@@ -28,101 +28,8 @@ function jarToCookie(jar) {
     .join("; ");
 }
 
-function extractSelectValue(html, key) {
-  const regex = new RegExp(
-    `<select[^>]*(?:id|name)=["']${key}["'][\\s\\S]*?<\\/select>`,
-    "i"
-  );
-
-  const match = html.match(regex);
-  if (!match) return null;
-
-  const selected = match[0].match(
-    /<option[^>]*value=["']([^"']*)["'][^>]*selected[^>]*>/i
-  );
-
-  return selected?.[1] || null;
-}
-
-function extractSelectText(html, key) {
-  const regex = new RegExp(
-    `<select[^>]*(?:id|name)=["']${key}["'][\\s\\S]*?<\\/select>`,
-    "i"
-  );
-
-  const match = html.match(regex);
-  if (!match) return null;
-
-  const selected = match[0].match(
-    /<option[^>]*selected[^>]*>(.*?)<\/option>/i
-  );
-
-  return selected?.[1]
-    ?.replace(/<[^>]+>/g, "")
-    ?.trim() || null;
-}
-
-function extractInput(html, key) {
-  const regex = new RegExp(
-    `(?:id|name)=["']${key}["'][^>]*value=["']([^"']*)["']`,
-    "i"
-  );
-
-  return html.match(regex)?.[1] || null;
-}
-
-function cleanGradeName(text) {
-  if (!text) return null;
-
-  return text
-    .replace(/\(5名\)/g, "")
-    .replace(/\(5蜷�\)/g, "")
-    .trim();
-}
-
-function mapVehicle(values) {
-  const brandMap = {
-    "1045": "スバル",
-  };
-
-  const modelMap = {
-    "10451015": "インプレッサスポーツ",
-  };
-
-  const gradeMap = {
-    "43|5": "２．０ｉ－Ｌアイサイト",
-  };
-
-  const bodyColorMap = {
-    "1022": "パールホワイト",
-  };
-
-  const colorCodeMap = {
-    K1X: "クリスタルホワイトパール",
-  };
-
-  return {
-    brand:
-      brandMap[values.brandCode] || values.brandText,
-
-    car:
-      modelMap[values.modelCode] || values.modelText,
-
-    grade:
-      gradeMap[values.gradeCode] || cleanGradeName(values.gradeText),
-
-    kata:
-      values.kataText || values.kataName,
-
-    colorCode:
-      values.colorCode,
-
-    color:
-      colorCodeMap[values.colorCode] || values.catalogColor,
-
-    bodyColor:
-      bodyColorMap[values.bodyColorCode] || values.bodyColorText,
-  };
+function unique(array) {
+  return Array.from(new Set(array));
 }
 
 export async function GET() {
@@ -175,83 +82,34 @@ export async function GET() {
 
     const stockHtml = await stock.text();
 
-    const stockId =
-      stockHtml.match(/StockId=([A-Z0-9]+)/i)?.[1];
+    const stockIds = unique(
+      Array.from(
+        stockHtml.matchAll(/StockId=([A-Z0-9]+)/gi)
+      ).map((m) => m[1])
+    );
 
-    const stockStatus =
-      stockHtml.match(/StockStatus=([0-9]+)/i)?.[1] || "00180002";
+    const stockStatuses = unique(
+      Array.from(
+        stockHtml.matchAll(/StockStatus=([0-9]+)/gi)
+      ).map((m) => m[1])
+    );
 
-    const editUrl =
-      `https://motorgate.jp/car/newregist/register?kbn=1&ClientId=${clientId}&StockId=${stockId}&StockStatus=${stockStatus}&ScreenId=CB101GR`;
+    const editUrls = unique(
+      stockIds.map((stockId) => {
+        const stockStatus =
+          stockStatuses[0] || "00180002";
 
-    const edit = await fetch(editUrl, {
-      headers: {
-        Cookie: jarToCookie(jar),
-        Referer: stockUrl,
-      },
-    });
-
-    const editHtml = await edit.text();
-
-    const values = {
-      brandCode: extractSelectValue(editHtml, "BrandName"),
-      brandText: extractSelectText(editHtml, "BrandName"),
-
-      modelCode: extractSelectValue(editHtml, "ModelName"),
-      modelText: extractSelectText(editHtml, "ModelName"),
-
-      gradeCode: extractSelectValue(editHtml, "Grade"),
-      gradeText: extractSelectText(editHtml, "Grade"),
-
-      kataCode: extractSelectValue(editHtml, "Kata"),
-      kataText: extractSelectText(editHtml, "Kata"),
-      kataName: extractInput(editHtml, "KataName"),
-
-      colorCode: extractInput(editHtml, "ColorCodeSerch"),
-      catalogColor: extractInput(editHtml, "CatColor"),
-      advertisedColor: extractInput(editHtml, "AdColorName"),
-
-      bodyColorCode: extractSelectValue(editHtml, "ColorBody"),
-      bodyColorText: extractSelectText(editHtml, "ColorBody"),
-
-      year: extractSelectValue(editHtml, "AdY"),
-      month: extractSelectValue(editHtml, "AdM"),
-
-      mileage: extractInput(editHtml, "Soukou"),
-      price: extractInput(editHtml, "Kakaku"),
-      totalPrice: extractInput(editHtml, "TotalPrice"),
-      chassisNumber: extractInput(editHtml, "SyadaiNum"),
-    };
-
-    const mapped = mapVehicle(values);
+        return `https://motorgate.jp/car/newregist/register?kbn=1&ClientId=${clientId}&StockId=${stockId}&StockStatus=${stockStatus}&ScreenId=CB101GR`;
+      })
+    );
 
     return Response.json({
       success: true,
-
-      vehicle: {
-        stockId,
-        stockStatus,
-
-        brand: mapped.brand,
-        car: mapped.car,
-        grade: mapped.grade,
-        kata: mapped.kata,
-
-        year: values.year,
-        month: values.month,
-
-        mileage: values.mileage,
-        price: values.price,
-        totalPrice: values.totalPrice,
-
-        colorCode: mapped.colorCode,
-        color: mapped.color,
-        bodyColor: mapped.bodyColor,
-
-        chassisNumber: values.chassisNumber,
-      },
-
-      raw: values,
+      count: stockIds.length,
+      stockIds,
+      stockStatuses,
+      sampleEditUrls: editUrls.slice(0, 10),
+      preview: stockHtml.substring(0, 1000),
     });
   } catch (e) {
     return Response.json({
