@@ -25,6 +25,11 @@ function jarToCookie(jar) {
     .join("; ");
 }
 
+async function readShiftJis(response) {
+  const buffer = await response.arrayBuffer();
+  return new TextDecoder("shift_jis").decode(buffer);
+}
+
 function cleanText(text) {
   return text
     .replace(/<script[\s\S]*?<\/script>/gi, "")
@@ -109,7 +114,7 @@ export async function GET() {
       },
     });
 
-    const editHtml = await edit.text();
+    const editHtml = await readShiftJis(edit);
     const editText = cleanText(editHtml);
 
     return Response.json({
