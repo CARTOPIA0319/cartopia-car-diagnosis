@@ -28,7 +28,23 @@ function jarToCookie(jar) {
     .join("; ");
 }
 
-function extractSelect(html, key) {
+function extractSelectValue(html, key) {
+  const regex = new RegExp(
+    `<select[^>]*(?:id|name)=["']${key}["'][\\s\\S]*?<\\/select>`,
+    "i"
+  );
+
+  const match = html.match(regex);
+  if (!match) return null;
+
+  const selected = match[0].match(
+    /<option[^>]*value=["']([^"']*)["'][^>]*selected[^>]*>/i
+  );
+
+  return selected?.[1] || null;
+}
+
+function extractSelectText(html, key) {
   const regex = new RegExp(
     `<select[^>]*(?:id|name)=["']${key}["'][\\s\\S]*?<\\/select>`,
     "i"
@@ -55,6 +71,40 @@ function extractInput(html, key) {
   return html.match(regex)?.[1] || null;
 }
 
+function findInputsByKeyword(html, keyword) {
+  const regex = /<input[^>]+>/gi;
+  const results = [];
+
+  for (const match of html.matchAll(regex)) {
+    const tag = match[0];
+
+    if (tag.toLowerCase().includes(keyword.toLowerCase())) {
+      results.push(tag);
+    }
+  }
+
+  return results.slice(0, 30);
+}
+
+function findSelectsByKeyword(html, keyword) {
+  const regex = /<select[\s\S]*?<\/select>/gi;
+  const results = [];
+
+  for (const match of html.matchAll(regex)) {
+    const tag = match[0];
+
+    if (tag.toLowerCase().includes(keyword.toLowerCase())) {
+      results.push(
+        tag
+          .replace(/\s+/g, " ")
+          .substring(0, 1500)
+      );
+    }
+  }
+
+  return results.slice(0, 10);
+}
+
 export async function GET() {
   try {
     const clientId = process.env.MOTORGATE_CLIENT_ID;
@@ -66,7 +116,6 @@ export async function GET() {
     const jar = {};
 
     const page = await fetch(loginUrl);
-
     addCookies(jar, page.headers.get("set-cookie") || "");
 
     const html = await page.text();
@@ -81,8 +130,7 @@ export async function GET() {
       method: "POST",
       redirect: "manual",
       headers: {
-        "Content-Type":
-          "application/x-www-form-urlencoded",
+        "Content-Type": "application/x-www-form-urlencoded",
         Origin: "https://motorgate.jp",
         Referer: loginUrl,
         Cookie: jarToCookie(jar),
@@ -111,8 +159,7 @@ export async function GET() {
       stockHtml.match(/StockId=([A-Z0-9]+)/i)?.[1];
 
     const stockStatus =
-      stockHtml.match(/StockStatus=([0-9]+)/i)?.[1]
-      || "00180002";
+      stockHtml.match(/StockStatus=([0-9]+)/i)?.[1] || "00180002";
 
     const editUrl =
       `https://motorgate.jp/car/newregist/register?kbn=1&ClientId=${clientId}&StockId=${stockId}&StockStatus=${stockStatus}&ScreenId=CB101GR`;
@@ -128,87 +175,45 @@ export async function GET() {
 
     return Response.json({
       success: true,
-
       stockId,
 
-      brand:
-        extractSelect(editHtml, "BrandName"),
+      selectedValues: {
+        BrandName: extractSelectValue(editHtml, "BrandName"),
+        ModelName: extractSelectValue(editHtml, "ModelName"),
+        Grade: extractSelectValue(editHtml, "Grade"),
+        Kata: extractSelectValue(editHtml, "Kata"),
+        AdY: extractSelectValue(editHtml, "AdY"),
+        AdM: extractSelectValue(editHtml, "AdM")
+      },
 
-      car:
-        extractSelect(editHtml, "CarName"),
+      selectedTexts: {
+        BrandName: extractSelectText(editHtml, "BrandName"),
+        ModelName: extractSelectText(editHtml, "ModelName"),
+        Grade: extractSelectText(editHtml, "Grade"),
+        Kata: extractSelectText(editHtml, "Kata"),
+        AdY: extractSelectText(editHtml, "AdY"),
+        AdM: extractSelectText(editHtml, "AdM")
+      },
 
-      model:
-        extractSelect(editHtml, "ModelName"),
+      inputs: {
+        brand: findInputsByKeyword(editHtml, "brand"),
+        model: findInputsByKeyword(editHtml, "model"),
+        grade: findInputsByKeyword(editHtml, "grade"),
+        color: findInputsByKeyword(editHtml, "color"),
+        kata: findInputsByKeyword(editHtml, "kata"),
+        syadai: findInputsByKeyword(editHtml, "syadai"),
+        soukou: findInputsByKeyword(editHtml, "soukou"),
+        kakaku: findInputsByKeyword(editHtml, "kakaku")
+      },
 
-      grade:
-        extractSelect(editHtml, "Grade"),
-
-      kata:
-        extractSelect(editHtml, "Kata"),
-
-      colorCode:
-        extractInput(editHtml, "ColorCode"),
-
-      bodyColor:
-        extractSelect(editHtml, "BodyColor"),
-
-      year:
-        extractSelect(editHtml, "AdY"),
-
-      month:
-        extractSelect(editHtml, "AdM"),
-
-      mileage:
-        extractInput(editHtml, "Soukou"),
-
-      price:
-        extractInput(editHtml, "Kakaku"),
-
-      totalPrice:
-        extractInput(editHtml, "TotalPrice"),
-
-      chassisNumber:
-        extractInput(editHtml, "temp_syadai_num"),
-
-      snippets: {
-        BrandName:
-          editHtml.includes("BrandName"),
-
-        CarName:
-          editHtml.includes("CarName"),
-
-        ModelName:
-          editHtml.includes("ModelName"),
-
-        Grade:
-          editHtml.includes("Grade"),
-
-        BodyColor:
-          editHtml.includes("BodyColor"),
-
-        ColorCode:
-          editHtml.includes("ColorCode"),
-
-        Kata:
-          editHtml.includes("Kata"),
-
-        AdY:
-          editHtml.includes("AdY"),
-
-        AdM:
-          editHtml.includes("AdM"),
-
-        Soukou:
-          editHtml.includes("Soukou"),
-
-        Kakaku:
-          editHtml.includes("Kakaku"),
-
-        TotalPrice:
-          editHtml.includes("TotalPrice")
+      selects: {
+        brand: findSelectsByKeyword(editHtml, "brand"),
+        model: findSelectsByKeyword(editHtml, "model"),
+        grade: findSelectsByKeyword(editHtml, "grade"),
+        color: findSelectsByKeyword(editHtml, "color"),
+        kata: findSelectsByKeyword(editHtml, "kata")
       }
     });
-
   } catch (e) {
     return Response.json({
       success: false,
