@@ -6,7 +6,6 @@ export async function GET() {
     const loginUrl = "https://motorgate.jp/login/index";
 
     const page = await fetch(loginUrl);
-
     const html = await page.text();
 
     const csrf =
@@ -22,8 +21,7 @@ export async function GET() {
       method: "POST",
       redirect: "manual",
       headers: {
-        "Content-Type":
-          "application/x-www-form-urlencoded",
+        "Content-Type": "application/x-www-form-urlencoded",
         Origin: "https://motorgate.jp",
         Referer: loginUrl,
         Cookie: beforeCookie,
@@ -37,27 +35,12 @@ export async function GET() {
       }),
     });
 
-    const afterCookie =
-      login.headers.get("set-cookie") || "";
-
-    const top = await fetch(
-      "https://motorgate.jp/top",
-      {
-        headers: {
-          Cookie: afterCookie,
-          Referer: loginUrl,
-        },
-      }
-    );
-
-    const topHtml = await top.text();
-
     return Response.json({
       success: true,
-      topStatus: top.status,
-      containsLoginForm:
-        topHtml.includes('name="client_pw"'),
-      html: topHtml.substring(0, 2000),
+      status: login.status,
+      location: login.headers.get("location"),
+      setCookie: login.headers.get("set-cookie"),
+      contentType: login.headers.get("content-type"),
     });
   } catch (e) {
     return Response.json({
