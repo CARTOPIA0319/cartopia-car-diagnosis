@@ -15,9 +15,9 @@ export async function GET() {
     const sessionId =
       html.match(/name="session_id"\s+value="([^"]+)"/)?.[1];
 
-    const setCookie = page.headers.get("set-cookie") || "";
+    const beforeCookie = page.headers.get("set-cookie") || "";
 
-    const cookie = setCookie
+    const cookie = beforeCookie
       .split(",")
       .map((x) => x.split(";")[0].trim())
       .join("; ");
@@ -40,27 +40,14 @@ export async function GET() {
       }),
     });
 
-    const loginCookie =
-      login.headers.get("set-cookie") || "";
-
-    const mergedCookie =
-      cookie + "; " + loginCookie;
-
-    const topPage = await fetch(
-      "https://motorgate.jp/top",
-      {
-        headers: {
-          Cookie: mergedCookie,
-        },
-      }
-    );
-
-    const topHtml = await topPage.text();
+    const afterCookie = login.headers.get("set-cookie") || "";
 
     return Response.json({
       success: true,
-      topStatus: topPage.status,
-      html: topHtml.substring(0, 3000),
+      loginStatus: login.status,
+      location: login.headers.get("location"),
+      beforeCookie,
+      afterCookie,
     });
   } catch (e) {
     return Response.json({
