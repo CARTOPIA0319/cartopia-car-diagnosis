@@ -32,6 +32,55 @@ function unique(array) {
   return Array.from(new Set(array));
 }
 
+function cleanTag(tag) {
+  return tag
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function findForms(html) {
+  return Array.from(html.matchAll(/<form[\s\S]*?<\/form>/gi))
+    .map((m) => cleanTag(m[0]).substring(0, 4000))
+    .slice(0, 5);
+}
+
+function findInputs(html) {
+  return Array.from(html.matchAll(/<input[^>]+>/gi))
+    .map((m) => cleanTag(m[0]))
+    .filter((tag) =>
+      /page|limit|count|display|disp|size|sort|stock|status|search|offset|start|rows|num/i.test(tag)
+    )
+    .slice(0, 100);
+}
+
+function findSelects(html) {
+  return Array.from(html.matchAll(/<select[\s\S]*?<\/select>/gi))
+    .map((m) => cleanTag(m[0]).substring(0, 2500))
+    .filter((tag) =>
+      /25|50|75|100|page|limit|count|display|disp|size|rows|num|sort/i.test(tag)
+    )
+    .slice(0, 20);
+}
+
+function findLinks(html) {
+  return unique(
+    Array.from(html.matchAll(/href=["']([^"']+)["']/gi))
+      .map((m) => m[1])
+      .filter((url) =>
+        /stock|search|page|limit|count|display|disp|size|rows|num|temporary|temp|save|draft/i.test(url)
+      )
+  ).slice(0, 100);
+}
+
+function findScripts(html) {
+  return Array.from(html.matchAll(/<script[\s\S]*?<\/script>/gi))
+    .map((m) => cleanTag(m[0]).substring(0, 4000))
+    .filter((tag) =>
+      /25|50|75|100|page|limit|count|display|disp|size|rows|num|stock|temporary|temp|save|draft/i.test(tag)
+    )
+    .slice(0, 10);
+}
+
 export async function GET() {
   try {
     const clientId = process.env.MOTORGATE_CLIENT_ID;
@@ -83,33 +132,19 @@ export async function GET() {
     const stockHtml = await stock.text();
 
     const stockIds = unique(
-      Array.from(
-        stockHtml.matchAll(/StockId=([A-Z0-9]+)/gi)
-      ).map((m) => m[1])
-    );
-
-    const stockStatuses = unique(
-      Array.from(
-        stockHtml.matchAll(/StockStatus=([0-9]+)/gi)
-      ).map((m) => m[1])
-    );
-
-    const editUrls = unique(
-      stockIds.map((stockId) => {
-        const stockStatus =
-          stockStatuses[0] || "00180002";
-
-        return `https://motorgate.jp/car/newregist/register?kbn=1&ClientId=${clientId}&StockId=${stockId}&StockStatus=${stockStatus}&ScreenId=CB101GR`;
-      })
+      Array.from(stockHtml.matchAll(/StockId=([A-Z0-9]+)/gi))
+        .map((m) => m[1])
     );
 
     return Response.json({
       success: true,
       count: stockIds.length,
       stockIds,
-      stockStatuses,
-      sampleEditUrls: editUrls.slice(0, 10),
-      preview: stockHtml.substring(0, 1000),
+      forms: findForms(stockHtml),
+      inputs: findInputs(stockHtml),
+      selects: findSelects(stockHtml),
+      links: findLinks(stockHtml),
+      scripts: findScripts(stockHtml),
     });
   } catch (e) {
     return Response.json({
