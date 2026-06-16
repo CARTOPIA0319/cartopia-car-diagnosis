@@ -35,13 +35,11 @@ function extractSelect(html, key) {
   );
 
   const match = html.match(regex);
-
   if (!match) return null;
 
-  const selected =
-    match[0].match(
-      /<option[^>]*selected[^>]*>(.*?)<\/option>/i
-    );
+  const selected = match[0].match(
+    /<option[^>]*selected[^>]*>(.*?)<\/option>/i
+  );
 
   return selected?.[1]
     ?.replace(/<[^>]+>/g, "")
@@ -146,7 +144,7 @@ export async function GET() {
         extractSelect(editHtml, "Grade"),
 
       kata:
-        extractInput(editHtml, "Kata"),
+        extractSelect(editHtml, "Kata"),
 
       colorCode:
         extractInput(editHtml, "ColorCode"),
@@ -155,7 +153,10 @@ export async function GET() {
         extractSelect(editHtml, "BodyColor"),
 
       year:
-        extractSelect(editHtml, "Year"),
+        extractSelect(editHtml, "AdY"),
+
+      month:
+        extractSelect(editHtml, "AdM"),
 
       mileage:
         extractInput(editHtml, "Soukou"),
@@ -165,6 +166,9 @@ export async function GET() {
 
       totalPrice:
         extractInput(editHtml, "TotalPrice"),
+
+      chassisNumber:
+        extractInput(editHtml, "temp_syadai_num"),
 
       snippets: {
         BrandName:
@@ -186,7 +190,22 @@ export async function GET() {
           editHtml.includes("ColorCode"),
 
         Kata:
-          editHtml.includes("Kata")
+          editHtml.includes("Kata"),
+
+        AdY:
+          editHtml.includes("AdY"),
+
+        AdM:
+          editHtml.includes("AdM"),
+
+        Soukou:
+          editHtml.includes("Soukou"),
+
+        Kakaku:
+          editHtml.includes("Kakaku"),
+
+        TotalPrice:
+          editHtml.includes("TotalPrice")
       }
     });
 
