@@ -28,25 +28,6 @@ function jarToCookie(jar) {
     .join("; ");
 }
 
-async function readJapanese(response) {
-  const buffer = await response.arrayBuffer();
-
-  try {
-    return new TextDecoder("shift_jis").decode(buffer);
-  } catch {
-    return new TextDecoder("utf-8").decode(buffer);
-  }
-}
-
-function cleanText(text) {
-  return text
-    .replace(/<script[\s\S]*?<\/script>/gi, "")
-    .replace(/<style[\s\S]*?<\/style>/gi, "")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
 export async function GET() {
   try {
     const clientId = process.env.MOTORGATE_CLIENT_ID;
@@ -60,7 +41,7 @@ export async function GET() {
     const page = await fetch(loginUrl);
     addCookies(jar, page.headers.get("set-cookie") || "");
 
-    const html = await readJapanese(page);
+    const html = await page.text();
 
     const csrf =
       html.match(/name="fuel_csrf_token"\s+value="([^"]+)"/)?.[1];
@@ -95,15 +76,17 @@ export async function GET() {
       },
     });
 
-    const stockHtml = await readJapanese(stock);
+    const stockHtml = await stock.text();
 
     const vehicleMatch =
       stockHtml.match(/StockId=([A-Z0-9]+)/i);
 
     if (!vehicleMatch) {
-      return Response.json({
-        success: false,
-        error: "vehicle not found",
+      return new Response("vehicle not found", {
+        status: 500,
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+        },
       });
     }
 
@@ -119,20 +102,20 @@ export async function GET() {
       },
     });
 
-    const detailHtml = await readJapanese(detail);
-    const detailText = cleanText(detailHtml);
+    const detailHtml = await detail.text();
 
-    return Response.json({
-      success: true,
-      stockId,
-      detailStatus: detail.status,
-      containsLoginForm: detailHtml.includes('name="client_pw"'),
-      detailText: detailText.substring(0, 5000),
+    return new Response(detailHtml, {
+      status: 200,
+      headers: {
+        "Content-Type": "text/html; charset=utf-8",
+      },
     });
   } catch (e) {
-    return Response.json({
-      success: false,
-      error: e.message,
+    return new Response(e.message, {
+      status: 500,
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+      },
     });
   }
 }
