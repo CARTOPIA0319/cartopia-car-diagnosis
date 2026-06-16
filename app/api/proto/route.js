@@ -25,17 +25,10 @@ function jarToCookie(jar) {
     .join("; ");
 }
 
-async function readShiftJis(response) {
-  const buffer = await response.arrayBuffer();
-  return new TextDecoder("shift_jis").decode(buffer);
-}
-
-function cleanText(text) {
-  return text
-    .replace(/<script[\s\S]*?<\/script>/gi, "")
-    .replace(/<style[\s\S]*?<\/style>/gi, "")
-    .replace(/<[^>]+>/g, " ")
+function cleanHtml(html) {
+  return html
     .replace(/\s+/g, " ")
+    .replace(/></g, ">\n<")
     .trim();
 }
 
@@ -114,8 +107,38 @@ export async function GET() {
       },
     });
 
-    const editHtml = await readShiftJis(edit);
-    const editText = cleanText(editHtml);
+    const editHtml = await edit.text();
+
+    const keywords = [
+      "StockId",
+      "ClientId",
+      "brand",
+      "maker",
+      "car",
+      "grade",
+      "price",
+      "distance",
+      "mileage",
+      "color",
+      "chassis",
+      "year",
+      "month",
+      "GT7",
+      "008511",
+      "83300",
+      "103.2",
+      "93"
+    ];
+
+    const snippets = {};
+
+    for (const word of keywords) {
+      const index = editHtml.indexOf(word);
+      snippets[word] =
+        index >= 0
+          ? cleanHtml(editHtml.substring(Math.max(0, index - 500), index + 1500))
+          : null;
+    }
 
     return Response.json({
       success: true,
@@ -124,7 +147,7 @@ export async function GET() {
       editStatus: edit.status,
       containsLoginForm: editHtml.includes('name="client_pw"'),
       editUrl,
-      editText: editText.substring(0, 10000),
+      snippets,
     });
   } catch (e) {
     return Response.json({
