@@ -32,53 +32,12 @@ function unique(array) {
   return Array.from(new Set(array));
 }
 
-function cleanTag(tag) {
-  return tag
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function findForms(html) {
-  return Array.from(html.matchAll(/<form[\s\S]*?<\/form>/gi))
-    .map((m) => cleanTag(m[0]).substring(0, 4000))
-    .slice(0, 5);
-}
-
-function findInputs(html) {
-  return Array.from(html.matchAll(/<input[^>]+>/gi))
-    .map((m) => cleanTag(m[0]))
-    .filter((tag) =>
-      /page|limit|count|display|disp|size|sort|stock|status|search|offset|start|rows|num/i.test(tag)
-    )
-    .slice(0, 100);
-}
-
-function findSelects(html) {
-  return Array.from(html.matchAll(/<select[\s\S]*?<\/select>/gi))
-    .map((m) => cleanTag(m[0]).substring(0, 2500))
-    .filter((tag) =>
-      /25|50|75|100|page|limit|count|display|disp|size|rows|num|sort/i.test(tag)
-    )
-    .slice(0, 20);
-}
-
-function findLinks(html) {
+function extractStockIds(html) {
   return unique(
-    Array.from(html.matchAll(/href=["']([^"']+)["']/gi))
-      .map((m) => m[1])
-      .filter((url) =>
-        /stock|search|page|limit|count|display|disp|size|rows|num|temporary|temp|save|draft/i.test(url)
-      )
-  ).slice(0, 100);
-}
-
-function findScripts(html) {
-  return Array.from(html.matchAll(/<script[\s\S]*?<\/script>/gi))
-    .map((m) => cleanTag(m[0]).substring(0, 4000))
-    .filter((tag) =>
-      /25|50|75|100|page|limit|count|display|disp|size|rows|num|stock|temporary|temp|save|draft/i.test(tag)
-    )
-    .slice(0, 10);
+    Array.from(
+      html.matchAll(/stock_ids\[\][^>]*value=['"]([A-Z0-9]+)['"]/gi)
+    ).map((m) => m[1])
+  );
 }
 
 export async function GET() {
@@ -87,11 +46,11 @@ export async function GET() {
     const password = process.env.MOTORGATE_PASSWORD;
 
     const loginUrl = "https://motorgate.jp/login/index";
-    const stockUrl = "https://motorgate.jp/stock/search";
 
     const jar = {};
 
     const page = await fetch(loginUrl);
+
     addCookies(jar, page.headers.get("set-cookie") || "");
 
     const html = await page.text();
@@ -106,7 +65,8 @@ export async function GET() {
       method: "POST",
       redirect: "manual",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type":
+          "application/x-www-form-urlencoded",
         Origin: "https://motorgate.jp",
         Referer: loginUrl,
         Cookie: jarToCookie(jar),
@@ -122,34 +82,65 @@ export async function GET() {
 
     addCookies(jar, login.headers.get("set-cookie") || "");
 
-    const stock = await fetch(stockUrl, {
+    const publicUrl =
+      "https://motorgate.jp/stock/newsearch/stocklist/index/1/100";
+
+    const publicRes = await fetch(publicUrl, {
       headers: {
         Cookie: jarToCookie(jar),
         Referer: "https://motorgate.jp/top",
       },
     });
 
-    const stockHtml = await stock.text();
+    const publicHtml = await publicRes.text();
 
-    const stockIds = unique(
-      Array.from(stockHtml.matchAll(/StockId=([A-Z0-9]+)/gi))
-        .map((m) => m[1])
-    );
+    const publicStockIds =
+      extractStockIds(publicHtml);
+
+    const saveUrl =
+      "https://motorgate.jp/stock/savelist";
+
+    const saveRes = await fetch(saveUrl, {
+      headers: {
+        Cookie: jarToCookie(jar),
+        Referer: publicUrl,
+      },
+    });
+
+    const saveHtml = await saveRes.text();
+
+    const saveStockIds =
+      extractStockIds(saveHtml);
 
     return Response.json({
       success: true,
-      count: stockIds.length,
-      stockIds,
-      forms: findForms(stockHtml),
-      inputs: findInputs(stockHtml),
-      selects: findSelects(stockHtml),
-      links: findLinks(stockHtml),
-      scripts: findScripts(stockHtml),
+
+      public: {
+        count: publicStockIds.length,
+        stockIds: publicStockIds.slice(0, 100)
+      },
+
+      save: {
+        count: saveStockIds.length,
+        stockIds: saveStockIds.slice(0, 100)
+      },
+
+      total:
+        publicStockIds.length +
+        saveStockIds.length,
+
+      publicPreview:
+        publicHtml.substring(0, 1000),
+
+      savePreview:
+        saveHtml.substring(0, 1000)
     });
+
   } catch (e) {
     return Response.json({
       success: false,
       error: e.message,
+      stack: e.stack
     });
   }
 }
