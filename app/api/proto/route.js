@@ -1,7 +1,7 @@
 export async function GET() {
   return Response.json({
     success: true,
-    clientIdExists: !!process.env.MOTORGATE_CLIENT_ID,
-    passwordExists: !!process.env.MOTORGATE_PASSWORD,
+    clientId: process.env.MOTORGATE_CLIENT_ID,
+    passwordLength: process.env.MOTORGATE_PASSWORD?.length || 0,
   });
 }
