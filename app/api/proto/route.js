@@ -1,3 +1,24 @@
+function extractCookies(setCookieText) {
+  if (!setCookieText) return "";
+
+  const matches = setCookieText.match(/(?:^|,\s*)([^=;,]+=[^;,]*)/g) || [];
+
+  return matches
+    .map((item) => item.replace(/^,\s*/, "").trim())
+    .filter((item) => {
+      return (
+        item.includes("=") &&
+        !item.startsWith("expires=") &&
+        !item.startsWith("Max-Age=") &&
+        !item.startsWith("path=") &&
+        !item.startsWith("Path=") &&
+        !item.startsWith("Httponly") &&
+        !item.startsWith("Secure")
+      );
+    })
+    .join("; ");
+}
+
 export async function GET() {
   try {
     const clientId = process.env.MOTORGATE_CLIENT_ID;
@@ -23,12 +44,9 @@ export async function GET() {
     const sessionId =
       html.match(/name="session_id"\s+value="([^"]+)"/)?.[1];
 
-    const beforeCookie = page.headers.get("set-cookie") || "";
-
-    const beforeCookieText = beforeCookie
-      .split(",")
-      .map((part) => part.split(";")[0].trim())
-      .join("; ");
+    const beforeCookie = extractCookies(
+      page.headers.get("set-cookie") || ""
+    );
 
     const login = await fetch(loginUrl, {
       method: "POST",
@@ -41,7 +59,7 @@ export async function GET() {
         "Content-Type": "application/x-www-form-urlencoded",
         Origin: "https://motorgate.jp",
         Referer: loginUrl,
-        Cookie: beforeCookieText,
+        Cookie: beforeCookie,
       },
       body: new URLSearchParams({
         fuel_csrf_token: csrf,
@@ -59,14 +77,11 @@ export async function GET() {
       }),
     });
 
-    const afterCookie = login.headers.get("set-cookie") || "";
+    const afterCookie = extractCookies(
+      login.headers.get("set-cookie") || ""
+    );
 
-    const afterCookieText = afterCookie
-      .split(",")
-      .map((part) => part.split(";")[0].trim())
-      .join("; ");
-
-    const mergedCookie = `${beforeCookieText}; ${afterCookieText}`;
+    const mergedCookie = `${beforeCookie}; ${afterCookie}`;
 
     const top = await fetch("https://motorgate.jp/top", {
       method: "GET",
@@ -75,7 +90,7 @@ export async function GET() {
           "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
         Accept:
           "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        Referer: loginUrl,
+        Referer: "https://motorgate.jp/login/index",
         Cookie: mergedCookie,
       },
     });
@@ -88,7 +103,8 @@ export async function GET() {
       loginLocation: login.headers.get("location"),
       topStatus: top.status,
       containsLoginForm: topHtml.includes('name="client_pw"'),
-      htmlPreview: topHtml.substring(0, 1500),
+      cookieLength: mergedCookie.length,
+      htmlPreview: topHtml.substring(0, 1200),
     });
   } catch (e) {
     return Response.json({
