@@ -11,8 +11,11 @@ function addCookies(jar, setCookieText) {
       const name = first.slice(0, eq);
       const value = first.slice(eq + 1);
 
-      if (value !== "deleted") jar[name] = value;
-      else delete jar[name];
+      if (value !== "deleted") {
+        jar[name] = value;
+      } else {
+        delete jar[name];
+      }
     }
   }
 
@@ -25,11 +28,33 @@ function jarToCookie(jar) {
     .join("; ");
 }
 
-function cleanHtml(html) {
-  return html
-    .replace(/\s+/g, " ")
-    .replace(/></g, ">\n<")
-    .trim();
+function extractSelect(html, key) {
+  const regex = new RegExp(
+    `<select[^>]*(?:id|name)=["']${key}["'][\\s\\S]*?<\\/select>`,
+    "i"
+  );
+
+  const match = html.match(regex);
+
+  if (!match) return null;
+
+  const selected =
+    match[0].match(
+      /<option[^>]*selected[^>]*>(.*?)<\/option>/i
+    );
+
+  return selected?.[1]
+    ?.replace(/<[^>]+>/g, "")
+    ?.trim() || null;
+}
+
+function extractInput(html, key) {
+  const regex = new RegExp(
+    `(?:id|name)=["']${key}["'][^>]*value=["']([^"']*)["']`,
+    "i"
+  );
+
+  return html.match(regex)?.[1] || null;
 }
 
 export async function GET() {
@@ -39,9 +64,11 @@ export async function GET() {
 
     const loginUrl = "https://motorgate.jp/login/index";
     const stockUrl = "https://motorgate.jp/stock/search";
+
     const jar = {};
 
     const page = await fetch(loginUrl);
+
     addCookies(jar, page.headers.get("set-cookie") || "");
 
     const html = await page.text();
@@ -56,7 +83,8 @@ export async function GET() {
       method: "POST",
       redirect: "manual",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type":
+          "application/x-www-form-urlencoded",
         Origin: "https://motorgate.jp",
         Referer: loginUrl,
         Cookie: jarToCookie(jar),
@@ -81,21 +109,12 @@ export async function GET() {
 
     const stockHtml = await stock.text();
 
-    const stockIdMatch =
-      stockHtml.match(/StockId=([A-Z0-9]+)/i);
+    const stockId =
+      stockHtml.match(/StockId=([A-Z0-9]+)/i)?.[1];
 
-    const stockStatusMatch =
-      stockHtml.match(/StockStatus=([0-9]+)/i);
-
-    if (!stockIdMatch) {
-      return Response.json({
-        success: false,
-        error: "stock id not found",
-      });
-    }
-
-    const stockId = stockIdMatch[1];
-    const stockStatus = stockStatusMatch?.[1] || "00180002";
+    const stockStatus =
+      stockHtml.match(/StockStatus=([0-9]+)/i)?.[1]
+      || "00180002";
 
     const editUrl =
       `https://motorgate.jp/car/newregist/register?kbn=1&ClientId=${clientId}&StockId=${stockId}&StockStatus=${stockStatus}&ScreenId=CB101GR`;
@@ -109,46 +128,68 @@ export async function GET() {
 
     const editHtml = await edit.text();
 
-    const keywords = [
-      "StockId",
-      "ClientId",
-      "brand",
-      "maker",
-      "car",
-      "grade",
-      "price",
-      "distance",
-      "mileage",
-      "color",
-      "chassis",
-      "year",
-      "month",
-      "GT7",
-      "008511",
-      "83300",
-      "103.2",
-      "93"
-    ];
-
-    const snippets = {};
-
-    for (const word of keywords) {
-      const index = editHtml.indexOf(word);
-      snippets[word] =
-        index >= 0
-          ? cleanHtml(editHtml.substring(Math.max(0, index - 500), index + 1500))
-          : null;
-    }
-
     return Response.json({
       success: true,
+
       stockId,
-      stockStatus,
-      editStatus: edit.status,
-      containsLoginForm: editHtml.includes('name="client_pw"'),
-      editUrl,
-      snippets,
+
+      brand:
+        extractSelect(editHtml, "BrandName"),
+
+      car:
+        extractSelect(editHtml, "CarName"),
+
+      model:
+        extractSelect(editHtml, "ModelName"),
+
+      grade:
+        extractSelect(editHtml, "Grade"),
+
+      kata:
+        extractInput(editHtml, "Kata"),
+
+      colorCode:
+        extractInput(editHtml, "ColorCode"),
+
+      bodyColor:
+        extractSelect(editHtml, "BodyColor"),
+
+      year:
+        extractSelect(editHtml, "Year"),
+
+      mileage:
+        extractInput(editHtml, "Soukou"),
+
+      price:
+        extractInput(editHtml, "Kakaku"),
+
+      totalPrice:
+        extractInput(editHtml, "TotalPrice"),
+
+      snippets: {
+        BrandName:
+          editHtml.includes("BrandName"),
+
+        CarName:
+          editHtml.includes("CarName"),
+
+        ModelName:
+          editHtml.includes("ModelName"),
+
+        Grade:
+          editHtml.includes("Grade"),
+
+        BodyColor:
+          editHtml.includes("BodyColor"),
+
+        ColorCode:
+          editHtml.includes("ColorCode"),
+
+        Kata:
+          editHtml.includes("Kata")
+      }
     });
+
   } catch (e) {
     return Response.json({
       success: false,
