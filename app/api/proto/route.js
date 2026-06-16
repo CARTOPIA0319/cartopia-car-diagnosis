@@ -11,11 +11,8 @@ function addCookies(jar, setCookieText) {
       const name = first.slice(0, eq);
       const value = first.slice(eq + 1);
 
-      if (value !== "deleted") {
-        jar[name] = value;
-      } else {
-        delete jar[name];
-      }
+      if (value !== "deleted") jar[name] = value;
+      else delete jar[name];
     }
   }
 
@@ -44,7 +41,6 @@ export async function GET() {
 
     const loginUrl = "https://motorgate.jp/login/index";
     const stockUrl = "https://motorgate.jp/stock/search";
-
     const jar = {};
 
     const page = await fetch(loginUrl);
@@ -87,22 +83,24 @@ export async function GET() {
 
     const stockHtml = await stock.text();
 
-    const editLinkMatch =
-      stockHtml.match(/https:\/\/motorgate\.jp\/car\/newregist\/register\?[^"'<> ]+/) ||
-      stockHtml.match(/\/car\/newregist\/register\?[^"'<> ]+/);
+    const stockIdMatch =
+      stockHtml.match(/StockId=([A-Z0-9]+)/i);
 
-    if (!editLinkMatch) {
+    const stockStatusMatch =
+      stockHtml.match(/StockStatus=([0-9]+)/i);
+
+    if (!stockIdMatch) {
       return Response.json({
         success: false,
-        error: "edit link not found",
+        error: "stock id not found",
       });
     }
 
-    let editUrl = editLinkMatch[0];
+    const stockId = stockIdMatch[1];
+    const stockStatus = stockStatusMatch?.[1] || "00180002";
 
-    if (editUrl.startsWith("/")) {
-      editUrl = "https://motorgate.jp" + editUrl;
-    }
+    const editUrl =
+      `https://motorgate.jp/car/newregist/register?kbn=1&ClientId=${clientId}&StockId=${stockId}&StockStatus=${stockStatus}&ScreenId=CB101GR`;
 
     const edit = await fetch(editUrl, {
       headers: {
@@ -116,10 +114,12 @@ export async function GET() {
 
     return Response.json({
       success: true,
+      stockId,
+      stockStatus,
       editStatus: edit.status,
       containsLoginForm: editHtml.includes('name="client_pw"'),
       editUrl,
-      editText: editText.substring(0, 8000),
+      editText: editText.substring(0, 10000),
     });
   } catch (e) {
     return Response.json({
