@@ -28,15 +28,6 @@ function jarToCookie(jar) {
     .join("; ");
 }
 
-function cleanText(text) {
-  return text
-    .replace(/<script[\s\S]*?<\/script>/gi, "")
-    .replace(/<style[\s\S]*?<\/style>/gi, "")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
 export async function GET() {
   try {
     const clientId = process.env.MOTORGATE_CLIENT_ID;
@@ -44,9 +35,11 @@ export async function GET() {
 
     const loginUrl = "https://motorgate.jp/login/index";
     const stockUrl = "https://motorgate.jp/stock/search";
+
     const jar = {};
 
     const page = await fetch(loginUrl);
+
     addCookies(jar, page.headers.get("set-cookie") || "");
 
     const html = await page.text();
@@ -85,24 +78,41 @@ export async function GET() {
     });
 
     const stockHtml = await stock.text();
-    const text = cleanText(stockHtml);
 
-    const editLinks = Array.from(
-      stockHtml.matchAll(/href="([^"]*\/car\/edit\/[^"]+)"/g)
-    ).map((m) => m[1]).slice(0, 20);
+    const vehicleMatch =
+      stockHtml.match(/StockId=([A-Z0-9]+)/i);
 
-    const imageUrls = Array.from(
-      stockHtml.matchAll(/https?:\/\/[^"'<> ]+\.(?:jpg|jpeg|png|webp|gif)[^"'<> ]*/gi)
-    ).map((m) => m[0]).slice(0, 20);
+    if (!vehicleMatch) {
+      return Response.json({
+        success: false,
+        error: "vehicle not found",
+      });
+    }
+
+    const stockId = vehicleMatch[1];
+
+    const detailUrl =
+      `https://motorgate.jp/stock/detail?StockId=${stockId}`;
+
+    const detail = await fetch(detailUrl, {
+      headers: {
+        Cookie: jarToCookie(jar),
+        Referer: stockUrl,
+      },
+    });
+
+    const detailHtml = await detail.text();
 
     return Response.json({
       success: true,
-      stockStatus: stock.status,
-      containsLoginForm: stockHtml.includes('name="client_pw"'),
-      textPreview: text.substring(0, 3000),
-      editLinks,
-      imageUrls,
+      stockId,
+      detailUrl,
+      detailStatus: detail.status,
+      containsLoginForm:
+        detailHtml.includes('name="client_pw"'),
+      preview: detailHtml.substring(0, 5000),
     });
+
   } catch (e) {
     return Response.json({
       success: false,
