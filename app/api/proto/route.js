@@ -10,7 +10,7 @@ export async function GET() {
       headers: {
         "User-Agent":
           "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
-        "Accept":
+        Accept:
           "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
       },
     });
@@ -23,9 +23,9 @@ export async function GET() {
     const sessionId =
       html.match(/name="session_id"\s+value="([^"]+)"/)?.[1];
 
-    const setCookie = page.headers.get("set-cookie") || "";
+    const beforeCookie = page.headers.get("set-cookie") || "";
 
-    const cookie = setCookie
+    const beforeCookieText = beforeCookie
       .split(",")
       .map((part) => part.split(";")[0].trim())
       .join("; ");
@@ -36,12 +36,12 @@ export async function GET() {
       headers: {
         "User-Agent":
           "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
-        "Accept":
+        Accept:
           "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "Content-Type": "application/x-www-form-urlencoded",
-        "Origin": "https://motorgate.jp",
-        "Referer": loginUrl,
-        "Cookie": cookie,
+        Origin: "https://motorgate.jp",
+        Referer: loginUrl,
+        Cookie: beforeCookieText,
       },
       body: new URLSearchParams({
         fuel_csrf_token: csrf,
@@ -59,13 +59,36 @@ export async function GET() {
       }),
     });
 
+    const afterCookie = login.headers.get("set-cookie") || "";
+
+    const afterCookieText = afterCookie
+      .split(",")
+      .map((part) => part.split(";")[0].trim())
+      .join("; ");
+
+    const mergedCookie = `${beforeCookieText}; ${afterCookieText}`;
+
+    const top = await fetch("https://motorgate.jp/top", {
+      method: "GET",
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        Referer: loginUrl,
+        Cookie: mergedCookie,
+      },
+    });
+
+    const topHtml = await top.text();
+
     return Response.json({
       success: true,
-      status: login.status,
-      location: login.headers.get("location"),
-      cookieSent: cookie.length > 0,
-      csrfExists: !!csrf,
-      sessionIdExists: !!sessionId,
+      loginStatus: login.status,
+      loginLocation: login.headers.get("location"),
+      topStatus: top.status,
+      containsLoginForm: topHtml.includes('name="client_pw"'),
+      htmlPreview: topHtml.substring(0, 1500),
     });
   } catch (e) {
     return Response.json({
