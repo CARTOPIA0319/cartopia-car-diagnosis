@@ -28,9 +28,47 @@ function jarToCookie(jar) {
     .join("; ");
 }
 
-async function readByDecoder(response, encoding) {
+async function readText(response) {
   const buffer = await response.arrayBuffer();
-  return new TextDecoder(encoding).decode(buffer);
+  return new TextDecoder("utf-8").decode(buffer);
+}
+
+function unique(array) {
+  return Array.from(new Set(array));
+}
+
+function extractStockIdsFromPublic(html) {
+  return unique(
+    Array.from(
+      html.matchAll(/stock_ids\[\][^>]*value=['"]([A-Z0-9]+)['"]/gi)
+    ).map((m) => m[1])
+  );
+}
+
+function extractStockIdsFromSave(html) {
+  return unique([
+    ...Array.from(
+      html.matchAll(/StockId=([A-Z0-9]+)/gi)
+    ).map((m) => m[1]),
+
+    ...Array.from(
+      html.matchAll(/list_check_[A-Z0-9]+['"][^>]*value=['"]([A-Z0-9]+)['"]/gi)
+    ).map((m) => m[1]),
+  ]);
+}
+
+function extractSelectValue(html, key) {
+  const regex = new RegExp(
+    `<select[^>]*(?:id|name)=["']${key}["'][\\s\\S]*?<\\/select>`,
+    "i"
+  );
+
+  const match = html.match(regex);
+  if (!match) return null;
+
+  return match[0].match(
+    /<option[^>]*value=["']([^"']*)["'][^>]*selected[^>]*>/i
+  )?.[1] || null;
 }
 
 function extractSelectText(html, key) {
@@ -50,20 +88,6 @@ function extractSelectText(html, key) {
     ?.trim() || null;
 }
 
-function extractSelectValue(html, key) {
-  const regex = new RegExp(
-    `<select[^>]*(?:id|name)=["']${key}["'][\\s\\S]*?<\\/select>`,
-    "i"
-  );
-
-  const match = html.match(regex);
-  if (!match) return null;
-
-  return match[0].match(
-    /<option[^>]*value=["']([^"']*)["'][^>]*selected[^>]*>/i
-  )?.[1] || null;
-}
-
 function extractInput(html, key) {
   const regex = new RegExp(
     `(?:id|name)=["']${key}["'][^>]*value=["']([^"']*)["']`,
@@ -71,18 +95,6 @@ function extractInput(html, key) {
   );
 
   return html.match(regex)?.[1] || null;
-}
-
-function unique(array) {
-  return Array.from(new Set(array));
-}
-
-function extractStockIdsFromPublic(html) {
-  return unique(
-    Array.from(
-      html.matchAll(/stock_ids\[\][^>]*value=['"]([A-Z0-9]+)['"]/gi)
-    ).map((m) => m[1])
-  );
 }
 
 function normalizeImageUrl(url) {
@@ -135,50 +147,106 @@ function extractMainImageUrl(html, stockId) {
   return sorted[0] || null;
 }
 
-function buildEditUrl(clientId, stockId) {
-  return `https://motorgate.jp/car/newregist/register?kbn=1&ClientId=${clientId}&StockId=${stockId}&StockStatus=00180002&ScreenId=CB101GR`;
+function cleanGradeName(text) {
+  if (!text) return null;
+
+  return text
+    .replace(/\(5名\)/g, "")
+    .replace(/\(4名\)/g, "")
+    .replace(/\(5蜷�\)/g, "")
+    .replace(/\(4蜷�\)/g, "")
+    .trim();
 }
 
-function extractVehicle(html, stockId) {
+function buildEditUrl({ clientId, stockId, stockStatus, source }) {
+  if (source === "save") {
+    return `https://motorgate.jp/car/newregist/register?kbn=1&client_id=${clientId}&StockStatus=${stockStatus}&StockId=${stockId}&ScreenId=SIH_001`;
+  }
+
+  return `https://motorgate.jp/car/newregist/register?kbn=1&ClientId=${clientId}&StockId=${stockId}&StockStatus=${stockStatus}&ScreenId=CB101GR`;
+}
+
+async function fetchVehicle({ clientId, jar, stockId, stockStatus, source }) {
+  const editUrl = buildEditUrl({
+    clientId,
+    stockId,
+    stockStatus,
+    source,
+  });
+
+  const edit = await fetch(editUrl, {
+    headers: {
+      Cookie: jarToCookie(jar),
+      Referer: "https://motorgate.jp/top",
+    },
+  });
+
+  const html = await readText(edit);
+
   return {
+    stockId,
+    source,
+    status: source === "public" ? "掲載中" : "一時保存",
+    editStatus: edit.status,
+    containsLoginForm: html.includes('name="client_pw"'),
+
     brand: extractSelectText(html, "BrandName"),
     car: extractSelectText(html, "ModelName"),
-    grade:
+    grade: cleanGradeName(
       extractInput(html, "GradeName") ||
-      extractSelectText(html, "Grade"),
+      extractSelectText(html, "Grade")
+    ),
     kata:
       extractSelectText(html, "Kata") ||
       extractInput(html, "KataName"),
+
     year: extractSelectValue(html, "AdY"),
     month: extractSelectValue(html, "AdM"),
     mileage: extractInput(html, "Soukou"),
     price: extractInput(html, "Kakaku"),
     totalPrice: extractInput(html, "TotalPrice"),
+
+    colorCode: extractInput(html, "ColorCodeSerch"),
     color:
       extractInput(html, "AdColorName") ||
       extractInput(html, "CatColor"),
+    bodyColor: extractSelectText(html, "ColorBody"),
+
+    chassisNumber:
+      extractInput(html, "SyadaiNum") ||
+      extractInput(html, "temp_syadai_num"),
+
     mainImageUrl: extractMainImageUrl(html, stockId),
+
     codes: {
       brandCode: extractSelectValue(html, "BrandName"),
       modelCode: extractSelectValue(html, "ModelName"),
       gradeCode: extractSelectValue(html, "Grade"),
       kataCode: extractSelectValue(html, "Kata"),
+      bodyColorCode: extractSelectValue(html, "ColorBody"),
     },
   };
 }
 
-export async function GET() {
+export async function GET(request) {
   try {
     const clientId = process.env.MOTORGATE_CLIENT_ID;
     const password = process.env.MOTORGATE_PASSWORD;
 
+    const url = new URL(request.url);
+    const page = Math.max(Number(url.searchParams.get("page") || 1), 1);
+    const limit = Math.min(
+      Math.max(Number(url.searchParams.get("limit") || 10), 1),
+      20
+    );
+
     const loginUrl = "https://motorgate.jp/login/index";
     const jar = {};
 
-    const page = await fetch(loginUrl);
-    addCookies(jar, page.headers.get("set-cookie") || "");
+    const loginPage = await fetch(loginUrl);
+    addCookies(jar, loginPage.headers.get("set-cookie") || "");
 
-    const loginHtml = await readByDecoder(page, "utf-8");
+    const loginHtml = await readText(loginPage);
 
     const csrf =
       loginHtml.match(/name="fuel_csrf_token"\s+value="([^"]+)"/)?.[1];
@@ -216,37 +284,69 @@ export async function GET() {
       },
     });
 
-    const publicHtml = await readByDecoder(publicRes, "utf-8");
-    const stockIds = extractStockIdsFromPublic(publicHtml);
+    const publicHtml = await readText(publicRes);
+    const publicStockIds = extractStockIdsFromPublic(publicHtml);
 
-    const targetStockId = stockIds[0];
+    const saveUrl =
+      "https://motorgate.jp/stock/savelist/index/1/100";
 
-    const editUrl = buildEditUrl(clientId, targetStockId);
-
-    const editRes = await fetch(editUrl, {
+    const saveRes = await fetch(saveUrl, {
       headers: {
         Cookie: jarToCookie(jar),
         Referer: publicUrl,
       },
     });
 
-    const buffer = await editRes.arrayBuffer();
+    const saveHtml = await readText(saveRes);
+    const saveStockIds = extractStockIdsFromSave(saveHtml);
 
-    const utf8Html = new TextDecoder("utf-8").decode(buffer);
-    const shiftJisHtml = new TextDecoder("shift_jis").decode(buffer);
-    const eucJpHtml = new TextDecoder("euc-jp").decode(buffer);
+    const targets = [
+      ...publicStockIds.map((stockId) => ({
+        stockId,
+        stockStatus: "00180002",
+        source: "public",
+      })),
+
+      ...saveStockIds.map((stockId) => ({
+        stockId,
+        stockStatus: "00180002",
+        source: "save",
+      })),
+    ];
+
+    const start = (page - 1) * limit;
+    const pagedTargets = targets.slice(start, start + limit);
+
+    const vehicles = [];
+
+    for (const target of pagedTargets) {
+      vehicles.push(
+        await fetchVehicle({
+          clientId,
+          jar,
+          ...target,
+        })
+      );
+    }
 
     return Response.json({
       success: true,
 
-      stockId: targetStockId,
+      page,
+      limit,
+
+      counts: {
+        public: publicStockIds.length,
+        save: saveStockIds.length,
+        total: targets.length,
+        returned: vehicles.length,
+        totalPages: Math.ceil(targets.length / limit),
+      },
 
       note:
-        "Compare utf8, shift_jis, and euc-jp. Send the result so we can choose the correct decoder.",
+        "Production vehicle API. Use page and limit to avoid timeout. Example: /api/proto?page=1&limit=10",
 
-      utf8: extractVehicle(utf8Html, targetStockId),
-      shift_jis: extractVehicle(shiftJisHtml, targetStockId),
-      euc_jp: extractVehicle(eucJpHtml, targetStockId),
+      vehicles,
     });
   } catch (e) {
     return Response.json({
