@@ -37,52 +37,6 @@ function unique(array) {
   return Array.from(new Set(array));
 }
 
-function repairKnownMojibake(text) {
-  if (!text) return text;
-
-  const map = {
-    "繝ｬ繧ｯ繧ｵ繧ｹ": "レクサス",
-    "繝医Κ繧ｿ": "トヨタ",
-    "譌･逕｣": "日産",
-    "繝帙Φ繝": "ホンダ",
-    "繝槭ヤ繝": "マツダ",
-    "荳芽廠": "三菱",
-    "繧ｹ繝舌Ν": "スバル",
-    "繝繧､繝上ヤ": "ダイハツ",
-    "繧ｹ繧ｺ繧ｭ": "スズキ",
-
-    "繧､繝ｳ繝励Ξ繝�し繧ｹ繝昴�繝�": "インプレッサスポーツ",
-    "繧｢繝ｫ繝輔ぃ繝ｼ繝峨ワ繧､繝悶Μ繝�ラ": "アルファードハイブリッド",
-    "繝ｯ繧ｴ繝ｳ�ｲ": "ワゴンR",
-    "繝輔Μ繝ｼ繝�": "フリード",
-    "繝弱�繝�": "ノート",
-
-    "繝代�繝ｫ繝帙Ρ繧､繝茨ｽ懃悄迴�逋ｽ": "パールホワイト",
-    "繝悶Λ繝�け�憺ｻ�": "ブラック",
-    "繝悶Λ繝�け": "ブラック",
-    "繧ｯ繝ｪ繧ｹ繧ｿ繝ｫ繝帙Ρ繧､繝医ヱ繝ｼ繝ｫ": "クリスタルホワイトパール",
-  };
-
-  let result = text;
-
-  for (const [bad, good] of Object.entries(map)) {
-    result = result.split(bad).join(good);
-  }
-
-  return result;
-}
-
-function normalizeText(text) {
-  if (!text) return null;
-
-  return repairKnownMojibake(
-    text
-      .replace(/<[^>]+>/g, "")
-      .replace(/\s+/g, " ")
-      .trim()
-  );
-}
-
 function extractStockIdsFromPublic(html) {
   return unique(
     Array.from(
@@ -103,35 +57,34 @@ function extractStockIdsFromSave(html) {
   ]);
 }
 
-function extractSelectValue(html, key) {
+function extractSelectHtml(html, key) {
   const regex = new RegExp(
     `<select[^>]*(?:id|name)=["']${key}["'][\\s\\S]*?<\\/select>`,
     "i"
   );
 
-  const match = html.match(regex);
-  if (!match) return null;
+  return html.match(regex)?.[0] || null;
+}
 
-  return match[0].match(
+function extractSelectValue(html, key) {
+  const selectHtml = extractSelectHtml(html, key);
+  if (!selectHtml) return null;
+
+  return selectHtml.match(
     /<option[^>]*value=["']([^"']*)["'][^>]*selected[^>]*>/i
   )?.[1] || null;
 }
 
 function extractSelectText(html, key) {
-  const regex = new RegExp(
-    `<select[^>]*(?:id|name)=["']${key}["'][\\s\\S]*?<\\/select>`,
-    "i"
-  );
+  const selectHtml = extractSelectHtml(html, key);
+  if (!selectHtml) return null;
 
-  const match = html.match(regex);
-  if (!match) return null;
-
-  const text =
-    match[0].match(
-      /<option[^>]*selected[^>]*>(.*?)<\/option>/i
-    )?.[1] || null;
-
-  return normalizeText(text);
+  return selectHtml.match(
+    /<option[^>]*selected[^>]*>(.*?)<\/option>/i
+  )?.[1]
+    ?.replace(/<[^>]+>/g, "")
+    ?.replace(/\s+/g, " ")
+    ?.trim() || null;
 }
 
 function extractInput(html, key) {
@@ -140,7 +93,7 @@ function extractInput(html, key) {
     "i"
   );
 
-  return normalizeText(html.match(regex)?.[1] || null);
+  return html.match(regex)?.[1] || null;
 }
 
 function normalizeImageUrl(url) {
@@ -196,12 +149,12 @@ function extractMainImageUrl(html, stockId) {
 function cleanGradeName(text) {
   if (!text) return null;
 
-  return normalizeText(text)
-    ?.replace(/\(5名\)/g, "")
-    ?.replace(/\(4名\)/g, "")
-    ?.replace(/\(5蜷�\)/g, "")
-    ?.replace(/\(4蜷�\)/g, "")
-    ?.trim() || null;
+  return text
+    .replace(/\(5名\)/g, "")
+    .replace(/\(4名\)/g, "")
+    .replace(/\(5蜷�\)/g, "")
+    .replace(/\(4蜷�\)/g, "")
+    .trim();
 }
 
 function buildEditUrl({ clientId, stockId, stockStatus, source }) {
@@ -212,40 +165,46 @@ function buildEditUrl({ clientId, stockId, stockStatus, source }) {
   return `https://motorgate.jp/car/newregist/register?kbn=1&ClientId=${clientId}&StockId=${stockId}&StockStatus=${stockStatus}&ScreenId=CB101GR`;
 }
 
-function fallbackByCode(codes, current) {
-  const brandMap = {
-    "1005": "レクサス",
-    "1010": "トヨタ",
-    "1015": "日産",
-    "1020": "ホンダ",
-    "1025": "マツダ",
-    "1040": "三菱",
-    "1045": "スバル",
-    "1050": "ダイハツ",
-    "1055": "スズキ",
+function makeDebugSelects(html) {
+  const keys = [
+    "BrandName",
+    "ModelName",
+    "CarName",
+    "Grade",
+    "Kata",
+    "ColorBody",
+  ];
+
+  const result = {};
+
+  for (const key of keys) {
+    const selectHtml = extractSelectHtml(html, key);
+
+    result[key] = {
+      exists: Boolean(selectHtml),
+      selectedValue: extractSelectValue(html, key),
+      selectedText: extractSelectText(html, key),
+      htmlPreview: selectHtml
+        ? selectHtml.replace(/\s+/g, " ").substring(0, 2500)
+        : null,
+    };
+  }
+
+  result.contains = {
+    subaru: html.includes("スバル"),
+    impreza: html.includes("インプレッサ"),
+    lexus: html.includes("レクサス"),
+    toyota: html.includes("トヨタ"),
+    honda: html.includes("ホンダ"),
+    gt7: html.includes("GT7"),
+    mojibakeSubaru: html.includes("繧ｹ繝舌Ν"),
+    mojibakeLexus: html.includes("繝ｬ繧ｯ繧ｵ繧ｹ"),
   };
 
-  const modelMap = {
-    "10451015": "インプレッサスポーツ",
-    "10102056": "アルファードハイブリッド",
-    "10051004": "LS",
-    "10552003": "ワゴンR",
-    "10202030": "フリード",
-    "10151042": "ノート",
-  };
-
-  return {
-    brand:
-      brandMap[codes.brandCode] ||
-      current.brand,
-
-    car:
-      modelMap[codes.modelCode] ||
-      current.car,
-  };
+  return result;
 }
 
-async function fetchVehicle({ clientId, jar, stockId, stockStatus, source }) {
+async function fetchVehicle({ clientId, jar, stockId, stockStatus, source, withDebug }) {
   const editUrl = buildEditUrl({
     clientId,
     stockId,
@@ -262,30 +221,15 @@ async function fetchVehicle({ clientId, jar, stockId, stockStatus, source }) {
 
   const html = await readText(edit);
 
-  const codes = {
-    brandCode: extractSelectValue(html, "BrandName"),
-    modelCode: extractSelectValue(html, "ModelName"),
-    gradeCode: extractSelectValue(html, "Grade"),
-    kataCode: extractSelectValue(html, "Kata"),
-    bodyColorCode: extractSelectValue(html, "ColorBody"),
-  };
-
-  const rawVehicle = {
-    brand: extractSelectText(html, "BrandName"),
-    car: extractSelectText(html, "ModelName"),
-  };
-
-  const fallback = fallbackByCode(codes, rawVehicle);
-
-  return {
+  const vehicle = {
     stockId,
     source,
     status: source === "public" ? "掲載中" : "一時保存",
     editStatus: edit.status,
     containsLoginForm: html.includes('name="client_pw"'),
 
-    brand: fallback.brand,
-    car: fallback.car,
+    brand: extractSelectText(html, "BrandName"),
+    car: extractSelectText(html, "ModelName"),
     grade: cleanGradeName(
       extractInput(html, "GradeName") ||
       extractSelectText(html, "Grade")
@@ -312,8 +256,20 @@ async function fetchVehicle({ clientId, jar, stockId, stockStatus, source }) {
 
     mainImageUrl: extractMainImageUrl(html, stockId),
 
-    codes,
+    codes: {
+      brandCode: extractSelectValue(html, "BrandName"),
+      modelCode: extractSelectValue(html, "ModelName"),
+      gradeCode: extractSelectValue(html, "Grade"),
+      kataCode: extractSelectValue(html, "Kata"),
+      bodyColorCode: extractSelectValue(html, "ColorBody"),
+    },
   };
+
+  if (withDebug) {
+    vehicle.debugSelects = makeDebugSelects(html);
+  }
+
+  return vehicle;
 }
 
 export async function GET(request) {
@@ -327,6 +283,10 @@ export async function GET(request) {
       Math.max(Number(url.searchParams.get("limit") || 10), 1),
       20
     );
+
+    const debug =
+      url.searchParams.get("debug") === "1" ||
+      url.searchParams.get("debug") === "true";
 
     const loginUrl = "https://motorgate.jp/login/index";
     const jar = {};
@@ -413,6 +373,7 @@ export async function GET(request) {
           clientId,
           jar,
           ...target,
+          withDebug: debug && vehicles.length === 0,
         })
       );
     }
@@ -422,6 +383,7 @@ export async function GET(request) {
 
       page,
       limit,
+      debug,
 
       counts: {
         public: publicStockIds.length,
@@ -432,7 +394,7 @@ export async function GET(request) {
       },
 
       note:
-        "Production vehicle API with temporary mojibake repair and code fallback.",
+        "Production vehicle API with optional debug select HTML. Use debug=1 to inspect the first vehicle only.",
 
       vehicles,
     });
