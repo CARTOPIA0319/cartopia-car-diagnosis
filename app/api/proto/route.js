@@ -300,12 +300,20 @@ const htmlHead = html.substring(0, 50000);
     editStatus: edit.status,
     containsLoginForm: html.includes('name="client_pw"'),
 
-    brand: extractSelectText(html, "BrandName"),
-    car: extractSelectText(html, "ModelName"),
-    grade: cleanGradeName(
-      extractInput(html, "GradeName") ||
-      extractSelectText(html, "Grade")
-    ),
+ brand: repairMojibake(
+  extractSelectText(html, "BrandName")
+),
+
+car: repairMojibake(
+  extractSelectText(html, "ModelName")
+),
+    
+    grade: repairMojibake(
+  cleanGradeName(
+    extractInput(html, "GradeName") ||
+    extractSelectText(html, "Grade")
+  )
+),
     kata:
       extractSelectText(html, "Kata") ||
       extractInput(html, "KataName"),
