@@ -151,7 +151,12 @@ export async function GET() {
       },
     });
 
-    const editHtml = await editRes.text();
+    console.log(
+  "content-type:",
+  editRes.headers.get("content-type")
+);
+
+const editHtml = await editRes.text();
 
     const brandOptions =
       extractOptions(extractSelectHtml(editHtml, "BrandName"));
