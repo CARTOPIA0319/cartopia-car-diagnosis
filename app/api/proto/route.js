@@ -57,16 +57,54 @@ function extractStockIdsFromSave(html) {
   ]);
 }
 
+function extractSelectValue(html, key) {
+  const regex = new RegExp(
+    `<select[^>]*(?:id|name)=["']${key}["'][\\s\\S]*?<\\/select>`,
+    "i"
+  );
+
+  const match = html.match(regex);
+  if (!match) return null;
+
+  return match[0].match(
+    /<option[^>]*value=["']([^"']*)["'][^>]*selected[^>]*>/i
+  )?.[1] || null;
+}
+
+function extractSelectText(html, key) {
+  const regex = new RegExp(
+    `<select[^>]*(?:id|name)=["']${key}["'][\\s\\S]*?<\\/select>`,
+    "i"
+  );
+
+  const match = html.match(regex);
+  if (!match) return null;
+
+  return match[0].match(
+    /<option[^>]*selected[^>]*>(.*?)<\/option>/i
+  )?.[1]
+    ?.replace(/<[^>]+>/g, "")
+    ?.replace(/\s+/g, " ")
+    ?.trim() || null;
+}
+
+function extractInput(html, key) {
+  const regex = new RegExp(
+    `(?:id|name)=["']${key}["'][^>]*value=["']([^"']*)["']`,
+    "i"
+  );
+
+  return html.match(regex)?.[1] || null;
+}
+
 function normalizeImageUrl(url) {
   if (!url) return null;
-
   if (url.startsWith("//")) return `https:${url}`;
   if (url.startsWith("/")) return `https://motorgate.jp${url}`;
-
   return url;
 }
 
-function extractImages(html, stockId) {
+function extractMainImageUrl(html, stockId) {
   const urls = unique([
     ...Array.from(
       html.matchAll(/https?:\/\/[^"'\s<>]+?\.(?:jpg|jpeg|png|webp)(?:\?[^"'\s<>]*)?/gi)
@@ -86,54 +124,40 @@ function extractImages(html, stockId) {
       !url.includes("/assets/img/common/img-set")
     );
 
-  const realVehicleImages = urls.filter((url) =>
+  const realImages = urls.filter((url) =>
     (
       url.includes("secure.goo-net.com") ||
       url.includes("picture-referrer.goo-net.com")
-    ) &&
-    (
-      url.includes(stockId) ||
-      /\/090\/0902332\/[QJ]\//.test(url) ||
-      /\/7000902332\//.test(url)
     ) &&
     !url.includes("_NO") &&
     !url.includes("_MP")
   );
 
-  const sortedRealVehicleImages = realVehicleImages.slice().sort((a, b) => {
+  const sorted = realImages.slice().sort((a, b) => {
     const score = (url) => {
       let value = 0;
-
       if (url.includes("/Q/")) value += 100;
       if (url.includes("01.jpg")) value += 50;
       if (url.includes("00.jpg")) value += 40;
       if (url.includes(stockId)) value += 20;
-      if (url.includes("secure.goo-net.com")) value += 10;
-
       return value;
     };
 
     return score(b) - score(a);
   });
 
-  const fallbackImages = urls.filter((url) =>
-    url.includes("secure.goo-net.com") ||
-    url.includes("picture-referrer.goo-net.com") ||
-    url.includes("storage-motorgate")
-  );
+  return sorted[0] || null;
+}
 
-  const mainImageUrl =
-    sortedRealVehicleImages[0] ||
-    fallbackImages[0] ||
-    null;
+function cleanGradeName(text) {
+  if (!text) return null;
 
-  return {
-    mainImageUrl,
-    imageCount: sortedRealVehicleImages.length || fallbackImages.length,
-    imageUrls: sortedRealVehicleImages.slice(0, 5),
-    fallbackImageUrls: fallbackImages.slice(0, 5),
-    allCandidateUrls: urls.slice(0, 20),
-  };
+  return text
+    .replace(/\(5名\)/g, "")
+    .replace(/\(4名\)/g, "")
+    .replace(/\(5蜷�\)/g, "")
+    .replace(/\(4蜷�\)/g, "")
+    .trim();
 }
 
 function buildEditUrl({ clientId, stockId, stockStatus, source }) {
@@ -144,7 +168,7 @@ function buildEditUrl({ clientId, stockId, stockStatus, source }) {
   return `https://motorgate.jp/car/newregist/register?kbn=1&ClientId=${clientId}&StockId=${stockId}&StockStatus=${stockStatus}&ScreenId=CB101GR`;
 }
 
-async function fetchVehicleImages({ clientId, jar, stockId, stockStatus, source }) {
+async function fetchVehicle({ clientId, jar, stockId, stockStatus, source }) {
   const editUrl = buildEditUrl({
     clientId,
     stockId,
@@ -159,15 +183,50 @@ async function fetchVehicleImages({ clientId, jar, stockId, stockStatus, source 
     },
   });
 
-  const editHtml = await readText(edit);
-  const images = extractImages(editHtml, stockId);
+  const html = await readText(edit);
 
   return {
     stockId,
     source,
+    status: source === "public" ? "掲載中" : "一時保存",
     editStatus: edit.status,
-    containsLoginForm: editHtml.includes('name="client_pw"'),
-    ...images,
+    containsLoginForm: html.includes('name="client_pw"'),
+
+    brand: extractSelectText(html, "BrandName"),
+    car: extractSelectText(html, "ModelName"),
+    grade: cleanGradeName(
+      extractInput(html, "GradeName") ||
+      extractSelectText(html, "Grade")
+    ),
+    kata:
+      extractSelectText(html, "Kata") ||
+      extractInput(html, "KataName"),
+
+    year: extractSelectValue(html, "AdY"),
+    month: extractSelectValue(html, "AdM"),
+    mileage: extractInput(html, "Soukou"),
+    price: extractInput(html, "Kakaku"),
+    totalPrice: extractInput(html, "TotalPrice"),
+
+    colorCode: extractInput(html, "ColorCodeSerch"),
+    color:
+      extractInput(html, "AdColorName") ||
+      extractInput(html, "CatColor"),
+    bodyColor: extractSelectText(html, "ColorBody"),
+
+    chassisNumber:
+      extractInput(html, "SyadaiNum") ||
+      extractInput(html, "temp_syadai_num"),
+
+    mainImageUrl: extractMainImageUrl(html, stockId),
+
+    codes: {
+      brandCode: extractSelectValue(html, "BrandName"),
+      modelCode: extractSelectValue(html, "ModelName"),
+      gradeCode: extractSelectValue(html, "Grade"),
+      kataCode: extractSelectValue(html, "Kata"),
+      bodyColorCode: extractSelectValue(html, "ColorBody"),
+    },
   };
 }
 
@@ -182,13 +241,13 @@ export async function GET() {
     const page = await fetch(loginUrl);
     addCookies(jar, page.headers.get("set-cookie") || "");
 
-    const html = await readText(page);
+    const loginHtml = await readText(page);
 
     const csrf =
-      html.match(/name="fuel_csrf_token"\s+value="([^"]+)"/)?.[1];
+      loginHtml.match(/name="fuel_csrf_token"\s+value="([^"]+)"/)?.[1];
 
     const sessionId =
-      html.match(/name="session_id"\s+value="([^"]+)"/)?.[1];
+      loginHtml.match(/name="session_id"\s+value="([^"]+)"/)?.[1];
 
     const login = await fetch(loginUrl, {
       method: "POST",
@@ -253,13 +312,13 @@ export async function GET() {
     const vehicles = [];
 
     for (const target of targets) {
-      const vehicle = await fetchVehicleImages({
-        clientId,
-        jar,
-        ...target,
-      });
-
-      vehicles.push(vehicle);
+      vehicles.push(
+        await fetchVehicle({
+          clientId,
+          jar,
+          ...target,
+        })
+      );
     }
 
     return Response.json({
@@ -273,7 +332,7 @@ export async function GET() {
       },
 
       note:
-        "Image test: real vehicle image preferred. First 5 public vehicles and first 3 save vehicles checked.",
+        "Vehicle data and main image integrated. First 5 public vehicles and first 3 save vehicles checked.",
 
       vehicles,
     });
