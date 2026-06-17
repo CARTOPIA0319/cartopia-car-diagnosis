@@ -30,7 +30,7 @@ function jarToCookie(jar) {
 
 async function readText(response) {
   const buffer = await response.arrayBuffer();
-  return new TextDecoder("shift-jis").decode(buffer);
+  return new TextDecoder("utf-8").decode(buffer);
 }
 
 function unique(array) {
