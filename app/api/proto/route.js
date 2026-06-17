@@ -32,12 +32,88 @@ function unique(array) {
   return Array.from(new Set(array));
 }
 
-function extractStockIds(html) {
+function cleanTag(tag) {
+  return tag
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function findSaveLinks(html) {
+  const hrefs = Array.from(
+    html.matchAll(/href=["']([^"']+)["']/gi)
+  ).map((m) => m[1]);
+
+  const actions = Array.from(
+    html.matchAll(/action=["']([^"']+)["']/gi)
+  ).map((m) => m[1]);
+
+  const scripts = Array.from(
+    html.matchAll(/(?:location\.href|location|open)\s*=?\s*["']([^"']+)["']/gi)
+  ).map((m) => m[1]);
+
+  return unique([...hrefs, ...actions, ...scripts])
+    .filter((url) =>
+      /StockId|stock|save|register|SIH_001|newregist|edit/i.test(url)
+    )
+    .slice(0, 200);
+}
+
+function findStockIds(html) {
   return unique(
     Array.from(
-      html.matchAll(/stock_ids\[\][^>]*value=['"]([A-Z0-9]+)['"]/gi)
+      html.matchAll(/StockId=([A-Z0-9]+)/gi)
     ).map((m) => m[1])
   );
+}
+
+function findScreenIds(html) {
+  return unique(
+    Array.from(
+      html.matchAll(/ScreenId=([A-Z0-9_]+)/gi)
+    ).map((m) => m[1])
+  );
+}
+
+function findInterestingInputs(html) {
+  return Array.from(
+    html.matchAll(/<input[^>]+>/gi)
+  )
+    .map((m) => cleanTag(m[0]))
+    .filter((tag) =>
+      /stock|save|temp|car|screen|status|id/i.test(tag)
+    )
+    .slice(0, 200);
+}
+
+function findInterestingText(html) {
+  const words = [
+    "SIH_001",
+    "StockId",
+    "StockStatus",
+    "newregist",
+    "register",
+    "一時",
+    "保存",
+    "temp",
+    "save",
+    "savelist",
+  ];
+
+  const result = {};
+
+  for (const word of words) {
+    const index = html.indexOf(word);
+
+    result[word] =
+      index >= 0
+        ? html
+            .substring(Math.max(0, index - 500), index + 1500)
+            .replace(/\s+/g, " ")
+            .trim()
+        : null;
+  }
+
+  return result;
 }
 
 export async function GET() {
@@ -46,11 +122,11 @@ export async function GET() {
     const password = process.env.MOTORGATE_PASSWORD;
 
     const loginUrl = "https://motorgate.jp/login/index";
+    const saveUrl = "https://motorgate.jp/stock/savelist";
 
     const jar = {};
 
     const page = await fetch(loginUrl);
-
     addCookies(jar, page.headers.get("set-cookie") || "");
 
     const html = await page.text();
@@ -65,8 +141,7 @@ export async function GET() {
       method: "POST",
       redirect: "manual",
       headers: {
-        "Content-Type":
-          "application/x-www-form-urlencoded",
+        "Content-Type": "application/x-www-form-urlencoded",
         Origin: "https://motorgate.jp",
         Referer: loginUrl,
         Cookie: jarToCookie(jar),
@@ -82,65 +157,33 @@ export async function GET() {
 
     addCookies(jar, login.headers.get("set-cookie") || "");
 
-    const publicUrl =
-      "https://motorgate.jp/stock/newsearch/stocklist/index/1/100";
-
-    const publicRes = await fetch(publicUrl, {
+    const saveRes = await fetch(saveUrl, {
       headers: {
         Cookie: jarToCookie(jar),
         Referer: "https://motorgate.jp/top",
       },
     });
 
-    const publicHtml = await publicRes.text();
-
-    const publicStockIds =
-      extractStockIds(publicHtml);
-
-    const saveUrl =
-      "https://motorgate.jp/stock/savelist";
-
-    const saveRes = await fetch(saveUrl, {
-      headers: {
-        Cookie: jarToCookie(jar),
-        Referer: publicUrl,
-      },
-    });
-
     const saveHtml = await saveRes.text();
-
-    const saveStockIds =
-      extractStockIds(saveHtml);
 
     return Response.json({
       success: true,
+      status: saveRes.status,
+      containsLoginForm: saveHtml.includes('name="client_pw"'),
 
-      public: {
-        count: publicStockIds.length,
-        stockIds: publicStockIds.slice(0, 100)
-      },
+      stockIds: findStockIds(saveHtml),
+      screenIds: findScreenIds(saveHtml),
+      links: findSaveLinks(saveHtml),
+      inputs: findInterestingInputs(saveHtml),
+      text: findInterestingText(saveHtml),
 
-      save: {
-        count: saveStockIds.length,
-        stockIds: saveStockIds.slice(0, 100)
-      },
-
-      total:
-        publicStockIds.length +
-        saveStockIds.length,
-
-      publicPreview:
-        publicHtml.substring(0, 1000),
-
-      savePreview:
-        saveHtml.substring(0, 1000)
+      preview: saveHtml.substring(0, 3000),
     });
-
   } catch (e) {
     return Response.json({
       success: false,
       error: e.message,
-      stack: e.stack
+      stack: e.stack,
     });
   }
 }
