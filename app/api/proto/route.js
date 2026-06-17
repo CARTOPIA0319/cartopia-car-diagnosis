@@ -37,6 +37,47 @@ function unique(array) {
   return Array.from(new Set(array));
 }
 
+function repairMojibake(text) {
+  if (!text) return text;
+
+  const map = {
+    "謗ｲ霈我ｸｭ": "掲載中",
+    "繝ｬ繧ｯ繧ｵ繧ｹ": "レクサス",
+    "繝医Κ繧ｿ": "トヨタ",
+    "譌･逕｣": "日産",
+    "繝帙Φ繝": "ホンダ",
+    "繝槭ヤ繝": "マツダ",
+    "荳芽廠": "三菱",
+    "繧ｹ繝舌Ν": "スバル",
+    "繝繧､繝上ヤ": "ダイハツ",
+    "繧ｹ繧ｺ繧ｭ": "スズキ",
+    "�ｬ�ｳ": "LS",
+    "繝舌�繧ｸ繝ｧ繝ｳ": "バージョン",
+    "�ｩ繝代ャ繧ｱ繝ｼ繧ｸ": "Iパッケージ",
+    "繝代�繝ｫ繝帙Ρ繧､繝茨ｽ懃悄迴�逋ｽ": "パールホワイト",
+    "繧ｽ繝九ャ繧ｯ繧ｯ繧ｩ繝ｼ繝�": "ソニッククォーツ"
+  };
+
+  let result = text;
+
+  for (const [bad, good] of Object.entries(map)) {
+    result = result.split(bad).join(good);
+  }
+
+  return result;
+}
+
+function cleanText(text) {
+  if (!text) return null;
+
+  return repairMojibake(
+    text
+      .replace(/<[^>]+>/g, "")
+      .replace(/\s+/g, " ")
+      .trim()
+  );
+}
+
 function extractStockIdsFromPublic(html) {
   return unique(
     Array.from(
@@ -79,12 +120,11 @@ function extractSelectText(html, key) {
   const selectHtml = extractSelectHtml(html, key);
   if (!selectHtml) return null;
 
-  return selectHtml.match(
+  const text = selectHtml.match(
     /<option[^>]*selected[^>]*>(.*?)<\/option>/i
-  )?.[1]
-    ?.replace(/<[^>]+>/g, "")
-    ?.replace(/\s+/g, " ")
-    ?.trim() || null;
+  )?.[1];
+
+  return cleanText(text);
 }
 
 function extractInput(html, key) {
@@ -93,7 +133,7 @@ function extractInput(html, key) {
     "i"
   );
 
-  return html.match(regex)?.[1] || null;
+  return cleanText(html.match(regex)?.[1] || null);
 }
 
 function normalizeImageUrl(url) {
@@ -149,12 +189,12 @@ function extractMainImageUrl(html, stockId) {
 function cleanGradeName(text) {
   if (!text) return null;
 
-  return text
-    .replace(/\(5名\)/g, "")
-    .replace(/\(4名\)/g, "")
-    .replace(/\(5蜷�\)/g, "")
-    .replace(/\(4蜷�\)/g, "")
-    .trim();
+  return cleanText(text)
+    ?.replace(/\(5名\)/g, "")
+    ?.replace(/\(4名\)/g, "")
+    ?.replace(/\(5蜷�\)/g, "")
+    ?.replace(/\(4蜷�\)/g, "")
+    ?.trim() || null;
 }
 
 function buildEditUrl({ clientId, stockId, stockStatus, source }) {
@@ -185,7 +225,7 @@ function makeDebugSelects(html) {
       selectedValue: extractSelectValue(html, key),
       selectedText: extractSelectText(html, key),
       htmlPreview: selectHtml
-        ? selectHtml.replace(/\s+/g, " ").substring(0, 2500)
+        ? repairMojibake(selectHtml.replace(/\s+/g, " ").substring(0, 2500))
         : null,
     };
   }
@@ -223,9 +263,11 @@ function findKeywordSnippets(html) {
 
     result[keyword] =
       index >= 0
-        ? html.substring(
-            Math.max(0, index - 1000),
-            Math.min(html.length, index + 1000)
+        ? repairMojibake(
+            html.substring(
+              Math.max(0, index - 1000),
+              Math.min(html.length, index + 1000)
+            )
           )
         : null;
   }
@@ -249,8 +291,6 @@ async function fetchVehicle({ clientId, jar, stockId, stockStatus, source, withD
   });
 
   const html = await readText(edit);
-
-  const htmlHead = html.substring(0, 5000);
 
   const vehicle = {
     stockId,
@@ -294,7 +334,6 @@ async function fetchVehicle({ clientId, jar, stockId, stockStatus, source, withD
       kataCode: extractSelectValue(html, "Kata"),
       bodyColorCode: extractSelectValue(html, "ColorBody"),
     },
-    htmlHead,
   };
 
   if (withDebug) {
@@ -427,7 +466,7 @@ export async function GET(request) {
       },
 
       note:
-        "Production vehicle API with optional debug select HTML and keyword snippets. Use debug=1 to inspect the first vehicle only.",
+        "Production vehicle API with mojibake repair. Use debug=1 to inspect the first vehicle only.",
 
       vehicles,
     });
