@@ -32,88 +32,26 @@ function unique(array) {
   return Array.from(new Set(array));
 }
 
-function cleanTag(tag) {
-  return tag
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function findSaveLinks(html) {
-  const hrefs = Array.from(
-    html.matchAll(/href=["']([^"']+)["']/gi)
-  ).map((m) => m[1]);
-
-  const actions = Array.from(
-    html.matchAll(/action=["']([^"']+)["']/gi)
-  ).map((m) => m[1]);
-
-  const scripts = Array.from(
-    html.matchAll(/(?:location\.href|location|open)\s*=?\s*["']([^"']+)["']/gi)
-  ).map((m) => m[1]);
-
-  return unique([...hrefs, ...actions, ...scripts])
-    .filter((url) =>
-      /StockId|stock|save|register|SIH_001|newregist|edit/i.test(url)
-    )
-    .slice(0, 200);
-}
-
-function findStockIds(html) {
+function extractStockIdsFromPublic(html) {
   return unique(
     Array.from(
-      html.matchAll(/StockId=([A-Z0-9]+)/gi)
+      html.matchAll(/stock_ids\[\][^>]*value=['"]([A-Z0-9]+)['"]/gi)
     ).map((m) => m[1])
   );
 }
 
-function findScreenIds(html) {
+function extractStockIdsFromSave(html) {
   return unique(
-    Array.from(
-      html.matchAll(/ScreenId=([A-Z0-9_]+)/gi)
-    ).map((m) => m[1])
+    [
+      ...Array.from(
+        html.matchAll(/StockId=([A-Z0-9]+)/gi)
+      ).map((m) => m[1]),
+
+      ...Array.from(
+        html.matchAll(/list_check_[A-Z0-9]+['"][^>]*value=['"]([A-Z0-9]+)['"]/gi)
+      ).map((m) => m[1])
+    ]
   );
-}
-
-function findInterestingInputs(html) {
-  return Array.from(
-    html.matchAll(/<input[^>]+>/gi)
-  )
-    .map((m) => cleanTag(m[0]))
-    .filter((tag) =>
-      /stock|save|temp|car|screen|status|id/i.test(tag)
-    )
-    .slice(0, 200);
-}
-
-function findInterestingText(html) {
-  const words = [
-    "SIH_001",
-    "StockId",
-    "StockStatus",
-    "newregist",
-    "register",
-    "一時",
-    "保存",
-    "temp",
-    "save",
-    "savelist",
-  ];
-
-  const result = {};
-
-  for (const word of words) {
-    const index = html.indexOf(word);
-
-    result[word] =
-      index >= 0
-        ? html
-            .substring(Math.max(0, index - 500), index + 1500)
-            .replace(/\s+/g, " ")
-            .trim()
-        : null;
-  }
-
-  return result;
 }
 
 export async function GET() {
@@ -122,7 +60,6 @@ export async function GET() {
     const password = process.env.MOTORGATE_PASSWORD;
 
     const loginUrl = "https://motorgate.jp/login/index";
-    const saveUrl = "https://motorgate.jp/stock/savelist";
 
     const jar = {};
 
@@ -157,27 +94,80 @@ export async function GET() {
 
     addCookies(jar, login.headers.get("set-cookie") || "");
 
-    const saveRes = await fetch(saveUrl, {
+    const publicUrl =
+      "https://motorgate.jp/stock/newsearch/stocklist/index/1/100";
+
+    const publicRes = await fetch(publicUrl, {
       headers: {
         Cookie: jarToCookie(jar),
         Referer: "https://motorgate.jp/top",
       },
     });
 
-    const saveHtml = await saveRes.text();
+    const publicHtml = await publicRes.text();
+    const publicStockIds = extractStockIdsFromPublic(publicHtml);
+
+    const savePage1Url =
+      "https://motorgate.jp/stock/savelist";
+
+    const savePage1Res = await fetch(savePage1Url, {
+      headers: {
+        Cookie: jarToCookie(jar),
+        Referer: publicUrl,
+      },
+    });
+
+    const savePage1Html = await savePage1Res.text();
+    const savePage1StockIds = extractStockIdsFromSave(savePage1Html);
+
+    const savePage2Url =
+      "https://motorgate.jp/stock/savelist/paging/2/25";
+
+    const savePage2Res = await fetch(savePage2Url, {
+      headers: {
+        Cookie: jarToCookie(jar),
+        Referer: savePage1Url,
+      },
+    });
+
+    const savePage2Html = await savePage2Res.text();
+    const savePage2StockIds = extractStockIdsFromSave(savePage2Html);
+
+    const saveStockIds = unique([
+      ...savePage1StockIds,
+      ...savePage2StockIds,
+    ]);
+
+    const allStockIds = unique([
+      ...publicStockIds,
+      ...saveStockIds,
+    ]);
 
     return Response.json({
       success: true,
-      status: saveRes.status,
-      containsLoginForm: saveHtml.includes('name="client_pw"'),
 
-      stockIds: findStockIds(saveHtml),
-      screenIds: findScreenIds(saveHtml),
-      links: findSaveLinks(saveHtml),
-      inputs: findInterestingInputs(saveHtml),
-      text: findInterestingText(saveHtml),
+      public: {
+        count: publicStockIds.length,
+        stockIds: publicStockIds,
+      },
 
-      preview: saveHtml.substring(0, 3000),
+      save: {
+        page1Count: savePage1StockIds.length,
+        page2Count: savePage2StockIds.length,
+        count: saveStockIds.length,
+        stockIds: saveStockIds,
+      },
+
+      total: {
+        simpleTotal:
+          publicStockIds.length + saveStockIds.length,
+
+        uniqueTotal:
+          allStockIds.length,
+      },
+
+      page2Preview:
+        savePage2Html.substring(0, 1000),
     });
   } catch (e) {
     return Response.json({
