@@ -291,7 +291,8 @@ async function fetchVehicle({ clientId, jar, stockId, stockStatus, source, withD
   });
 
   const html = await edit.text();
-
+const htmlHead = html.substring(0, 50000);
+  
   const vehicle = {
     stockId,
     source,
@@ -334,6 +335,7 @@ async function fetchVehicle({ clientId, jar, stockId, stockStatus, source, withD
       kataCode: extractSelectValue(html, "Kata"),
       bodyColorCode: extractSelectValue(html, "ColorBody"),
     },
+    htmlHead,
   };
 
   if (withDebug) {
