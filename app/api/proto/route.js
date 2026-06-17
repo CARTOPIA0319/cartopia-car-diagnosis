@@ -57,59 +57,40 @@ function extractStockIdsFromSave(html) {
   ]);
 }
 
-function extractSelectValue(html, key) {
-  const regex = new RegExp(
-    `<select[^>]*(?:id|name)=["']${key}["'][\\s\\S]*?<\\/select>`,
-    "i"
+function extractImages(html, stockId) {
+  const urls = unique([
+    ...Array.from(
+      html.matchAll(/https?:\/\/[^"'\s<>]+?\.(?:jpg|jpeg|png|webp)(?:\?[^"'\s<>]*)?/gi)
+    ).map((m) => m[0]),
+
+    ...Array.from(
+      html.matchAll(/src=["']([^"']+\.(?:jpg|jpeg|png|webp)(?:\?[^"']*)?)["']/gi)
+    ).map((m) => m[1]),
+  ])
+    .map((url) => {
+      if (url.startsWith("//")) return `https:${url}`;
+      if (url.startsWith("/")) return `https://motorgate.jp${url}`;
+      return url;
+    })
+    .filter((url) =>
+      !url.includes("car_nophoto") &&
+      !url.includes("no_photo") &&
+      !url.includes("nophoto")
+    );
+
+  const stockImageUrls = urls.filter((url) =>
+    url.includes(stockId.replace("0902332A", "7000902332"))
+    || url.includes(stockId)
+    || url.includes("storage-motorgate")
+    || url.includes("picture-referrer.goo-net.com")
   );
 
-  const match = html.match(regex);
-  if (!match) return null;
-
-  const selected = match[0].match(
-    /<option[^>]*value=["']([^"']*)["'][^>]*selected[^>]*>/i
-  );
-
-  return selected?.[1] || null;
-}
-
-function extractSelectText(html, key) {
-  const regex = new RegExp(
-    `<select[^>]*(?:id|name)=["']${key}["'][\\s\\S]*?<\\/select>`,
-    "i"
-  );
-
-  const match = html.match(regex);
-  if (!match) return null;
-
-  const selected = match[0].match(
-    /<option[^>]*selected[^>]*>(.*?)<\/option>/i
-  );
-
-  return selected?.[1]
-    ?.replace(/<[^>]+>/g, "")
-    ?.replace(/\s+/g, " ")
-    ?.trim() || null;
-}
-
-function extractInput(html, key) {
-  const regex = new RegExp(
-    `(?:id|name)=["']${key}["'][^>]*value=["']([^"']*)["']`,
-    "i"
-  );
-
-  return html.match(regex)?.[1] || null;
-}
-
-function cleanGradeName(text) {
-  if (!text) return null;
-
-  return text
-    .replace(/\(5名\)/g, "")
-    .replace(/\(4名\)/g, "")
-    .replace(/\(5蜷�\)/g, "")
-    .replace(/\(4蜷�\)/g, "")
-    .trim();
+  return {
+    mainImageUrl: stockImageUrls[0] || urls[0] || null,
+    imageCount: stockImageUrls.length || urls.length,
+    imageUrls: stockImageUrls.slice(0, 5),
+    allCandidateUrls: urls.slice(0, 20),
+  };
 }
 
 function buildEditUrl({ clientId, stockId, stockStatus, source }) {
@@ -120,29 +101,7 @@ function buildEditUrl({ clientId, stockId, stockStatus, source }) {
   return `https://motorgate.jp/car/newregist/register?kbn=1&ClientId=${clientId}&StockId=${stockId}&StockStatus=${stockStatus}&ScreenId=CB101GR`;
 }
 
-function mapVehicle(values) {
-  return {
-    brand: values.brandText,
-    car: values.modelText,
-    grade: cleanGradeName(values.gradeName || values.gradeText),
-    kata: values.kataText || values.kataName,
-
-    year: values.year,
-    month: values.month,
-
-    mileage: values.mileage,
-    price: values.price,
-    totalPrice: values.totalPrice,
-
-    colorCode: values.colorCode,
-    color: values.advertisedColor || values.catalogColor,
-    bodyColor: values.bodyColorText,
-
-    chassisNumber: values.chassisNumber,
-  };
-}
-
-async function fetchVehicle({ clientId, jar, stockId, stockStatus, source }) {
+async function fetchVehicleImages({ clientId, jar, stockId, stockStatus, source }) {
   const editUrl = buildEditUrl({
     clientId,
     stockId,
@@ -158,59 +117,14 @@ async function fetchVehicle({ clientId, jar, stockId, stockStatus, source }) {
   });
 
   const editHtml = await readText(edit);
-
-  const values = {
-    brandCode: extractSelectValue(editHtml, "BrandName"),
-    brandText: extractSelectText(editHtml, "BrandName"),
-
-    modelCode: extractSelectValue(editHtml, "ModelName"),
-    modelText: extractSelectText(editHtml, "ModelName"),
-
-    gradeCode: extractSelectValue(editHtml, "Grade"),
-    gradeText: extractSelectText(editHtml, "Grade"),
-    gradeName: extractInput(editHtml, "GradeName"),
-
-    kataCode: extractSelectValue(editHtml, "Kata"),
-    kataText: extractSelectText(editHtml, "Kata"),
-    kataName: extractInput(editHtml, "KataName"),
-
-    colorCode: extractInput(editHtml, "ColorCodeSerch"),
-    catalogColor: extractInput(editHtml, "CatColor"),
-    advertisedColor: extractInput(editHtml, "AdColorName"),
-
-    bodyColorCode: extractSelectValue(editHtml, "ColorBody"),
-    bodyColorText: extractSelectText(editHtml, "ColorBody"),
-
-    year: extractSelectValue(editHtml, "AdY"),
-    month: extractSelectValue(editHtml, "AdM"),
-
-    mileage: extractInput(editHtml, "Soukou"),
-    price: extractInput(editHtml, "Kakaku"),
-    totalPrice: extractInput(editHtml, "TotalPrice"),
-
-    chassisNumber:
-      extractInput(editHtml, "SyadaiNum") ||
-      extractInput(editHtml, "temp_syadai_num"),
-  };
-
-  const vehicle = mapVehicle(values);
+  const images = extractImages(editHtml, stockId);
 
   return {
     stockId,
-    stockStatus,
     source,
     editStatus: edit.status,
     containsLoginForm: editHtml.includes('name="client_pw"'),
-
-    ...vehicle,
-
-    codes: {
-      brandCode: values.brandCode,
-      modelCode: values.modelCode,
-      gradeCode: values.gradeCode,
-      kataCode: values.kataCode,
-      bodyColorCode: values.bodyColorCode,
-    },
+    ...images,
   };
 }
 
@@ -280,13 +194,13 @@ export async function GET() {
     const saveStockIds = extractStockIdsFromSave(saveHtml);
 
     const targets = [
-      ...publicStockIds.map((stockId) => ({
+      ...publicStockIds.slice(0, 5).map((stockId) => ({
         stockId,
         stockStatus: "00180002",
         source: "public",
       })),
 
-      ...saveStockIds.map((stockId) => ({
+      ...saveStockIds.slice(0, 3).map((stockId) => ({
         stockId,
         stockStatus: "00180002",
         source: "save",
@@ -296,7 +210,7 @@ export async function GET() {
     const vehicles = [];
 
     for (const target of targets) {
-      const vehicle = await fetchVehicle({
+      const vehicle = await fetchVehicleImages({
         clientId,
         jar,
         ...target,
@@ -305,46 +219,19 @@ export async function GET() {
       vehicles.push(vehicle);
     }
 
-    const codeSummary = {
-      brandCodes: unique(
-        vehicles.map((v) => v.codes.brandCode).filter(Boolean)
-      ),
-
-      modelCodes: unique(
-        vehicles.map((v) => v.codes.modelCode).filter(Boolean)
-      ),
-
-      gradeCodes: unique(
-        vehicles.map((v) => v.codes.gradeCode).filter(Boolean)
-      ),
-
-      kataCodes: unique(
-        vehicles.map((v) => v.codes.kataCode).filter(Boolean)
-      ),
-
-      colorCodes: unique(
-        vehicles.map((v) => v.colorCode).filter(Boolean)
-      ),
-
-      bodyColorCodes: unique(
-        vehicles.map((v) => v.codes.bodyColorCode).filter(Boolean)
-      ),
-    };
-
     return Response.json({
       success: true,
 
       counts: {
         public: publicStockIds.length,
         save: saveStockIds.length,
-        total: targets.length,
-        crawled: vehicles.length,
+        total: publicStockIds.length + saveStockIds.length,
+        checked: vehicles.length,
       },
 
       note:
-        "All vehicles crawled. Japanese text may still be mojibake, but codes are usable.",
+        "Image test: first 5 public vehicles and first 3 save vehicles checked.",
 
-      codeSummary,
       vehicles,
     });
   } catch (e) {
