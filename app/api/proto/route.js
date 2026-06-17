@@ -28,44 +28,68 @@ function jarToCookie(jar) {
     .join("; ");
 }
 
-function extractSelectHtml(html, key) {
+async function readUtf8(response) {
+  const buffer = await response.arrayBuffer();
+  return new TextDecoder("utf-8").decode(buffer);
+}
+
+function unique(array) {
+  return Array.from(new Set(array));
+}
+
+function extractStockIdsFromPublic(html) {
+  return unique(
+    Array.from(
+      html.matchAll(/stock_ids\[\][^>]*value=['"]([A-Z0-9]+)['"]/gi)
+    ).map((m) => m[1])
+  );
+}
+
+function extractStockIdsFromSave(html) {
+  return unique([
+    ...Array.from(
+      html.matchAll(/StockId=([A-Z0-9]+)/gi)
+    ).map((m) => m[1]),
+
+    ...Array.from(
+      html.matchAll(/list_check_[A-Z0-9]+['"][^>]*value=['"]([A-Z0-9]+)['"]/gi)
+    ).map((m) => m[1]),
+  ]);
+}
+
+function extractSelectValue(html, key) {
   const regex = new RegExp(
     `<select[^>]*(?:id|name)=["']${key}["'][\\s\\S]*?<\\/select>`,
     "i"
   );
 
-  return html.match(regex)?.[0] || "";
-}
+  const match = html.match(regex);
+  if (!match) return null;
 
-function extractOptions(selectHtml) {
-  const options = [];
-
-  for (const match of selectHtml.matchAll(
-    /<option[^>]*value=["']([^"']*)["'][^>]*>(.*?)<\/option>/gi
-  )) {
-    const value = match[1];
-    const text = match[2]
-      .replace(/<[^>]+>/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
-
-    if (value !== "") {
-      options.push({
-        value,
-        text,
-      });
-    }
-  }
-
-  return options;
-}
-
-function extractSelectedValue(html, key) {
-  const selectHtml = extractSelectHtml(html, key);
-
-  return selectHtml.match(
+  const selected = match[0].match(
     /<option[^>]*value=["']([^"']*)["'][^>]*selected[^>]*>/i
-  )?.[1] || null;
+  );
+
+  return selected?.[1] || null;
+}
+
+function extractSelectText(html, key) {
+  const regex = new RegExp(
+    `<select[^>]*(?:id|name)=["']${key}["'][\\s\\S]*?<\\/select>`,
+    "i"
+  );
+
+  const match = html.match(regex);
+  if (!match) return null;
+
+  const selected = match[0].match(
+    /<option[^>]*selected[^>]*>(.*?)<\/option>/i
+  );
+
+  return selected?.[1]
+    ?.replace(/<[^>]+>/g, "")
+    ?.replace(/\s+/g, " ")
+    ?.trim() || null;
 }
 
 function extractInput(html, key) {
@@ -77,14 +101,115 @@ function extractInput(html, key) {
   return html.match(regex)?.[1] || null;
 }
 
-function toDict(options) {
-  const dict = {};
+function cleanGradeName(text) {
+  if (!text) return null;
 
-  for (const option of options) {
-    dict[option.value] = option.text;
+  return text
+    .replace(/\(5名\)/g, "")
+    .replace(/\(4名\)/g, "")
+    .trim();
+}
+
+function buildEditUrl({ clientId, stockId, stockStatus, source }) {
+  if (source === "save") {
+    return `https://motorgate.jp/car/newregist/register?kbn=1&client_id=${clientId}&StockStatus=${stockStatus}&StockId=${stockId}&ScreenId=SIH_001`;
   }
 
-  return dict;
+  return `https://motorgate.jp/car/newregist/register?kbn=1&ClientId=${clientId}&StockId=${stockId}&StockStatus=${stockStatus}&ScreenId=CB101GR`;
+}
+
+function mapVehicle(values) {
+  return {
+    brand: values.brandText,
+    car: values.modelText,
+    grade: cleanGradeName(values.gradeName || values.gradeText),
+    kata: values.kataText || values.kataName,
+
+    year: values.year,
+    month: values.month,
+
+    mileage: values.mileage,
+    price: values.price,
+    totalPrice: values.totalPrice,
+
+    colorCode: values.colorCode,
+    color: values.advertisedColor || values.catalogColor,
+    bodyColor: values.bodyColorText,
+
+    chassisNumber: values.chassisNumber,
+  };
+}
+
+async function fetchVehicle({ clientId, jar, stockId, stockStatus, source }) {
+  const editUrl = buildEditUrl({
+    clientId,
+    stockId,
+    stockStatus,
+    source,
+  });
+
+  const edit = await fetch(editUrl, {
+    headers: {
+      Cookie: jarToCookie(jar),
+      Referer: "https://motorgate.jp/top",
+    },
+  });
+
+  const editHtml = await readUtf8(edit);
+
+  const values = {
+    brandCode: extractSelectValue(editHtml, "BrandName"),
+    brandText: extractSelectText(editHtml, "BrandName"),
+
+    modelCode: extractSelectValue(editHtml, "ModelName"),
+    modelText: extractSelectText(editHtml, "ModelName"),
+
+    gradeCode: extractSelectValue(editHtml, "Grade"),
+    gradeText: extractSelectText(editHtml, "Grade"),
+    gradeName: extractInput(editHtml, "GradeName"),
+
+    kataCode: extractSelectValue(editHtml, "Kata"),
+    kataText: extractSelectText(editHtml, "Kata"),
+    kataName: extractInput(editHtml, "KataName"),
+
+    colorCode: extractInput(editHtml, "ColorCodeSerch"),
+    catalogColor: extractInput(editHtml, "CatColor"),
+    advertisedColor: extractInput(editHtml, "AdColorName"),
+
+    bodyColorCode: extractSelectValue(editHtml, "ColorBody"),
+    bodyColorText: extractSelectText(editHtml, "ColorBody"),
+
+    year: extractSelectValue(editHtml, "AdY"),
+    month: extractSelectValue(editHtml, "AdM"),
+
+    mileage: extractInput(editHtml, "Soukou"),
+    price: extractInput(editHtml, "Kakaku"),
+    totalPrice: extractInput(editHtml, "TotalPrice"),
+
+    chassisNumber:
+      extractInput(editHtml, "SyadaiNum") ||
+      extractInput(editHtml, "temp_syadai_num"),
+  };
+
+  const vehicle = mapVehicle(values);
+
+  return {
+    stockId,
+    stockStatus,
+    source,
+    editStatus: edit.status,
+    containsLoginForm: editHtml.includes('name="client_pw"'),
+
+    ...vehicle,
+
+    raw: {
+      brandCode: values.brandCode,
+      modelCode: values.modelCode,
+      gradeCode: values.gradeCode,
+      kataCode: values.kataCode,
+      bodyColorCode: values.bodyColorCode,
+    },
+  };
 }
 
 export async function GET() {
@@ -93,15 +218,12 @@ export async function GET() {
     const password = process.env.MOTORGATE_PASSWORD;
 
     const loginUrl = "https://motorgate.jp/login/index";
-    const stockUrl =
-      "https://motorgate.jp/stock/newsearch/stocklist/index/1/100";
-
     const jar = {};
 
     const page = await fetch(loginUrl);
     addCookies(jar, page.headers.get("set-cookie") || "");
 
-    const html = await page.text();
+    const html = await readUtf8(page);
 
     const csrf =
       html.match(/name="fuel_csrf_token"\s+value="([^"]+)"/)?.[1];
@@ -129,82 +251,73 @@ export async function GET() {
 
     addCookies(jar, login.headers.get("set-cookie") || "");
 
-    const stockRes = await fetch(stockUrl, {
+    const publicUrl =
+      "https://motorgate.jp/stock/newsearch/stocklist/index/1/100";
+
+    const publicRes = await fetch(publicUrl, {
       headers: {
         Cookie: jarToCookie(jar),
         Referer: "https://motorgate.jp/top",
       },
     });
 
-    const stockHtml = await stockRes.text();
+    const publicHtml = await readUtf8(publicRes);
+    const publicStockIds = extractStockIdsFromPublic(publicHtml);
 
-    const firstStockId =
-      stockHtml.match(/stock_ids\[\][^>]*value=['"]([A-Z0-9]+)['"]/i)?.[1];
+    const saveUrl =
+      "https://motorgate.jp/stock/savelist/index/1/100";
 
-    const editUrl =
-      `https://motorgate.jp/car/newregist/register?kbn=1&ClientId=${clientId}&StockId=${firstStockId}&StockStatus=00180002&ScreenId=CB101GR`;
-
-    const editRes = await fetch(editUrl, {
+    const saveRes = await fetch(saveUrl, {
       headers: {
         Cookie: jarToCookie(jar),
-        Referer: stockUrl,
+        Referer: publicUrl,
       },
     });
 
-    console.log(
-  "content-type:",
-  editRes.headers.get("content-type")
-);
+    const saveHtml = await readUtf8(saveRes);
+    const saveStockIds = extractStockIdsFromSave(saveHtml);
 
-const editHtml = await editRes.text();
+    const targets = [
+      ...publicStockIds.map((stockId) => ({
+        stockId,
+        stockStatus: "00180002",
+        source: "public",
+      })),
 
-    const brandOptions =
-      extractOptions(extractSelectHtml(editHtml, "BrandName"));
+      ...saveStockIds.map((stockId) => ({
+        stockId,
+        stockStatus: "00180002",
+        source: "save",
+      })),
+    ];
 
-    const modelOptions =
-      extractOptions(extractSelectHtml(editHtml, "ModelName"));
+    const limitedTargets = targets.slice(0, 10);
 
-    const gradeOptions =
-      extractOptions(extractSelectHtml(editHtml, "Grade"));
+    const vehicles = [];
 
-    const kataOptions =
-      extractOptions(extractSelectHtml(editHtml, "Kata"));
+    for (const target of limitedTargets) {
+      const vehicle = await fetchVehicle({
+        clientId,
+        jar,
+        ...target,
+      });
 
-    const colorOptions =
-      extractOptions(extractSelectHtml(editHtml, "SelColorCode"));
-
-    const bodyColorOptions =
-      extractOptions(extractSelectHtml(editHtml, "ColorBody"));
+      vehicles.push(vehicle);
+    }
 
     return Response.json({
       success: true,
 
-      firstStockId,
-
-      selected: {
-        brandCode: extractSelectedValue(editHtml, "BrandName"),
-        modelCode: extractSelectedValue(editHtml, "ModelName"),
-        gradeCode: extractSelectedValue(editHtml, "Grade"),
-        kataCode: extractSelectedValue(editHtml, "Kata"),
-        colorCode: extractInput(editHtml, "ColorCodeSerch"),
-        bodyColorCode: extractSelectedValue(editHtml, "ColorBody"),
+      counts: {
+        public: publicStockIds.length,
+        save: saveStockIds.length,
+        total: targets.length,
+        crawled: vehicles.length,
       },
 
-      dictionaries: {
-        brandCount: brandOptions.length,
-        modelCount: modelOptions.length,
-        gradeCount: gradeOptions.length,
-        kataCount: kataOptions.length,
-        colorCount: colorOptions.length,
-        bodyColorCount: bodyColorOptions.length,
+      note: "Encoding test: only first 10 vehicles crawled.",
 
-        brand: toDict(brandOptions),
-        model: toDict(modelOptions),
-        grade: toDict(gradeOptions),
-        kata: toDict(kataOptions),
-        color: toDict(colorOptions),
-        bodyColor: toDict(bodyColorOptions),
-      },
+      vehicles,
     });
   } catch (e) {
     return Response.json({
