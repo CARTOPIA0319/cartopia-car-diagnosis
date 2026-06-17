@@ -41,16 +41,22 @@ function extractStockIdsFromPublic(html) {
 }
 
 function extractStockIdsFromSave(html) {
-  return unique(
-    [
-      ...Array.from(
-        html.matchAll(/StockId=([A-Z0-9]+)/gi)
-      ).map((m) => m[1]),
+  return unique([
+    ...Array.from(
+      html.matchAll(/StockId=([A-Z0-9]+)/gi)
+    ).map((m) => m[1]),
 
-      ...Array.from(
-        html.matchAll(/list_check_[A-Z0-9]+['"][^>]*value=['"]([A-Z0-9]+)['"]/gi)
-      ).map((m) => m[1])
-    ]
+    ...Array.from(
+      html.matchAll(/list_check_[A-Z0-9]+['"][^>]*value=['"]([A-Z0-9]+)['"]/gi)
+    ).map((m) => m[1]),
+  ]);
+}
+
+function findSavePerPageLinks(html) {
+  return unique(
+    Array.from(
+      html.matchAll(/\/stock\/savelist\/(?:index|paging)\/[0-9]+\/[0-9]+/gi)
+    ).map((m) => m[0])
   );
 }
 
@@ -60,7 +66,6 @@ export async function GET() {
     const password = process.env.MOTORGATE_PASSWORD;
 
     const loginUrl = "https://motorgate.jp/login/index";
-
     const jar = {};
 
     const page = await fetch(loginUrl);
@@ -118,29 +123,50 @@ export async function GET() {
     });
 
     const savePage1Html = await savePage1Res.text();
-    const savePage1StockIds = extractStockIdsFromSave(savePage1Html);
 
-    const savePage2Url =
-      "https://motorgate.jp/stock/savelist/paging/2/25";
+    const perPageLinks = findSavePerPageLinks(savePage1Html);
 
-    const savePage2Res = await fetch(savePage2Url, {
-      headers: {
-        Cookie: jarToCookie(jar),
-        Referer: savePage1Url,
-      },
-    });
-
-    const savePage2Html = await savePage2Res.text();
-    const savePage2StockIds = extractStockIdsFromSave(savePage2Html);
-
-    const saveStockIds = unique([
-      ...savePage1StockIds,
-      ...savePage2StockIds,
+    const candidateSaveUrls = unique([
+      "https://motorgate.jp/stock/savelist/index/1/100",
+      "https://motorgate.jp/stock/savelist/paging/1/100",
+      "https://motorgate.jp/stock/savelist/index/1/75",
+      "https://motorgate.jp/stock/savelist/paging/1/75",
+      ...perPageLinks.map((url) =>
+        url.startsWith("http")
+          ? url
+          : `https://motorgate.jp${url}`
+      ),
     ]);
+
+    const saveAttempts = [];
+
+    for (const url of candidateSaveUrls) {
+      const res = await fetch(url, {
+        headers: {
+          Cookie: jarToCookie(jar),
+          Referer: savePage1Url,
+        },
+      });
+
+      const html = await res.text();
+      const ids = extractStockIdsFromSave(html);
+
+      saveAttempts.push({
+        url,
+        status: res.status,
+        count: ids.length,
+        stockIds: ids,
+      });
+    }
+
+    const bestSave =
+      saveAttempts
+        .slice()
+        .sort((a, b) => b.count - a.count)[0];
 
     const allStockIds = unique([
       ...publicStockIds,
-      ...saveStockIds,
+      ...(bestSave?.stockIds || []),
     ]);
 
     return Response.json({
@@ -152,22 +178,22 @@ export async function GET() {
       },
 
       save: {
-        page1Count: savePage1StockIds.length,
-        page2Count: savePage2StockIds.length,
-        count: saveStockIds.length,
-        stockIds: saveStockIds,
+        bestUrl: bestSave?.url || null,
+        bestCount: bestSave?.count || 0,
+        stockIds: bestSave?.stockIds || [],
+        attempts: saveAttempts.map((a) => ({
+          url: a.url,
+          status: a.status,
+          count: a.count,
+        })),
+        perPageLinks,
       },
 
       total: {
         simpleTotal:
-          publicStockIds.length + saveStockIds.length,
-
-        uniqueTotal:
-          allStockIds.length,
+          publicStockIds.length + (bestSave?.count || 0),
+        uniqueTotal: allStockIds.length,
       },
-
-      page2Preview:
-        savePage2Html.substring(0, 1000),
     });
   } catch (e) {
     return Response.json({
