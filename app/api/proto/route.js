@@ -204,6 +204,35 @@ function makeDebugSelects(html) {
   return result;
 }
 
+function findKeywordSnippets(html) {
+  const keywords = [
+    "BrandNamechange",
+    "ModelNamechange",
+    "brand",
+    "maker",
+    "model",
+    "car_name",
+    "maker_name",
+    "brand_name"
+  ];
+
+  const result = {};
+
+  for (const keyword of keywords) {
+    const index = html.indexOf(keyword);
+
+    result[keyword] =
+      index >= 0
+        ? html.substring(
+            Math.max(0, index - 1000),
+            Math.min(html.length, index + 1000)
+          )
+        : null;
+  }
+
+  return result;
+}
+
 async function fetchVehicle({ clientId, jar, stockId, stockStatus, source, withDebug }) {
   const editUrl = buildEditUrl({
     clientId,
@@ -267,6 +296,7 @@ async function fetchVehicle({ clientId, jar, stockId, stockStatus, source, withD
 
   if (withDebug) {
     vehicle.debugSelects = makeDebugSelects(html);
+    vehicle.keywordSnippets = findKeywordSnippets(html);
   }
 
   return vehicle;
@@ -394,7 +424,7 @@ export async function GET(request) {
       },
 
       note:
-        "Production vehicle API with optional debug select HTML. Use debug=1 to inspect the first vehicle only.",
+        "Production vehicle API with optional debug select HTML and keyword snippets. Use debug=1 to inspect the first vehicle only.",
 
       vehicles,
     });
