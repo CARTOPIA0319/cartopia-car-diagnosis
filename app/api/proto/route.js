@@ -57,6 +57,15 @@ function extractStockIdsFromSave(html) {
   ]);
 }
 
+function normalizeImageUrl(url) {
+  if (!url) return null;
+
+  if (url.startsWith("//")) return `https:${url}`;
+  if (url.startsWith("/")) return `https://motorgate.jp${url}`;
+
+  return url;
+}
+
 function extractImages(html, stockId) {
   const urls = unique([
     ...Array.from(
@@ -67,28 +76,62 @@ function extractImages(html, stockId) {
       html.matchAll(/src=["']([^"']+\.(?:jpg|jpeg|png|webp)(?:\?[^"']*)?)["']/gi)
     ).map((m) => m[1]),
   ])
-    .map((url) => {
-      if (url.startsWith("//")) return `https:${url}`;
-      if (url.startsWith("/")) return `https://motorgate.jp${url}`;
-      return url;
-    })
+    .map(normalizeImageUrl)
+    .filter(Boolean)
     .filter((url) =>
       !url.includes("car_nophoto") &&
       !url.includes("no_photo") &&
-      !url.includes("nophoto")
+      !url.includes("nophoto") &&
+      !url.includes("/assets/img/common/car") &&
+      !url.includes("/assets/img/common/img-set")
     );
 
-  const stockImageUrls = urls.filter((url) =>
-    url.includes(stockId.replace("0902332A", "7000902332"))
-    || url.includes(stockId)
-    || url.includes("storage-motorgate")
-    || url.includes("picture-referrer.goo-net.com")
+  const realVehicleImages = urls.filter((url) =>
+    (
+      url.includes("secure.goo-net.com") ||
+      url.includes("picture-referrer.goo-net.com")
+    ) &&
+    (
+      url.includes(stockId) ||
+      /\/090\/0902332\/[QJ]\//.test(url) ||
+      /\/7000902332\//.test(url)
+    ) &&
+    !url.includes("_NO") &&
+    !url.includes("_MP")
   );
 
+  const sortedRealVehicleImages = realVehicleImages.slice().sort((a, b) => {
+    const score = (url) => {
+      let value = 0;
+
+      if (url.includes("/Q/")) value += 100;
+      if (url.includes("01.jpg")) value += 50;
+      if (url.includes("00.jpg")) value += 40;
+      if (url.includes(stockId)) value += 20;
+      if (url.includes("secure.goo-net.com")) value += 10;
+
+      return value;
+    };
+
+    return score(b) - score(a);
+  });
+
+  const fallbackImages = urls.filter((url) =>
+    url.includes("secure.goo-net.com") ||
+    url.includes("picture-referrer.goo-net.com") ||
+    url.includes("storage-motorgate")
+  );
+
+  const mainImageUrl =
+    sortedRealVehicleImages[0] ||
+    fallbackImages[0] ||
+    null;
+
   return {
-    mainImageUrl: stockImageUrls[0] || urls[0] || null,
-    imageCount: stockImageUrls.length || urls.length,
-    imageUrls: stockImageUrls.slice(0, 5),
+    mainImageUrl,
+    imageCount: sortedRealVehicleImages.length || fallbackImages.length,
+    imageUrls: sortedRealVehicleImages.slice(0, 5),
+    fallbackImageUrls: fallbackImages.slice(0, 5),
     allCandidateUrls: urls.slice(0, 20),
   };
 }
@@ -230,7 +273,7 @@ export async function GET() {
       },
 
       note:
-        "Image test: first 5 public vehicles and first 3 save vehicles checked.",
+        "Image test: real vehicle image preferred. First 5 public vehicles and first 3 save vehicles checked.",
 
       vehicles,
     });
