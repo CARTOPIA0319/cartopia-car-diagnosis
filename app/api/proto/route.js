@@ -28,7 +28,7 @@ function jarToCookie(jar) {
     .join("; ");
 }
 
-async function readUtf8(response) {
+async function readText(response) {
   const buffer = await response.arrayBuffer();
   return new TextDecoder("utf-8").decode(buffer);
 }
@@ -107,6 +107,8 @@ function cleanGradeName(text) {
   return text
     .replace(/\(5名\)/g, "")
     .replace(/\(4名\)/g, "")
+    .replace(/\(5蜷�\)/g, "")
+    .replace(/\(4蜷�\)/g, "")
     .trim();
 }
 
@@ -155,7 +157,7 @@ async function fetchVehicle({ clientId, jar, stockId, stockStatus, source }) {
     },
   });
 
-  const editHtml = await readUtf8(edit);
+  const editHtml = await readText(edit);
 
   const values = {
     brandCode: extractSelectValue(editHtml, "BrandName"),
@@ -202,7 +204,7 @@ async function fetchVehicle({ clientId, jar, stockId, stockStatus, source }) {
 
     ...vehicle,
 
-    raw: {
+    codes: {
       brandCode: values.brandCode,
       modelCode: values.modelCode,
       gradeCode: values.gradeCode,
@@ -223,7 +225,7 @@ export async function GET() {
     const page = await fetch(loginUrl);
     addCookies(jar, page.headers.get("set-cookie") || "");
 
-    const html = await readUtf8(page);
+    const html = await readText(page);
 
     const csrf =
       html.match(/name="fuel_csrf_token"\s+value="([^"]+)"/)?.[1];
@@ -261,7 +263,7 @@ export async function GET() {
       },
     });
 
-    const publicHtml = await readUtf8(publicRes);
+    const publicHtml = await readText(publicRes);
     const publicStockIds = extractStockIdsFromPublic(publicHtml);
 
     const saveUrl =
@@ -274,7 +276,7 @@ export async function GET() {
       },
     });
 
-    const saveHtml = await readUtf8(saveRes);
+    const saveHtml = await readText(saveRes);
     const saveStockIds = extractStockIdsFromSave(saveHtml);
 
     const targets = [
@@ -291,11 +293,9 @@ export async function GET() {
       })),
     ];
 
-    const limitedTargets = targets.slice(0, 10);
-
     const vehicles = [];
 
-    for (const target of limitedTargets) {
+    for (const target of targets) {
       const vehicle = await fetchVehicle({
         clientId,
         jar,
@@ -304,6 +304,32 @@ export async function GET() {
 
       vehicles.push(vehicle);
     }
+
+    const codeSummary = {
+      brandCodes: unique(
+        vehicles.map((v) => v.codes.brandCode).filter(Boolean)
+      ),
+
+      modelCodes: unique(
+        vehicles.map((v) => v.codes.modelCode).filter(Boolean)
+      ),
+
+      gradeCodes: unique(
+        vehicles.map((v) => v.codes.gradeCode).filter(Boolean)
+      ),
+
+      kataCodes: unique(
+        vehicles.map((v) => v.codes.kataCode).filter(Boolean)
+      ),
+
+      colorCodes: unique(
+        vehicles.map((v) => v.colorCode).filter(Boolean)
+      ),
+
+      bodyColorCodes: unique(
+        vehicles.map((v) => v.codes.bodyColorCode).filter(Boolean)
+      ),
+    };
 
     return Response.json({
       success: true,
@@ -315,8 +341,10 @@ export async function GET() {
         crawled: vehicles.length,
       },
 
-      note: "Encoding test: only first 10 vehicles crawled.",
+      note:
+        "All vehicles crawled. Japanese text may still be mojibake, but codes are usable.",
 
+      codeSummary,
       vehicles,
     });
   } catch (e) {
