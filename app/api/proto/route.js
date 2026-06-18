@@ -132,6 +132,30 @@ function absoluteUrl(src, baseUrl) {
   return new URL(src, baseUrl).toString();
 }
 
+function extractQualityImageMap(html, baseUrl) {
+  const map = {};
+
+  const regex =
+    /<input\b[^>]*name=['"]quality_img_url\[\]['"][^>]*>/gi;
+
+  const inputs = String(html || "").match(regex) || [];
+
+  for (const input of inputs) {
+    const id =
+      input.match(/data-quality-img-url-id=["']([^"']+)["']/i)?.[1] ||
+      input.match(/id=["']quality_img_url_([^"']+)["']/i)?.[1] ||
+      "";
+
+    const value = input.match(/value=["']([^"']+)["']/i)?.[1] || "";
+
+    if (id && value) {
+      map[id] = absoluteUrl(decodeHtmlEntities(value), baseUrl);
+    }
+  }
+
+  return map;
+}
+
 function extractRawHrefValues(html) {
   return Array.from(
     String(html || "").matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi)
@@ -147,17 +171,11 @@ function extractHrefValues(html, baseUrl) {
 }
 
 function extractImageValues(html, baseUrl) {
-  const imgs = Array.from(
+  return Array.from(
     String(html || "").matchAll(/<img\b[^>]*src=["']([^"']+)["'][^>]*>/gi)
-  ).map((m) => absoluteUrl(decodeHtmlEntities(m[1]), baseUrl));
-
-  const qualityImgs = Array.from(
-    String(html || "").matchAll(
-      /name=['"]quality_img_url\[\]['"][^>]*value=["']([^"']+)["']/gi
-    )
-  ).map((m) => absoluteUrl(decodeHtmlEntities(m[1]), baseUrl));
-
-  return [...qualityImgs, ...imgs].filter(Boolean);
+  )
+    .map((m) => absoluteUrl(decodeHtmlEntities(m[1]), baseUrl))
+    .filter(Boolean);
 }
 
 function findFirstUrl(urls, includesText) {
@@ -216,16 +234,6 @@ function fixBasicMojibake(text) {
     .trim();
 }
 
-function extractHiddenBeforeRow(html, stockId) {
-  const marker = `<tr id="tr_${stockId}"`;
-  const index = html.indexOf(marker);
-  if (index < 0) return "";
-
-  const before = html.slice(Math.max(0, index - 12000), index);
-  const prevTr = before.lastIndexOf("</tr>");
-  return prevTr >= 0 ? before.slice(prevTr) : before;
-}
-
 function extractVehicleRows(html) {
   const rows = [];
   const regex =
@@ -234,22 +242,21 @@ function extractVehicleRows(html) {
   let match;
 
   while ((match = regex.exec(html)) !== null) {
-    const stockId = match[1];
     rows.push({
-      stockId,
-      rowHtml: extractHiddenBeforeRow(html, stockId) + match[0],
+      stockId: match[1],
+      rowHtml: match[0],
     });
   }
 
   return rows;
 }
 
-function parseVehicleRow(row, baseUrl) {
+function parseVehicleRow(row, baseUrl, qualityImageMap) {
   const { stockId, rowHtml } = row;
 
   const rawHrefs = extractRawHrefValues(rowHtml);
   const urls = extractHrefValues(rowHtml, baseUrl);
-  const images = extractImageValues(rowHtml, baseUrl);
+  const rowImages = extractImageValues(rowHtml, baseUrl);
 
   const rawTireHref =
     rawHrefs.find((href) => href.includes("get_tire_from_car_model")) || "";
@@ -300,12 +307,14 @@ function parseVehicleRow(row, baseUrl) {
     ? `${fixBasicMojibake(totalPriceNumber)}万円`
     : "";
 
-  const realImages = images.filter(
+  const realRowImages = rowImages.filter(
     (imageUrl) =>
       !imageUrl.includes("car_nophoto") &&
       !imageUrl.includes("total_price_unset") &&
       !imageUrl.includes("/common/")
   );
+
+  const imageUrl = qualityImageMap[stockId] || realRowImages[0] || "";
 
   const title = [carName, gradeName].filter(Boolean).join(" ").trim();
 
@@ -328,7 +337,7 @@ function parseVehicleRow(row, baseUrl) {
     displacement,
     bodyPrice,
     totalPrice,
-    imageUrl: realImages[0] || "",
+    imageUrl,
     detailUrl,
     editUrl,
     gooUrl,
@@ -344,7 +353,7 @@ function parseVehicleRow(row, baseUrl) {
       ]
         .filter(Boolean)
         .join(" / "),
-      imageUrl: realImages[0] || "",
+      imageUrl,
     },
   };
 }
@@ -443,9 +452,11 @@ export async function GET(request) {
 
     const html = await readUtf8Text(res);
 
+    const qualityImageMap = extractQualityImageMap(html, publicListUrl);
     const vehicleRows = extractVehicleRows(html);
+
     const allVehicles = vehicleRows.map((row) =>
-      parseVehicleRow(row, publicListUrl)
+      parseVehicleRow(row, publicListUrl, qualityImageMap)
     );
 
     const vehicles =
@@ -466,6 +477,7 @@ export async function GET(request) {
         foundRows: vehicleRows.length,
         totalVehicles: allVehicles.length,
         returnedVehicles: vehicles.slice(0, limit).length,
+        imageMapCount: Object.keys(qualityImageMap).length,
       },
 
       vehicles: vehicles.slice(0, limit),
