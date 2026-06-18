@@ -33,19 +33,72 @@ function jarToCookie(jar) {
     .join("; ");
 }
 
-function scoreDecodedText(text) {
+async function readUtf8Text(response) {
+  const buffer = await response.arrayBuffer();
+  return new TextDecoder("utf-8", { fatal: false }).decode(buffer);
+}
+
+function decodeHtmlEntities(text) {
+  return String(text || "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) =>
+      String.fromCharCode(parseInt(hex, 16))
+    )
+    .replace(/&#(\d+);/g, (_, num) =>
+      String.fromCharCode(parseInt(num, 10))
+    );
+}
+
+function safeDecodeURIComponent(value) {
+  if (!value) return "";
+
+  try {
+    return decodeURIComponent(String(value).replace(/\+/g, " "));
+  } catch {
+    return String(value);
+  }
+}
+
+function getRawQueryParam(urlString, name) {
+  const decodedUrl = decodeHtmlEntities(urlString || "");
+  const query = decodedUrl.split("?")[1] || "";
+
+  for (const part of query.split("&")) {
+    const eq = part.indexOf("=");
+    if (eq < 0) continue;
+
+    const key = part.slice(0, eq);
+    const value = part.slice(eq + 1);
+
+    if (key === name) {
+      return safeDecodeURIComponent(value);
+    }
+  }
+
+  return "";
+}
+
+function scoreText(text) {
   const goodWords = [
     "ハスラー",
     "ルークス",
     "インプレッサ",
-    "車両情報",
-    "価格",
-    "総額",
-    "年",
-    "万円",
-    "掲載中",
+    "Ｎ－ＯＮＥ",
+    "ＬＳ",
+    "ハイブリッド",
     "４ＷＤ",
     "ナビ",
+    "カメラ",
+    "価格",
+    "総額",
+    "万円",
+    "年",
+    "車検",
   ];
 
   const badWords = [
@@ -65,32 +118,26 @@ function scoreDecodedText(text) {
     "邱",
     "霆",
     "縺",
-    "荳",
     "�",
   ];
 
   let score = 0;
 
   for (const word of goodWords) {
-    if (text.includes(word)) score += 150;
+    if (text.includes(word)) score += 200;
   }
 
   for (const word of badWords) {
     const count = (text.match(new RegExp(word, "g")) || []).length;
-    score -= count * 20;
+    score -= count * 30;
   }
 
   const japaneseCount =
     (text.match(/[ぁ-んァ-ヶ一-龠々ーＡ-Ｚａ-ｚ０-９]/g) || []).length;
 
-  score += Math.min(japaneseCount, 800);
+  score += Math.min(japaneseCount, 1000);
 
   return score;
-}
-
-async function readUtf8Text(response) {
-  const buffer = await response.arrayBuffer();
-  return new TextDecoder("utf-8", { fatal: false }).decode(buffer);
 }
 
 function buildShiftJisReverseMap() {
@@ -140,13 +187,12 @@ function reverseMojibake(text) {
   const bytes = [];
 
   for (const char of Array.from(text)) {
-    const encoded = map.get(char);
+    const sjisBytes = map.get(char);
 
-    if (encoded) {
-      bytes.push(...encoded);
+    if (sjisBytes) {
+      bytes.push(...sjisBytes);
     } else {
-      const fallback = new TextEncoder().encode(char);
-      bytes.push(...fallback);
+      bytes.push(...new TextEncoder().encode(char));
     }
   }
 
@@ -154,13 +200,11 @@ function reverseMojibake(text) {
     Uint8Array.from(bytes)
   );
 
-  return scoreDecodedText(repaired) > scoreDecodedText(text)
-    ? repaired
-    : text;
+  return scoreText(repaired) > scoreText(text) ? repaired : text;
 }
 
 function replaceKnownMojibake(text) {
-  return text
+  return String(text || "")
     .replace(/蟷ｴ/g, "年")
     .replace(/譛�/g, "月")
     .replace(/荳⑫/g, "万K")
@@ -172,26 +216,39 @@ function replaceKnownMojibake(text) {
     .replace(/謗ｲ霈我ｸｭ/g, "掲載中")
     .replace(/霆贋ｸ｡諠��ｱ繧堤ｷｨ髮�/g, "車両情報を編集")
     .replace(/繧ｿ繧､繝､繧呈爾縺�/g, "タイヤを探す")
+
     .replace(/繝上せ繝ｩ繝ｼ/g, "ハスラー")
     .replace(/繝ｫ繝ｼ繧ｯ繧ｹ/g, "ルークス")
+    .replace(/繧､繝ｳ繝励Ξ繝�し繧ｹ繝昴�繝�/g, "インプレッサスポーツ")
     .replace(/繝上う繝悶Μ繝�ラ/g, "ハイブリッド")
+
+    .replace(/�費ｼｷ�､/g, "４ＷＤ")
+    .replace(/�ｼ撰ｼ撰ｽ/g, "６００ｈ")
     .replace(/繧ｪ繝励す繝ｧ繝ｳ/g, "オプション")
+    .replace(/繝��繝医Φ繧ｫ繝ｩ繝ｼ/g, "ツートンカラー")
     .replace(/邏疲ｭ｣/g, "純正")
     .replace(/繝翫ン/g, "ナビ")
-    .replace(/蜈ｨ譁ｹ菴�/g, "全方位")
     .replace(/繧ｫ繝｡繝ｩ/g, "カメラ")
+    .replace(/蜈ｨ譁ｹ菴阪Δ繝九ち繝ｼ/g, "全方位モニター")
+    .replace(/蜈ｨ譁ｹ菴�/g, "全方位")
     .replace(/蜑榊ｸｭ/g, "前席")
     .replace(/繧ｷ繝ｼ繝医ヲ繝ｼ繧ｿ繝ｼ/g, "シートヒーター")
-    .replace(/繧ｹ繝弱�繝｢繝ｼ繝峨/g, "スノーモード");
+    .replace(/繝ｫ繝ｼ繝輔Ξ繝ｼ繝ｫ/g, "ルーフレール")
+    .replace(/繧ｹ繝弱�繝｢繝ｼ繝峨/g, "スノーモード")
+    .replace(/繝代�繧ｭ繝ｳ繧ｰ繧ｽ繝翫�/g, "パーキングソナー")
+    .replace(/繧ｷ繝ｼ繝医ヰ繝�け繝��繝悶Ν/g, "シートバックテーブル")
+    .replace(/繝輔か繧ｰ/g, "フォグ")
+    .replace(/繝悶Ν繝ｼ/g, "ブルー")
+    .replace(/繧ｽ繝九ャ繧ｯ繧ｯ繧ｩ繝ｼ繝�/g, "ソニッククォーツ");
 }
 
 function fixText(text) {
   if (!text) return "";
 
-  const repaired = reverseMojibake(text);
-  const fixed = replaceKnownMojibake(repaired);
+  const reversed = reverseMojibake(text);
+  const knownFixed = replaceKnownMojibake(reversed);
 
-  return fixed
+  return knownFixed
     .replace(/\r/g, "\n")
     .replace(/[ \t]+/g, " ")
     .replace(/\n[ \t]+/g, "\n")
@@ -200,25 +257,9 @@ function fixText(text) {
     .trim();
 }
 
-function decodeHtmlEntities(text) {
-  return text
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&#x([0-9a-f]+);/gi, (_, hex) =>
-      String.fromCharCode(parseInt(hex, 16))
-    )
-    .replace(/&#(\d+);/g, (_, num) =>
-      String.fromCharCode(parseInt(num, 10))
-    );
-}
-
 function cleanHtmlToText(html) {
   return decodeHtmlEntities(
-    html
+    String(html || "")
       .replace(/<script[\s\S]*?<\/script>/gi, " ")
       .replace(/<style[\s\S]*?<\/style>/gi, " ")
       .replace(/<br\s*\/?>/gi, "\n")
@@ -239,7 +280,7 @@ function cleanHtmlToText(html) {
 }
 
 function compactText(text) {
-  return text
+  return String(text || "")
     .split(/\n+/)
     .map((line) => line.trim())
     .filter(Boolean)
@@ -257,26 +298,21 @@ function absoluteUrl(src, baseUrl) {
 }
 
 function extractHrefValues(html, baseUrl) {
-  return Array.from(html.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi))
+  return Array.from(
+    String(html || "").matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi)
+  )
     .map((m) => decodeHtmlEntities(m[1]))
     .map((href) => absoluteUrl(href, baseUrl))
     .filter(Boolean);
 }
 
 function extractImageValues(html, baseUrl) {
-  return Array.from(html.matchAll(/<img\b[^>]*src=["']([^"']+)["'][^>]*>/gi))
+  return Array.from(
+    String(html || "").matchAll(/<img\b[^>]*src=["']([^"']+)["'][^>]*>/gi)
+  )
     .map((m) => decodeHtmlEntities(m[1]))
     .map((src) => absoluteUrl(src, baseUrl))
     .filter(Boolean);
-}
-
-function getUrlParam(urlString, name) {
-  try {
-    const url = new URL(urlString);
-    return url.searchParams.get(name) || "";
-  } catch {
-    return "";
-  }
 }
 
 function findFirstUrl(urls, includesText) {
@@ -302,7 +338,7 @@ function extractNameAnchorHtml(nameCellHtml) {
 }
 
 function extractLiTexts(html) {
-  return Array.from(html.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi))
+  return Array.from(String(html || "").matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi))
     .map((m) => cleanHtmlToText(m[1]))
     .map((text) => compactText(text))
     .filter(Boolean);
@@ -346,12 +382,17 @@ function parseVehicleRow(row, baseUrl) {
   const tireUrl = findFirstUrl(urls, "get_tire_from_car_model");
   const gooUrl = findFirstUrl(urls, "goo-net.com");
 
-  const carNameFromUrl = getUrlParam(tireUrl, "car_name");
-  const gradeNameFromUrl = getUrlParam(tireUrl, "grade_name");
-  const classificationNameFromUrl = getUrlParam(tireUrl, "classification_name");
+  const carNameFromUrl = getRawQueryParam(tireUrl, "car_name");
+  const gradeNameFromUrl = getRawQueryParam(tireUrl, "grade_name");
+  const classificationNameFromUrl = getRawQueryParam(
+    tireUrl,
+    "classification_name"
+  );
 
   const nameCellHtml = extractTdByClass(rowHtml, "item__name");
-  const visibleTitleRaw = compactText(cleanHtmlToText(extractNameAnchorHtml(nameCellHtml)));
+  const visibleTitleRaw = compactText(
+    cleanHtmlToText(extractNameAnchorHtml(nameCellHtml))
+  );
   const visibleTitleFixed = fixText(visibleTitleRaw);
 
   const infoCellHtml = extractTdByClass(rowHtml, "item__info");
@@ -360,27 +401,24 @@ function parseVehicleRow(row, baseUrl) {
 
   const costCellHtml = extractTdByClass(rowHtml, "item__cost");
 
-  const bodyPriceNumber = extractSpanById(costCellHtml, `kakaku_display_${stockId}`);
-  const totalPriceNumber = extractSpanById(costCellHtml, `total_display_${stockId}`);
-  const btobPriceNumber = extractSpanById(costCellHtml, `btob_kakaku_display_${stockId}`);
+  const bodyPriceNumber = extractSpanById(
+    costCellHtml,
+    `kakaku_display_${stockId}`
+  );
+  const totalPriceNumber = extractSpanById(
+    costCellHtml,
+    `total_display_${stockId}`
+  );
+  const btobPriceNumber = extractSpanById(
+    costCellHtml,
+    `btob_kakaku_display_${stockId}`
+  );
 
   const year = infoItemsFixed[0] || "";
   const mileage = infoItemsFixed[1] || "";
   const color = infoItemsFixed[2] || "";
   const inspection = infoItemsFixed[3] || "";
   const displacement = infoItemsFixed[4] || "";
-
-  const titleFromUrl = [carNameFromUrl, gradeNameFromUrl]
-    .filter(Boolean)
-    .join(" ")
-    .trim();
-
-  const lineTitle = titleFromUrl || visibleTitleFixed;
-
-  const lineDescription =
-    visibleTitleFixed && visibleTitleFixed.length > lineTitle.length
-      ? visibleTitleFixed
-      : lineTitle;
 
   const bodyPrice = bodyPriceNumber ? `${bodyPriceNumber}万円` : "";
   const totalPrice = totalPriceNumber ? `${totalPriceNumber}万円` : "";
@@ -390,19 +428,40 @@ function parseVehicleRow(row, baseUrl) {
       : "";
 
   const realImages = images.filter(
-    (url) =>
-      !url.includes("car_nophoto") &&
-      !url.includes("total_price_unset") &&
-      !url.includes("common/")
+    (imageUrl) =>
+      !imageUrl.includes("car_nophoto") &&
+      !imageUrl.includes("total_price_unset") &&
+      !imageUrl.includes("/common/")
   );
+
+  const titleFromUrl = [carNameFromUrl, gradeNameFromUrl]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+
+  const title =
+    titleFromUrl ||
+    visibleTitleFixed ||
+    visibleTitleRaw ||
+    stockId;
+
+  const description =
+    visibleTitleFixed && visibleTitleFixed.length > title.length
+      ? visibleTitleFixed
+      : title;
 
   return {
     stockId,
 
     lineCard: {
-      title: lineTitle,
-      description: lineDescription,
-      footer: [year, mileage, color, totalPrice ? `総額 ${totalPrice}` : ""]
+      title,
+      description,
+      footer: [
+        year,
+        mileage,
+        color,
+        totalPrice ? `総額 ${totalPrice}` : "",
+      ]
         .filter(Boolean)
         .join(" / "),
       imageUrl: realImages[0] || images[0] || "",
@@ -439,9 +498,31 @@ function parseVehicleRow(row, baseUrl) {
       visibleTitleFixed,
       infoItemsRaw,
       infoItemsFixed,
-      rowTextFixedPreview: fixText(compactText(cleanHtmlToText(rowHtml))).substring(0, 1200),
+      rowTextFixedPreview: fixText(compactText(cleanHtmlToText(rowHtml))).substring(
+        0,
+        1200
+      ),
     },
   };
+}
+
+function vehicleMatches(vehicle, keyword) {
+  const key = String(keyword || "").trim();
+
+  if (!key) return true;
+
+  const target = [
+    vehicle.stockId,
+    vehicle.lineCard.title,
+    vehicle.lineCard.description,
+    vehicle.extracted.carName,
+    vehicle.extracted.gradeName,
+    vehicle.extracted.classificationName,
+    vehicle.debug.visibleTitleRaw,
+    vehicle.debug.visibleTitleFixed,
+  ].join(" ");
+
+  return target.includes(key);
 }
 
 function pickAround(html, keyword, before = 3000, after = 7000) {
@@ -517,19 +598,23 @@ export async function GET(request) {
     const { jar, loginStatus } = await loginMotorgate();
 
     const url = new URL(request.url);
-    const mode = url.searchParams.get("mode") || "list3";
-    const limit = Number(url.searchParams.get("limit") || "3");
+    const mode = url.searchParams.get("mode") || "search";
+    const keyword = url.searchParams.get("keyword") || "ハスラー";
+    const limit = Number(url.searchParams.get("limit") || "5");
 
     const publicListUrl =
       "https://motorgate.jp/stock/newsearch/stocklist/index/1/100";
 
-    if (mode !== "list3") {
+    if (mode !== "search") {
       return Response.json({
         success: true,
-        note: "Motorgate list page URL-param extraction test.",
+        note: "Motorgate list search extraction.",
         loginStatus,
         usage: {
-          list3: "/api/proto?mode=list3&limit=3",
+          searchHustler:
+            "/api/proto?mode=search&keyword=ハスラー&limit=5",
+          searchByStockId:
+            "/api/proto?mode=search&keyword=0902332A30260610W001&limit=5",
         },
         targetUrl: publicListUrl,
       });
@@ -548,13 +633,18 @@ export async function GET(request) {
     const html = await readUtf8Text(res);
 
     const vehicleRows = extractVehicleRows(html);
-    const vehicles = vehicleRows
-      .slice(0, limit)
-      .map((row) => parseVehicleRow(row, publicListUrl));
+    const allVehicles = vehicleRows.map((row) =>
+      parseVehicleRow(row, publicListUrl)
+    );
+
+    const matchedVehicles = allVehicles
+      .filter((vehicle) => vehicleMatches(vehicle, keyword))
+      .slice(0, limit);
 
     return Response.json({
       success: true,
       mode,
+      keyword,
       targetUrl: publicListUrl,
       status: res.status,
       contentType: res.headers.get("content-type"),
@@ -563,7 +653,8 @@ export async function GET(request) {
 
       checks: {
         rowCountFound: vehicleRows.length,
-        vehicleCountExtracted: vehicles.length,
+        allVehicleCount: allVehicles.length,
+        matchedVehicleCount: matchedVehicles.length,
         hasTrStockId: /<tr\b[^>]*id=["']tr_[A-Za-z0-9]+["']/i.test(html),
         hasCarNameParam: html.includes("car_name="),
         hasGradeNameParam: html.includes("grade_name="),
@@ -571,13 +662,18 @@ export async function GET(request) {
         hasDetailLink: html.includes("/stock/detail"),
       },
 
-      vehicles,
+      vehicles: matchedVehicles,
 
       debug: {
-        firstStockIds: vehicleRows.slice(0, 10).map((row) => row.stockId),
-        aroundFirstVehicleRow: vehicleRows[0]
-          ? vehicleRows[0].rowHtml.substring(0, 5000)
-          : "",
+        first10StockIds: vehicleRows.slice(0, 10).map((row) => row.stockId),
+        first10Titles: allVehicles.slice(0, 10).map((vehicle) => ({
+          stockId: vehicle.stockId,
+          title: vehicle.lineCard.title,
+          carName: vehicle.extracted.carName,
+          gradeName: vehicle.extracted.gradeName,
+        })),
+        aroundKeyword: pickAround(html, keyword),
+        aroundHustlerMojibake: pickAround(html, "繝上せ繝ｩ繝ｼ"),
         aroundCarNameParam: pickAround(html, "car_name="),
       },
     });
