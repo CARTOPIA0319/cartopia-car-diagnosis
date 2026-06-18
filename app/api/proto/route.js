@@ -85,15 +85,15 @@ function cleanText(text) {
 }
 
 const BRAND_CODE_MAP = {
-  "1005": "レクサス",
-  "1010": "トヨタ",
-  "1015": "日産",
-  "1020": "ホンダ",
-  "1025": "マツダ",
-  "1040": "三菱",
-  "1045": "スバル",
-  "1050": "ダイハツ",
-  "1055": "スズキ"
+  "1005": "\u30ec\u30af\u30b5\u30b9",
+  "1010": "\u30c8\u30e8\u30bf",
+  "1015": "\u65e5\u7523",
+  "1020": "\u30db\u30f3\u30c0",
+  "1025": "\u30de\u30c4\u30c0",
+  "1040": "\u4e09\u83f1",
+  "1045": "\u30b9\u30d0\u30eb",
+  "1050": "\u30c0\u30a4\u30cf\u30c4",
+  "1055": "\u30b9\u30ba\u30ad"
 };
 
 const MODEL_CODE_MAP = {
@@ -101,15 +101,17 @@ const MODEL_CODE_MAP = {
 };
 
 const GRADE_CODE_MAP = {
-  "48|5": "LS600h バージョンL Iパッケージ"
+  "48|5": "LS600h \u30d0\u30fc\u30b8\u30e7\u30f3L I\u30d1\u30c3\u30b1\u30fc\u30b8"
 };
 
 const BODY_COLOR_CODE_MAP = {
-  "1022": "パールホワイト"
+  "1022": "\u30d1\u30fc\u30eb\u30db\u30ef\u30a4\u30c8"
 };
 
 function chooseNameByCode(code, map, fallback) {
-  return map[code] || repairMojibake(fallback) || fallback || null;
+  const key = String(code || "").trim();
+  return map[key] || repairMojibake(fallback) || fallback || null;
+}
 }
 
 function extractStockIdsFromPublic(html) {
