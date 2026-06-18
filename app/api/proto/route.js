@@ -84,20 +84,16 @@ function cleanText(text) {
   );
 }
 
-function jp(base64) {
-  return Buffer.from(base64, "base64").toString("utf8");
-}
-
 const BRAND_CODE_MAP = {
-  "1005": jp("44Os44Kv44K144K5"),
-  "1010": jp("44OI44Oo44K/"),
-  "1015": jp("5pel55Sj"),
-  "1020": jp("44Ob44Oz44OA"),
-  "1025": jp("44Oe44OE44OA"),
-  "1040": jp("5LiJ6I+x"),
-  "1045": jp("44K544OQ44Or"),
-  "1050": jp("44OA44Kk44OP44OE"),
-  "1055": jp("44K544K644Kt")
+  "1005": "\u30EC\u30AF\u30B5\u30B9",
+  "1010": "\u30C8\u30E8\u30BF",
+  "1015": "\u65E5\u7523",
+  "1020": "\u30DB\u30F3\u30C0",
+  "1025": "\u30DE\u30C4\u30C0",
+  "1040": "\u4E09\u83F1",
+  "1045": "\u30B9\u30D0\u30EB",
+  "1050": "\u30C0\u30A4\u30CF\u30C4",
+  "1055": "\u30B9\u30BA\u30AD"
 };
 
 const MODEL_CODE_MAP = {
@@ -105,11 +101,11 @@ const MODEL_CODE_MAP = {
 };
 
 const GRADE_CODE_MAP = {
-  "48|5": jp("TFM2MDBoIOODkOODvOOCuOODp+ODs0wgSeODkeODg+OCseODvOOCuA==")
+  "48|5": "LS600h \u30D0\u30FC\u30B8\u30E7\u30F3L I\u30D1\u30C3\u30B1\u30FC\u30B8"
 };
 
 const BODY_COLOR_CODE_MAP = {
-  "1022": jp("44OR44O844Or44Ob44Ov44Kk44OI")
+  "1022": "\u30D1\u30FC\u30EB\u30DB\u30EF\u30A4\u30C8"
 };
 
 function chooseNameByCode(code, map, fallback) {
