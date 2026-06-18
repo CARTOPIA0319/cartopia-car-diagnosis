@@ -30,7 +30,12 @@ function jarToCookie(jar) {
 
 async function readText(response) {
   const buffer = await response.arrayBuffer();
-  return new TextDecoder("shift-jis").decode(buffer);
+
+  try {
+    return new TextDecoder("shift-jis").decode(buffer);
+  } catch {
+    return new TextDecoder("utf-8").decode(buffer);
+  }
 }
 
 function unique(array) {
@@ -42,6 +47,7 @@ function repairMojibake(text) {
 
   const map = {
     "謗ｲ霈我ｸｭ": "掲載中",
+    "蝨ｨ蠎ｫ": "在庫",
     "繝ｬ繧ｯ繧ｵ繧ｹ": "レクサス",
     "繝医Κ繧ｿ": "トヨタ",
     "譌･逕｣": "日産",
@@ -76,6 +82,34 @@ function cleanText(text) {
       .replace(/\s+/g, " ")
       .trim()
   );
+}
+
+const BRAND_CODE_MAP = {
+  "1005": "レクサス",
+  "1010": "トヨタ",
+  "1015": "日産",
+  "1020": "ホンダ",
+  "1025": "マツダ",
+  "1040": "三菱",
+  "1045": "スバル",
+  "1050": "ダイハツ",
+  "1055": "スズキ"
+};
+
+const MODEL_CODE_MAP = {
+  "10051004": "LS"
+};
+
+const GRADE_CODE_MAP = {
+  "48|5": "LS600h バージョンL Iパッケージ"
+};
+
+const BODY_COLOR_CODE_MAP = {
+  "1022": "パールホワイト"
+};
+
+function chooseNameByCode(code, map, fallback) {
+  return map[code] || repairMojibake(fallback) || fallback || null;
 }
 
 function extractStockIdsFromPublic(html) {
@@ -204,7 +238,6 @@ function buildEditUrl({ clientId, stockId, stockStatus, source }) {
 
   return `https://motorgate.jp/car/newregist/register?kbn=1&ClientId=${clientId}&StockId=${stockId}&StockStatus=${stockStatus}&ScreenId=CB101GR`;
 }
-
 function makeDebugSelects(html) {
   const keys = [
     "BrandName",
@@ -230,48 +263,6 @@ function makeDebugSelects(html) {
     };
   }
 
-  result.contains = {
-    subaru: html.includes("スバル"),
-    impreza: html.includes("インプレッサ"),
-    lexus: html.includes("レクサス"),
-    toyota: html.includes("トヨタ"),
-    honda: html.includes("ホンダ"),
-    gt7: html.includes("GT7"),
-    mojibakeSubaru: html.includes("繧ｹ繝舌Ν"),
-    mojibakeLexus: html.includes("繝ｬ繧ｯ繧ｵ繧ｹ"),
-  };
-
-  return result;
-}
-
-function findKeywordSnippets(html) {
-  const keywords = [
-    "BrandNamechange",
-    "ModelNamechange",
-    "brand",
-    "maker",
-    "model",
-    "car_name",
-    "maker_name",
-    "brand_name"
-  ];
-
-  const result = {};
-
-  for (const keyword of keywords) {
-    const index = html.indexOf(keyword);
-
-    result[keyword] =
-      index >= 0
-        ? repairMojibake(
-            html.substring(
-              Math.max(0, index - 1000),
-              Math.min(html.length, index + 1000)
-            )
-          )
-        : null;
-  }
-
   return result;
 }
 
@@ -291,30 +282,30 @@ async function fetchVehicle({ clientId, jar, stockId, stockStatus, source, withD
   });
 
   const html = await edit.text();
-const htmlHead = html.substring(0, 50000);
-  
+
+  const brandCode = extractSelectValue(html, "BrandName");
+  const modelCode = extractSelectValue(html, "ModelName");
+  const gradeCode = extractSelectValue(html, "Grade");
+  const bodyColorCode = extractSelectValue(html, "ColorBody");
+
+  const rawBrand = extractSelectText(html, "BrandName");
+  const rawCar = extractSelectText(html, "ModelName");
+  const rawGrade = cleanGradeName(
+    extractInput(html, "GradeName") ||
+    extractSelectText(html, "Grade")
+  );
+
   const vehicle = {
     stockId,
     source,
     status: source === "public" ? "掲載中" : "一時保存",
     editStatus: edit.status,
     containsLoginForm: html.includes('name="client_pw"'),
-rawBrand: extractSelectText(html, "BrandName"),
-testBrand: repairMojibake("繝ｬ繧ｯ繧ｵ繧ｹ"),
-brand: repairMojibake(
-  extractSelectText(html, "BrandName")
-),
 
-car: repairMojibake(
-  extractSelectText(html, "ModelName")
-),
-    
-    grade: repairMojibake(
-  cleanGradeName(
-    extractInput(html, "GradeName") ||
-    extractSelectText(html, "Grade")
-  )
-),
+    brand: chooseNameByCode(brandCode, BRAND_CODE_MAP, rawBrand),
+    car: chooseNameByCode(modelCode, MODEL_CODE_MAP, rawCar),
+    grade: chooseNameByCode(gradeCode, GRADE_CODE_MAP, rawGrade),
+
     kata:
       extractSelectText(html, "Kata") ||
       extractInput(html, "KataName"),
@@ -329,7 +320,7 @@ car: repairMojibake(
     color:
       extractInput(html, "AdColorName") ||
       extractInput(html, "CatColor"),
-    bodyColor: extractSelectText(html, "ColorBody"),
+    bodyColor: chooseNameByCode(bodyColorCode, BODY_COLOR_CODE_MAP, extractSelectText(html, "ColorBody")),
 
     chassisNumber:
       extractInput(html, "SyadaiNum") ||
@@ -338,18 +329,23 @@ car: repairMojibake(
     mainImageUrl: extractMainImageUrl(html, stockId),
 
     codes: {
-      brandCode: extractSelectValue(html, "BrandName"),
-      modelCode: extractSelectValue(html, "ModelName"),
-      gradeCode: extractSelectValue(html, "Grade"),
+      brandCode,
+      modelCode,
+      gradeCode,
       kataCode: extractSelectValue(html, "Kata"),
-      bodyColorCode: extractSelectValue(html, "ColorBody"),
+      bodyColorCode,
     },
-    htmlHead,
   };
 
   if (withDebug) {
+    vehicle.debug = {
+      rawBrand,
+      rawCar,
+      rawGrade,
+      testBrand: chooseNameByCode("1005", BRAND_CODE_MAP, "繝ｬ繧ｯ繧ｵ繧ｹ"),
+    };
+
     vehicle.debugSelects = makeDebugSelects(html);
-    vehicle.keywordSnippets = findKeywordSnippets(html);
   }
 
   return vehicle;
@@ -463,11 +459,9 @@ export async function GET(request) {
 
     return Response.json({
       success: true,
-
       page,
       limit,
       debug,
-
       counts: {
         public: publicStockIds.length,
         save: saveStockIds.length,
@@ -475,10 +469,8 @@ export async function GET(request) {
         returned: vehicles.length,
         totalPages: Math.ceil(targets.length / limit),
       },
-
       note:
-        "Production vehicle API with mojibake repair. Use debug=1 to inspect the first vehicle only.",
-
+        "Production vehicle API using code maps for key vehicle names.",
       vehicles,
     });
   } catch (e) {
