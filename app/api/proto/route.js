@@ -36,6 +36,15 @@ async function readUtf8Text(response) {
   return new TextDecoder("utf-8", { fatal: false }).decode(buffer);
 }
 
+function json(data) {
+  return new Response(JSON.stringify(data, null, 2), {
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+    },
+  });
+}
+
 function decodeHtmlEntities(text) {
   return String(text || "")
     .replace(/&nbsp;/g, " ")
@@ -52,14 +61,80 @@ function decodeHtmlEntities(text) {
     );
 }
 
-function safeDecode(value) {
-  if (!value) return "";
+function percentDecodeUtf8(value) {
+  const text = String(value || "").replace(/\+/g, "%20");
+  const bytes = [];
 
-  try {
-    return decodeURIComponent(String(value).replace(/\+/g, "%20"));
-  } catch {
-    return String(value);
+  for (let i = 0; i < text.length; i++) {
+    if (
+      text[i] === "%" &&
+      i + 2 < text.length &&
+      /^[0-9a-fA-F]{2}$/.test(text.slice(i + 1, i + 3))
+    ) {
+      bytes.push(parseInt(text.slice(i + 1, i + 3), 16));
+      i += 2;
+    } else {
+      const code = text.charCodeAt(i);
+      if (code <= 0x7f) {
+        bytes.push(code);
+      } else {
+        const encoded = new TextEncoder().encode(text[i]);
+        bytes.push(...encoded);
+      }
+    }
   }
+
+  let result = "";
+  let i = 0;
+
+  while (i < bytes.length) {
+    const b1 = bytes[i];
+
+    if (b1 < 0x80) {
+      result += String.fromCodePoint(b1);
+      i += 1;
+    } else if ((b1 & 0xe0) === 0xc0) {
+      const b2 = bytes[i + 1];
+      result += String.fromCodePoint(((b1 & 0x1f) << 6) | (b2 & 0x3f));
+      i += 2;
+    } else if ((b1 & 0xf0) === 0xe0) {
+      const b2 = bytes[i + 1];
+      const b3 = bytes[i + 2];
+      result += String.fromCodePoint(
+        ((b1 & 0x0f) << 12) | ((b2 & 0x3f) << 6) | (b3 & 0x3f)
+      );
+      i += 3;
+    } else if ((b1 & 0xf8) === 0xf0) {
+      const b2 = bytes[i + 1];
+      const b3 = bytes[i + 2];
+      const b4 = bytes[i + 3];
+      result += String.fromCodePoint(
+        ((b1 & 0x07) << 18) |
+          ((b2 & 0x3f) << 12) |
+          ((b3 & 0x3f) << 6) |
+          (b4 & 0x3f)
+      );
+      i += 4;
+    } else {
+      result += "�";
+      i += 1;
+    }
+  }
+
+  return result;
+}
+
+function getQueryParamRaw(urlText, name) {
+  const text = decodeHtmlEntities(String(urlText || ""));
+  const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp(`[?&]${escapedName}=([^&#"']*)`, "i");
+  const match = text.match(regex);
+
+  return match ? match[1] : "";
+}
+
+function getQueryParamDecoded(urlText, name) {
+  return fixBasicMojibake(percentDecodeUtf8(getQueryParamRaw(urlText, name)));
 }
 
 function cleanHtmlToText(html) {
@@ -102,20 +177,17 @@ function absoluteUrl(src, baseUrl) {
   return new URL(src, baseUrl).toString();
 }
 
-function extractHrefValues(html, baseUrl) {
-  return Array.from(
-    String(html || "").matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi)
-  )
-    .map((m) => decodeHtmlEntities(m[1]))
-    .map((href) => absoluteUrl(href, baseUrl))
-    .filter(Boolean);
-}
-
 function extractRawHrefValues(html) {
   return Array.from(
     String(html || "").matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi)
   )
     .map((m) => decodeHtmlEntities(m[1]))
+    .filter(Boolean);
+}
+
+function extractHrefValues(html, baseUrl) {
+  return extractRawHrefValues(html)
+    .map((href) => absoluteUrl(href, baseUrl))
     .filter(Boolean);
 }
 
@@ -130,19 +202,6 @@ function extractImageValues(html, baseUrl) {
 
 function findFirstUrl(urls, includesText) {
   return urls.find((url) => url.includes(includesText)) || "";
-}
-
-function getQueryParamRaw(urlText, name) {
-  const text = decodeHtmlEntities(String(urlText || ""));
-  const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const regex = new RegExp(`[?&]${escapedName}=([^&#"']*)`, "i");
-  const match = text.match(regex);
-
-  return match ? match[1] : "";
-}
-
-function getQueryParamDecoded(urlText, name) {
-  return safeDecode(getQueryParamRaw(urlText, name));
 }
 
 function extractTdByClass(rowHtml, className) {
@@ -188,7 +247,6 @@ function fixBasicMojibake(text) {
     .replace(/讀�/g, "検")
     .replace(/霆頑､懈紛蛯吩ｻ�/g, "車検整備付")
     .replace(/萓｡譬ｼ/g, "価格")
-    .replace(/邱城｡�/g, "総額")
     .replace(/邱城｡�/g, "総額")
     .replace(/繝上せ繝ｩ繝ｼ/g, "ハスラー")
     .replace(/繝上う繝悶Μ繝�ラ�ｸ/g, "ハイブリッドＸ")
@@ -276,8 +334,14 @@ function parseVehicleRow(row, baseUrl) {
   const inspection = infoItemsFixed[3] || "";
   const displacement = infoItemsFixed[4] || "";
 
-  const bodyPrice = bodyPriceNumber ? `${fixBasicMojibake(bodyPriceNumber)}万円` : "";
-  const totalPrice = totalPriceNumber ? `${fixBasicMojibake(totalPriceNumber)}万円` : "";
+  const bodyPrice = bodyPriceNumber
+    ? `${fixBasicMojibake(bodyPriceNumber)}万円`
+    : "";
+
+  const totalPrice = totalPriceNumber
+    ? `${fixBasicMojibake(totalPriceNumber)}万円`
+    : "";
+
   const btobPrice =
     btobPriceNumber && btobPriceNumber !== "-"
       ? `${fixBasicMojibake(btobPriceNumber)}万円`
@@ -293,7 +357,10 @@ function parseVehicleRow(row, baseUrl) {
   const titleFromParams = [carName, gradeName].filter(Boolean).join(" ").trim();
   const title = titleFromParams || visibleTitleFixed || stockId;
 
-  const description = visibleTitleFixed || title;
+  const description =
+    visibleTitleFixed && !visibleTitleFixed.includes("�")
+      ? visibleTitleFixed
+      : title;
 
   return {
     stockId,
@@ -375,19 +442,6 @@ function vehicleMatches(vehicle, keyword) {
   return target.includes(key);
 }
 
-function pickAround(html, keyword, before = 3000, after = 7000) {
-  const index = html.indexOf(keyword);
-
-  if (index < 0) {
-    return null;
-  }
-
-  return html.substring(
-    Math.max(0, index - before),
-    Math.min(html.length, index + after)
-  );
-}
-
 async function loginMotorgate() {
   const clientId = process.env.MOTORGATE_CLIENT_ID;
   const password = process.env.MOTORGATE_PASSWORD;
@@ -456,15 +510,13 @@ export async function GET(request) {
       "https://motorgate.jp/stock/newsearch/stocklist/index/1/100";
 
     if (mode !== "search") {
-      return Response.json({
+      return json({
         success: true,
-        note: "Raw href URL parameter decode test.",
+        note: "Manual UTF-8 percent decode test.",
         loginStatus,
         usage: {
           targetHustler:
             "/api/proto?mode=search&keyword=0902332A30260610W001&limit=5",
-          searchHustler:
-            "/api/proto?mode=search&keyword=ハスラー&limit=5",
         },
         targetUrl: publicListUrl,
       });
@@ -491,7 +543,7 @@ export async function GET(request) {
       .filter((vehicle) => vehicleMatches(vehicle, keyword))
       .slice(0, limit);
 
-    return Response.json({
+    return json({
       success: true,
       mode,
       keyword,
@@ -505,13 +557,12 @@ export async function GET(request) {
         rowCountFound: vehicleRows.length,
         allVehicleCount: allVehicles.length,
         matchedVehicleCount: matchedVehicles.length,
-        hasTrStockId: /<tr\b[^>]*id=["']tr_[A-Za-z0-9]+["']/i.test(html),
         hasCarNameParam: html.includes("car_name="),
         hasGradeNameParam: html.includes("grade_name="),
-        decodeTestHustler: safeDecode(
+        manualDecodeTestHustler: percentDecodeUtf8(
           "%E3%83%8F%E3%82%B9%E3%83%A9%E3%83%BC"
         ),
-        decodeTestGrade: safeDecode(
+        manualDecodeTestGrade: percentDecodeUtf8(
           "%E3%83%8F%E3%82%A4%E3%83%96%E3%83%AA%E3%83%83%E3%83%89%EF%BC%B8"
         ),
       },
@@ -528,12 +579,10 @@ export async function GET(request) {
           rawCarName: vehicle.debug.rawCarName,
           rawGradeName: vehicle.debug.rawGradeName,
         })),
-        aroundTargetStockId: pickAround(html, keyword),
-        aroundCarNameParam: pickAround(html, "car_name="),
       },
     });
   } catch (e) {
-    return Response.json({
+    return json({
       success: false,
       error: e.message,
       stack: e.stack,
