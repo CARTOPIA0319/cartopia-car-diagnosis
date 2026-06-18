@@ -1,6 +1,8 @@
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+let SHIFT_JIS_REVERSE_MAP = null;
+
 function addCookies(jar, setCookieText) {
   if (!setCookieText) return jar;
 
@@ -36,13 +38,14 @@ function scoreDecodedText(text) {
     "ハスラー",
     "ルークス",
     "インプレッサ",
-    "車両情報を編集",
+    "車両情報",
     "価格",
     "総額",
-    "年式",
-    "車種",
-    "グレード",
+    "年",
+    "万円",
     "掲載中",
+    "４ＷＤ",
+    "ナビ",
   ];
 
   const badWords = [
@@ -58,13 +61,18 @@ function scoreDecodedText(text) {
     "蟷",
     "荳",
     "譁",
+    "萓",
+    "邱",
+    "霆",
+    "縺",
+    "荳",
     "�",
   ];
 
   let score = 0;
 
   for (const word of goodWords) {
-    if (text.includes(word)) score += 100;
+    if (text.includes(word)) score += 150;
   }
 
   for (const word of badWords) {
@@ -75,39 +83,121 @@ function scoreDecodedText(text) {
   const japaneseCount =
     (text.match(/[ぁ-んァ-ヶ一-龠々ーＡ-Ｚａ-ｚ０-９]/g) || []).length;
 
-  score += Math.min(japaneseCount, 500);
+  score += Math.min(japaneseCount, 800);
 
   return score;
 }
 
-async function readBestText(response) {
+async function readUtf8Text(response) {
   const buffer = await response.arrayBuffer();
+  return new TextDecoder("utf-8", { fatal: false }).decode(buffer);
+}
 
-  const utf8 = new TextDecoder("utf-8", { fatal: false }).decode(buffer);
-  const shiftJis = new TextDecoder("shift_jis", { fatal: false }).decode(buffer);
+function buildShiftJisReverseMap() {
+  if (SHIFT_JIS_REVERSE_MAP) return SHIFT_JIS_REVERSE_MAP;
 
-  const utf8Score = scoreDecodedText(utf8);
-  const shiftJisScore = scoreDecodedText(shiftJis);
+  const decoder = new TextDecoder("shift_jis", { fatal: false });
+  const map = new Map();
 
-  if (shiftJisScore > utf8Score) {
-    return {
-      text: shiftJis,
-      encoding: "shift_jis",
-      scores: {
-        utf8: utf8Score,
-        shift_jis: shiftJisScore,
-      },
-    };
+  for (let b = 0x00; b <= 0xff; b++) {
+    const char = decoder.decode(Uint8Array.from([b]));
+    if (char && char !== "�" && !map.has(char)) {
+      map.set(char, [b]);
+    }
   }
 
-  return {
-    text: utf8,
-    encoding: "utf-8",
-    scores: {
-      utf8: utf8Score,
-      shift_jis: shiftJisScore,
-    },
-  };
+  const leadRanges = [
+    [0x81, 0x9f],
+    [0xe0, 0xfc],
+  ];
+
+  const trailRanges = [
+    [0x40, 0x7e],
+    [0x80, 0xfc],
+  ];
+
+  for (const [leadStart, leadEnd] of leadRanges) {
+    for (let lead = leadStart; lead <= leadEnd; lead++) {
+      for (const [trailStart, trailEnd] of trailRanges) {
+        for (let trail = trailStart; trail <= trailEnd; trail++) {
+          const char = decoder.decode(Uint8Array.from([lead, trail]));
+          if (char && char !== "�" && !map.has(char)) {
+            map.set(char, [lead, trail]);
+          }
+        }
+      }
+    }
+  }
+
+  SHIFT_JIS_REVERSE_MAP = map;
+  return map;
+}
+
+function reverseMojibake(text) {
+  if (!text) return "";
+
+  const map = buildShiftJisReverseMap();
+  const bytes = [];
+
+  for (const char of Array.from(text)) {
+    const encoded = map.get(char);
+
+    if (encoded) {
+      bytes.push(...encoded);
+    } else {
+      const fallback = new TextEncoder().encode(char);
+      bytes.push(...fallback);
+    }
+  }
+
+  const repaired = new TextDecoder("utf-8", { fatal: false }).decode(
+    Uint8Array.from(bytes)
+  );
+
+  return scoreDecodedText(repaired) > scoreDecodedText(text)
+    ? repaired
+    : text;
+}
+
+function replaceKnownMojibake(text) {
+  return text
+    .replace(/蟷ｴ/g, "年")
+    .replace(/譛�/g, "月")
+    .replace(/荳⑫/g, "万K")
+    .replace(/荳��/g, "万円")
+    .replace(/讀�/g, "検")
+    .replace(/霆頑､懈紛蛯吩ｻ�/g, "車検整備付")
+    .replace(/萓｡譬ｼ/g, "価格")
+    .replace(/邱城｡�/g, "総額")
+    .replace(/謗ｲ霈我ｸｭ/g, "掲載中")
+    .replace(/霆贋ｸ｡諠��ｱ繧堤ｷｨ髮�/g, "車両情報を編集")
+    .replace(/繧ｿ繧､繝､繧呈爾縺�/g, "タイヤを探す")
+    .replace(/繝上せ繝ｩ繝ｼ/g, "ハスラー")
+    .replace(/繝ｫ繝ｼ繧ｯ繧ｹ/g, "ルークス")
+    .replace(/繝上う繝悶Μ繝�ラ/g, "ハイブリッド")
+    .replace(/繧ｪ繝励す繝ｧ繝ｳ/g, "オプション")
+    .replace(/邏疲ｭ｣/g, "純正")
+    .replace(/繝翫ン/g, "ナビ")
+    .replace(/蜈ｨ譁ｹ菴�/g, "全方位")
+    .replace(/繧ｫ繝｡繝ｩ/g, "カメラ")
+    .replace(/蜑榊ｸｭ/g, "前席")
+    .replace(/繧ｷ繝ｼ繝医ヲ繝ｼ繧ｿ繝ｼ/g, "シートヒーター")
+    .replace(/繧ｹ繝弱�繝｢繝ｼ繝峨/g, "スノーモード");
+}
+
+function fixText(text) {
+  if (!text) return "";
+
+  const repaired = reverseMojibake(text);
+  const fixed = replaceKnownMojibake(repaired);
+
+  return fixed
+    .replace(/\r/g, "\n")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n[ \t]+/g, "\n")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 }
 
 function decodeHtmlEntities(text) {
@@ -126,7 +216,7 @@ function decodeHtmlEntities(text) {
     );
 }
 
-function cleanText(html) {
+function cleanHtmlToText(html) {
   return decodeHtmlEntities(
     html
       .replace(/<script[\s\S]*?<\/script>/gi, " ")
@@ -134,6 +224,7 @@ function cleanText(html) {
       .replace(/<br\s*\/?>/gi, "\n")
       .replace(/<\/p>/gi, "\n")
       .replace(/<\/div>/gi, "\n")
+      .replace(/<\/li>/gi, "\n")
       .replace(/<\/td>/gi, "\n")
       .replace(/<\/th>/gi, "\n")
       .replace(/<\/tr>/gi, "\n")
@@ -165,148 +256,192 @@ function absoluteUrl(src, baseUrl) {
   return new URL(src, baseUrl).toString();
 }
 
-function extractImagesFromHtml(html, baseUrl) {
-  return Array.from(
-    html.matchAll(/<img[^>]+src=["']([^"']+)["'][^>]*>/gi)
-  )
-    .map((m) => absoluteUrl(m[1], baseUrl))
+function extractHrefValues(html, baseUrl) {
+  return Array.from(html.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi))
+    .map((m) => decodeHtmlEntities(m[1]))
+    .map((href) => absoluteUrl(href, baseUrl))
     .filter(Boolean);
 }
 
-function extractLinksFromHtml(html, baseUrl) {
-  return Array.from(
-    html.matchAll(/<a[^>]+href=["']([^"']+)["'][^>]*>/gi)
-  )
-    .map((m) => absoluteUrl(m[1], baseUrl))
+function extractImageValues(html, baseUrl) {
+  return Array.from(html.matchAll(/<img\b[^>]*src=["']([^"']+)["'][^>]*>/gi))
+    .map((m) => decodeHtmlEntities(m[1]))
+    .map((src) => absoluteUrl(src, baseUrl))
     .filter(Boolean);
 }
 
-function extractCells(rowHtml) {
-  return Array.from(
-    rowHtml.matchAll(/<(td|th)\b[^>]*>([\s\S]*?)<\/\1>/gi)
-  )
-    .map((m) => cleanText(m[2]))
-    .map((text) => text.trim())
-    .filter(Boolean);
-}
-
-function removeActionText(text) {
-  const stopWords = [
-    "車両情報を編集",
-    "タイヤを探す",
-    "その他を選択",
-    "実行",
-    "コピーして新規登録",
-    "成約・削除",
-    "在庫診断",
-    "小売相場",
-    "AA相場",
-  ];
-
-  let result = text;
-
-  for (const word of stopWords) {
-    const index = result.indexOf(word);
-    if (index >= 0) {
-      result = result.slice(0, index);
-    }
+function getUrlParam(urlString, name) {
+  try {
+    const url = new URL(urlString);
+    return url.searchParams.get(name) || "";
+  } catch {
+    return "";
   }
-
-  return result.trim();
 }
 
-function pickVehicleDescription(cells) {
-  const candidates = cells
-    .map(removeActionText)
-    .map(compactText)
-    .filter((text) => text.length >= 10)
-    .filter((text) => !text.includes("価格 "))
-    .filter((text) => !text.includes("総額 "))
-    .filter((text) => !text.includes("車台番号/"))
-    .filter((text) => !text.includes("管理用番号/"))
-    .sort((a, b) => b.length - a.length);
-
-  return candidates[0] || "";
+function findFirstUrl(urls, includesText) {
+  return urls.find((url) => url.includes(includesText)) || "";
 }
 
-function pickFirstMatch(text, regex) {
-  const match = text.match(regex);
-  return match ? match[1] || match[0] : "";
-}
-
-function parseVehicleRow(rowHtml, rowIndex, baseUrl) {
-  const cells = extractCells(rowHtml);
-  const rowText = compactText(cleanText(rowHtml));
-
-  const vehicleDescription = pickVehicleDescription(cells);
-
-  const images = extractImagesFromHtml(rowHtml, baseUrl);
-  const links = extractLinksFromHtml(rowHtml, baseUrl);
-
-  const detailUrl =
-    links.find((url) => url.includes("/stock/detail")) ||
-    links.find((url) => url.includes("StockId=")) ||
-    "";
-
-  const editUrl =
-    links.find((url) => url.includes("/stock/") && url.includes("register")) ||
-    links.find((url) => rowText.includes("車両情報を編集") && url.includes("stock")) ||
-    "";
-
-  const stockId =
-    pickFirstMatch(rowHtml, /StockId=([A-Za-z0-9]+)/) ||
-    pickFirstMatch(rowHtml, /stock_id["']?\s*[:=]\s*["']?([A-Za-z0-9]+)/i);
-
-  return {
-    rowIndex,
-    stockId,
-    vehicleDescription,
-    year: pickFirstMatch(rowText, /((?:19|20)\d{2}年)/),
-    mileage: pickFirstMatch(rowText, /(\d+(?:\.\d+)?万[ＫK])/),
-    color: "",
-    inspection:
-      pickFirstMatch(rowText, /(検(?:19|20)\d{2}年\d{2}月)/) ||
-      (rowText.includes("車検整備付") ? "車検整備付" : ""),
-    displacement: pickFirstMatch(rowText, /(\d+(?:\.\d+)?(?:cc|L))/i),
-    bodyPrice: pickFirstMatch(rowText, /価格\s*([0-9.]+万円)/),
-    totalPrice: pickFirstMatch(rowText, /総額\s*([0-9.]+万円)/),
-    firstImage: images[0] || "",
-    images,
-    detailUrl,
-    editUrl,
-    cells,
-    rawText: rowText,
-  };
-}
-
-function extractVehicleRows(html, baseUrl, limit = 3) {
-  const rowMatches = Array.from(
-    html.matchAll(/<tr\b[^>]*>[\s\S]*?<\/tr>/gi)
+function extractTdByClass(rowHtml, className) {
+  const regex = new RegExp(
+    `<td\\b[^>]*class=["'][^"']*${className}[^"']*["'][^>]*>([\\s\\S]*?)<\\/td>`,
+    "i"
   );
 
-  const vehicles = [];
+  return rowHtml.match(regex)?.[1] || "";
+}
 
-  for (let i = 0; i < rowMatches.length; i++) {
-    const rowHtml = rowMatches[i][0];
-    const rowText = cleanText(rowHtml);
+function extractNameAnchorHtml(nameCellHtml) {
+  const carModelDiv =
+    nameCellHtml.match(
+      /<div\b[^>]*class=["'][^"']*car-model[^"']*["'][^>]*>([\s\S]*?)<\/div>/i
+    )?.[1] || nameCellHtml;
 
-    const looksLikeVehicleRow =
-      rowText.includes("車両情報を編集") ||
-      rowText.includes("コピーして新規登録") ||
-      rowText.includes("在庫診断");
+  return carModelDiv.match(/<a\b[^>]*>([\s\S]*?)<\/a>/i)?.[1] || "";
+}
 
-    if (!looksLikeVehicleRow) continue;
+function extractLiTexts(html) {
+  return Array.from(html.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi))
+    .map((m) => cleanHtmlToText(m[1]))
+    .map((text) => compactText(text))
+    .filter(Boolean);
+}
 
-    const parsed = parseVehicleRow(rowHtml, i, baseUrl);
+function extractSpanById(html, idPart) {
+  const regex = new RegExp(
+    `<span\\b[^>]*id=["'][^"']*${idPart}[^"']*["'][^>]*>([\\s\\S]*?)<\\/span>`,
+    "i"
+  );
 
-    if (!parsed.vehicleDescription) continue;
+  return compactText(cleanHtmlToText(html.match(regex)?.[1] || ""));
+}
 
-    vehicles.push(parsed);
+function extractVehicleRows(html) {
+  const rows = [];
 
-    if (vehicles.length >= limit) break;
+  const regex =
+    /<tr\b[^>]*id=["']tr_([A-Za-z0-9]+)["'][^>]*>([\s\S]*?)(?=<tr\b[^>]*id=["']tr_[A-Za-z0-9]+["']|<\/tbody>|<\/table>)/gi;
+
+  let match;
+
+  while ((match = regex.exec(html)) !== null) {
+    rows.push({
+      stockId: match[1],
+      rowHtml: match[0],
+    });
   }
 
-  return vehicles;
+  return rows;
+}
+
+function parseVehicleRow(row, baseUrl) {
+  const { stockId, rowHtml } = row;
+
+  const urls = extractHrefValues(rowHtml, baseUrl);
+  const images = extractImageValues(rowHtml, baseUrl);
+
+  const detailUrl = findFirstUrl(urls, "/stock/detail");
+  const editUrl = findFirstUrl(urls, "/car/edit/new");
+  const tireUrl = findFirstUrl(urls, "get_tire_from_car_model");
+  const gooUrl = findFirstUrl(urls, "goo-net.com");
+
+  const carNameFromUrl = getUrlParam(tireUrl, "car_name");
+  const gradeNameFromUrl = getUrlParam(tireUrl, "grade_name");
+  const classificationNameFromUrl = getUrlParam(tireUrl, "classification_name");
+
+  const nameCellHtml = extractTdByClass(rowHtml, "item__name");
+  const visibleTitleRaw = compactText(cleanHtmlToText(extractNameAnchorHtml(nameCellHtml)));
+  const visibleTitleFixed = fixText(visibleTitleRaw);
+
+  const infoCellHtml = extractTdByClass(rowHtml, "item__info");
+  const infoItemsRaw = extractLiTexts(infoCellHtml);
+  const infoItemsFixed = infoItemsRaw.map(fixText);
+
+  const costCellHtml = extractTdByClass(rowHtml, "item__cost");
+
+  const bodyPriceNumber = extractSpanById(costCellHtml, `kakaku_display_${stockId}`);
+  const totalPriceNumber = extractSpanById(costCellHtml, `total_display_${stockId}`);
+  const btobPriceNumber = extractSpanById(costCellHtml, `btob_kakaku_display_${stockId}`);
+
+  const year = infoItemsFixed[0] || "";
+  const mileage = infoItemsFixed[1] || "";
+  const color = infoItemsFixed[2] || "";
+  const inspection = infoItemsFixed[3] || "";
+  const displacement = infoItemsFixed[4] || "";
+
+  const titleFromUrl = [carNameFromUrl, gradeNameFromUrl]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+
+  const lineTitle = titleFromUrl || visibleTitleFixed;
+
+  const lineDescription =
+    visibleTitleFixed && visibleTitleFixed.length > lineTitle.length
+      ? visibleTitleFixed
+      : lineTitle;
+
+  const bodyPrice = bodyPriceNumber ? `${bodyPriceNumber}万円` : "";
+  const totalPrice = totalPriceNumber ? `${totalPriceNumber}万円` : "";
+  const btobPrice =
+    btobPriceNumber && btobPriceNumber !== "-"
+      ? `${btobPriceNumber}万円`
+      : "";
+
+  const realImages = images.filter(
+    (url) =>
+      !url.includes("car_nophoto") &&
+      !url.includes("total_price_unset") &&
+      !url.includes("common/")
+  );
+
+  return {
+    stockId,
+
+    lineCard: {
+      title: lineTitle,
+      description: lineDescription,
+      footer: [year, mileage, color, totalPrice ? `総額 ${totalPrice}` : ""]
+        .filter(Boolean)
+        .join(" / "),
+      imageUrl: realImages[0] || images[0] || "",
+    },
+
+    extracted: {
+      carName: carNameFromUrl,
+      gradeName: gradeNameFromUrl,
+      classificationName: classificationNameFromUrl,
+      year,
+      mileage,
+      color,
+      inspection,
+      displacement,
+      bodyPrice,
+      totalPrice,
+      btobPrice,
+    },
+
+    urls: {
+      detailUrl,
+      editUrl,
+      tireUrl,
+      gooUrl,
+    },
+
+    images: {
+      firstUsableImage: realImages[0] || "",
+      allImages: images,
+    },
+
+    debug: {
+      visibleTitleRaw,
+      visibleTitleFixed,
+      infoItemsRaw,
+      infoItemsFixed,
+      rowTextFixedPreview: fixText(compactText(cleanHtmlToText(rowHtml))).substring(0, 1200),
+    },
+  };
 }
 
 function pickAround(html, keyword, before = 3000, after = 7000) {
@@ -339,8 +474,7 @@ async function loginMotorgate() {
 
   addCookies(jar, loginPage.headers.get("set-cookie") || "");
 
-  const loginRead = await readBestText(loginPage);
-  const loginHtml = loginRead.text;
+  const loginHtml = await readUtf8Text(loginPage);
 
   const csrf =
     loginHtml.match(/name="fuel_csrf_token"\s+value="([^"]+)"/)?.[1];
@@ -375,18 +509,14 @@ async function loginMotorgate() {
     clientId,
     jar,
     loginStatus: login.status,
-    loginEncoding: loginRead.encoding,
-    loginScores: loginRead.scores,
   };
 }
 
 export async function GET(request) {
   try {
-    const { clientId, jar, loginStatus, loginEncoding, loginScores } =
-      await loginMotorgate();
+    const { jar, loginStatus } = await loginMotorgate();
 
     const url = new URL(request.url);
-
     const mode = url.searchParams.get("mode") || "list3";
     const limit = Number(url.searchParams.get("limit") || "3");
 
@@ -396,10 +526,8 @@ export async function GET(request) {
     if (mode !== "list3") {
       return Response.json({
         success: true,
-        note: "Motorgate list page extraction test.",
+        note: "Motorgate list page URL-param extraction test.",
         loginStatus,
-        loginEncoding,
-        loginScores,
         usage: {
           list3: "/api/proto?mode=list3&limit=3",
         },
@@ -417,15 +545,12 @@ export async function GET(request) {
       },
     });
 
-    const read = await readBestText(res);
-    const html = read.text;
+    const html = await readUtf8Text(res);
 
-    const vehicles = extractVehicleRows(html, publicListUrl, limit);
-
-    const allImages = extractImagesFromHtml(html, publicListUrl).slice(0, 80);
-    const allStockLinks = extractLinksFromHtml(html, publicListUrl)
-      .filter((link) => link.includes("stock") || link.includes("StockId"))
-      .slice(0, 80);
+    const vehicleRows = extractVehicleRows(html);
+    const vehicles = vehicleRows
+      .slice(0, limit)
+      .map((row) => parseVehicleRow(row, publicListUrl));
 
     return Response.json({
       success: true,
@@ -434,27 +559,27 @@ export async function GET(request) {
       status: res.status,
       contentType: res.headers.get("content-type"),
       loginStatus,
-      loginEncoding,
-      loginScores,
-      listEncoding: read.encoding,
-      listScores: read.scores,
       containsLoginForm: html.includes('name="client_pw"'),
+
       checks: {
-        hasHustler: html.includes("ハスラー"),
-        hasVehicleEdit: html.includes("車両情報を編集"),
-        hasPrice: html.includes("価格"),
-        hasTotalPrice: html.includes("総額"),
-        hasTable: html.includes("<table"),
+        rowCountFound: vehicleRows.length,
         vehicleCountExtracted: vehicles.length,
-        imageCount: allImages.length,
-        stockLinkCount: allStockLinks.length,
+        hasTrStockId: /<tr\b[^>]*id=["']tr_[A-Za-z0-9]+["']/i.test(html),
+        hasCarNameParam: html.includes("car_name="),
+        hasGradeNameParam: html.includes("grade_name="),
+        hasVehicleEdit: html.includes("car/edit/new"),
+        hasDetailLink: html.includes("/stock/detail"),
       },
+
       vehicles,
-      allImages,
-      allStockLinks,
-      aroundHustler: pickAround(html, "ハスラー"),
-      aroundVehicleEdit: pickAround(html, "車両情報を編集"),
-      htmlTextHead: cleanText(html).substring(0, 12000),
+
+      debug: {
+        firstStockIds: vehicleRows.slice(0, 10).map((row) => row.stockId),
+        aroundFirstVehicleRow: vehicleRows[0]
+          ? vehicleRows[0].rowHtml.substring(0, 5000)
+          : "",
+        aroundCarNameParam: pickAround(html, "car_name="),
+      },
     });
   } catch (e) {
     return Response.json({
