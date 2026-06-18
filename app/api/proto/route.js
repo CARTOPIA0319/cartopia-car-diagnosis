@@ -111,7 +111,6 @@ const BODY_COLOR_CODE_MAP = {
 function chooseNameByCode(code, map, fallback) {
   const key = String(code || "").trim();
   return map[key] || repairMojibake(fallback) || fallback || null;
-  
 }
 
 
