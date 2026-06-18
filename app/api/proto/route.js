@@ -29,8 +29,7 @@ function jarToCookie(jar) {
 }
 
 async function readText(response) {
-  const buffer = await response.arrayBuffer();
-  return new TextDecoder("shift-jis").decode(buffer);
+  return await response.text();
 }
 
 export async function GET(request) {
@@ -42,21 +41,30 @@ export async function GET(request) {
     const jar = {};
 
     const loginPage = await fetch(loginUrl);
-    addCookies(jar, loginPage.headers.get("set-cookie") || "");
+
+    addCookies(
+      jar,
+      loginPage.headers.get("set-cookie") || ""
+    );
 
     const loginHtml = await readText(loginPage);
 
     const csrf =
-      loginHtml.match(/name="fuel_csrf_token"\s+value="([^"]+)"/)?.[1];
+      loginHtml.match(
+        /name="fuel_csrf_token"\s+value="([^"]+)"/
+      )?.[1];
 
     const sessionId =
-      loginHtml.match(/name="session_id"\s+value="([^"]+)"/)?.[1];
+      loginHtml.match(
+        /name="session_id"\s+value="([^"]+)"/
+      )?.[1];
 
     const login = await fetch(loginUrl, {
       method: "POST",
       redirect: "manual",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type":
+          "application/x-www-form-urlencoded",
         Origin: "https://motorgate.jp",
         Referer: loginUrl,
         Cookie: jarToCookie(jar),
@@ -70,7 +78,10 @@ export async function GET(request) {
       }),
     });
 
-    addCookies(jar, login.headers.get("set-cookie") || "");
+    addCookies(
+      jar,
+      login.headers.get("set-cookie") || ""
+    );
 
     const publicUrl =
       "https://motorgate.jp/stock/newsearch/stocklist/index/1/100";
@@ -89,6 +100,7 @@ export async function GET(request) {
       note: "Debug public stock list HTML.",
       html: publicHtml.substring(0, 100000),
     });
+
   } catch (e) {
     return Response.json({
       success: false,
