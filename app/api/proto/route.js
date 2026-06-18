@@ -300,7 +300,8 @@ const htmlHead = html.substring(0, 50000);
     editStatus: edit.status,
     containsLoginForm: html.includes('name="client_pw"'),
 rawBrand: extractSelectText(html, "BrandName"),
- brand: repairMojibake(
+testBrand: repairMojibake("繝ｬ繧ｯ繧ｵ繧ｹ"),
+brand: repairMojibake(
   extractSelectText(html, "BrandName")
 ),
 
