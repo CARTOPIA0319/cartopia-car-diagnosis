@@ -339,6 +339,10 @@ async function fetchVehicle({ clientId, jar, stockId, stockStatus, source, withD
 
   if (withDebug) {
     vehicle.debug = {
+      brandCode,
+modelCode,
+gradeCode,
+bodyColorCode,
       rawBrand,
       rawCar,
       rawGrade,
