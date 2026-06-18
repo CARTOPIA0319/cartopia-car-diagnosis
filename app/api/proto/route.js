@@ -299,7 +299,7 @@ const htmlHead = html.substring(0, 50000);
     status: source === "public" ? "掲載中" : "一時保存",
     editStatus: edit.status,
     containsLoginForm: html.includes('name="client_pw"'),
-
+rawBrand: extractSelectText(html, "BrandName"),
  brand: repairMojibake(
   extractSelectText(html, "BrandName")
 ),
