@@ -341,14 +341,22 @@ async function fetchVehicle({ clientId, jar, stockId, stockStatus, source, withD
 
   if (withDebug) {
     vehicle.debug = {
-      brandCode,
+  brandCode,
 modelCode,
 gradeCode,
 bodyColorCode,
-      rawBrand,
-      rawCar,
-      rawGrade,
-      testBrand: chooseNameByCode("1005", BRAND_CODE_MAP, "繝ｬ繧ｯ繧ｵ繧ｹ"),
+
+rawBrand,
+rawCar,
+rawGrade,
+
+mapValue: BRAND_CODE_MAP["1005"],
+
+testBrand: chooseNameByCode(
+  "1005",
+  BRAND_CODE_MAP,
+  "繝ｬ繧ｯ繧ｵ繧ｹ"
+),
     };
 
     vehicle.debugSelects = makeDebugSelects(html);
