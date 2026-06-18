@@ -281,7 +281,7 @@ async function fetchVehicle({ clientId, jar, stockId, stockStatus, source, withD
     },
   });
 
-  const html = await edit.text();
+  const html = await readText(edit);
 
   const brandCode = extractSelectValue(html, "BrandName");
   const modelCode = extractSelectValue(html, "ModelName");
