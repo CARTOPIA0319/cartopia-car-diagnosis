@@ -112,7 +112,7 @@ function chooseNameByCode(code, map, fallback) {
   const key = String(code || "").trim();
   return map[key] || repairMojibake(fallback) || fallback || null;
 }
-}
+
 
 function extractStockIdsFromPublic(html) {
   return unique(
