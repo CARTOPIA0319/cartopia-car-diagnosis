@@ -30,7 +30,7 @@ function jarToCookie(jar) {
 
 async function readText(response) {
   const buffer = await response.arrayBuffer();
-  return new TextDecoder("utf-8").decode(buffer);
+  return new TextDecoder("shift_jis").decode(buffer);
 }
 
 function pickAround(html, keyword, before = 3000, after = 7000) {
@@ -154,7 +154,7 @@ export async function GET(request) {
     } else {
       return Response.json({
         success: true,
-        note: "Motorgate page map debug API.",
+        note: "Motorgate page map debug API. Shift_JIS decode test.",
         loginStatus,
         clientId,
         usage: {
