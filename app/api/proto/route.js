@@ -14,11 +14,8 @@ function addCookies(jar, setCookieText) {
       const name = first.slice(0, eq);
       const value = first.slice(eq + 1);
 
-      if (value !== "deleted") {
-        jar[name] = value;
-      } else {
-        delete jar[name];
-      }
+      if (value !== "deleted") jar[name] = value;
+      else delete jar[name];
     }
   }
 
@@ -74,54 +71,13 @@ function percentDecodeUtf8(value) {
       bytes.push(parseInt(text.slice(i + 1, i + 3), 16));
       i += 2;
     } else {
-      const code = text.charCodeAt(i);
-      if (code <= 0x7f) {
-        bytes.push(code);
-      } else {
-        const encoded = new TextEncoder().encode(text[i]);
-        bytes.push(...encoded);
-      }
+      bytes.push(...new TextEncoder().encode(text[i]));
     }
   }
 
-  let result = "";
-  let i = 0;
-
-  while (i < bytes.length) {
-    const b1 = bytes[i];
-
-    if (b1 < 0x80) {
-      result += String.fromCodePoint(b1);
-      i += 1;
-    } else if ((b1 & 0xe0) === 0xc0) {
-      const b2 = bytes[i + 1];
-      result += String.fromCodePoint(((b1 & 0x1f) << 6) | (b2 & 0x3f));
-      i += 2;
-    } else if ((b1 & 0xf0) === 0xe0) {
-      const b2 = bytes[i + 1];
-      const b3 = bytes[i + 2];
-      result += String.fromCodePoint(
-        ((b1 & 0x0f) << 12) | ((b2 & 0x3f) << 6) | (b3 & 0x3f)
-      );
-      i += 3;
-    } else if ((b1 & 0xf8) === 0xf0) {
-      const b2 = bytes[i + 1];
-      const b3 = bytes[i + 2];
-      const b4 = bytes[i + 3];
-      result += String.fromCodePoint(
-        ((b1 & 0x07) << 18) |
-          ((b2 & 0x3f) << 12) |
-          ((b3 & 0x3f) << 6) |
-          (b4 & 0x3f)
-      );
-      i += 4;
-    } else {
-      result += "�";
-      i += 1;
-    }
-  }
-
-  return result;
+  return new TextDecoder("utf-8", { fatal: false }).decode(
+    Uint8Array.from(bytes)
+  );
 }
 
 function getQueryParamRaw(urlText, name) {
@@ -129,7 +85,6 @@ function getQueryParamRaw(urlText, name) {
   const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const regex = new RegExp(`[?&]${escapedName}=([^&#"']*)`, "i");
   const match = text.match(regex);
-
   return match ? match[1] : "";
 }
 
@@ -192,12 +147,17 @@ function extractHrefValues(html, baseUrl) {
 }
 
 function extractImageValues(html, baseUrl) {
-  return Array.from(
+  const imgs = Array.from(
     String(html || "").matchAll(/<img\b[^>]*src=["']([^"']+)["'][^>]*>/gi)
-  )
-    .map((m) => decodeHtmlEntities(m[1]))
-    .map((src) => absoluteUrl(src, baseUrl))
-    .filter(Boolean);
+  ).map((m) => absoluteUrl(decodeHtmlEntities(m[1]), baseUrl));
+
+  const qualityImgs = Array.from(
+    String(html || "").matchAll(
+      /name=['"]quality_img_url\[\]['"][^>]*value=["']([^"']+)["']/gi
+    )
+  ).map((m) => absoluteUrl(decodeHtmlEntities(m[1]), baseUrl));
+
+  return [...qualityImgs, ...imgs].filter(Boolean);
 }
 
 function findFirstUrl(urls, includesText) {
@@ -256,18 +216,28 @@ function fixBasicMojibake(text) {
     .trim();
 }
 
+function extractHiddenBeforeRow(html, stockId) {
+  const marker = `<tr id="tr_${stockId}"`;
+  const index = html.indexOf(marker);
+  if (index < 0) return "";
+
+  const before = html.slice(Math.max(0, index - 12000), index);
+  const prevTr = before.lastIndexOf("</tr>");
+  return prevTr >= 0 ? before.slice(prevTr) : before;
+}
+
 function extractVehicleRows(html) {
   const rows = [];
-
   const regex =
     /<tr\b[^>]*id=["']tr_([A-Za-z0-9]+)["'][^>]*>([\s\S]*?)(?=<tr\b[^>]*id=["']tr_[A-Za-z0-9]+["']|<\/tbody>|<\/table>)/gi;
 
   let match;
 
   while ((match = regex.exec(html)) !== null) {
+    const stockId = match[1];
     rows.push({
-      stockId: match[1],
-      rowHtml: match[0],
+      stockId,
+      rowHtml: extractHiddenBeforeRow(html, stockId) + match[0],
     });
   }
 
@@ -289,13 +259,6 @@ function parseVehicleRow(row, baseUrl) {
   const editUrl = findFirstUrl(urls, "/car/edit/new");
   const gooUrl = findFirstUrl(urls, "goo-net.com");
 
-  const rawCarName = getQueryParamRaw(rawTireHref, "car_name");
-  const rawGradeName = getQueryParamRaw(rawTireHref, "grade_name");
-  const rawClassificationName = getQueryParamRaw(
-    rawTireHref,
-    "classification_name"
-  );
-
   const carName = getQueryParamDecoded(rawTireHref, "car_name");
   const gradeName = getQueryParamDecoded(rawTireHref, "grade_name");
   const classificationName = getQueryParamDecoded(
@@ -310,8 +273,7 @@ function parseVehicleRow(row, baseUrl) {
   const visibleTitleFixed = fixBasicMojibake(visibleTitleRaw);
 
   const infoCellHtml = extractTdByClass(rowHtml, "item__info");
-  const infoItemsRaw = extractLiTexts(infoCellHtml);
-  const infoItemsFixed = infoItemsRaw.map(fixBasicMojibake);
+  const infoItemsFixed = extractLiTexts(infoCellHtml).map(fixBasicMojibake);
 
   const costCellHtml = extractTdByClass(rowHtml, "item__cost");
 
@@ -322,10 +284,6 @@ function parseVehicleRow(row, baseUrl) {
   const totalPriceNumber = extractSpanById(
     costCellHtml,
     `total_display_${stockId}`
-  );
-  const btobPriceNumber = extractSpanById(
-    costCellHtml,
-    `btob_kakaku_display_${stockId}`
   );
 
   const year = infoItemsFixed[0] || "";
@@ -342,11 +300,6 @@ function parseVehicleRow(row, baseUrl) {
     ? `${fixBasicMojibake(totalPriceNumber)}万円`
     : "";
 
-  const btobPrice =
-    btobPriceNumber && btobPriceNumber !== "-"
-      ? `${fixBasicMojibake(btobPriceNumber)}万円`
-      : "";
-
   const realImages = images.filter(
     (imageUrl) =>
       !imageUrl.includes("car_nophoto") &&
@@ -354,8 +307,7 @@ function parseVehicleRow(row, baseUrl) {
       !imageUrl.includes("/common/")
   );
 
-  const titleFromParams = [carName, gradeName].filter(Boolean).join(" ").trim();
-  const title = titleFromParams || visibleTitleFixed || stockId;
+  const title = [carName, gradeName].filter(Boolean).join(" ").trim();
 
   const description =
     visibleTitleFixed && !visibleTitleFixed.includes("�")
@@ -364,6 +316,22 @@ function parseVehicleRow(row, baseUrl) {
 
   return {
     stockId,
+    title,
+    description,
+    carName,
+    gradeName,
+    classificationName,
+    year,
+    mileage,
+    color,
+    inspection,
+    displacement,
+    bodyPrice,
+    totalPrice,
+    imageUrl: realImages[0] || "",
+    detailUrl,
+    editUrl,
+    gooUrl,
 
     lineCard: {
       title,
@@ -376,70 +344,25 @@ function parseVehicleRow(row, baseUrl) {
       ]
         .filter(Boolean)
         .join(" / "),
-      imageUrl: realImages[0] || images[0] || "",
-    },
-
-    extracted: {
-      carName,
-      gradeName,
-      classificationName,
-      year,
-      mileage,
-      color,
-      inspection,
-      displacement,
-      bodyPrice,
-      totalPrice,
-      btobPrice,
-    },
-
-    urls: {
-      detailUrl,
-      editUrl,
-      tireUrl,
-      gooUrl,
-    },
-
-    images: {
-      firstUsableImage: realImages[0] || "",
-      allImages: images,
-    },
-
-    debug: {
-      rawTireHref,
-      rawCarName,
-      rawGradeName,
-      rawClassificationName,
-      decodedCarName: carName,
-      decodedGradeName: gradeName,
-      decodedClassificationName: classificationName,
-      visibleTitleRaw,
-      visibleTitleFixed,
-      infoItemsRaw,
-      infoItemsFixed,
+      imageUrl: realImages[0] || "",
     },
   };
 }
 
 function vehicleMatches(vehicle, keyword) {
   const key = String(keyword || "").trim();
-
   if (!key) return true;
 
-  const target = [
+  return [
     vehicle.stockId,
-    vehicle.lineCard.title,
-    vehicle.lineCard.description,
-    vehicle.extracted.carName,
-    vehicle.extracted.gradeName,
-    vehicle.extracted.classificationName,
-    vehicle.debug.rawCarName,
-    vehicle.debug.rawGradeName,
-    vehicle.debug.visibleTitleRaw,
-    vehicle.debug.visibleTitleFixed,
-  ].join(" ");
-
-  return target.includes(key);
+    vehicle.title,
+    vehicle.description,
+    vehicle.carName,
+    vehicle.gradeName,
+    vehicle.classificationName,
+  ]
+    .join(" ")
+    .includes(key);
 }
 
 async function loginMotorgate() {
@@ -501,26 +424,12 @@ export async function GET(request) {
     const { jar, loginStatus } = await loginMotorgate();
 
     const url = new URL(request.url);
-    const mode = url.searchParams.get("mode") || "search";
-    const keyword =
-      url.searchParams.get("keyword") || "0902332A30260610W001";
-    const limit = Number(url.searchParams.get("limit") || "5");
+    const mode = url.searchParams.get("mode") || "all";
+    const keyword = url.searchParams.get("keyword") || "";
+    const limit = Number(url.searchParams.get("limit") || "100");
 
     const publicListUrl =
       "https://motorgate.jp/stock/newsearch/stocklist/index/1/100";
-
-    if (mode !== "search") {
-      return json({
-        success: true,
-        note: "Manual UTF-8 percent decode test.",
-        loginStatus,
-        usage: {
-          targetHustler:
-            "/api/proto?mode=search&keyword=0902332A30260610W001&limit=5",
-        },
-        targetUrl: publicListUrl,
-      });
-    }
 
     const res = await fetch(publicListUrl, {
       headers: {
@@ -539,9 +448,10 @@ export async function GET(request) {
       parseVehicleRow(row, publicListUrl)
     );
 
-    const matchedVehicles = allVehicles
-      .filter((vehicle) => vehicleMatches(vehicle, keyword))
-      .slice(0, limit);
+    const vehicles =
+      mode === "search"
+        ? allVehicles.filter((vehicle) => vehicleMatches(vehicle, keyword))
+        : allVehicles;
 
     return json({
       success: true,
@@ -549,37 +459,18 @@ export async function GET(request) {
       keyword,
       targetUrl: publicListUrl,
       status: res.status,
-      contentType: res.headers.get("content-type"),
       loginStatus,
       containsLoginForm: html.includes('name="client_pw"'),
 
-      checks: {
-        rowCountFound: vehicleRows.length,
-        allVehicleCount: allVehicles.length,
-        matchedVehicleCount: matchedVehicles.length,
-        hasCarNameParam: html.includes("car_name="),
-        hasGradeNameParam: html.includes("grade_name="),
-        manualDecodeTestHustler: percentDecodeUtf8(
-          "%E3%83%8F%E3%82%B9%E3%83%A9%E3%83%BC"
-        ),
-        manualDecodeTestGrade: percentDecodeUtf8(
-          "%E3%83%8F%E3%82%A4%E3%83%96%E3%83%AA%E3%83%83%E3%83%89%EF%BC%B8"
-        ),
+      counts: {
+        foundRows: vehicleRows.length,
+        totalVehicles: allVehicles.length,
+        returnedVehicles: vehicles.slice(0, limit).length,
       },
 
-      vehicles: matchedVehicles,
+      vehicles: vehicles.slice(0, limit),
 
-      debug: {
-        first10StockIds: vehicleRows.slice(0, 10).map((row) => row.stockId),
-        first10DecodedTitles: allVehicles.slice(0, 10).map((vehicle) => ({
-          stockId: vehicle.stockId,
-          title: vehicle.lineCard.title,
-          carName: vehicle.extracted.carName,
-          gradeName: vehicle.extracted.gradeName,
-          rawCarName: vehicle.debug.rawCarName,
-          rawGradeName: vehicle.debug.rawGradeName,
-        })),
-      },
+      lineCards: vehicles.slice(0, limit).map((vehicle) => vehicle.lineCard),
     });
   } catch (e) {
     return json({
