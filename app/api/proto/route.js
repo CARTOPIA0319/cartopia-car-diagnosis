@@ -29,7 +29,8 @@ function jarToCookie(jar) {
 }
 
 async function readText(response) {
-  return await response.text();
+  const buffer = await response.arrayBuffer();
+  return new TextDecoder("utf-8").decode(buffer);
 }
 
 function pickAround(html, keyword, before = 3000, after = 7000) {
@@ -54,12 +55,15 @@ function pickImages(html) {
 function pickLinks(html) {
   return Array.from(
     html.matchAll(/href=["']([^"']+)["']/gi)
-  ).map((m) => m[1]).filter((url) =>
-    url.includes("stock") ||
-    url.includes("detail") ||
-    url.includes("register") ||
-    url.includes("StockId")
-  ).slice(0, 100);
+  )
+    .map((m) => m[1])
+    .filter((url) =>
+      url.includes("stock") ||
+      url.includes("detail") ||
+      url.includes("register") ||
+      url.includes("StockId")
+    )
+    .slice(0, 100);
 }
 
 async function loginMotorgate() {
