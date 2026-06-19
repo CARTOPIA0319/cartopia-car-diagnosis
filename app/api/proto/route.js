@@ -231,6 +231,12 @@ function fixBasicMojibake(text) {
     .trim();
 }
 
+function toHalfWidthAscii(text) {
+  return String(text || "").replace(/[！-～]/g, (char) =>
+    String.fromCharCode(char.charCodeAt(0) - 0xfee0)
+  );
+}
+
 function normalizeTypeText(text) {
   return fixBasicMojibake(
     decodeHtmlEntities(String(text || ""))
@@ -247,6 +253,18 @@ function normalizeTypeText(text) {
       .replace(/\n/g, " ")
       .replace(/　/g, " ")
   );
+}
+
+function normalizeTypeKey(type) {
+  const value = toHalfWidthAscii(String(type || ""))
+    .replace(/：/g, ":")
+    .replace(/　/g, " ")
+    .trim();
+
+  if (/^suv$/i.test(value)) return "SUV";
+  if (/^ev・hv$/i.test(value)) return "EV・HV";
+
+  return value;
 }
 
 function extractTypesFromText(text) {
@@ -272,6 +290,12 @@ function extractTypesFromText(text) {
   return types;
 }
 
+function buildTypeKeys(types) {
+  return Array.from(
+    new Set(types.map((type) => normalizeTypeKey(type)).filter(Boolean))
+  );
+}
+
 function pickAround(text, keyword, before = 800, after = 1200) {
   const fixed = normalizeTypeText(text);
   const index = fixed.indexOf(keyword);
@@ -288,6 +312,7 @@ async function fetchVehicleTypesFromEditPage(jar, vehicle) {
   if (!vehicle.editUrl) {
     return {
       types: [],
+      typeKeys: [],
       status: null,
       success: false,
       reason: "editUrl not found",
@@ -311,9 +336,11 @@ async function fetchVehicleTypesFromEditPage(jar, vehicle) {
   const typesFromHtml = extractTypesFromText(html);
   const typesFromText = extractTypesFromText(cleanText);
   const types = Array.from(new Set([...typesFromHtml, ...typesFromText]));
+  const typeKeys = buildTypeKeys(types);
 
   return {
     types,
+    typeKeys,
     status: res.status,
     success: types.length > 0,
     reason: types.length > 0 ? "" : "TYPE not found",
@@ -434,6 +461,7 @@ function parseVehicleRow(row, baseUrl, qualityImageMap) {
     editUrl,
     gooUrl,
     types: [],
+    typeKeys: [],
 
     lineCard: {
       title,
@@ -465,6 +493,156 @@ function vehicleMatches(vehicle, keyword) {
   ]
     .join(" ")
     .includes(key);
+}
+
+function vehicleMatchesTypes(vehicle, type1, type2) {
+  const typeKeys = vehicle.typeKeys || [];
+  const key1 = normalizeTypeKey(type1);
+  const key2 = normalizeTypeKey(type2);
+
+  if (key1 && !typeKeys.includes(key1)) return false;
+  if (key2 && !typeKeys.includes(key2)) return false;
+
+  return true;
+}
+
+async function attachVehicleTypes(jar, vehicles) {
+  const withTypes = [];
+
+  for (const vehicle of vehicles) {
+    const typeResult = await fetchVehicleTypesFromEditPage(jar, vehicle);
+
+    withTypes.push({
+      ...vehicle,
+      types: typeResult.types,
+      typeKeys: typeResult.typeKeys,
+      lineCard: {
+        ...vehicle.lineCard,
+        types: typeResult.types,
+        typeKeys: typeResult.typeKeys,
+      },
+      typeResult,
+    });
+  }
+
+  return withTypes;
+}
+
+function makeSimpleCard(vehicle) {
+  return {
+    stockId: vehicle.stockId,
+    title: vehicle.title,
+    description: vehicle.description,
+    year: vehicle.year,
+    mileage: vehicle.mileage,
+    color: vehicle.color,
+    bodyPrice: vehicle.bodyPrice,
+    totalPrice: vehicle.totalPrice,
+    imageUrl: vehicle.imageUrl,
+    detailUrl: vehicle.detailUrl,
+    types: vehicle.types || [],
+    typeKeys: vehicle.typeKeys || [],
+  };
+}
+
+function makeFlexBubble(vehicle) {
+  return {
+    type: "bubble",
+    hero: {
+      type: "image",
+      url: vehicle.imageUrl || "https://placehold.co/1200x800?text=CARTOPIA",
+      size: "full",
+      aspectRatio: "20:13",
+      aspectMode: "cover",
+    },
+    body: {
+      type: "box",
+      layout: "vertical",
+      spacing: "sm",
+      contents: [
+        {
+          type: "text",
+          text: vehicle.title || "在庫車両",
+          weight: "bold",
+          size: "md",
+          wrap: true,
+        },
+        {
+          type: "text",
+          text: vehicle.description || "",
+          size: "xs",
+          color: "#555555",
+          wrap: true,
+          maxLines: 3,
+        },
+        {
+          type: "separator",
+          margin: "md",
+        },
+        {
+          type: "box",
+          layout: "vertical",
+          margin: "md",
+          spacing: "xs",
+          contents: [
+            {
+              type: "text",
+              text: vehicle.totalPrice ? `支払総額 ${vehicle.totalPrice}` : "支払総額 お問い合わせ",
+              weight: "bold",
+              size: "sm",
+              color: "#111111",
+            },
+            {
+              type: "text",
+              text: [vehicle.year, vehicle.mileage, vehicle.color]
+                .filter(Boolean)
+                .join(" / "),
+              size: "xs",
+              color: "#666666",
+              wrap: true,
+            },
+          ],
+        },
+      ],
+    },
+    footer: {
+      type: "box",
+      layout: "vertical",
+      spacing: "sm",
+      contents: [
+        {
+          type: "button",
+          style: "primary",
+          color: "#0B1F3A",
+          action: {
+            type: "uri",
+            label: "車両詳細を見る",
+            uri: vehicle.detailUrl || "https://cartopia-car-diagnosis.vercel.app",
+          },
+        },
+      ],
+    },
+  };
+}
+
+function makeFlexMessage(vehicles) {
+  const bubbles = vehicles.slice(0, 10).map(makeFlexBubble);
+
+  if (bubbles.length === 0) {
+    return {
+      type: "text",
+      text: "条件に合う在庫が見つかりませんでした。",
+    };
+  }
+
+  return {
+    type: "flex",
+    altText: "おすすめ在庫車両",
+    contents: {
+      type: "carousel",
+      contents: bubbles,
+    },
+  };
 }
 
 async function loginMotorgate() {
@@ -528,6 +706,8 @@ export async function GET(request) {
     const url = new URL(request.url);
     const mode = url.searchParams.get("mode") || "all";
     const keyword = url.searchParams.get("keyword") || "";
+    const type1 = url.searchParams.get("type1") || "";
+    const type2 = url.searchParams.get("type2") || "";
     const limit = Number(url.searchParams.get("limit") || "100");
     const includeTypes = url.searchParams.get("includeTypes") === "1";
 
@@ -553,48 +733,46 @@ export async function GET(request) {
       parseVehicleRow(row, publicListUrl, qualityImageMap)
     );
 
-    const filteredVehicles =
-      mode === "search"
-        ? allVehicles.filter((vehicle) => vehicleMatches(vehicle, keyword))
-        : allVehicles;
-
-    const vehicles = filteredVehicles.slice(0, limit);
-
+    let vehicles = allVehicles;
     let typeDebug = [];
 
-    if (includeTypes) {
-      const withTypes = [];
-
-      for (const vehicle of vehicles) {
-        const typeResult = await fetchVehicleTypesFromEditPage(jar, vehicle);
-
-        withTypes.push({
-          ...vehicle,
-          types: typeResult.types,
-          lineCard: {
-            ...vehicle.lineCard,
-            types: typeResult.types,
-          },
-          typeResult,
-        });
-
-        typeDebug.push({
-          stockId: vehicle.stockId,
-          title: vehicle.title,
-          types: typeResult.types,
-          success: typeResult.success,
-          status: typeResult.status,
-          reason: typeResult.reason,
-        });
-      }
-
-      vehicles.splice(0, vehicles.length, ...withTypes);
+    if (mode === "search") {
+      vehicles = vehicles.filter((vehicle) => vehicleMatches(vehicle, keyword));
     }
+
+    if (mode === "typeSearch") {
+      vehicles = await attachVehicleTypes(jar, vehicles);
+
+      vehicles = vehicles.filter((vehicle) =>
+        vehicleMatchesTypes(vehicle, type1, type2)
+      );
+    } else if (includeTypes) {
+      vehicles = vehicles.slice(0, limit);
+      vehicles = await attachVehicleTypes(jar, vehicles);
+    } else {
+      vehicles = vehicles.slice(0, limit);
+    }
+
+    const limitedVehicles = vehicles.slice(0, limit);
+
+    typeDebug = limitedVehicles.map((vehicle) => ({
+      stockId: vehicle.stockId,
+      title: vehicle.title,
+      types: vehicle.types || [],
+      typeKeys: vehicle.typeKeys || [],
+      success: vehicle.typeResult?.success || false,
+      status: vehicle.typeResult?.status || null,
+      reason: vehicle.typeResult?.reason || "",
+    }));
 
     return json({
       success: true,
       mode,
       keyword,
+      type1,
+      type2,
+      typeKey1: normalizeTypeKey(type1),
+      typeKey2: normalizeTypeKey(type2),
       targetUrl: publicListUrl,
       status: res.status,
       loginStatus,
@@ -603,13 +781,16 @@ export async function GET(request) {
       counts: {
         foundRows: vehicleRows.length,
         totalVehicles: allVehicles.length,
-        returnedVehicles: vehicles.length,
+        returnedVehicles: limitedVehicles.length,
         imageMapCount: Object.keys(qualityImageMap).length,
-        typeFetchedVehicles: includeTypes ? vehicles.length : 0,
+        typeFetchedVehicles:
+          mode === "typeSearch" || includeTypes ? vehicles.length : 0,
       },
 
-      vehicles,
-      lineCards: vehicles.map((vehicle) => vehicle.lineCard),
+      vehicles: limitedVehicles,
+      cards: limitedVehicles.map(makeSimpleCard),
+      lineCards: limitedVehicles.map((vehicle) => vehicle.lineCard),
+      flexMessage: makeFlexMessage(limitedVehicles),
       typeDebug,
     });
   } catch (e) {
