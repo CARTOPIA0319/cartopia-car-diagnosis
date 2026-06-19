@@ -234,6 +234,80 @@ function fixBasicMojibake(text) {
     .trim();
 }
 
+function extractTypesFromText(text) {
+  const decoded = decodeHtmlEntities(String(text || ""));
+  const fixed = fixBasicMojibake(decoded);
+
+  const types = [];
+  const regex = /TYPE\s*[:：]\s*([^\s<>"'&]+)/gi;
+
+  let match;
+
+  while ((match = regex.exec(fixed)) !== null) {
+    const type = compactText(match[1]).replace(/[、,。]/g, "");
+
+    if (type && !types.includes(type)) {
+      types.push(type);
+    }
+  }
+
+  return types;
+}
+
+function pickAround(text, keyword, before = 800, after = 1200) {
+  const index = String(text || "").indexOf(keyword);
+
+  if (index < 0) return "";
+
+  return String(text || "").substring(
+    Math.max(0, index - before),
+    Math.min(String(text || "").length, index + after)
+  );
+}
+
+async function fetchVehicleTypesFromEditPage(jar, vehicle) {
+  if (!vehicle.editUrl) {
+    return {
+      types: [],
+      status: null,
+      success: false,
+      reason: "editUrl not found",
+      debug: {},
+    };
+  }
+
+  const res = await fetch(vehicle.editUrl, {
+    headers: {
+      Cookie: jarToCookie(jar),
+      Referer: "https://motorgate.jp/top",
+      "User-Agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+      "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+    },
+  });
+
+  const html = await readUtf8Text(res);
+  const cleanText = cleanHtmlToText(html);
+
+  const typesFromHtml = extractTypesFromText(html);
+  const typesFromText = extractTypesFromText(cleanText);
+
+  const types = Array.from(new Set([...typesFromHtml, ...typesFromText]));
+
+  return {
+    types,
+    status: res.status,
+    success: types.length > 0,
+    reason: types.length > 0 ? "" : "TYPE not found",
+    debug: {
+      containsLoginForm: html.includes('name="client_pw"'),
+      containsType: html.includes("TYPE"),
+      aroundTypeRaw: pickAround(html, "TYPE"),
+      aroundTypeText: pickAround(cleanText, "TYPE"),
+    },
+  };
+}
+
 function extractVehicleRows(html) {
   const rows = [];
   const regex =
@@ -341,6 +415,7 @@ function parseVehicleRow(row, baseUrl, qualityImageMap) {
     detailUrl,
     editUrl,
     gooUrl,
+    types: [],
 
     lineCard: {
       title,
@@ -436,6 +511,7 @@ export async function GET(request) {
     const mode = url.searchParams.get("mode") || "all";
     const keyword = url.searchParams.get("keyword") || "";
     const limit = Number(url.searchParams.get("limit") || "100");
+    const includeTypes = url.searchParams.get("includeTypes") === "1";
 
     const publicListUrl =
       "https://motorgate.jp/stock/newsearch/stocklist/index/1/100";
@@ -459,10 +535,43 @@ export async function GET(request) {
       parseVehicleRow(row, publicListUrl, qualityImageMap)
     );
 
-    const vehicles =
+    const filteredVehicles =
       mode === "search"
         ? allVehicles.filter((vehicle) => vehicleMatches(vehicle, keyword))
         : allVehicles;
+
+    const vehicles = filteredVehicles.slice(0, limit);
+
+    let typeDebug = [];
+
+    if (includeTypes) {
+      const withTypes = [];
+
+      for (const vehicle of vehicles) {
+        const typeResult = await fetchVehicleTypesFromEditPage(jar, vehicle);
+
+        withTypes.push({
+          ...vehicle,
+          types: typeResult.types,
+          lineCard: {
+            ...vehicle.lineCard,
+            types: typeResult.types,
+          },
+          typeResult,
+        });
+
+        typeDebug.push({
+          stockId: vehicle.stockId,
+          title: vehicle.title,
+          types: typeResult.types,
+          success: typeResult.success,
+          status: typeResult.status,
+          reason: typeResult.reason,
+        });
+      }
+
+      vehicles.splice(0, vehicles.length, ...withTypes);
+    }
 
     return json({
       success: true,
@@ -476,13 +585,16 @@ export async function GET(request) {
       counts: {
         foundRows: vehicleRows.length,
         totalVehicles: allVehicles.length,
-        returnedVehicles: vehicles.slice(0, limit).length,
+        returnedVehicles: vehicles.length,
         imageMapCount: Object.keys(qualityImageMap).length,
+        typeFetchedVehicles: includeTypes ? vehicles.length : 0,
       },
 
-      vehicles: vehicles.slice(0, limit),
+      vehicles,
 
-      lineCards: vehicles.slice(0, limit).map((vehicle) => vehicle.lineCard),
+      lineCards: vehicles.map((vehicle) => vehicle.lineCard),
+
+      typeDebug,
     });
   } catch (e) {
     return json({
