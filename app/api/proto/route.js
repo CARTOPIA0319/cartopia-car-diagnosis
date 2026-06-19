@@ -134,10 +134,7 @@ function absoluteUrl(src, baseUrl) {
 
 function extractQualityImageMap(html, baseUrl) {
   const map = {};
-
-  const regex =
-    /<input\b[^>]*name=['"]quality_img_url\[\]['"][^>]*>/gi;
-
+  const regex = /<input\b[^>]*name=['"]quality_img_url\[\]['"][^>]*>/gi;
   const inputs = String(html || "").match(regex) || [];
 
   for (const input of inputs) {
@@ -234,19 +231,40 @@ function fixBasicMojibake(text) {
     .trim();
 }
 
-function extractTypesFromText(text) {
-  const decoded = decodeHtmlEntities(String(text || ""));
-  const fixed = fixBasicMojibake(decoded);
+function normalizeTypeText(text) {
+  return fixBasicMojibake(
+    decodeHtmlEntities(String(text || ""))
+      .replace(/Ｔ/g, "T")
+      .replace(/Ｙ/g, "Y")
+      .replace(/Ｐ/g, "P")
+      .replace(/Ｅ/g, "E")
+      .replace(/ｔ/g, "t")
+      .replace(/ｙ/g, "y")
+      .replace(/ｐ/g, "p")
+      .replace(/ｅ/g, "e")
+      .replace(/：/g, ":")
+      .replace(/\r/g, " ")
+      .replace(/\n/g, " ")
+      .replace(/　/g, " ")
+  );
+}
 
+function extractTypesFromText(text) {
+  const fixed = normalizeTypeText(text);
   const types = [];
-  const regex = /TYPE\s*[:：]\s*([^\s<>"'&]+)/gi;
+  const regex = /TYPE\s*:\s*([^\s<>"'&]+)/gi;
 
   let match;
 
   while ((match = regex.exec(fixed)) !== null) {
     const type = compactText(match[1]).replace(/[、,。]/g, "");
 
-    if (type && !types.includes(type)) {
+    if (
+      type &&
+      !type.includes(".") &&
+      !type.includes("_") &&
+      !types.includes(type)
+    ) {
       types.push(type);
     }
   }
@@ -255,13 +273,14 @@ function extractTypesFromText(text) {
 }
 
 function pickAround(text, keyword, before = 800, after = 1200) {
-  const index = String(text || "").indexOf(keyword);
+  const fixed = normalizeTypeText(text);
+  const index = fixed.indexOf(keyword);
 
   if (index < 0) return "";
 
-  return String(text || "").substring(
+  return fixed.substring(
     Math.max(0, index - before),
-    Math.min(String(text || "").length, index + after)
+    Math.min(fixed.length, index + after)
   );
 }
 
@@ -291,7 +310,6 @@ async function fetchVehicleTypesFromEditPage(jar, vehicle) {
 
   const typesFromHtml = extractTypesFromText(html);
   const typesFromText = extractTypesFromText(cleanText);
-
   const types = Array.from(new Set([...typesFromHtml, ...typesFromText]));
 
   return {
@@ -301,7 +319,7 @@ async function fetchVehicleTypesFromEditPage(jar, vehicle) {
     reason: types.length > 0 ? "" : "TYPE not found",
     debug: {
       containsLoginForm: html.includes('name="client_pw"'),
-      containsType: html.includes("TYPE"),
+      containsHalfWidthType: normalizeTypeText(html).includes("TYPE:"),
       aroundTypeRaw: pickAround(html, "TYPE"),
       aroundTypeText: pickAround(cleanText, "TYPE"),
     },
@@ -591,9 +609,7 @@ export async function GET(request) {
       },
 
       vehicles,
-
       lineCards: vehicles.map((vehicle) => vehicle.lineCard),
-
       typeDebug,
     });
   } catch (e) {
