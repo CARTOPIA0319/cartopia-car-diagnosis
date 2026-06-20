@@ -1,5 +1,169 @@
-
 {
-  "updatedAt": "",
-  "vehicles": []
+  "updatedAt": "2026-06-20T03:32:37.370Z",
+  "source": "motorgate",
+  "counts": {
+    "foundRows": 36,
+    "parsedVehicles": 36,
+    "vehicles": 5,
+    "imageMapCount": 36
+  },
+  "vehicles": [
+    {
+      "stockId": "0902332A30260327W002",
+      "title": "ＬＳ ＬＳ６００ｈ　バージョンＣ　Ｉパッケージ",
+      "description": "ＬＳ ＬＳ６００ｈ　バージョンＣ　Ｉパッケージ ４ＷＤ　ハイブリッド　木目＋本革ステアリング　ハンドルヒーター　本革シート　アラカンターラルーフ　１２．３インチワイドディスプレイ　純正ナビ　パワーシート＆メモリー　クルコン　シートベンチレーション",
+      "carName": "ＬＳ",
+      "gradeName": "ＬＳ６００ｈ　バージョンＣ　Ｉパッケージ",
+      "classificationName": "UVF45",
+      "year": "2016年",
+      "mileage": "10.5万K",
+      "color": "ソニッククォーツ",
+      "inspection": "検2027年01月",
+      "displacement": "5.0L",
+      "bodyPrice": "209.8万円",
+      "totalPrice": "222.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260327/H/70009023323026032700200.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260327W002",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260327002&area_cd=11",
+      "types": [
+        "普通車",
+        "セダン",
+        "EＶ・ＨＶ",
+        "普通…"
+      ],
+      "typeKeys": [
+        "普通車",
+        "セダン",
+        "EV・HV",
+        "普通…"
+      ],
+      "updatedAt": "2026-06-20T03:32:37.369Z"
+    },
+    {
+      "stockId": "0902332A30251021W001",
+      "title": "ＬＳ ＬＳ６００ｈＬ",
+      "description": "ＬＳ ＬＳ６００ｈＬ ４ＷＤ　ハイブリッド　ロングモデル　純正ナビ　バックカメラ　フリップダウンモニター　マークレビンソンスピーカー　ＥＴＣ　本革パワーシート　シートヒーター／クーラー　ステアリングヒーター　パワートランク",
+      "carName": "ＬＳ",
+      "gradeName": "ＬＳ６００ｈＬ",
+      "classificationName": "UVF46",
+      "year": "2014年",
+      "mileage": "走不明",
+      "color": "ブラック",
+      "inspection": "検2028年04月",
+      "displacement": "5.0L",
+      "bodyPrice": "160.3万円",
+      "totalPrice": "168.3万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30251021/H/70009023323025102100100.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30251021W001",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230251021001&area_cd=11",
+      "types": [
+        "普通車",
+        "セダン",
+        "EＶ・ＨＶ",
+        "普通…"
+      ],
+      "typeKeys": [
+        "普通車",
+        "セダン",
+        "EV・HV",
+        "普通…"
+      ],
+      "updatedAt": "2026-06-20T03:32:37.369Z"
+    },
+    {
+      "stockId": "0902332A30250725W001",
+      "title": "Ｎ－ＯＮＥ プレミアム",
+      "description": "Ｎ－ＯＮＥ プレミアム ４ＷＤ　ホンダセンシング　ツートンカラー　ハーフレザーシート　追従式クルーズコントロール　ＬＥＤヘッドライト／フォグ　純正ディスプレイオーディオ　バックカメラ　ＥＴＣ　シートヒーター　パーキングソナー",
+      "carName": "Ｎ－ＯＮＥ",
+      "gradeName": "プレミアム",
+      "classificationName": "JG4",
+      "year": "2023年",
+      "mileage": "1.2万K",
+      "color": "メテオロイドグレーメタリック／ブラック",
+      "inspection": "車検整備付",
+      "displacement": "660cc",
+      "bodyPrice": "181.9万円",
+      "totalPrice": "185.6万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30250725/H/70009023323025072500100.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30250725W001",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230250725001&area_cd=11",
+      "types": [
+        "軽自動車",
+        "スタンダード",
+        "スポーティ",
+        "特にこだわりはない",
+        "軽自…"
+      ],
+      "typeKeys": [
+        "軽自動車",
+        "スタンダード",
+        "スポーティ",
+        "特にこだわりはない",
+        "軽自…"
+      ],
+      "updatedAt": "2026-06-20T03:32:37.369Z"
+    },
+    {
+      "stockId": "0902332A30260313W003",
+      "title": "Ｎ－ＶＡＮ＋スタイル ファン・ターボ",
+      "description": "Ｎ－ＶＡＮ＋スタイル ファン・ターボ ４ＷＤ　ターボ　オプションカラー　天井収納　アダプティブクルーズコントロール　純正ナビ　バックカメラ　Ｂｌｕｅｔｏｏｔｈ　フルセグ　パーキングソナー　ドラレコ　純正オプションペダルカバー　ＵＳＢポート",
+      "carName": "Ｎ－ＶＡＮ＋スタイル",
+      "gradeName": "ファン・ターボ",
+      "classificationName": "JJ2",
+      "year": "2021年",
+      "mileage": "13.5万K",
+      "color": "プラチナホワイトパール",
+      "inspection": "検2027年02月",
+      "displacement": "660cc",
+      "bodyPrice": "108.5万円",
+      "totalPrice": "112.3万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260313/H/70009023323026031300300.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260313W003",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260313003&area_cd=11",
+      "types": [
+        "軽自動車",
+        "スライドドア",
+        "特にこだわりはない",
+        "軽自…"
+      ],
+      "typeKeys": [
+        "軽自動車",
+        "スライドドア",
+        "特にこだわりはない",
+        "軽自…"
+      ],
+      "updatedAt": "2026-06-20T03:32:37.369Z"
+    },
+    {
+      "stockId": "0902332A30260406W003",
+      "title": "Ｎ－ＷＧＮカスタム Ｌ・ターボホンダセンシング",
+      "description": "Ｎ－ＷＧＮカスタム Ｌ・ターボホンダセンシング ４ＷＤ　フルセグＴＶ　Ｂｌｕｅｔｏｏｔｈ　Ｂカメラ　純正エンジンスターター　ＥＴＣ　追従式クルーズコントロール　ステリモ　前２席シートヒーター　Ｐソナー　ブレーキホールド　パドルシフト　ＵＳＢポート",
+      "carName": "Ｎ－ＷＧＮカスタム",
+      "gradeName": "Ｌ・ターボホンダセンシング",
+      "classificationName": "JH4",
+      "year": "2020年",
+      "mileage": "2.6万K",
+      "color": "プラチナホワイトパール",
+      "inspection": "検2027年08月",
+      "displacement": "660cc",
+      "bodyPrice": "150.4万円",
+      "totalPrice": "153.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260406/H/70009023323026040600300.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260406W003",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260406003&area_cd=11",
+      "types": [
+        "軽自動車",
+        "スタンダード",
+        "特にこだわりはない",
+        "軽自…"
+      ],
+      "typeKeys": [
+        "軽自動車",
+        "スタンダード",
+        "特にこだわりはない",
+        "軽自…"
+      ],
+      "updatedAt": "2026-06-20T03:32:37.369Z"
+    }
+  ]
 }
