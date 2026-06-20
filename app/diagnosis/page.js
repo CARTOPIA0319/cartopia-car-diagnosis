@@ -3,66 +3,148 @@
 import { useState } from "react";
 
 export default function DiagnosisPage() {
+  const [selectedMainType, setSelectedMainType] = useState("");
+  const [selectedLabel, setSelectedLabel] = useState("");
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedLabel, setSelectedLabel] = useState("");
 
-  async function search(type1, type2, label) {
+  const keiOptions = [
+    "スライドドア",
+    "スタンダード",
+    "SUV",
+    "トラック",
+    "スポーティ",
+    "特にこだわりはない",
+  ];
+
+  const normalOptions = [
+    "コンパクトカー",
+    "ミニバン",
+    "SUV",
+    "セダン",
+    "低燃費・ハイブリッド",
+    "スポーティ",
+    "バン・トラック",
+    "特にこだわりはない",
+  ];
+
+  async function search(mainType, subType) {
     setLoading(true);
-    setSelectedLabel(label);
+    setSelectedLabel(subType);
 
-    const res = await fetch(
-      `/api/inventory/search?type1=${encodeURIComponent(
-        type1
-      )}&type2=${encodeURIComponent(type2)}&limit=20`
-    );
+    const url =
+      subType === "特にこだわりはない"
+        ? `/api/inventory/search?type=${encodeURIComponent(mainType)}&limit=20`
+        : `/api/inventory/search?type1=${encodeURIComponent(
+            mainType
+          )}&type2=${encodeURIComponent(subType)}&limit=20`;
 
+    const res = await fetch(url);
     const data = await res.json();
 
     setCars(data.vehicles || []);
     setLoading(false);
   }
 
-  async function searchAllKei() {
-    setLoading(true);
-    setSelectedLabel("特にこだわりはない");
-
-    const res = await fetch(
-      `/api/inventory/search?type=${encodeURIComponent("軽自動車")}&limit=20`
-    );
-
-    const data = await res.json();
-
-    setCars(data.vehicles || []);
-    setLoading(false);
+  function reset() {
+    setSelectedMainType("");
+    setSelectedLabel("");
+    setCars([]);
   }
+
+  const options =
+    selectedMainType === "軽自動車"
+      ? keiOptions
+      : selectedMainType === "普通車"
+      ? normalOptions
+      : [];
 
   return (
     <main style={{ padding: 20, maxWidth: 720, margin: "0 auto" }}>
-      <h1 style={{ fontSize: 42, marginBottom: 30 }}>軽自動車診断</h1>
+      <h1 style={{ fontSize: 42, marginBottom: 24 }}>ざっくり診断</h1>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        <button onClick={() => search("軽自動車", "スライドドア", "スライドドア")}>スライドドア</button>
-        <button onClick={() => search("軽自動車", "スタンダード", "スタンダード")}>スタンダード</button>
-        <button onClick={() => search("軽自動車", "SUV", "SUV")}>SUV</button>
-        <button onClick={() => search("軽自動車", "トラック", "トラック")}>トラック</button>
-        <button onClick={() => search("軽自動車", "スポーティ", "スポーティ")}>スポーティ</button>
-        <button onClick={searchAllKei}>特にこだわりはない</button>
-      </div>
+      {!selectedMainType && (
+        <>
+          <p style={{ fontSize: 18, marginBottom: 18 }}>
+            まずは探している車の大きさを選んでください。
+          </p>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <button onClick={() => setSelectedMainType("軽自動車")}>
+              軽自動車
+            </button>
+
+            <button onClick={() => setSelectedMainType("普通車")}>
+              普通車
+            </button>
+          </div>
+        </>
+      )}
+
+      {selectedMainType && (
+        <>
+          <button
+            onClick={reset}
+            style={{
+              marginBottom: 18,
+              background: "transparent",
+              border: "none",
+              textDecoration: "underline",
+              fontSize: 14,
+            }}
+          >
+            最初に戻る
+          </button>
+
+          <h2 style={{ fontSize: 28, marginBottom: 18 }}>
+            {selectedMainType}のタイプを選んでください
+          </h2>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {options.map((option) => (
+              <button
+                key={option}
+                onClick={() => search(selectedMainType, option)}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
 
       {loading && <p style={{ marginTop: 24 }}>検索中...</p>}
 
       {!loading && selectedLabel && (
         <h2 style={{ marginTop: 30, fontSize: 22 }}>
-          {selectedLabel}のおすすめ在庫
+          {selectedMainType}・{selectedLabel}のおすすめ在庫
         </h2>
       )}
 
-      <div style={{ marginTop: 18, display: "flex", flexDirection: "column", gap: 16 }}>
+      <div
+        style={{
+          marginTop: 18,
+          display: "flex",
+          flexDirection: "column",
+          gap: 16,
+        }}
+      >
         {cars.map((car) => (
-          <div key={car.stockId} style={{ border: "1px solid #ddd", borderRadius: 12, overflow: "hidden", background: "#fff" }}>
+          <div
+            key={car.stockId}
+            style={{
+              border: "1px solid #ddd",
+              borderRadius: 12,
+              overflow: "hidden",
+              background: "#fff",
+            }}
+          >
             {car.imageUrl && (
-              <img src={car.imageUrl} alt={car.title} style={{ width: "100%", display: "block" }} />
+              <img
+                src={car.imageUrl}
+                alt={car.title}
+                style={{ width: "100%", display: "block" }}
+              />
             )}
 
             <div style={{ padding: 14 }}>
