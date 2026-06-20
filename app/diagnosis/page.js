@@ -22,6 +22,7 @@ export default function DiagnosisPage() {
     { label: "ミニバン", type: "ミニバン" },
     { label: "SUV", type: "SUV" },
     { label: "セダン", type: "セダン" },
+    { label: "ステーションワゴン", type: "ステーションワゴン" },
     { label: "低燃費・ハイブリッド", type: "EV・HV" },
     { label: "スポーティ", type: "スポーティ" },
     { label: "バン・トラック", type: "バン・トラック" },
