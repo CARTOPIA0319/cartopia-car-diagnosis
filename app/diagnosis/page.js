@@ -9,35 +9,35 @@ export default function DiagnosisPage() {
   const [loading, setLoading] = useState(false);
 
   const keiOptions = [
-    "スライドドア",
-    "スタンダード",
-    "SUV",
-    "トラック",
-    "スポーティ",
-    "特にこだわりはない",
+    { label: "スライドドア", type: "スライドドア" },
+    { label: "スタンダード", type: "スタンダード" },
+    { label: "SUV", type: "SUV" },
+    { label: "トラック", type: "トラック" },
+    { label: "スポーティ", type: "スポーティ" },
+    { label: "特にこだわりはない", type: "特にこだわりはない" },
   ];
 
   const normalOptions = [
-    "コンパクトカー",
-    "ミニバン",
-    "SUV",
-    "セダン",
-    "EV・HV,
-    "スポーティ",
-    "バン・トラック",
-    "特にこだわりはない",
+    { label: "コンパクトカー", type: "コンパクトカー" },
+    { label: "ミニバン", type: "ミニバン" },
+    { label: "SUV", type: "SUV" },
+    { label: "セダン", type: "セダン" },
+    { label: "低燃費・ハイブリッド", type: "EV・HV" },
+    { label: "スポーティ", type: "スポーティ" },
+    { label: "バン・トラック", type: "バン・トラック" },
+    { label: "特にこだわりはない", type: "特にこだわりはない" },
   ];
 
-  async function search(mainType, subType) {
+  async function search(mainType, option) {
     setLoading(true);
-    setSelectedLabel(subType);
+    setSelectedLabel(option.label);
 
     const url =
-      subType === "特にこだわりはない"
+      option.type === "特にこだわりはない"
         ? `/api/inventory/search?type=${encodeURIComponent(mainType)}&limit=20`
         : `/api/inventory/search?type1=${encodeURIComponent(
             mainType
-          )}&type2=${encodeURIComponent(subType)}&limit=20`;
+          )}&type2=${encodeURIComponent(option.type)}&limit=20`;
 
     const res = await fetch(url);
     const data = await res.json();
@@ -102,11 +102,8 @@ export default function DiagnosisPage() {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {options.map((option) => (
-              <button
-                key={option}
-                onClick={() => search(selectedMainType, option)}
-              >
-                {option}
+              <button key={option.label} onClick={() => search(selectedMainType, option)}>
+                {option.label}
               </button>
             ))}
           </div>
@@ -121,14 +118,7 @@ export default function DiagnosisPage() {
         </h2>
       )}
 
-      <div
-        style={{
-          marginTop: 18,
-          display: "flex",
-          flexDirection: "column",
-          gap: 16,
-        }}
-      >
+      <div style={{ marginTop: 18, display: "flex", flexDirection: "column", gap: 16 }}>
         {cars.map((car) => (
           <a
             key={car.stockId}
@@ -146,11 +136,7 @@ export default function DiagnosisPage() {
             }}
           >
             {car.imageUrl && (
-              <img
-                src={car.imageUrl}
-                alt={car.title}
-                style={{ width: "100%", display: "block" }}
-              />
+              <img src={car.imageUrl} alt={car.title} style={{ width: "100%", display: "block" }} />
             )}
 
             <div style={{ padding: 14 }}>
