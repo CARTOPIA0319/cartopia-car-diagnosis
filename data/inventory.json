@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-06-20T03:32:37.370Z",
+  "updatedAt": "2026-06-20T12:29:20.506Z",
   "source": "motorgate",
   "counts": {
     "foundRows": 36,
     "parsedVehicles": 36,
-    "vehicles": 5,
+    "vehicles": 15,
     "imageMapCount": 36
   },
   "vehicles": [
@@ -37,7 +37,7 @@
         "EV・HV",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T03:32:37.369Z"
+      "updatedAt": "2026-06-20T12:29:20.505Z"
     },
     {
       "stockId": "0902332A30251021W001",
@@ -68,7 +68,7 @@
         "EV・HV",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T03:32:37.369Z"
+      "updatedAt": "2026-06-20T12:29:20.505Z"
     },
     {
       "stockId": "0902332A30250725W001",
@@ -101,7 +101,7 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T03:32:37.369Z"
+      "updatedAt": "2026-06-20T12:29:20.505Z"
     },
     {
       "stockId": "0902332A30260313W003",
@@ -132,7 +132,7 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T03:32:37.369Z"
+      "updatedAt": "2026-06-20T12:29:20.505Z"
     },
     {
       "stockId": "0902332A30260406W003",
@@ -163,7 +163,323 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T03:32:37.369Z"
+      "updatedAt": "2026-06-20T12:29:20.505Z"
+    },
+    {
+      "stockId": "0902332A30260415W001",
+      "title": "ＮＶ１００クリッパーリオ Ｅ",
+      "description": "ＮＶ１００クリッパーリオ Ｅ ４ＷＤ　ターボ　エマージェンシーブレーキ　純正ナビ　ＴＶ　Ｂｌｕｅｔｏｏｔｈ　バックカメラ　ＥＴＣ２．０　シートヒーター　リアヒーター　ドライブレコーダー　ステアリングスイッチ　ＨＩＤヘッドライト",
+      "carName": "ＮＶ１００クリッパーリオ",
+      "gradeName": "Ｅ",
+      "classificationName": "DR17W",
+      "year": "2019年",
+      "mileage": "8.8万K",
+      "color": "ブルーイッシュブラックＰ",
+      "inspection": "車検整備付",
+      "displacement": "660cc",
+      "bodyPrice": "104.2万円",
+      "totalPrice": "109.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260415/H/70009023323026041500100.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260415W001",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260415001&area_cd=11",
+      "types": [
+        "軽自動車",
+        "スライドドア",
+        "特にこだわりはない",
+        "軽自…"
+      ],
+      "typeKeys": [
+        "軽自動車",
+        "スライドドア",
+        "特にこだわりはない",
+        "軽自…"
+      ],
+      "updatedAt": "2026-06-20T12:29:20.505Z"
+    },
+    {
+      "stockId": "0902332A30260424W001",
+      "title": "ＮＶ３５０キャラバンバン ロングプレミアムＧＸターボ",
+      "description": "ＮＶ３５０キャラバンバン ロングプレミアムＧＸターボ ワンオーナー　切替式４ＷＤ　ディーゼルターボ　エンジンスターター　社外１７インチＡＷ＋夏タイヤセット積込　純正ＯＰＬＥＤデイライト　アラウンドビュー　社外ナビ　フルセグ　社外ＡＷ＋スタットレス着用",
+      "carName": "ＮＶ３５０キャラバンバン",
+      "gradeName": "ロングプレミアムＧＸターボ",
+      "classificationName": "VW6E26",
+      "year": "2020年",
+      "mileage": "15.2万K",
+      "color": "ファントムブラックパール",
+      "inspection": "車検整備付",
+      "displacement": "2.5L",
+      "bodyPrice": "206.3万円",
+      "totalPrice": "212.3万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260424/H/70009023323026042400100.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260424W001",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260424001&area_cd=11",
+      "types": [
+        "普通車",
+        "ミニバン",
+        "バン・トラック",
+        "普通…"
+      ],
+      "typeKeys": [
+        "普通車",
+        "ミニバン",
+        "バン・トラック",
+        "普通…"
+      ],
+      "updatedAt": "2026-06-20T12:29:20.505Z"
+    },
+    {
+      "stockId": "0902332A30260421W002",
+      "title": "ｅＫクロス Ｔ",
+      "description": "ｅＫクロス Ｔ ４ＷＤ　ハイブリッド　ターボ　純正９インチナビ　デジタルインナーミラー　アラウンドビューモニター　前席シートヒーター　セーフティシールド　純正１５インチアルミ　フルセグ　Ｂｌｕｅｔｏｏｔｈ　フォグ",
+      "carName": "ｅＫクロス",
+      "gradeName": "Ｔ",
+      "classificationName": "B38W",
+      "year": "2019年",
+      "mileage": "5.2万K",
+      "color": "ホワイトパール",
+      "inspection": "車検整備付",
+      "displacement": "660cc",
+      "bodyPrice": "134.4万円",
+      "totalPrice": "138.3万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100200.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W002",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260421002&area_cd=11",
+      "types": [
+        "軽自動車",
+        "スタンダード",
+        "ＳＵＶ",
+        "特にこだわりはない",
+        "軽自…"
+      ],
+      "typeKeys": [
+        "軽自動車",
+        "スタンダード",
+        "SUV",
+        "特にこだわりはない",
+        "軽自…"
+      ],
+      "updatedAt": "2026-06-20T12:29:20.505Z"
+    },
+    {
+      "stockId": "0902332A30260422W002",
+      "title": "アルファードハイブリッド Ｓ　タイプゴールド",
+      "description": "アルファードハイブリッド Ｓ　タイプゴールド ４ＷＤ　ＯＰパノラミックビューモニター（ガッツミラーなし）　シーケンシャルウィンカー　ＪＢＬ　フリップダウンＭ　Ｐバックドア　パーキングアシスト　ＡＣ１００Ｖ１５００Ｗ　ＨＤＭＩ　ＥＴＣ　両側Ｐスラ",
+      "carName": "アルファードハイブリッド",
+      "gradeName": "Ｓ　タイプゴールド",
+      "classificationName": "AYH30W",
+      "year": "2021年",
+      "mileage": "5.1万K",
+      "color": "ラグジュアリーホワイトパールクリスタルシャインガラスフレーク",
+      "inspection": "車検整備付",
+      "displacement": "2.5L",
+      "bodyPrice": "428.1万円",
+      "totalPrice": "438.5万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260422/H/70009023323026042200200.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260422W002",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260422002&area_cd=11",
+      "types": [
+        "普通車",
+        "ミニバン",
+        "EＶ・ＨＶ",
+        "普通…"
+      ],
+      "typeKeys": [
+        "普通車",
+        "ミニバン",
+        "EV・HV",
+        "普通…"
+      ],
+      "updatedAt": "2026-06-20T12:29:20.505Z"
+    },
+    {
+      "stockId": "0902332A30260323W004",
+      "title": "インプレッサスポーツ ２．０ｉ－Ｌアイサイト",
+      "description": "インプレッサスポーツ ２．０ｉ－Ｌアイサイト ４ＷＤ　ディーラーＯＰインプレッサ専用８インチナビ　ＬＥＤアクセサリーライナー　純正アルミ　アダプティブクルコン　リアフォグ　パドルシフト　ＥＴＣ２．０　フルセグ　Ｂｌｕｅｔｏｏｔｈ　ＳＲＶＤ",
+      "carName": "インプレッサスポーツ",
+      "gradeName": "２．０ｉ－Ｌアイサイト",
+      "classificationName": "GT7",
+      "year": "2017年",
+      "mileage": "8.3万K",
+      "color": "クリスタルホワイトパール",
+      "inspection": "車検整備付",
+      "displacement": "2.0L",
+      "bodyPrice": "93万円",
+      "totalPrice": "103.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260323/H/70009023323026032300400.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260323W004",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260323004&area_cd=11",
+      "types": [
+        "普通車",
+        "コンパクトカー",
+        "ステーションワゴン",
+        "スポーティ",
+        "普通…"
+      ],
+      "typeKeys": [
+        "普通車",
+        "コンパクトカー",
+        "ステーションワゴン",
+        "スポーティ",
+        "普通…"
+      ],
+      "updatedAt": "2026-06-20T12:29:20.505Z"
+    },
+    {
+      "stockId": "0902332A30260519W001",
+      "title": "エクストレイル ２０Ｘ　エマージェンシーブレーキパッケージ",
+      "description": "エクストレイル ２０Ｘ　エマージェンシーブレーキパッケージ ４ＷＤ　７人乗り　オプションカラー　フルセグナビ　Ｂｌｕｅｔｏｏｔｈ　バックカメラ　ルーフレール　前席シートヒーター　ＥＴＣ　パーキングソナー　マルチインフォディスプレイ　純正１７インチアルミホイール",
+      "carName": "エクストレイル",
+      "gradeName": "２０Ｘ　エマージェンシーブレーキパッケージ",
+      "classificationName": "NT32",
+      "year": "2016年",
+      "mileage": "4.6万K",
+      "color": "ダイヤモンドブラックＰ",
+      "inspection": "検2027年09月",
+      "displacement": "2.0L",
+      "bodyPrice": "136.2万円",
+      "totalPrice": "143.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260519/H/70009023323026051900100.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260519W001",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260519001&area_cd=11",
+      "types": [
+        "普通車",
+        "ＳＵＶ",
+        "普通…"
+      ],
+      "typeKeys": [
+        "普通車",
+        "SUV",
+        "普通…"
+      ],
+      "updatedAt": "2026-06-20T12:29:20.505Z"
+    },
+    {
+      "stockId": "0902332A30251223W001",
+      "title": "エスティマハイブリッド アエラス　プレミアム",
+      "description": "エスティマハイブリッド アエラス　プレミアム ４ＷＤ　トヨタセーフティセンス　寒冷地仕様　純正大型ナビ　バックカメラ　ＥＴＣ　両側電動スライドドア　パワーシート　ハーフレザーシート　オットマン　３列目シート床下収納　ＡＣ１００Ｖ　ウォークスルー",
+      "carName": "エスティマハイブリッド",
+      "gradeName": "アエラス　プレミアム",
+      "classificationName": "AHR20W",
+      "year": "2018年",
+      "mileage": "5.6万K",
+      "color": "アイスチタニウムマイカメタリック",
+      "inspection": "車検整備付",
+      "displacement": "2.4L",
+      "bodyPrice": "308.1万円",
+      "totalPrice": "318.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30251223/H/70009023323025122300100.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30251223W001",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230251223001&area_cd=11",
+      "types": [
+        "普通車",
+        "ミニバン",
+        "EＶ・ＨＶ",
+        "普通…"
+      ],
+      "typeKeys": [
+        "普通車",
+        "ミニバン",
+        "EV・HV",
+        "普通…"
+      ],
+      "updatedAt": "2026-06-20T12:29:20.505Z"
+    },
+    {
+      "stockId": "0902332A30251028W003",
+      "title": "キャスト スポーツＳＡＩＩ",
+      "description": "キャスト スポーツＳＡＩＩ ４ＷＤ　ターボ　パドルシフト　ＬＥＤヘッドライト／フォグ／アクセサリーライナー　ＭＯＭＯ製革ハンドル　ハーフレザーシート　純正フルセグナビ　Ｂｌｕｅｔｏｏｔｈ　バックカメラ　ＥＴＣ　前席シートヒーター",
+      "carName": "キャスト",
+      "gradeName": "スポーツＳＡＩＩ",
+      "classificationName": "LA260S",
+      "year": "2017年",
+      "mileage": "3.9万K",
+      "color": "ブラックマイカメタリック",
+      "inspection": "車検整備付",
+      "displacement": "660cc",
+      "bodyPrice": "127.2万円",
+      "totalPrice": "132.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30251028/H/70009023323025102800300.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30251028W003",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230251028003&area_cd=11",
+      "types": [
+        "軽自動車",
+        "スタンダード",
+        "スポーティ",
+        "特にこだわりはない",
+        "軽自…"
+      ],
+      "typeKeys": [
+        "軽自動車",
+        "スタンダード",
+        "スポーティ",
+        "特にこだわりはない",
+        "軽自…"
+      ],
+      "updatedAt": "2026-06-20T12:29:20.505Z"
+    },
+    {
+      "stockId": "0902332A30260323W001",
+      "title": "キャスト スタイルＧ　ターボ　プライムコレクション　ＳＡＩＩＩ",
+      "description": "キャスト スタイルＧ　ターボ　プライムコレクション　ＳＡＩＩＩ ４ＷＤ　ターボ　レザーシート　前列シートヒーター　パノラマモニター　純正８インチナビ　Ｂｌｕｅｔｏｏｔｈ　ナビ連動ドラレコ　オートハイビーム　革巻ステアリング　木目調パネル　ステリモ　ＥＴＣ",
+      "carName": "キャスト",
+      "gradeName": "スタイルＧ　ターボ　プライムコレクション　ＳＡＩＩＩ",
+      "classificationName": "LA260S",
+      "year": "2017年",
+      "mileage": "10.2万K",
+      "color": "パールホワイトＩＩＩ",
+      "inspection": "検2026年12月",
+      "displacement": "660cc",
+      "bodyPrice": "86.7万円",
+      "totalPrice": "89.3万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260323/H/70009023323026032300100.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260323W001",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260323001&area_cd=11",
+      "types": [
+        "軽自動車",
+        "スタンダード",
+        "特にこだわりはない",
+        "軽自…"
+      ],
+      "typeKeys": [
+        "軽自動車",
+        "スタンダード",
+        "特にこだわりはない",
+        "軽自…"
+      ],
+      "updatedAt": "2026-06-20T12:29:20.505Z"
+    },
+    {
+      "stockId": "0902332A30260323W002",
+      "title": "クラウンスポーツ Ｚ",
+      "description": "クラウンスポーツ Ｚ ４ＷＤ　ＨＶ　アップルカープレイ　置くだけ充電　パノラマモター　パワーバックドア　デジタルインナーミラー　シートヒーター　ベンチレーション　純正２１インチＡＷ　パーキングソナー　ＥＴＣ　ＯＰカラー",
+      "carName": "クラウンスポーツ",
+      "gradeName": "Ｚ",
+      "classificationName": "AZSH36W",
+      "year": "2024年",
+      "mileage": "2.3万K",
+      "color": "プレシャスホワイトパール",
+      "inspection": "検2027年10月",
+      "displacement": "2.5L",
+      "bodyPrice": "524.6万円",
+      "totalPrice": "533.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260323/H/70009023323026032300200.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260323W002",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260323002&area_cd=11",
+      "types": [
+        "普通車",
+        "ＳＵＶ",
+        "EＶ・ＨＶ",
+        "スポーティ",
+        "普通…"
+      ],
+      "typeKeys": [
+        "普通車",
+        "SUV",
+        "EV・HV",
+        "スポーティ",
+        "普通…"
+      ],
+      "updatedAt": "2026-06-20T12:29:20.505Z"
     }
   ]
 }
