@@ -1,21 +1,24 @@
 {
-  "updatedAt": "2026-06-20T22:17:43.623Z",
+  "updatedAt": "2026-06-20T23:33:42.444Z",
   "source": "motorgate",
-  "updateMode": "batch-save",
-  "progress": {
-    "start": 0,
-    "batch": 5,
-    "fetchedThisTime": 5,
-    "nextStart": 5,
-    "foundRows": 36,
-    "completed": false
-  },
+  "updateMode": "saved-merge",
   "counts": {
-    "foundRows": 36,
-    "parsedVehicles": 36,
-    "vehicles": 36,
-    "imageMapCount": 36
+    "publicVehicles": 36,
+    "savedVehicles": 31,
+    "vehicles": 67
   },
+  "savedPages": [
+    {
+      "pageUrl": "https://motorgate.jp/stock/savelist",
+      "status": 200,
+      "count": 25
+    },
+    {
+      "pageUrl": "https://motorgate.jp/stock/savelist/index/2",
+      "status": 200,
+      "count": 6
+    }
+  ],
   "vehicles": [
     {
       "stockId": "0902332A30260327W002",
@@ -46,7 +49,8 @@
         "EV・HV",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T22:17:43.499Z"
+      "updatedAt": "2026-06-20T22:17:43.499Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30251021W001",
@@ -77,7 +81,8 @@
         "EV・HV",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T22:17:43.499Z"
+      "updatedAt": "2026-06-20T22:17:43.499Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30250725W001",
@@ -110,7 +115,8 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T22:17:43.499Z"
+      "updatedAt": "2026-06-20T22:17:43.499Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260313W003",
@@ -141,7 +147,8 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T22:17:43.500Z"
+      "updatedAt": "2026-06-20T22:17:43.500Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260406W003",
@@ -172,7 +179,8 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T22:17:43.500Z"
+      "updatedAt": "2026-06-20T22:17:43.500Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260415W001",
@@ -203,7 +211,8 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260424W001",
@@ -234,7 +243,8 @@
         "バン・トラック",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260421W002",
@@ -267,7 +277,8 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260422W002",
@@ -298,7 +309,8 @@
         "EV・HV",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260323W004",
@@ -331,7 +343,8 @@
         "スポーティ",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260519W001",
@@ -360,7 +373,8 @@
         "SUV",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30251223W001",
@@ -391,7 +405,8 @@
         "EV・HV",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30251028W003",
@@ -424,7 +439,8 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260323W001",
@@ -455,7 +471,8 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260323W002",
@@ -488,7 +505,8 @@
         "スポーティ",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260228W001",
@@ -521,7 +539,8 @@
         "スポーティ",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260518W001",
@@ -552,7 +571,8 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260518W002",
@@ -583,7 +603,8 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30251224W001",
@@ -612,7 +633,8 @@
         "コンパクトカー",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260403W001",
@@ -641,7 +663,8 @@
         "コンパクトカー",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260319W002",
@@ -672,7 +695,8 @@
         "SUV",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260323W003",
@@ -703,7 +727,8 @@
         "バン・トラック",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260422W001",
@@ -734,7 +759,8 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260520W002",
@@ -767,7 +793,8 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260610W001",
@@ -798,7 +825,8 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30251222W002",
@@ -827,7 +855,8 @@
         "コンパクトカー",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260302W001",
@@ -858,7 +887,8 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260416W001",
@@ -887,7 +917,8 @@
         "SUV",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260522W001",
@@ -918,7 +949,8 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260515W003",
@@ -949,7 +981,8 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260331W001",
@@ -978,7 +1011,8 @@
         "コンパクトカー",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260327W001",
@@ -1007,7 +1041,8 @@
         "SUV",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260511W002",
@@ -1038,7 +1073,8 @@
         "バン・トラック",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260408W001",
@@ -1069,7 +1105,8 @@
         "スポーティ",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260526W003",
@@ -1100,7 +1137,8 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
     },
     {
       "stockId": "0902332A30260421W001",
@@ -1129,7 +1167,752 @@
         "ミニバン",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:44:03.324Z",
+      "sourceStatus": "掲載在庫"
+    },
+    {
+      "stockId": "0902332A30260413W001",
+      "title": "クラウンマジェスタ",
+      "description": "クラウンマジェスタ",
+      "carName": "クラウンマジェスタ",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260413W001&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260413W001",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260409W001",
+      "title": "レヴォーグ",
+      "description": "レヴォーグ",
+      "carName": "レヴォーグ",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260409W001&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260409W001",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260314W001",
+      "title": "アルファードハイブリッド",
+      "description": "アルファードハイブリッド",
+      "carName": "アルファードハイブリッド",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260314W001&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260314W001",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260314W002",
+      "title": "ムーヴ",
+      "description": "ムーヴ",
+      "carName": "ムーヴ",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260314W002&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260314W002",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260313W001",
+      "title": "ハスラー",
+      "description": "ハスラー",
+      "carName": "ハスラー",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260313W001&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260313W001",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260617W002",
+      "title": "ワゴンＲ",
+      "description": "ワゴンＲ",
+      "carName": "ワゴンＲ",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260617W002&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260617W002",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260310W001",
+      "title": "ムーヴ",
+      "description": "ムーヴ",
+      "carName": "ムーヴ",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260310W001&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260310W001",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260414W002",
+      "title": "ｅＫクロス",
+      "description": "ｅＫクロス",
+      "carName": "ｅＫクロス",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260414W002",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260421W003",
+      "title": "デミオ",
+      "description": "デミオ",
+      "carName": "デミオ",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W003&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W003",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260422W003",
+      "title": "レガシィＢ４",
+      "description": "レガシィＢ４",
+      "carName": "レガシィＢ４",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W003&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260422W003",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260422W004",
+      "title": "クラウン",
+      "description": "クラウン",
+      "carName": "クラウン",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W004&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260422W004",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260501W001",
+      "title": "ワゴンＲ",
+      "description": "ワゴンＲ",
+      "carName": "ワゴンＲ",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260501W001&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260501W001",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260511W001",
+      "title": "ハイエースワゴン",
+      "description": "ハイエースワゴン",
+      "carName": "ハイエースワゴン",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260511W001&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260511W001",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260520W001",
+      "title": "デイズ",
+      "description": "デイズ",
+      "carName": "デイズ",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260520W001&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260520W001",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260522W002",
+      "title": "ルークス",
+      "description": "ルークス",
+      "carName": "ルークス",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260522W002&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260522W002",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260526W001",
+      "title": "ＧＳ",
+      "description": "ＧＳ",
+      "carName": "ＧＳ",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260526W001&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260526W001",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260526W002",
+      "title": "ノア",
+      "description": "ノア",
+      "carName": "ノア",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260526W002&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260526W002",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260526W004",
+      "title": "ポルテ",
+      "description": "ポルテ",
+      "carName": "ポルテ",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260526W004&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260526W004",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260604W001",
+      "title": "ＲＸ",
+      "description": "ＲＸ",
+      "carName": "ＲＸ",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260604W001&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260604W001",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260605W001",
+      "title": "エクストレイル",
+      "description": "エクストレイル",
+      "carName": "エクストレイル",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260605W001&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260605W001",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260609W001",
+      "title": "エスティマハイブリッド",
+      "description": "エスティマハイブリッド",
+      "carName": "エスティマハイブリッド",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260609W001&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260609W001",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260609W002",
+      "title": "ハスラー",
+      "description": "ハスラー",
+      "carName": "ハスラー",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260609W002&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260609W002",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260612W001",
+      "title": "シエンタ",
+      "description": "シエンタ",
+      "carName": "シエンタ",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260612W001&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260612W001",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260612W002",
+      "title": "ハスラー",
+      "description": "ハスラー",
+      "carName": "ハスラー",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260612W002&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260612W002",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260615W001",
+      "title": "ハリアーハイブリッド",
+      "description": "ハリアーハイブリッド",
+      "carName": "ハリアーハイブリッド",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260615W001&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260615W001",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:40.923Z"
+    },
+    {
+      "stockId": "0902332A30260615W002",
+      "title": "タント",
+      "description": "タント",
+      "carName": "タント",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260615W002&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260615W002",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:42.444Z"
+    },
+    {
+      "stockId": "0902332A30260615W004",
+      "title": "ムーヴ",
+      "description": "ムーヴ",
+      "carName": "ムーヴ",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260615W004&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260615W004",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:42.444Z"
+    },
+    {
+      "stockId": "0902332A30260615W003",
+      "title": "エルグランド",
+      "description": "エルグランド",
+      "carName": "エルグランド",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260615W003&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260615W003",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:42.444Z"
+    },
+    {
+      "stockId": "0902332A30260616W001",
+      "title": "クライスラージープ ラングラーアンリミテッド",
+      "description": "クライスラージープ ラングラーアンリミテッド",
+      "carName": "クライスラージープ ラングラーアンリミテッド",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260616W001&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260616W001",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:42.444Z"
+    },
+    {
+      "stockId": "0902332A30260617W001",
+      "title": "フリード",
+      "description": "フリード",
+      "carName": "フリード",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260617W001&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260617W001",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:42.444Z"
+    },
+    {
+      "stockId": "0902332A30260617W003",
+      "title": "ノート",
+      "description": "ノート",
+      "carName": "ノート",
+      "gradeName": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "",
+      "totalPrice": "",
+      "imageUrl": "",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260617W003&ScreenId=CB101GR",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260617W003",
+      "types": [],
+      "typeKeys": [],
+      "updatedAt": "2026-06-20T23:33:42.444Z"
     }
   ]
 }
