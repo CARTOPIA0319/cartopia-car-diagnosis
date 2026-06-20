@@ -4,6 +4,7 @@ export const maxDuration = 300;
 
 function addCookies(jar, setCookieText) {
   if (!setCookieText) return jar;
+
   const pieces = setCookieText.split(/,\s*(?=[^;,]+=)/);
 
   for (const piece of pieces) {
@@ -13,6 +14,7 @@ function addCookies(jar, setCookieText) {
     if (eq > 0) {
       const name = first.slice(0, eq);
       const value = first.slice(eq + 1);
+
       if (value !== "deleted") jar[name] = value;
       else delete jar[name];
     }
@@ -92,6 +94,8 @@ function pickRelevantLinks(links) {
     "list",
     "temp",
     "draft",
+    "save",
+    "savelist",
   ];
 
   return links.filter((link) => {
@@ -173,6 +177,7 @@ async function fetchPage(jar, url) {
     status: res.status,
     title: cleanText(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] || ""),
     containsLoginForm: html.includes('name="client_pw"'),
+    textSample: cleanText(html).slice(0, 1500),
     relevantLinks: pickRelevantLinks(links),
   };
 }
@@ -184,12 +189,15 @@ export async function GET() {
     const pages = [];
 
     pages.push(await fetchPage(jar, "https://motorgate.jp/top"));
+
     pages.push(
       await fetchPage(
         jar,
         "https://motorgate.jp/stock/newsearch/stocklist/index/1/100"
       )
     );
+
+    pages.push(await fetchPage(jar, "https://motorgate.jp/stock/savelist"));
 
     return json({
       success: true,
