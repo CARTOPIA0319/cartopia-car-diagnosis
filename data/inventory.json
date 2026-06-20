@@ -1,6 +1,15 @@
 {
-  "updatedAt": "2026-06-20T21:44:03.325Z",
+  "updatedAt": "2026-06-20T21:59:15.872Z",
   "source": "motorgate",
+  "updateMode": "batch-save",
+  "progress": {
+    "start": 0,
+    "batch": 5,
+    "fetchedThisTime": 5,
+    "nextStart": 5,
+    "foundRows": 36,
+    "completed": false
+  },
   "counts": {
     "foundRows": 36,
     "parsedVehicles": 36,
@@ -37,7 +46,7 @@
         "EV・HV",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:59:15.762Z"
     },
     {
       "stockId": "0902332A30251021W001",
@@ -68,7 +77,7 @@
         "EV・HV",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:59:15.762Z"
     },
     {
       "stockId": "0902332A30250725W001",
@@ -101,7 +110,7 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:59:15.762Z"
     },
     {
       "stockId": "0902332A30260313W003",
@@ -132,7 +141,7 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:59:15.762Z"
     },
     {
       "stockId": "0902332A30260406W003",
@@ -163,7 +172,7 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z"
+      "updatedAt": "2026-06-20T21:59:15.762Z"
     },
     {
       "stockId": "0902332A30260415W001",
