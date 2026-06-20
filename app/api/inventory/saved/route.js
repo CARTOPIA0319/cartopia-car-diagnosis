@@ -54,8 +54,16 @@ function cleanText(text) {
     .trim();
 }
 
-function unique(list) {
-  return Array.from(new Set(list.filter(Boolean)));
+function uniqueByStockId(vehicles) {
+  const map = new Map();
+
+  for (const vehicle of vehicles) {
+    if (vehicle.stockId && !map.has(vehicle.stockId)) {
+      map.set(vehicle.stockId, vehicle);
+    }
+  }
+
+  return Array.from(map.values());
 }
 
 async function loginMotorgate() {
@@ -97,10 +105,12 @@ async function loginMotorgate() {
   return { jar, loginStatus: login.status };
 }
 
-function extractSavedVehicles(html) {
-  const stockIds = unique(
-    [...String(html || "").matchAll(/StockId=([A-Za-z0-9]+)/g)].map(
-      (m) => m[1]
+function extractSavedVehicles(html, pageUrl) {
+  const stockIds = Array.from(
+    new Set(
+      [...String(html || "").matchAll(/StockId=([A-Za-z0-9]+)/g)].map(
+        (m) => m[1]
+      )
     )
   );
 
@@ -114,31 +124,65 @@ function extractSavedVehicles(html) {
     stockId,
     title: titles[index] || "",
     sourceStatus: "一時保存",
+    sourcePageUrl: pageUrl,
     editUrl: `https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=${stockId}&ScreenId=CB101GR`,
     detailUrl: `https://motorgate.jp/stock/detail?ClientId=0902332&StockId=${stockId}`,
   }));
+}
+
+async function fetchSavedPage(jar, pageUrl) {
+  const res = await fetch(pageUrl, {
+    headers: {
+      Cookie: jarToCookie(jar),
+      Referer: "https://motorgate.jp/top",
+    },
+  });
+
+  const html = await readUtf8Text(res);
+  const vehicles = extractSavedVehicles(html, pageUrl);
+
+  return {
+    pageUrl,
+    status: res.status,
+    htmlLength: html.length,
+    count: vehicles.length,
+    vehicles,
+  };
 }
 
 export async function GET() {
   try {
     const { jar, loginStatus } = await loginMotorgate();
 
-    const res = await fetch("https://motorgate.jp/stock/savelist", {
-      headers: {
-        Cookie: jarToCookie(jar),
-        Referer: "https://motorgate.jp/top",
-      },
-    });
+    const candidateUrls = [
+      "https://motorgate.jp/stock/savelist",
+      "https://motorgate.jp/stock/savelist/index/2",
+      "https://motorgate.jp/stock/savelist/index/26",
+      "https://motorgate.jp/stock/savelist?page=2",
+      "https://motorgate.jp/stock/savelist?p=2",
+    ];
 
-    const html = await readUtf8Text(res);
-    const vehicles = extractSavedVehicles(html);
+    const pages = [];
+
+    for (const pageUrl of candidateUrls) {
+      const page = await fetchSavedPage(jar, pageUrl);
+      pages.push(page);
+    }
+
+    const vehicles = uniqueByStockId(pages.flatMap((page) => page.vehicles));
 
     return json({
       success: true,
       loginStatus,
-      status: res.status,
       count: vehicles.length,
       vehicles,
+      pages: pages.map((page) => ({
+        pageUrl: page.pageUrl,
+        status: page.status,
+        htmlLength: page.htmlLength,
+        count: page.count,
+        titles: page.vehicles.map((vehicle) => vehicle.title).slice(0, 10),
+      })),
     });
   } catch (e) {
     return json({
