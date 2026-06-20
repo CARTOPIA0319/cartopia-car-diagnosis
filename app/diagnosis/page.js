@@ -130,13 +130,19 @@ export default function DiagnosisPage() {
         }}
       >
         {cars.map((car) => (
-          <div
+          <a
             key={car.stockId}
+            href={car.gooUrl || car.detailUrl || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
+              display: "block",
               border: "1px solid #ddd",
               borderRadius: 12,
               overflow: "hidden",
               background: "#fff",
+              color: "inherit",
+              textDecoration: "none",
             }}
           >
             {car.imageUrl && (
@@ -161,8 +167,12 @@ export default function DiagnosisPage() {
                 <div>走行距離：{car.mileage || "-"}</div>
                 <div>色：{car.color || "-"}</div>
               </div>
+
+              <div style={{ marginTop: 10, fontSize: 14, fontWeight: "bold" }}>
+                詳細を見る
+              </div>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </main>
