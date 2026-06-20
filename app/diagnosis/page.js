@@ -22,7 +22,7 @@ export default function DiagnosisPage() {
     "ミニバン",
     "SUV",
     "セダン",
-    "低燃費・ハイブリッド",
+    "EV・HV,
     "スポーティ",
     "バン・トラック",
     "特にこだわりはない",
