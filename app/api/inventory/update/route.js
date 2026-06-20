@@ -4,6 +4,7 @@ export const maxDuration = 300;
 
 function addCookies(jar, setCookieText) {
   if (!setCookieText) return jar;
+
   const pieces = setCookieText.split(/,\s*(?=[^;,]+=)/);
 
   for (const piece of pieces) {
@@ -13,6 +14,7 @@ function addCookies(jar, setCookieText) {
     if (eq > 0) {
       const name = first.slice(0, eq);
       const value = first.slice(eq + 1);
+
       if (value !== "deleted") jar[name] = value;
       else delete jar[name];
     }
@@ -128,6 +130,7 @@ function extractTdByClass(rowHtml, className) {
     `<td\\b[^>]*class=["'][^"']*${className}[^"']*["'][^>]*>([\\s\\S]*?)<\\/td>`,
     "i"
   );
+
   return rowHtml.match(regex)?.[1] || "";
 }
 
@@ -152,6 +155,7 @@ function extractSpanById(html, idPart) {
     `<span\\b[^>]*id=["'][^"']*${idPart}[^"']*["'][^>]*>([\\s\\S]*?)<\\/span>`,
     "i"
   );
+
   return compactText(cleanHtmlToText(html.match(regex)?.[1] || ""));
 }
 
@@ -531,7 +535,57 @@ async function loginMotorgate() {
   };
 }
 
-async function fetchInventoryFromMotorgate(limit) {
+async function fetchCurrentInventoryFromGitHub() {
+  const token = process.env.GITHUB_TOKEN;
+  const owner = process.env.GITHUB_OWNER || "CARTOPIA0319";
+  const repo = process.env.GITHUB_REPO || "cartopia-car-diagnosis";
+  const branch = process.env.GITHUB_BRANCH || "main";
+  const path = "data/inventory.json";
+
+  if (!token) {
+    return {
+      inventory: {
+        updatedAt: "",
+        source: "motorgate",
+        counts: {},
+        vehicles: [],
+      },
+      sha: null,
+    };
+  }
+
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+
+  const current = await fetch(`${apiUrl}?ref=${branch}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github+json",
+      "User-Agent": "cartopia-inventory-updater",
+    },
+  });
+
+  if (!current.ok) {
+    return {
+      inventory: {
+        updatedAt: "",
+        source: "motorgate",
+        counts: {},
+        vehicles: [],
+      },
+      sha: null,
+    };
+  }
+
+  const currentJson = await current.json();
+  const text = Buffer.from(currentJson.content || "", "base64").toString("utf8");
+
+  return {
+    inventory: JSON.parse(text),
+    sha: currentJson.sha || null,
+  };
+}
+
+async function fetchInventoryBatchFromMotorgate(start, batch) {
   const { jar, loginStatus } = await loginMotorgate();
 
   const publicListUrl =
@@ -556,8 +610,7 @@ async function fetchInventoryFromMotorgate(limit) {
     parseVehicleRow(row, publicListUrl, qualityImageMap)
   );
 
-  const targetVehicles = limit > 0 ? parsedVehicles.slice(0, limit) : parsedVehicles;
-
+  const targetVehicles = parsedVehicles.slice(start, start + batch);
   const vehiclesWithTypes = await attachVehicleTypes(jar, targetVehicles);
   const inventoryVehicles = vehiclesWithTypes.map(toInventoryVehicle);
 
@@ -567,13 +620,29 @@ async function fetchInventoryFromMotorgate(limit) {
     containsLoginForm: html.includes('name="client_pw"'),
     foundRows: vehicleRows.length,
     parsedVehicles: parsedVehicles.length,
+    start,
+    batch,
     returnedVehicles: inventoryVehicles.length,
     imageMapCount: Object.keys(qualityImageMap).length,
     vehicles: inventoryVehicles,
   };
 }
 
-async function commitInventoryToGitHub(inventoryData) {
+function mergeInventoryVehicles(oldVehicles, newVehicles) {
+  const map = new Map();
+
+  for (const vehicle of oldVehicles || []) {
+    if (vehicle.stockId) map.set(vehicle.stockId, vehicle);
+  }
+
+  for (const vehicle of newVehicles || []) {
+    if (vehicle.stockId) map.set(vehicle.stockId, vehicle);
+  }
+
+  return Array.from(map.values());
+}
+
+async function commitInventoryToGitHub(inventoryData, existingSha) {
   const token = process.env.GITHUB_TOKEN;
   const owner = process.env.GITHUB_OWNER || "CARTOPIA0319";
   const repo = process.env.GITHUB_REPO || "cartopia-car-diagnosis";
@@ -589,21 +658,6 @@ async function commitInventoryToGitHub(inventoryData) {
 
   const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
 
-  const current = await fetch(`${apiUrl}?ref=${branch}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/vnd.github+json",
-      "User-Agent": "cartopia-inventory-updater",
-    },
-  });
-
-  let sha = null;
-
-  if (current.ok) {
-    const currentJson = await current.json();
-    sha = currentJson.sha || null;
-  }
-
   const content = Buffer.from(
     JSON.stringify(inventoryData, null, 2),
     "utf8"
@@ -618,10 +672,10 @@ async function commitInventoryToGitHub(inventoryData) {
       "User-Agent": "cartopia-inventory-updater",
     },
     body: JSON.stringify({
-      message: "update inventory data",
+      message: "update inventory batch data",
       content,
       branch,
-      ...(sha ? { sha } : {}),
+      ...(existingSha ? { sha: existingSha } : {}),
     }),
   });
 
@@ -640,36 +694,62 @@ async function commitInventoryToGitHub(inventoryData) {
 export async function GET(request) {
   try {
     const url = new URL(request.url);
-    const limit = Number(url.searchParams.get("limit") || "0");
+
+    const start = Number(url.searchParams.get("start") || "0");
+    const batch = Number(url.searchParams.get("batch") || "5");
     const save = url.searchParams.get("save") === "1";
 
-    const result = await fetchInventoryFromMotorgate(limit);
+    const result = await fetchInventoryBatchFromMotorgate(start, batch);
+
+    const current = await fetchCurrentInventoryFromGitHub();
+
+    const mergedVehicles = save
+      ? mergeInventoryVehicles(current.inventory.vehicles || [], result.vehicles)
+      : result.vehicles;
 
     const inventoryData = {
       updatedAt: new Date().toISOString(),
       source: "motorgate",
+      updateMode: save ? "batch-save" : "preview",
+      progress: {
+        start,
+        batch,
+        fetchedThisTime: result.vehicles.length,
+        nextStart: start + result.vehicles.length,
+        foundRows: result.foundRows,
+        completed: start + result.vehicles.length >= result.foundRows,
+      },
       counts: {
         foundRows: result.foundRows,
         parsedVehicles: result.parsedVehicles,
-        vehicles: result.vehicles.length,
+        vehicles: mergedVehicles.length,
         imageMapCount: result.imageMapCount,
       },
-      vehicles: result.vehicles,
+      vehicles: mergedVehicles,
     };
 
     const github = save
-      ? await commitInventoryToGitHub(inventoryData)
+      ? await commitInventoryToGitHub(inventoryData, current.sha)
       : {
           saved: false,
-          reason: "preview only. add ?save=1 to save data/inventory.json",
+          reason:
+            "preview only. add ?save=1 to save merged data/inventory.json",
         };
 
     return json({
       success: true,
-      mode: save ? "save" : "preview",
+      mode: save ? "batch-save" : "preview",
       loginStatus: result.loginStatus,
       listStatus: result.listStatus,
       containsLoginForm: result.containsLoginForm,
+      batch: {
+        start,
+        batch,
+        fetchedThisTime: result.vehicles.length,
+        nextStart: start + result.vehicles.length,
+        foundRows: result.foundRows,
+        completed: start + result.vehicles.length >= result.foundRows,
+      },
       github,
       inventory: inventoryData,
     });
