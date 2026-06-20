@@ -26,7 +26,6 @@ export default function DiagnosisPage() {
     { label: "低燃費・ハイブリッド", type: "EV・HV" },
     { label: "スポーティ", type: "スポーティ" },
     { label: "バン・トラック", type: "バン・トラック" },
-    { label: "特にこだわりはない", type: "特にこだわりはない" },
   ];
 
   async function search(mainType, option) {
@@ -103,7 +102,10 @@ export default function DiagnosisPage() {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {options.map((option) => (
-              <button key={option.label} onClick={() => search(selectedMainType, option)}>
+              <button
+                key={option.label}
+                onClick={() => search(selectedMainType, option)}
+              >
                 {option.label}
               </button>
             ))}
@@ -119,7 +121,14 @@ export default function DiagnosisPage() {
         </h2>
       )}
 
-      <div style={{ marginTop: 18, display: "flex", flexDirection: "column", gap: 16 }}>
+      <div
+        style={{
+          marginTop: 18,
+          display: "flex",
+          flexDirection: "column",
+          gap: 16,
+        }}
+      >
         {cars.map((car) => (
           <a
             key={car.stockId}
@@ -137,7 +146,11 @@ export default function DiagnosisPage() {
             }}
           >
             {car.imageUrl && (
-              <img src={car.imageUrl} alt={car.title} style={{ width: "100%", display: "block" }} />
+              <img
+                src={car.imageUrl}
+                alt={car.title}
+                style={{ width: "100%", display: "block" }}
+              />
             )}
 
             <div style={{ padding: 14 }}>
