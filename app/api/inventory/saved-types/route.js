@@ -54,15 +54,6 @@ function cleanText(text) {
     .trim();
 }
 
-function normalizeType(type) {
-  return String(type || "")
-    .replace(/ＳＵＶ/g, "SUV")
-    .replace(/EＶ・ＨＶ/g, "EV・HV")
-    .replace(/ＥＶ・ＨＶ/g, "EV・HV")
-    .replace(/ｅｖ・ｈｖ/gi, "EV・HV")
-    .trim();
-}
-
 async function loginMotorgate() {
   const clientId = process.env.MOTORGATE_CLIENT_ID;
   const password = process.env.MOTORGATE_PASSWORD;
@@ -99,10 +90,7 @@ async function loginMotorgate() {
 
   addCookies(jar, login.headers.get("set-cookie") || "");
 
-  return {
-    jar,
-    loginStatus: login.status,
-  };
+  return { jar, loginStatus: login.status };
 }
 
 async function fetchSavedList(jar) {
@@ -133,38 +121,25 @@ async function fetchSavedList(jar) {
   return [...new Set(stockIds)];
 }
 
-function extractTypes(html) {
-  const text = cleanText(html);
+function extractCheckedSnippets(html) {
+  const snippets = [];
 
-  const found = [];
-
-  const candidates = [
-    "軽自動車",
-    "普通車",
-    "SUV",
-    "ＳＵＶ",
-    "ミニバン",
-    "セダン",
-    "コンパクトカー",
-    "ステーションワゴン",
-    "スポーティ",
-    "スライドドア",
-    "EV・HV",
-    "EＶ・ＨＶ",
-    "ＥＶ・ＨＶ",
-    "バン・トラック",
-    "スタンダード",
-    "トラック",
-    "特にこだわりはない",
+  const checkedMatches = [
+    ...String(html || "").matchAll(/<input\b[^>]*checked[^>]*>/gi),
   ];
 
-  for (const type of candidates) {
-    if (text.includes(type)) {
-      found.push(normalizeType(type));
-    }
+  for (const match of checkedMatches) {
+    const index = match.index || 0;
+    const start = Math.max(0, index - 500);
+    const end = Math.min(html.length, index + 800);
+
+    snippets.push({
+      input: match[0],
+      aroundText: cleanText(html.substring(start, end)),
+    });
   }
 
-  return [...new Set(found)];
+  return snippets.slice(0, 50);
 }
 
 async function inspectVehicle(jar, stockId) {
@@ -188,9 +163,8 @@ async function inspectVehicle(jar, stockId) {
     status: res.status,
     title: cleanText(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] || ""),
     containsFatalError: html.includes("FatalError"),
-    typeKeys: extractTypes(html),
     htmlLength: html.length,
-    htmlPreview: html.substring(0, 2000),
+    checkedSnippets: extractCheckedSnippets(html),
   };
 }
 
@@ -199,7 +173,7 @@ export async function GET() {
     const { jar, loginStatus } = await loginMotorgate();
 
     const stockIds = await fetchSavedList(jar);
-    const targets = stockIds.slice(0, 5);
+    const targets = stockIds.slice(0, 2);
 
     const results = [];
 
