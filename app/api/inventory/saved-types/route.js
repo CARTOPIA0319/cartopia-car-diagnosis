@@ -55,14 +55,12 @@ function cleanText(text) {
 }
 
 function normalizeType(type) {
-  const value = String(type || "")
+  return String(type || "")
     .replace(/ＳＵＶ/g, "SUV")
     .replace(/EＶ・ＨＶ/g, "EV・HV")
     .replace(/ＥＶ・ＨＶ/g, "EV・HV")
     .replace(/ｅｖ・ｈｖ/gi, "EV・HV")
     .trim();
-
-  return value;
 }
 
 async function loginMotorgate() {
@@ -73,7 +71,6 @@ async function loginMotorgate() {
   const jar = {};
 
   const loginPage = await fetch(loginUrl);
-
   addCookies(jar, loginPage.headers.get("set-cookie") || "");
 
   const loginHtml = await readUtf8Text(loginPage);
@@ -120,6 +117,7 @@ async function fetchSavedList(jar) {
     const res = await fetch(url, {
       headers: {
         Cookie: jarToCookie(jar),
+        Referer: "https://motorgate.jp/top",
       },
     });
 
@@ -141,7 +139,10 @@ function extractTypes(html) {
   const found = [];
 
   const candidates = [
+    "軽自動車",
+    "普通車",
     "SUV",
+    "ＳＵＶ",
     "ミニバン",
     "セダン",
     "コンパクトカー",
@@ -150,11 +151,10 @@ function extractTypes(html) {
     "スライドドア",
     "EV・HV",
     "EＶ・ＨＶ",
-    "ＳＵＶ",
+    "ＥＶ・ＨＶ",
     "バン・トラック",
     "スタンダード",
-    "軽自動車",
-    "普通車",
+    "トラック",
     "特にこだわりはない",
   ];
 
@@ -168,12 +168,15 @@ function extractTypes(html) {
 }
 
 async function inspectVehicle(jar, stockId) {
-  const editUrl = `https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=${stockId}&ScreenId=CB101GR`;
+  const editUrl = `https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=${stockId}&ScreenId=SIH_001`;
 
   const res = await fetch(editUrl, {
     headers: {
       Cookie: jarToCookie(jar),
-      Referer: "https://motorgate.jp/top",
+      Referer: "https://motorgate.jp/stock/savelist",
+      "User-Agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+      "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
     },
   });
 
@@ -183,9 +186,11 @@ async function inspectVehicle(jar, stockId) {
     stockId,
     editUrl,
     status: res.status,
+    title: cleanText(html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] || ""),
+    containsFatalError: html.includes("FatalError"),
     typeKeys: extractTypes(html),
     htmlLength: html.length,
-    htmlPreview: html.substring(0, 3000),
+    htmlPreview: html.substring(0, 2000),
   };
 }
 
