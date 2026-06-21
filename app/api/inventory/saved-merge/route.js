@@ -43,15 +43,146 @@ function json(data) {
   });
 }
 
-function cleanText(text) {
+function decodeHtmlEntities(text) {
   return String(text || "")
-    .replace(/<script[\s\S]*?<\/script>/gi, " ")
-    .replace(/<style[\s\S]*?<\/style>/gi, " ")
-    .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")
-    .replace(/\s+/g, " ")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) =>
+      String.fromCharCode(parseInt(hex, 16))
+    )
+    .replace(/&#(\d+);/g, (_, num) =>
+      String.fromCharCode(parseInt(num, 10))
+    );
+}
+
+function cleanHtmlToText(html) {
+  return decodeHtmlEntities(
+    String(html || "")
+      .replace(/<script[\s\S]*?<\/script>/gi, " ")
+      .replace(/<style[\s\S]*?<\/style>/gi, " ")
+      .replace(/<br\s*\/?>/gi, "\n")
+      .replace(/<\/p>/gi, "\n")
+      .replace(/<\/div>/gi, "\n")
+      .replace(/<\/li>/gi, "\n")
+      .replace(/<\/td>/gi, "\n")
+      .replace(/<\/th>/gi, "\n")
+      .replace(/<\/tr>/gi, "\n")
+      .replace(/<[^>]+>/g, " ")
+  )
+    .replace(/\r/g, "\n")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n[ \t]+/g, "\n")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
     .trim();
+}
+
+function compactText(text) {
+  return String(text || "")
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .join(" ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
+function fixBasicMojibake(text) {
+  return String(text || "")
+    .replace(/蟷ｴ/g, "年")
+    .replace(/譛�/g, "月")
+    .replace(/荳⑫/g, "万K")
+    .replace(/荳��/g, "万円")
+    .replace(/讀�/g, "検")
+    .replace(/霆頑､懈紛蛯吩ｻ�/g, "車検整備付")
+    .replace(/萓｡譬ｼ/g, "価格")
+    .replace(/邱城｡�/g, "総額")
+    .trim();
+}
+
+function toHalfWidthAscii(text) {
+  return String(text || "").replace(/[！-～]/g, (char) =>
+    String.fromCharCode(char.charCodeAt(0) - 0xfee0)
+  );
+}
+
+function normalizeTypeText(text) {
+  return fixBasicMojibake(
+    decodeHtmlEntities(String(text || ""))
+      .replace(/Ｔ/g, "T")
+      .replace(/Ｙ/g, "Y")
+      .replace(/Ｐ/g, "P")
+      .replace(/Ｅ/g, "E")
+      .replace(/Ｖ/g, "V")
+      .replace(/Ｈ/g, "H")
+      .replace(/ｔ/g, "t")
+      .replace(/ｙ/g, "y")
+      .replace(/ｐ/g, "p")
+      .replace(/ｅ/g, "e")
+      .replace(/ｖ/g, "v")
+      .replace(/ｈ/g, "h")
+      .replace(/Ｓ/g, "S")
+      .replace(/Ｕ/g, "U")
+      .replace(/：/g, ":")
+      .replace(/\r/g, " ")
+      .replace(/\n/g, " ")
+      .replace(/　/g, " ")
+  );
+}
+
+function normalizeTypeKey(type) {
+  const value = toHalfWidthAscii(String(type || ""))
+    .replace(/：/g, ":")
+    .replace(/　/g, " ")
+    .replace(/Ｅ/g, "E")
+    .replace(/Ｖ/g, "V")
+    .replace(/Ｈ/g, "H")
+    .replace(/Ｓ/g, "S")
+    .replace(/Ｕ/g, "U")
+    .trim();
+
+  if (/^suv$/i.test(value)) return "SUV";
+  if (/^ev・hv$/i.test(value)) return "EV・HV";
+  if (/^e[vｖ]・h[vｖ]$/i.test(value)) return "EV・HV";
+
+  return value;
+}
+
+function extractTypesFromText(text) {
+  const fixed = normalizeTypeText(text);
+  const types = [];
+  const regex = /TYPE\s*:\s*([^\s<>"'&]+)/gi;
+  let match;
+
+  while ((match = regex.exec(fixed)) !== null) {
+    const type = compactText(match[1]).replace(/[、,。]/g, "");
+
+    if (
+      type &&
+      !type.includes(".") &&
+      !type.includes("_") &&
+      !type.includes("…") &&
+      !types.includes(type)
+    ) {
+      types.push(type);
+    }
+  }
+
+  return types;
+}
+
+function buildTypeKeys(types) {
+  return Array.from(
+    new Set(types.map((type) => normalizeTypeKey(type)).filter(Boolean))
+  );
+}
+
+function cleanText(text) {
+  return cleanHtmlToText(text);
 }
 
 function uniqueByStockId(vehicles) {
@@ -71,7 +202,14 @@ async function loginMotorgate() {
   const loginUrl = "https://motorgate.jp/login/index";
   const jar = {};
 
-  const loginPage = await fetch(loginUrl);
+  const loginPage = await fetch(loginUrl, {
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+      "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+    },
+  });
+
   addCookies(jar, loginPage.headers.get("set-cookie") || "");
 
   const loginHtml = await readUtf8Text(loginPage);
@@ -87,7 +225,12 @@ async function loginMotorgate() {
     redirect: "manual",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
+      Origin: "https://motorgate.jp",
+      Referer: loginUrl,
       Cookie: jarToCookie(jar),
+      "User-Agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+      "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
     },
     body: new URLSearchParams({
       fuel_csrf_token: csrf || "",
@@ -136,7 +279,7 @@ function extractSavedVehicles(html, pageUrl) {
     gooUrl: "",
     sourceStatus: "一時保存",
     sourcePageUrl: pageUrl,
-    editUrl: `https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=${stockId}&ScreenId=CB101GR`,
+    editUrl: `https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=${stockId}&ScreenId=SIH_001`,
     detailUrl: `https://motorgate.jp/stock/detail?ClientId=0902332&StockId=${stockId}`,
     types: [],
     typeKeys: [],
@@ -149,6 +292,9 @@ async function fetchSavedPage(jar, pageUrl) {
     headers: {
       Cookie: jarToCookie(jar),
       Referer: "https://motorgate.jp/top",
+      "User-Agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+      "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
     },
   });
 
@@ -163,7 +309,52 @@ async function fetchSavedPage(jar, pageUrl) {
   };
 }
 
-async function fetchSavedVehicles() {
+async function fetchVehicleTypesFromEditPage(jar, vehicle) {
+  const res = await fetch(vehicle.editUrl, {
+    headers: {
+      Cookie: jarToCookie(jar),
+      Referer: "https://motorgate.jp/stock/savelist",
+      "User-Agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+      "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+    },
+  });
+
+  const html = await readUtf8Text(res);
+  const text = cleanHtmlToText(html);
+
+  const typesFromHtml = extractTypesFromText(html);
+  const typesFromText = extractTypesFromText(text);
+  const types = Array.from(new Set([...typesFromHtml, ...typesFromText]));
+  const typeKeys = buildTypeKeys(types);
+
+  return {
+    types,
+    typeKeys,
+    status: res.status,
+    success: typeKeys.length > 0,
+    containsFatalError: html.includes("FatalError"),
+  };
+}
+
+async function attachSavedVehicleTypes(jar, vehicles) {
+  const result = [];
+
+  for (const vehicle of vehicles) {
+    const typeResult = await fetchVehicleTypesFromEditPage(jar, vehicle);
+
+    result.push({
+      ...vehicle,
+      types: typeResult.types,
+      typeKeys: typeResult.typeKeys,
+      typeResult,
+    });
+  }
+
+  return result;
+}
+
+async function fetchSavedVehiclesWithTypes() {
   const { jar, loginStatus } = await loginMotorgate();
 
   const pages = [];
@@ -174,11 +365,13 @@ async function fetchSavedVehicles() {
   );
 
   const vehicles = uniqueByStockId(pages.flatMap((page) => page.vehicles));
+  const vehiclesWithTypes = await attachSavedVehicleTypes(jar, vehicles);
 
   return {
     loginStatus,
     pages,
     vehicles,
+    vehiclesWithTypes,
   };
 }
 
@@ -250,7 +443,7 @@ async function commitInventoryToGitHub(inventoryData, existingSha) {
       "User-Agent": "cartopia-inventory-updater",
     },
     body: JSON.stringify({
-      message: "merge saved inventory data",
+      message: "merge saved inventory with types",
       content,
       branch,
       ...(existingSha ? { sha: existingSha } : {}),
@@ -275,10 +468,14 @@ export async function GET(request) {
     const save = url.searchParams.get("save") === "1";
 
     const current = await fetchCurrentInventoryFromGitHub();
-    const savedResult = await fetchSavedVehicles();
+    const savedResult = await fetchSavedVehiclesWithTypes();
 
-    const publicVehicles = current.inventory.vehicles || [];
-    const savedVehicles = savedResult.vehicles || [];
+    const currentVehicles = current.inventory.vehicles || [];
+    const publicVehicles = currentVehicles.filter(
+      (vehicle) => vehicle.sourceStatus !== "一時保存"
+    );
+
+    const savedVehicles = savedResult.vehiclesWithTypes || [];
 
     const mergedVehicles = uniqueByStockId([
       ...publicVehicles.map((vehicle) => ({
@@ -291,10 +488,13 @@ export async function GET(request) {
     const inventoryData = {
       updatedAt: new Date().toISOString(),
       source: "motorgate",
-      updateMode: save ? "saved-merge" : "preview-saved-merge",
+      updateMode: save
+        ? "saved-merge-with-types"
+        : "preview-saved-merge-with-types",
       counts: {
         publicVehicles: publicVehicles.length,
-        savedVehicles: savedVehicles.length,
+        savedVehiclesFound: savedResult.vehicles.length,
+        savedVehiclesWithTypes: savedVehicles.length,
         vehicles: mergedVehicles.length,
       },
       savedPages: savedResult.pages.map((page) => ({
