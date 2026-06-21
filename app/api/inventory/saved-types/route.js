@@ -125,9 +125,9 @@ async function fetchSavedList(jar) {
 
     const html = await readUtf8Text(res);
 
-    const ids = [
-      ...html.matchAll(/StockId=([A-Za-z0-9]+)/g),
-    ].map((m) => m[1]);
+    const ids = [...html.matchAll(/StockId=([A-Za-z0-9]+)/g)].map(
+      (m) => m[1]
+    );
 
     stockIds.push(...ids);
   }
@@ -153,6 +153,9 @@ function extractTypes(html) {
     "ＳＵＶ",
     "バン・トラック",
     "スタンダード",
+    "軽自動車",
+    "普通車",
+    "特にこだわりはない",
   ];
 
   for (const type of candidates) {
@@ -165,8 +168,7 @@ function extractTypes(html) {
 }
 
 async function inspectVehicle(jar, stockId) {
-  const editUrl =
-    `https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=${stockId}&ScreenId=CB101GR`;
+  const editUrl = `https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=${stockId}&ScreenId=CB101GR`;
 
   const res = await fetch(editUrl, {
     headers: {
@@ -179,9 +181,11 @@ async function inspectVehicle(jar, stockId) {
 
   return {
     stockId,
+    editUrl,
     status: res.status,
     typeKeys: extractTypes(html),
     htmlLength: html.length,
+    htmlPreview: html.substring(0, 3000),
   };
 }
 
@@ -190,15 +194,12 @@ export async function GET() {
     const { jar, loginStatus } = await loginMotorgate();
 
     const stockIds = await fetchSavedList(jar);
-
     const targets = stockIds.slice(0, 5);
 
     const results = [];
 
     for (const stockId of targets) {
-      results.push(
-        await inspectVehicle(jar, stockId)
-      );
+      results.push(await inspectVehicle(jar, stockId));
     }
 
     return json({
