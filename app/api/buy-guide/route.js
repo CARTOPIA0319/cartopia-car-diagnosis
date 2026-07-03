@@ -7,7 +7,6 @@ export async function GET() {
 
 export async function POST(request) {
   const body = await request.json();
-
   const events = body.events || [];
 
   for (const event of events) {
