@@ -12,7 +12,10 @@ export async function POST(request) {
   const events = body.events || [];
 
   for (const event of events) {
-    if (event.type === "postback" && event.postback?.data === "switch-to-car-search-menu") {
+    if (
+      event.type === "postback" &&
+      event.postback?.data === "switch-to-buy-menu"
+    ) {
       await linkRichMenu(event.source.userId, BUY_MENU_ID);
 
       await replyMessage(event.replyToken, [
@@ -26,28 +29,28 @@ export async function POST(request) {
                 action: {
                   type: "message",
                   label: "車種が決まっている人は？",
-                  text: "車種が決まっている人は？"
-                }
+                  text: "車種が決まっている人は？",
+                },
               },
               {
                 type: "action",
                 action: {
                   type: "message",
                   label: "ざっくり診断とは？",
-                  text: "ざっくり診断とは？"
-                }
+                  text: "ざっくり診断とは？",
+                },
               },
               {
                 type: "action",
                 action: {
                   type: "message",
                   label: "ぴったり診断とは？",
-                  text: "ぴったり診断とは？"
-                }
-              }
-            ]
-          }
-        }
+                  text: "ぴったり診断とは？",
+                },
+              },
+            ],
+          },
+        },
       ]);
     }
 
@@ -58,8 +61,13 @@ export async function POST(request) {
         await replyMessage(event.replyToken, [
           {
             type: "text",
-            text: "欲しい車種が決まっている方は、そのまま車種名を入力してください。\n\n例：\n・アルファード\n・N-BOX\n・シエンタ"
-          }
+            text:
+              "欲しい車種が決まっている方は、そのまま車種名を入力してください。\n\n" +
+              "例：\n" +
+              "・アルファード\n" +
+              "・N-BOX\n" +
+              "・シエンタ",
+          },
         ]);
       }
 
@@ -67,8 +75,10 @@ export async function POST(request) {
         await replyMessage(event.replyToken, [
           {
             type: "text",
-            text: "ざっくり診断は、まだ車種がはっきり決まっていない方向けです。\n\n軽自動車・普通車・SUV・ミニバンなど、大まかな希望から合いそうな方向性を探します。"
-          }
+            text:
+              "ざっくり診断は、所要時間約10秒！まだ車種がはっきり決まっていない方向けです。\n\n" +
+              "軽自動車・普通車・SUV・ミニバンなど、大まかな希望から合いそうな方向性を探します。",
+          },
         ]);
       }
 
@@ -76,8 +86,9 @@ export async function POST(request) {
         await replyMessage(event.replyToken, [
           {
             type: "text",
-            text: "ぴったり診断は、ご家族構成・使い方・ご予算・雪道・将来の生活変化まで含めて、AIが合いそうな車を考える診断です。"
-          }
+            text:
+              "ぴったり診断は、所要時間5分前後かかりますが、家族構成・使い方・予算・将来の生活変化まで含めて、AIが合いそうな車を考える診断です。",
+          },
         ]);
       }
     }
