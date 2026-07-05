@@ -14,7 +14,7 @@ export async function POST(request) {
   for (const event of events) {
     if (
       event.type === "postback" &&
-      event.postback?.data === "switch-to-buy-menu"
+      event.postback?.data === "switch-to-car-search-menu"
     ) {
       await linkRichMenu(event.source.userId, BUY_MENU_ID);
 
