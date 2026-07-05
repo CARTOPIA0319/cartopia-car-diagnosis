@@ -12,46 +12,18 @@ export async function POST(request) {
   const events = body.events || [];
 
   for (const event of events) {
-    if (
+    const isBuyPostback =
       event.type === "postback" &&
-      event.postback?.data === "switch-to-car-search-menu"
-    ) {
-      await linkRichMenu(event.source.userId, BUY_MENU_ID);
+      event.postback?.data === "switch-to-car-search-menu";
 
-      await replyMessage(event.replyToken, [
-        {
-          type: "text",
-          text: "気になる項目を選んでください。",
-          quickReply: {
-            items: [
-              {
-                type: "action",
-                action: {
-                  type: "message",
-                  label: "車種が決まっている人は？",
-                  text: "車種が決まっている人は？",
-                },
-              },
-              {
-                type: "action",
-                action: {
-                  type: "message",
-                  label: "ざっくり診断とは？",
-                  text: "ざっくり診断とは？",
-                },
-              },
-              {
-                type: "action",
-                action: {
-                  type: "message",
-                  label: "ぴったり診断とは？",
-                  text: "ぴったり診断とは？",
-                },
-              },
-            ],
-          },
-        },
-      ]);
+    const isBuyMessage =
+      event.type === "message" &&
+      event.message?.type === "text" &&
+      event.message.text === "くるまを買う";
+
+    if (isBuyPostback || isBuyMessage) {
+      await showBuyGuide(event);
+      continue;
     }
 
     if (event.type === "message" && event.message?.type === "text") {
@@ -69,6 +41,7 @@ export async function POST(request) {
               "・シエンタ",
           },
         ]);
+        continue;
       }
 
       if (text === "ざっくり診断とは？") {
@@ -80,6 +53,7 @@ export async function POST(request) {
               "軽自動車・普通車・SUV・ミニバンなど、大まかな希望から合いそうな方向性を探します。",
           },
         ]);
+        continue;
       }
 
       if (text === "ぴったり診断とは？") {
@@ -90,11 +64,51 @@ export async function POST(request) {
               "ぴったり診断は、所要時間5分前後かかりますが、家族構成・使い方・予算・将来の生活変化まで含めて、AIが合いそうな車を考える診断です。",
           },
         ]);
+        continue;
       }
     }
   }
 
   return Response.json({ ok: true });
+}
+
+async function showBuyGuide(event) {
+  await linkRichMenu(event.source.userId, BUY_MENU_ID);
+
+  await replyMessage(event.replyToken, [
+    {
+      type: "text",
+      text: "気になる項目を選んでください。",
+      quickReply: {
+        items: [
+          {
+            type: "action",
+            action: {
+              type: "message",
+              label: "車種が決まっている人は？",
+              text: "車種が決まっている人は？",
+            },
+          },
+          {
+            type: "action",
+            action: {
+              type: "message",
+              label: "ざっくり診断とは？",
+              text: "ざっくり診断とは？",
+            },
+          },
+          {
+            type: "action",
+            action: {
+              type: "message",
+              label: "ぴったり診断とは？",
+              text: "ぴったり診断とは？",
+            },
+          },
+        ],
+      },
+    },
+  ]);
 }
 
 async function replyMessage(replyToken, messages) {
