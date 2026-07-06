@@ -9,9 +9,14 @@ export async function GET() {
 
 export async function POST(request) {
   const body = await request.json();
+  console.log("BODY:", JSON.stringify(body));
+
   const events = body.events || [];
 
   for (const event of events) {
+    console.log("EVENT_TYPE:", event.type);
+    console.log("EVENT:", JSON.stringify(event));
+
     const isBuyPostback =
       event.type === "postback" &&
       event.postback?.data === "switch-to-car-search-menu";
@@ -20,6 +25,9 @@ export async function POST(request) {
       event.type === "message" &&
       event.message?.type === "text" &&
       event.message.text === "くるまを買う";
+
+    console.log("isBuyPostback:", isBuyPostback);
+    console.log("isBuyMessage:", isBuyMessage);
 
     if (isBuyPostback || isBuyMessage) {
       await showBuyGuide(event);
@@ -73,6 +81,8 @@ export async function POST(request) {
 }
 
 async function showBuyGuide(event) {
+  console.log("SHOW_BUY_GUIDE_START");
+
   await linkRichMenu(event.source.userId, BUY_MENU_ID);
 
   await replyMessage(event.replyToken, [
@@ -109,10 +119,12 @@ async function showBuyGuide(event) {
       },
     },
   ]);
+
+  console.log("SHOW_BUY_GUIDE_END");
 }
 
 async function replyMessage(replyToken, messages) {
-  await fetch("https://api.line.me/v2/bot/message/reply", {
+  const res = await fetch("https://api.line.me/v2/bot/message/reply", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -123,13 +135,21 @@ async function replyMessage(replyToken, messages) {
       messages,
     }),
   });
+
+  const text = await res.text();
+  console.log("REPLY_STATUS:", res.status);
+  console.log("REPLY_RESPONSE:", text);
 }
 
 async function linkRichMenu(userId, richMenuId) {
-  await fetch(`https://api.line.me/v2/bot/user/${userId}/richmenu/${richMenuId}`, {
+  const res = await fetch(`https://api.line.me/v2/bot/user/${userId}/richmenu/${richMenuId}`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
     },
   });
+
+  const text = await res.text();
+  console.log("LINK_MENU_STATUS:", res.status);
+  console.log("LINK_MENU_RESPONSE:", text);
 }
