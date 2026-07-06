@@ -1,4 +1,4 @@
-const BUY_MENU_ID = "richmenu-e5d740b020ec4b2a55a6a074b502a608";
+const BUY_MENU_ID = "richmenu-8ffd84cc0a598fcf02e1f067e18d2890";
 
 const buyQuickReply = {
   items: [
@@ -64,7 +64,7 @@ export async function POST(request) {
       await replyMessage(event.replyToken, [
         {
           type: "text",
-          text: "気になる項目を選んでください",
+          text: "気になる項目を選んでください😊",
           quickReply: buyQuickReply,
         },
       ]);
@@ -76,8 +76,8 @@ export async function POST(request) {
         {
           type: "text",
           text:
-            "欲しい車種が決まっている方へ\n\n" +
-            "そのまま車種名を送ってください。\n\n" +
+            "🚗 欲しい車種が決まっている方へ\n\n" +
+            "そのまま車種名を送ってください😊\n\n" +
             "例えば…\n" +
             "・アルファード\n" +
             "・N-BOX\n" +
@@ -95,9 +95,9 @@ export async function POST(request) {
         {
           type: "text",
           text:
-            "ざっくり診断（約10秒）\n\n" +
+            "🚙 ざっくり診断（約10秒）\n\n" +
             "「まだ何に乗るか決まってない」\n\n" +
-            "そんな方はこちら！\n\n" +
+            "そんな方はこちらです😊\n\n" +
             "いくつかの質問に答えるだけで、\n" +
             "あなたに合いそうな車のタイプをご提案します。",
           quickReply: buyQuickReply,
@@ -111,14 +111,14 @@ export async function POST(request) {
         {
           type: "text",
           text:
-            "AIぴったり診断（約5分）\n\n" +
+            "✨ AIぴったり診断（約5分）\n\n" +
             "家族構成\n" +
             "使い方\n" +
             "ご予算\n" +
             "将来のライフスタイル\n\n" +
             "まで考えて、\n" +
             "あなたにぴったりな車種をご提案します。\n\n" +
-            "「後悔しない車選び」をしたい方におすすめです。",
+            "「後悔しない車選び」をしたい方におすすめです😊",
           quickReply: buyQuickReply,
         },
       ]);
