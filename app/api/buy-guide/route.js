@@ -86,14 +86,14 @@ export async function POST(request) {
         {
           type: "text",
           text:
-            "🚗 欲しい車種が決まっている方は\n" +
-            "そのまま車種名を送ってください😊\n\n" +
+            "🚗 欲しい車種がある方へ\n\n" +
+            "車種名をそのまま送ってください😊\n\n" +
             "例えば…\n" +
             "・アルファード\n" +
             "・N-BOX\n" +
             "・シエンタ\n" +
             "・ヴェゼル\n\n" +
-            "など、何でも大丈夫です✨",
+            "こんな感じで大丈夫です✨",
           quickReply: buyQuickReply,
         },
       ]);
