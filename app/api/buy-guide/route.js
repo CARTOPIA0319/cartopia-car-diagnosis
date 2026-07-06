@@ -6,14 +6,6 @@ const buyQuickReply = {
       type: "action",
       action: {
         type: "message",
-        label: "車種が決まっている人は？",
-        text: "車種が決まっている人は？",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
         label: "ざっくり診断とは？",
         text: "ざっくり診断とは？",
       },
@@ -24,6 +16,14 @@ const buyQuickReply = {
         type: "message",
         label: "ぴったり診断とは？",
         text: "ぴったり診断とは？",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "車種が決まっている人は？",
+        text: "車種が決まっている人は？",
       },
     },
   ],
@@ -56,9 +56,6 @@ export async function POST(request) {
       postbackData === "switch-to-car-search-menu";
 
     if (isBuy) {
-      console.log("USER_ID:", event.source.userId);
-      console.log("BUY_MENU_ID:", BUY_MENU_ID);
-
       await linkRichMenu(event.source.userId, BUY_MENU_ID);
 
       await replyMessage(event.replyToken, [
@@ -83,7 +80,7 @@ export async function POST(request) {
             "・N-BOX\n" +
             "・シエンタ\n" +
             "・ヴェゼル\n\n" +
-            "など、何でも大丈夫です。",
+            "など、何でも大丈夫です✨",
           quickReply: buyQuickReply,
         },
       ]);
@@ -97,9 +94,9 @@ export async function POST(request) {
           text:
             "🚙 ざっくり診断（約10秒）\n\n" +
             "「まだ何に乗るか決まってない」\n\n" +
-            "そんな方はこちらです😊\n\n" +
-            "いくつかの質問に答えるだけで、\n" +
-            "あなたに合いそうな車のタイプをご提案します。",
+            "そんな方におすすめです😊\n\n" +
+            "いくつかの質問に答えるだけで\n" +
+            "あなたに合いそうな車のタイプをご提案します✨",
           quickReply: buyQuickReply,
         },
       ]);
@@ -116,9 +113,9 @@ export async function POST(request) {
             "使い方\n" +
             "ご予算\n" +
             "将来のライフスタイル\n\n" +
-            "まで考えて、\n" +
-            "あなたにぴったりな車種をご提案します。\n\n" +
-            "「後悔しない車選び」をしたい方におすすめです😊",
+            "まで考えて\n" +
+            "あなたにぴったりな車種をご提案します😊\n\n" +
+            "「後悔しない車選び」をしたい方におすすめです🚗",
           quickReply: buyQuickReply,
         },
       ]);
