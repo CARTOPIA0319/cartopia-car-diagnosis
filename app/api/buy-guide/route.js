@@ -56,16 +56,18 @@ export async function POST(request) {
       postbackData === "switch-to-car-search-menu";
 
     if (isBuy) {
+      console.log("USER_ID:", event.source.userId);
+      console.log("BUY_MENU_ID:", BUY_MENU_ID);
+
       await linkRichMenu(event.source.userId, BUY_MENU_ID);
 
       await replyMessage(event.replyToken, [
         {
           type: "text",
-          text: "気になる項目を選んでください😊",
+          text: "気になる項目を選んでください",
           quickReply: buyQuickReply,
         },
       ]);
-
       continue;
     }
 
@@ -74,18 +76,17 @@ export async function POST(request) {
         {
           type: "text",
           text:
-            "🚗 欲しい車種が決まっている方へ\n\n" +
-            "そのまま車種名を送ってください😊\n\n" +
+            "欲しい車種が決まっている方へ\n\n" +
+            "そのまま車種名を送ってください。\n\n" +
             "例えば…\n" +
             "・アルファード\n" +
             "・N-BOX\n" +
             "・シエンタ\n" +
             "・ヴェゼル\n\n" +
-            "など、何でも大丈夫です✨",
+            "など、何でも大丈夫です。",
           quickReply: buyQuickReply,
         },
       ]);
-
       continue;
     }
 
@@ -94,15 +95,14 @@ export async function POST(request) {
         {
           type: "text",
           text:
-            "🔍 ざっくり診断（約10秒）\n\n" +
-            "「まだ何に乗るか決まってない🤔」\n\n" +
+            "ざっくり診断（約10秒）\n\n" +
+            "「まだ何に乗るか決まってない」\n\n" +
             "そんな方はこちら！\n\n" +
             "いくつかの質問に答えるだけで、\n" +
-            "あなたに合いそうな車のタイプをご提案します😊",
+            "あなたに合いそうな車のタイプをご提案します。",
           quickReply: buyQuickReply,
         },
       ]);
-
       continue;
     }
 
@@ -111,18 +111,17 @@ export async function POST(request) {
         {
           type: "text",
           text:
-            "✨ AIぴったり診断（約5分）\n\n" +
-            "家族構成👨‍👩‍👧\n" +
-            "使い方🚗\n" +
-            "ご予算💰\n" +
-            "将来のライフスタイル🌱\n\n" +
+            "AIぴったり診断（約5分）\n\n" +
+            "家族構成\n" +
+            "使い方\n" +
+            "ご予算\n" +
+            "将来のライフスタイル\n\n" +
             "まで考えて、\n" +
-            "あなたにぴったりな車種をご提案します😊\n\n" +
-            "「後悔しない車選び」をしたい方におすすめです✨",
+            "あなたにぴったりな車種をご提案します。\n\n" +
+            "「後悔しない車選び」をしたい方におすすめです。",
           quickReply: buyQuickReply,
         },
       ]);
-
       continue;
     }
   }
