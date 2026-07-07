@@ -21,7 +21,6 @@ const roughSizeQuickReply = {
   items: [
     { type: "action", action: { type: "message", label: "軽自動車", text: "軽自動車" } },
     { type: "action", action: { type: "message", label: "普通車", text: "普通車" } },
-    { type: "action", action: { type: "message", label: "トップへ戻る", text: "トップへ戻る" } },
   ],
 };
 
@@ -31,7 +30,9 @@ const lightTypeQuickReply = {
     { type: "action", action: { type: "message", label: "スタンダード", text: "軽自動車 スタンダード" } },
     { type: "action", action: { type: "message", label: "SUV", text: "軽自動車 SUV" } },
     { type: "action", action: { type: "message", label: "トラック", text: "軽自動車 トラック" } },
+    { type: "action", action: { type: "message", label: "スポーティ", text: "軽自動車 スポーティ" } },
     { type: "action", action: { type: "message", label: "こだわりなし", text: "軽自動車 こだわりなし" } },
+    { type: "action", action: { type: "message", label: "ひとつ戻る", text: "ざっくり診断" } },
   ],
 };
 
@@ -81,7 +82,9 @@ export async function POST(request) {
       await replyMessage(event.replyToken, [
         {
           type: "text",
-          text: "⚡ ざっくり診断をはじめます😊\n\nまずは探している車の大きさを選んでね🚗",
+          text:
+            "⚡ ざっくり診断を開始😊\n\n" +
+            "まずは車のサイズは軽？普通車？🚗",
           quickReply: roughSizeQuickReply,
         },
       ]);
@@ -92,7 +95,9 @@ export async function POST(request) {
       await replyMessage(event.replyToken, [
         {
           type: "text",
-          text: "軽自動車ですね😊\n\n次に、どんなタイプが気になりますか？",
+          text:
+            "軽自動車ね😊\n\n" +
+            "どんなタイプの軽を探してるの？🔍😊",
           quickReply: lightTypeQuickReply,
         },
       ]);
@@ -103,7 +108,7 @@ export async function POST(request) {
       await replyMessage(event.replyToken, [
         {
           type: "text",
-          text: "普通車ですね😊\n\n次は普通車のタイプ選択を作っていきます🚗",
+          text: "普通車ね😊\n\n次は普通車のタイプ選択を作っていきます🚗",
         },
       ]);
       continue;
