@@ -1,69 +1,42 @@
-const BUY_MENU_ID = "richmenu-3525919a10364ad419aec24b0d9a3cd7";
+const BUY_MENU_ID = "richmenu-45b4781911f21f5d5632ec63e211b449";
 const TOP_MENU_ID = "richmenu-19859bd6bf80b802dfc2171536ac089e";
 
 const topQuickReply = {
   items: [
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "「買う」でできること",
-        text: "「買う」でできること",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "「売る」でできること",
-        text: "「売る」でできること",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "「予約」でできること",
-        text: "「予約」でできること",
-      },
-    },
+    { type: "action", action: { type: "message", label: "「買う」でできること", text: "「買う」でできること" } },
+    { type: "action", action: { type: "message", label: "「売る」でできること", text: "「売る」でできること" } },
+    { type: "action", action: { type: "message", label: "「予約」でできること", text: "「予約」でできること" } },
   ],
 };
 
 const buyQuickReply = {
   items: [
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "ざっくり診断とは？",
-        text: "ざっくり診断とは？",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "ぴったり診断とは？",
-        text: "ぴったり診断とは？",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "車種が決まっている人は？",
-        text: "車種が決まっている人は？",
-      },
-    },
+    { type: "action", action: { type: "message", label: "ざっくり診断とは？", text: "ざっくり診断とは？" } },
+    { type: "action", action: { type: "message", label: "ぴったり診断とは？", text: "ぴったり診断とは？" } },
+    { type: "action", action: { type: "message", label: "車種が決まっている人は？", text: "車種が決まっている人は？" } },
+  ],
+};
+
+const roughSizeQuickReply = {
+  items: [
+    { type: "action", action: { type: "message", label: "軽自動車", text: "軽自動車" } },
+    { type: "action", action: { type: "message", label: "普通車", text: "普通車" } },
+    { type: "action", action: { type: "message", label: "トップへ戻る", text: "トップへ戻る" } },
+  ],
+};
+
+const lightTypeQuickReply = {
+  items: [
+    { type: "action", action: { type: "message", label: "スライドドア", text: "軽自動車 スライドドア" } },
+    { type: "action", action: { type: "message", label: "スタンダード", text: "軽自動車 スタンダード" } },
+    { type: "action", action: { type: "message", label: "SUV", text: "軽自動車 SUV" } },
+    { type: "action", action: { type: "message", label: "トラック", text: "軽自動車 トラック" } },
+    { type: "action", action: { type: "message", label: "こだわりなし", text: "軽自動車 こだわりなし" } },
   ],
 };
 
 export async function GET() {
-  return Response.json({
-    status: "ok",
-    name: "CARTOPIA main webhook",
-  });
+  return Response.json({ status: "ok", name: "CARTOPIA main webhook" });
 }
 
 export async function POST(request) {
@@ -78,8 +51,7 @@ export async function POST(request) {
         ? event.message.text
         : "";
 
-    const postbackData =
-      event.type === "postback" ? event.postback?.data : "";
+    const postbackData = event.type === "postback" ? event.postback?.data : "";
 
     const isBuy =
       text === "くるまを買う" ||
@@ -87,27 +59,51 @@ export async function POST(request) {
 
     if (isBuy) {
       await linkRichMenu(event.source.userId, BUY_MENU_ID);
-
       await replyMessage(event.replyToken, [
-        {
-          type: "text",
-          text: "気になる項目を選んでください😊",
-          quickReply: buyQuickReply,
-        },
+        { type: "text", text: "気になる項目を選んでください😊", quickReply: buyQuickReply },
       ]);
       continue;
     }
 
     if (text === "トップへ戻る") {
       await linkRichMenu(event.source.userId, TOP_MENU_ID);
-
       await replyMessage(event.replyToken, [
         {
           type: "text",
-          text:
-            "😊 次は何する？\n\n" +
-            "気になるメニューを選んでね🚗",
+          text: "😊 次は何する？\n\n気になるメニューを選んでね🚗",
           quickReply: topQuickReply,
+        },
+      ]);
+      continue;
+    }
+
+    if (text === "ざっくり診断") {
+      await replyMessage(event.replyToken, [
+        {
+          type: "text",
+          text: "⚡ ざっくり診断をはじめます😊\n\nまずは探している車の大きさを選んでね🚗",
+          quickReply: roughSizeQuickReply,
+        },
+      ]);
+      continue;
+    }
+
+    if (text === "軽自動車") {
+      await replyMessage(event.replyToken, [
+        {
+          type: "text",
+          text: "軽自動車ですね😊\n\n次に、どんなタイプが気になりますか？",
+          quickReply: lightTypeQuickReply,
+        },
+      ]);
+      continue;
+    }
+
+    if (text === "普通車") {
+      await replyMessage(event.replyToken, [
+        {
+          type: "text",
+          text: "普通車ですね😊\n\n次は普通車のタイプ選択を作っていきます🚗",
         },
       ]);
       continue;
@@ -230,10 +226,7 @@ async function replyMessage(replyToken, messages) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
     },
-    body: JSON.stringify({
-      replyToken,
-      messages,
-    }),
+    body: JSON.stringify({ replyToken, messages }),
   });
 
   const result = await res.text();
