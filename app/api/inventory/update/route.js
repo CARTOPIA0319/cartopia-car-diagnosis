@@ -137,14 +137,14 @@ function extractTdByClass(rowHtml, className) {
 function extractNameAnchorHtml(nameCellHtml) {
   const carModelDiv =
     nameCellHtml.match(
-      /<div\b[^>]*class=["'][^"']*car-model[^"']*["'][^>]*>([\s\S]*?)<\/div>/i
+      /<div\\b[^>]*class=["'][^"']*car-model[^"']*["'][^>]*>([\\s\\S]*?)<\\/div>/i
     )?.[1] || nameCellHtml;
 
-  return carModelDiv.match(/<a\b[^>]*>([\s\S]*?)<\/a>/i)?.[1] || "";
+  return carModelDiv.match(/<a\\b[^>]*>([\\s\\S]*?)<\\/a>/i)?.[1] || "";
 }
 
 function extractLiTexts(html) {
-  return Array.from(String(html || "").matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi))
+  return Array.from(String(html || "").matchAll(/<li\\b[^>]*>([\\s\\S]*?)<\\/li>/gi))
     .map((m) => cleanHtmlToText(m[1]))
     .map((text) => compactText(text))
     .filter(Boolean);
@@ -259,10 +259,11 @@ function normalizeTypeKey(type) {
 
   if (/^suv$/i.test(value)) return "SUV";
   if (/^ev・hv$/i.test(value)) return "EV・HV";
+  if (value === "ＳＵＶ") return "SUV";
+  if (value === "ＥＶ・ＨＶ") return "EV・HV";
 
   return value;
 }
-
 function extractTypesFromText(text) {
   const fixed = normalizeTypeText(text);
   const types = [];
@@ -440,21 +441,38 @@ async function fetchVehicleTypesFromEditPage(jar, vehicle) {
   };
 }
 
-async function attachVehicleTypes(jar, vehicles) {
-  const withTypes = [];
+async function mapWithConcurrency(items, limit, mapper) {
+  const results = [];
+  let index = 0;
 
-  for (const vehicle of vehicles) {
+  async function worker() {
+    while (index < items.length) {
+      const currentIndex = index;
+      index += 1;
+      results[currentIndex] = await mapper(items[currentIndex], currentIndex);
+    }
+  }
+
+  const workers = Array.from(
+    { length: Math.min(limit, items.length) },
+    () => worker()
+  );
+
+  await Promise.all(workers);
+  return results;
+}
+
+async function attachVehicleTypes(jar, vehicles) {
+  return await mapWithConcurrency(vehicles, 5, async (vehicle) => {
     const typeResult = await fetchVehicleTypesFromEditPage(jar, vehicle);
 
-    withTypes.push({
+    return {
       ...vehicle,
       types: typeResult.types,
       typeKeys: typeResult.typeKeys,
       typeResult,
-    });
-  }
-
-  return withTypes;
+    };
+  });
 }
 
 function toInventoryVehicle(vehicle) {
@@ -475,6 +493,7 @@ function toInventoryVehicle(vehicle) {
     imageUrl: vehicle.imageUrl,
     detailUrl: vehicle.detailUrl,
     gooUrl: vehicle.gooUrl,
+    sourceStatus: "掲載在庫",
     types: vehicle.types || [],
     typeKeys: vehicle.typeKeys || [],
     updatedAt: new Date().toISOString(),
@@ -584,8 +603,7 @@ async function fetchCurrentInventoryFromGitHub() {
     sha: currentJson.sha || null,
   };
 }
-
-async function fetchInventoryBatchFromMotorgate(start, batch) {
+async function fetchFullInventoryFromMotorgate() {
   const { jar, loginStatus } = await loginMotorgate();
 
   const publicListUrl =
@@ -610,8 +628,7 @@ async function fetchInventoryBatchFromMotorgate(start, batch) {
     parseVehicleRow(row, publicListUrl, qualityImageMap)
   );
 
-  const targetVehicles = parsedVehicles.slice(start, start + batch);
-  const vehiclesWithTypes = await attachVehicleTypes(jar, targetVehicles);
+  const vehiclesWithTypes = await attachVehicleTypes(jar, parsedVehicles);
   const inventoryVehicles = vehiclesWithTypes.map(toInventoryVehicle);
 
   return {
@@ -620,23 +637,28 @@ async function fetchInventoryBatchFromMotorgate(start, batch) {
     containsLoginForm: html.includes('name="client_pw"'),
     foundRows: vehicleRows.length,
     parsedVehicles: parsedVehicles.length,
-    start,
-    batch,
-    returnedVehicles: inventoryVehicles.length,
     imageMapCount: Object.keys(qualityImageMap).length,
     vehicles: inventoryVehicles,
   };
 }
 
-function mergeInventoryVehicles(oldVehicles, newVehicles) {
+function keepSavedVehicles(oldVehicles) {
+  return (oldVehicles || []).filter(
+    (vehicle) => vehicle.sourceStatus === "一時保存"
+  );
+}
+
+function mergePublishedAndSavedVehicles(publishedVehicles, savedVehicles) {
   const map = new Map();
 
-  for (const vehicle of oldVehicles || []) {
+  for (const vehicle of publishedVehicles || []) {
     if (vehicle.stockId) map.set(vehicle.stockId, vehicle);
   }
 
-  for (const vehicle of newVehicles || []) {
-    if (vehicle.stockId) map.set(vehicle.stockId, vehicle);
+  for (const vehicle of savedVehicles || []) {
+    if (vehicle.stockId && !map.has(vehicle.stockId)) {
+      map.set(vehicle.stockId, vehicle);
+    }
   }
 
   return Array.from(map.values());
@@ -672,7 +694,7 @@ async function commitInventoryToGitHub(inventoryData, existingSha) {
       "User-Agent": "cartopia-inventory-updater",
     },
     body: JSON.stringify({
-      message: "update inventory batch data",
+      message: "refresh inventory data",
       content,
       branch,
       ...(existingSha ? { sha: existingSha } : {}),
@@ -694,62 +716,51 @@ async function commitInventoryToGitHub(inventoryData, existingSha) {
 export async function GET(request) {
   try {
     const url = new URL(request.url);
-
-    const start = Number(url.searchParams.get("start") || "0");
-    const batch = Number(url.searchParams.get("batch") || "5");
     const save = url.searchParams.get("save") === "1";
 
-    const result = await fetchInventoryBatchFromMotorgate(start, batch);
-
     const current = await fetchCurrentInventoryFromGitHub();
+    const result = await fetchFullInventoryFromMotorgate();
 
-    const mergedVehicles = save
-      ? mergeInventoryVehicles(current.inventory.vehicles || [], result.vehicles)
-      : result.vehicles;
+    const savedVehicles = keepSavedVehicles(current.inventory.vehicles || []);
+    const mergedVehicles = mergePublishedAndSavedVehicles(
+      result.vehicles,
+      savedVehicles
+    );
 
     const inventoryData = {
       updatedAt: new Date().toISOString(),
       source: "motorgate",
-      updateMode: save ? "batch-save" : "preview",
-      progress: {
-        start,
-        batch,
-        fetchedThisTime: result.vehicles.length,
-        nextStart: start + result.vehicles.length,
-        foundRows: result.foundRows,
-        completed: start + result.vehicles.length >= result.foundRows,
-      },
+      updateMode: save ? "full-auto-refresh" : "preview",
       counts: {
+        publicVehicles: result.vehicles.length,
+        savedVehiclesKept: savedVehicles.length,
+        vehicles: mergedVehicles.length,
         foundRows: result.foundRows,
         parsedVehicles: result.parsedVehicles,
-        vehicles: mergedVehicles.length,
         imageMapCount: result.imageMapCount,
       },
-      vehicles: mergedVehicles,
+      checks: {
+        loginStatus: result.loginStatus,
+        listStatus: result.listStatus,
+        containsLoginForm: result.containsLoginForm,
+      },
+      vehicles: save ? mergedVehicles : result.vehicles,
     };
 
     const github = save
       ? await commitInventoryToGitHub(inventoryData, current.sha)
       : {
           saved: false,
-          reason:
-            "preview only. add ?save=1 to save merged data/inventory.json",
+          reason: "preview only. add ?save=1 to save data/inventory.json",
         };
 
     return json({
       success: true,
-      mode: save ? "batch-save" : "preview",
+      mode: save ? "full-auto-refresh" : "preview",
       loginStatus: result.loginStatus,
       listStatus: result.listStatus,
       containsLoginForm: result.containsLoginForm,
-      batch: {
-        start,
-        batch,
-        fetchedThisTime: result.vehicles.length,
-        nextStart: start + result.vehicles.length,
-        foundRows: result.foundRows,
-        completed: start + result.vehicles.length >= result.foundRows,
-      },
+      counts: inventoryData.counts,
       github,
       inventory: inventoryData,
     });
