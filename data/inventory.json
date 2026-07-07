@@ -1,25 +1,21 @@
 {
-  "updatedAt": "2026-06-24T02:53:46.804Z",
+  "updatedAt": "2026-07-07T04:18:47.820Z",
   "source": "motorgate",
-  "updateMode": "saved-merge-with-details",
-  "counts": {
-    "publicVehicles": 36,
-    "savedVehiclesFound": 25,
-    "savedVehiclesWithDetails": 25,
-    "vehicles": 61
+  "updateMode": "batch-save",
+  "progress": {
+    "start": 0,
+    "batch": 10,
+    "fetchedThisTime": 10,
+    "nextStart": 10,
+    "foundRows": 45,
+    "completed": false
   },
-  "savedPages": [
-    {
-      "pageUrl": "https://motorgate.jp/stock/savelist",
-      "status": 200,
-      "count": 25
-    },
-    {
-      "pageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "status": 200,
-      "count": 25
-    }
-  ],
+  "counts": {
+    "foundRows": 45,
+    "parsedVehicles": 45,
+    "vehicles": 62,
+    "imageMapCount": 45
+  },
   "vehicles": [
     {
       "stockId": "0902332A30260327W002",
@@ -50,8 +46,7 @@
         "EV・HV",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T22:17:43.499Z",
-      "sourceStatus": "掲載在庫"
+      "updatedAt": "2026-07-07T04:18:47.683Z"
     },
     {
       "stockId": "0902332A30251021W001",
@@ -82,8 +77,7 @@
         "EV・HV",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T22:17:43.499Z",
-      "sourceStatus": "掲載在庫"
+      "updatedAt": "2026-07-07T04:18:47.683Z"
     },
     {
       "stockId": "0902332A30250725W001",
@@ -97,8 +91,8 @@
       "color": "メテオロイドグレーメタリック／ブラック",
       "inspection": "車検整備付",
       "displacement": "660cc",
-      "bodyPrice": "181.9万円",
-      "totalPrice": "185.6万円",
+      "bodyPrice": "168.5万円",
+      "totalPrice": "172.2万円",
       "imageUrl": "https://picture1.goo-net.com/7000902332/30250725/H/70009023323025072500100.jpg",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30250725W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230250725001&area_cd=11",
@@ -116,8 +110,7 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T22:17:43.499Z",
-      "sourceStatus": "掲載在庫"
+      "updatedAt": "2026-07-07T04:18:47.683Z"
     },
     {
       "stockId": "0902332A30260313W003",
@@ -131,8 +124,8 @@
       "color": "プラチナホワイトパール",
       "inspection": "検2027年02月",
       "displacement": "660cc",
-      "bodyPrice": "108.5万円",
-      "totalPrice": "112.3万円",
+      "bodyPrice": "102.9万円",
+      "totalPrice": "105.2万円",
       "imageUrl": "https://picture1.goo-net.com/7000902332/30260313/H/70009023323026031300300.jpg",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260313W003",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260313003&area_cd=11",
@@ -148,8 +141,7 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T22:17:43.500Z",
-      "sourceStatus": "掲載在庫"
+      "updatedAt": "2026-07-07T04:18:47.683Z"
     },
     {
       "stockId": "0902332A30260406W003",
@@ -180,8 +172,7 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T22:17:43.500Z",
-      "sourceStatus": "掲載在庫"
+      "updatedAt": "2026-07-07T04:18:47.683Z"
     },
     {
       "stockId": "0902332A30260415W001",
@@ -278,8 +269,7 @@
         "特にこだわりはない",
         "軽自…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z",
-      "sourceStatus": "掲載在庫"
+      "updatedAt": "2026-07-07T04:18:47.683Z"
     },
     {
       "stockId": "0902332A30260422W002",
@@ -310,8 +300,7 @@
         "EV・HV",
         "普通…"
       ],
-      "updatedAt": "2026-06-20T21:44:03.324Z",
-      "sourceStatus": "掲載在庫"
+      "updatedAt": "2026-07-07T04:18:47.683Z"
     },
     {
       "stockId": "0902332A30260323W004",
@@ -1430,42 +1419,36 @@
     },
     {
       "stockId": "0902332A30260414W002",
-      "title": "ｅＫクロス",
-      "description": "ｅＫクロス",
+      "title": "ｅＫクロス Ｔ",
+      "description": "ｅＫクロス Ｔ ４ＷＤ　ハイブリッド　ターボ　ツートーンカラー　ハーフレザーシート　新品サマータイヤ組替済み　純正１５インチ切削アルミホイール　前席シートヒーター　クリアランスソナー　ＬＥＤヘッドライト　フォグ",
       "carName": "ｅＫクロス",
-      "gradeName": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "",
-      "totalPrice": "",
-      "imageUrl": "https://secure.goo-net.com/090/0902332/Q/0902332A30260414W00279.jpg",
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260414W002&ScreenId=SIH_001",
+      "gradeName": "Ｔ",
+      "classificationName": "B38W",
+      "year": "2019年",
+      "mileage": "6.0万K",
+      "color": "ナチュラルアイボリーメタリックＩＩ",
+      "inspection": "検2026年11月",
+      "displacement": "660cc",
+      "bodyPrice": "130.7万円",
+      "totalPrice": "133.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260414/H/70009023323026041400200.jpg",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260414W002",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260414002&area_cd=11",
       "types": [
         "軽自動車",
         "スタンダード",
-        "SUV",
-        "特にこだわりはない"
+        "ＳＵＶ",
+        "特にこだわりはない",
+        "軽自…"
       ],
       "typeKeys": [
         "軽自動車",
         "スタンダード",
         "SUV",
-        "特にこだわりはない"
+        "特にこだわりはない",
+        "軽自…"
       ],
-      "updatedAt": "2026-06-24T02:51:39.668Z",
-      "typeResult": {
-        "status": 200,
-        "success": true,
-        "containsFatalError": false
-      }
+      "updatedAt": "2026-07-07T04:18:47.683Z"
     },
     {
       "stockId": "0902332A30260421W003",
@@ -1804,40 +1787,34 @@
     },
     {
       "stockId": "0902332A30260604W001",
-      "title": "ＲＸ",
-      "description": "ＲＸ",
+      "title": "ＲＸ ＲＸ２００ｔ　Ｆスポーツ",
+      "description": "ＲＸ ＲＸ２００ｔ　Ｆスポーツ ４ＷＤ　ターボ　サンルーフ　パワーバックドア　純正ＥＧスターター　純正１２．３インチワイドナビ　ＨＵＤ　サイド・バックカメラ　シートベンチレーション　ハンドルヒーター　パドルシフト　クリアランスソナー",
       "carName": "ＲＸ",
-      "gradeName": "",
-      "classificationName": "",
-      "year": "2022年",
-      "mileage": "74100万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "",
+      "gradeName": "ＲＸ２００ｔ　Ｆスポーツ",
+      "classificationName": "AGL25W",
+      "year": "2015年",
+      "mileage": "7.4万K",
+      "color": "ホワイトノーヴァガラスフレーク",
+      "inspection": "車検整備付",
+      "displacement": "2.0L",
+      "bodyPrice": "324.9万円",
       "totalPrice": "335.2万円",
-      "imageUrl": "https://secure.goo-net.com/090/0902332/Q/0902332A30260604W00179.jpg",
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260604W001&ScreenId=SIH_001",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260604/H/70009023323026060400100.jpg",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260604W001",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260604001&area_cd=11",
       "types": [
         "普通車",
         "コンパクトカー",
-        "SUV"
+        "ＳＵＶ",
+        "普通…"
       ],
       "typeKeys": [
         "普通車",
         "コンパクトカー",
-        "SUV"
+        "SUV",
+        "普通…"
       ],
-      "updatedAt": "2026-06-24T02:51:39.668Z",
-      "typeResult": {
-        "status": 200,
-        "success": true,
-        "containsFatalError": false
-      }
+      "updatedAt": "2026-07-07T04:18:47.683Z"
     },
     {
       "stockId": "0902332A30260605W001",
@@ -2097,6 +2074,37 @@
         "success": true,
         "containsFatalError": false
       }
+    },
+    {
+      "stockId": "0902332A30260628W001",
+      "title": "ＮＴ１００クリッパートラック ＧＸ",
+      "description": "ＮＴ１００クリッパートラック ＧＸ ４ＷＤ（切替式）　純正ナビ　Ｂｌｕｅｔｏｏｔｈ　パワーウィンドウ　キーレスキー　エアコン　パワステ　フォグランプ　荷台マット　ゲートプロテクター　アオリチェーン　純正ドライブレコーダー　集中ドアロック",
+      "carName": "ＮＴ１００クリッパートラック",
+      "gradeName": "ＧＸ",
+      "classificationName": "DR16T",
+      "year": "2018年",
+      "mileage": "3.6万K",
+      "color": "スペリアホワイト",
+      "inspection": "車検整備付",
+      "displacement": "660cc",
+      "bodyPrice": "95.5万円",
+      "totalPrice": "99.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260628/H/70009023323026062800100.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260628W001",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260628001&area_cd=11",
+      "types": [
+        "軽自動車",
+        "トラック",
+        "特にこだわりはない",
+        "軽自…"
+      ],
+      "typeKeys": [
+        "軽自動車",
+        "トラック",
+        "特にこだわりはない",
+        "軽自…"
+      ],
+      "updatedAt": "2026-07-07T04:18:47.683Z"
     }
   ]
 }
