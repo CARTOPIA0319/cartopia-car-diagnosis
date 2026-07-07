@@ -30,6 +30,35 @@ const buyQuickReply = {
   ],
 };
 
+const topQuickReply = {
+  items: [
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "「買う」でできること",
+        text: "「買う」でできること",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "「売る」でできること",
+        text: "「売る」でできること",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "「予約」でできること",
+        text: "「予約」でできること",
+      },
+    },
+  ],
+};
+
 export async function GET() {
   return Response.json({
     status: "ok",
@@ -50,7 +79,9 @@ export async function POST(request) {
         : "";
 
     const postbackData =
-      event.type === "postback" ? event.postback?.data : "";
+      event.type === "postback"
+        ? event.postback?.data
+        : "";
 
     const isBuy =
       text === "くるまを買う" ||
@@ -75,13 +106,15 @@ export async function POST(request) {
       await replyMessage(event.replyToken, [
         {
           type: "text",
-          text: "トップメニューに戻りました😊",
+          text:
+            "😊 次は何する？\n\n" +
+            "気になるメニューを選んでね🚗",
+          quickReply: topQuickReply,
         },
       ]);
       continue;
     }
-
-    if (text === "車種が決まっている人は？") {
+        if (text === "車種が決まっている人は？") {
       await replyMessage(event.replyToken, [
         {
           type: "text",
@@ -140,17 +173,20 @@ export async function POST(request) {
 }
 
 async function replyMessage(replyToken, messages) {
-  const res = await fetch("https://api.line.me/v2/bot/message/reply", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
-    },
-    body: JSON.stringify({
-      replyToken,
-      messages,
-    }),
-  });
+  const res = await fetch(
+    "https://api.line.me/v2/bot/message/reply",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
+      },
+      body: JSON.stringify({
+        replyToken,
+        messages,
+      }),
+    }
+  );
 
   const result = await res.text();
   console.log("REPLY_STATUS:", res.status);
