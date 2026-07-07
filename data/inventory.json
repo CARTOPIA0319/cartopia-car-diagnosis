@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-07T05:32:15.460Z",
+  "updatedAt": "2026-07-07T05:34:32.453Z",
   "source": "motorgate",
   "updateMode": "full-public-and-saved-refresh",
   "counts": {
@@ -66,7 +66,7 @@
         "セダン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -104,7 +104,7 @@
         "セダン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -144,7 +144,7 @@
         "スポーティ",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -182,7 +182,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -220,7 +220,7 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -258,7 +258,7 @@
         "トラック",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -296,7 +296,7 @@
         "コンパクトカー",
         "SUV"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -336,7 +336,7 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -376,7 +376,7 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -414,7 +414,7 @@
         "ミニバン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -452,7 +452,7 @@
         "ミニバン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -490,7 +490,7 @@
         "ミニバン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -528,7 +528,7 @@
         "ミニバン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -564,7 +564,7 @@
         "普通車",
         "ミニバン"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -604,7 +604,7 @@
         "スポーティ",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -642,7 +642,7 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -678,7 +678,7 @@
         "普通車",
         "バン・トラック"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -718,7 +718,7 @@
         "EV・HV",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -758,7 +758,7 @@
         "EV・HV",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -796,7 +796,7 @@
         "セダン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -836,7 +836,7 @@
         "ミニバン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -874,7 +874,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -910,7 +910,7 @@
         "普通車",
         "コンパクトカー"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -946,7 +946,7 @@
         "普通車",
         "コンパクトカー"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -984,7 +984,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1022,7 +1022,7 @@
         "ミニバン",
         "SUV"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1062,7 +1062,7 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.375Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1100,7 +1100,7 @@
         "ミニバン",
         "バン・トラック"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1140,7 +1140,7 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1178,7 +1178,7 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1218,7 +1218,7 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1254,7 +1254,7 @@
         "普通車",
         "コンパクトカー"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1292,7 +1292,7 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1330,7 +1330,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1366,7 +1366,7 @@
         "普通車",
         "SUV"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1404,7 +1404,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1442,7 +1442,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1480,7 +1480,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1516,7 +1516,7 @@
         "普通車",
         "SUV"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1554,7 +1554,7 @@
         "ミニバン",
         "バン・トラック"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1592,7 +1592,7 @@
         "ステーションワゴン",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1630,7 +1630,7 @@
         "ステーションワゴン",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1668,7 +1668,7 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1706,7 +1706,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1742,7 +1742,49 @@
         "普通車",
         "ミニバン"
       ],
-      "updatedAt": "2026-07-07T05:31:49.376Z",
+      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "typeResult": {
+        "status": 200,
+        "success": true,
+        "containsFatalError": false
+      }
+    },
+    {
+      "stockId": "0902332A30260421W003",
+      "title": "デミオ",
+      "description": "デミオ",
+      "carName": "デミオ",
+      "gradeName": "",
+      "gradeExtraInfo": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "11500万K",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "116.3万円",
+      "totalPrice": "125.2万円",
+      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026042100300.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W003",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
+      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260421W003&ScreenId=SIH_001",
+      "types": [
+        "普通車",
+        "コンパクトカー",
+        "ステーションワゴン",
+        "EV・HV",
+        "スポーティ"
+      ],
+      "typeKeys": [
+        "普通車",
+        "コンパクトカー",
+        "ステーションワゴン",
+        "EV・HV",
+        "スポーティ"
+      ],
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1780,7 +1822,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1818,7 +1860,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1856,7 +1898,7 @@
         "トラック",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1896,7 +1938,7 @@
         "スポーティ",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1936,7 +1978,7 @@
         "ステーションワゴン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1976,7 +2018,7 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2014,7 +2056,7 @@
         "SUV",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2056,7 +2098,7 @@
         "ステーションワゴン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2094,7 +2136,7 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2132,7 +2174,7 @@
         "セダン",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2168,7 +2210,7 @@
         "普通車",
         "SUV"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2208,7 +2250,7 @@
         "スポーティ",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2246,7 +2288,7 @@
         "コンパクトカー",
         "ミニバン"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2284,7 +2326,7 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2320,7 +2362,7 @@
         "普通車",
         "ミニバン"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2358,49 +2400,7 @@
         "セダン",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
-      "typeResult": {
-        "status": 200,
-        "success": true,
-        "containsFatalError": false
-      }
-    },
-    {
-      "stockId": "0902332A30260421W003",
-      "title": "デミオ",
-      "description": "デミオ",
-      "carName": "デミオ",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "11500万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "116.3万円",
-      "totalPrice": "125.2万円",
-      "imageUrl": "https://secure.goo-net.com/090/0902332/Q/0902332A30260421W00379.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W003",
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260421W003&ScreenId=SIH_001",
-      "types": [
-        "普通車",
-        "コンパクトカー",
-        "ステーションワゴン",
-        "EV・HV",
-        "スポーティ"
-      ],
-      "typeKeys": [
-        "普通車",
-        "コンパクトカー",
-        "ステーションワゴン",
-        "EV・HV",
-        "スポーティ"
-      ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2440,7 +2440,7 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2478,7 +2478,7 @@
         "コンパクトカー",
         "ステーションワゴン"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2518,7 +2518,7 @@
         "ステーションワゴン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:32:15.460Z",
+      "updatedAt": "2026-07-07T05:34:32.453Z",
       "typeResult": {
         "status": 200,
         "success": true,
