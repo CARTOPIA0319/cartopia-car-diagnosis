@@ -1,3 +1,5 @@
+import inventory from "../../../data/inventory.json";
+
 const BUY_MENU_ID = "richmenu-45b4781911f21f5d5632ec63e211b449";
 const TOP_MENU_ID = "richmenu-19859bd6bf80b802dfc2171536ac089e";
 
@@ -125,6 +127,48 @@ export async function POST(request) {
       continue;
     }
 
+    if (isRoughSearchText(text)) {
+      const [size, rawType] = text.split(" ");
+      const type = normalizeType(rawType);
+      const results = findVehicles(size, type);
+
+      if (results.length === 0) {
+        await replyMessage(event.replyToken, [
+          {
+            type: "text",
+            text:
+              `${size}・${rawType}で探してみたけど、今の在庫には近い車がありませんでした🙇‍♀️\n\n` +
+              "在庫にない場合も、全国からご希望に合う一台をお探しできます😊",
+          },
+        ]);
+        continue;
+      }
+
+      const chunks = chunk(results, 12);
+      const messages = [
+        {
+          type: "text",
+          text:
+            `${size}・${rawType}のおすすめ在庫です😊\n\n` +
+            `支払総額が高い順に${results.length}台表示します🚗`,
+        },
+        ...chunks.slice(0, 4).map((vehicles, index) =>
+          makeCarouselMessage(vehicles, `${size}・${rawType} ${index + 1}`)
+        ),
+      ];
+
+      await replyMessage(event.replyToken, messages);
+
+      const remainingChunks = chunks.slice(4);
+      for (const vehicles of remainingChunks) {
+        await pushMessage(event.source.userId, [
+          makeCarouselMessage(vehicles, `${size}・${rawType}`)
+        ]);
+      }
+
+      continue;
+    }
+
     if (text === "「買う」でできること") {
       await replyMessage(event.replyToken, [
         {
@@ -235,6 +279,166 @@ export async function POST(request) {
   return Response.json({ ok: true });
 }
 
+function isRoughSearchText(text) {
+  return (
+    text.startsWith("軽自動車 ") ||
+    text.startsWith("普通車 ")
+  );
+}
+
+function normalizeType(type) {
+  if (type === "こだわりなし") return "特にこだわりはない";
+  if (type === "低燃費・ハイブリッド") return "EV・HV";
+  return type;
+}
+
+function findVehicles(size, type) {
+  const vehicles = inventory.vehicles || [];
+
+  return vehicles
+    .filter((vehicle) => {
+      const keys = [...(vehicle.types || []), ...(vehicle.typeKeys || [])];
+
+      const hasSize = keys.includes(size);
+      const hasType =
+        type === "特にこだわりはない"
+          ? keys.includes("特にこだわりはない")
+          : keys.includes(type);
+
+      return hasSize && hasType;
+    })
+    .sort((a, b) => priceNumber(b.totalPrice) - priceNumber(a.totalPrice));
+}
+
+function priceNumber(priceText) {
+  if (!priceText) return 0;
+  const match = String(priceText).match(/([\d.]+)/);
+  return match ? Number(match[1]) : 0;
+}
+
+function chunk(array, size) {
+  const result = [];
+  for (let i = 0; i < array.length; i += size) {
+    result.push(array.slice(i, i + size));
+  }
+  return result;
+}
+
+function makeCarouselMessage(vehicles, altText) {
+  return {
+    type: "flex",
+    altText: `${altText}のおすすめ在庫`,
+    contents: {
+      type: "carousel",
+      contents: vehicles.map(makeVehicleBubble),
+    },
+  };
+}
+
+function makeVehicleBubble(vehicle) {
+  const imageUrl = validImageUrl(vehicle.imageUrl);
+  const detailUrl = validUrl(vehicle.detailUrl) || validUrl(vehicle.gooUrl);
+
+  const bubble = {
+    type: "bubble",
+    size: "mega",
+    body: {
+      type: "box",
+      layout: "vertical",
+      spacing: "md",
+      contents: [
+        {
+          type: "text",
+          text: vehicle.carName || vehicle.title || "車両情報",
+          weight: "bold",
+          size: "xl",
+          wrap: true,
+        },
+        {
+          type: "text",
+          text: vehicle.gradeName || vehicle.description || "",
+          size: "sm",
+          color: "#555555",
+          wrap: true,
+          maxLines: 3,
+        },
+        {
+          type: "text",
+          text: `支払総額 ${vehicle.totalPrice || "お問い合わせ"}`,
+          weight: "bold",
+          size: "lg",
+          color: "#D97706",
+          wrap: true,
+        },
+        {
+          type: "box",
+          layout: "vertical",
+          spacing: "xs",
+          contents: [
+            { type: "text", text: `年式：${vehicle.year || "-"}`, size: "sm", color: "#555555" },
+            { type: "text", text: `走行距離：${vehicle.mileage || "-"}`, size: "sm", color: "#555555" },
+            { type: "text", text: `色：${vehicle.color || "-"}`, size: "sm", color: "#555555", wrap: true },
+            { type: "text", text: `状態：${vehicle.sourceStatus || "-"}`, size: "sm", color: "#555555" },
+          ],
+        },
+      ],
+    },
+    footer: {
+      type: "box",
+      layout: "vertical",
+      spacing: "sm",
+      contents: [
+        {
+          type: "button",
+          style: "primary",
+          color: "#0B1F3A",
+          action: {
+            type: "message",
+            label: "この車について相談する",
+            text: `この車について相談したい：${vehicle.carName || vehicle.title}`,
+          },
+        },
+      ],
+    },
+  };
+
+  if (imageUrl) {
+    bubble.hero = {
+      type: "image",
+      url: imageUrl,
+      size: "full",
+      aspectRatio: "16:9",
+      aspectMode: "cover",
+    };
+  }
+
+  if (detailUrl) {
+    bubble.footer.contents.unshift({
+      type: "button",
+      style: "secondary",
+      action: {
+        type: "uri",
+        label: "詳細を見る",
+        uri: detailUrl,
+      },
+    });
+  }
+
+  return bubble;
+}
+
+function validImageUrl(url) {
+  if (!url) return "";
+  const text = String(url);
+  return text.startsWith("https://") ? text : "";
+}
+
+function validUrl(url) {
+  if (!url) return "";
+  const text = String(url);
+  return text.startsWith("https://") || text.startsWith("http://") ? text : "";
+}
+
 async function replyMessage(replyToken, messages) {
   const res = await fetch("https://api.line.me/v2/bot/message/reply", {
     method: "POST",
@@ -248,6 +452,24 @@ async function replyMessage(replyToken, messages) {
   const result = await res.text();
   console.log("REPLY_STATUS:", res.status);
   console.log("REPLY_RESULT:", result);
+}
+
+async function pushMessage(userId, messages) {
+  const res = await fetch("https://api.line.me/v2/bot/message/push", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
+    },
+    body: JSON.stringify({
+      to: userId,
+      messages,
+    }),
+  });
+
+  const result = await res.text();
+  console.log("PUSH_STATUS:", res.status);
+  console.log("PUSH_RESULT:", result);
 }
 
 async function linkRichMenu(userId, richMenuId) {
