@@ -36,6 +36,20 @@ const lightTypeQuickReply = {
   ],
 };
 
+const normalTypeQuickReply = {
+  items: [
+    { type: "action", action: { type: "message", label: "コンパクトカー", text: "普通車 コンパクトカー" } },
+    { type: "action", action: { type: "message", label: "ミニバン", text: "普通車 ミニバン" } },
+    { type: "action", action: { type: "message", label: "SUV", text: "普通車 SUV" } },
+    { type: "action", action: { type: "message", label: "セダン", text: "普通車 セダン" } },
+    { type: "action", action: { type: "message", label: "ステーションワゴン", text: "普通車 ステーションワゴン" } },
+    { type: "action", action: { type: "message", label: "低燃費・HV", text: "普通車 低燃費・ハイブリッド" } },
+    { type: "action", action: { type: "message", label: "スポーティ", text: "普通車 スポーティ" } },
+    { type: "action", action: { type: "message", label: "バン・トラック", text: "普通車 バン・トラック" } },
+    { type: "action", action: { type: "message", label: "ひとつ戻る", text: "ざっくり診断" } },
+  ],
+};
+
 export async function GET() {
   return Response.json({ status: "ok", name: "CARTOPIA main webhook" });
 }
@@ -82,9 +96,7 @@ export async function POST(request) {
       await replyMessage(event.replyToken, [
         {
           type: "text",
-          text:
-            "⚡ ざっくり診断を開始😊\n\n" +
-            "まずは車のサイズは軽？普通車？🚗",
+          text: "⚡ ざっくり診断を開始😊\n\nまずは車のサイズは軽？普通車？🚗",
           quickReply: roughSizeQuickReply,
         },
       ]);
@@ -95,9 +107,7 @@ export async function POST(request) {
       await replyMessage(event.replyToken, [
         {
           type: "text",
-          text:
-            "軽自動車ね😊\n\n" +
-            "どんなタイプの軽を探してるの？🔍😊",
+          text: "軽自動車ね😊\n\nどんなタイプの軽を探してるの？🔍😊",
           quickReply: lightTypeQuickReply,
         },
       ]);
@@ -108,7 +118,8 @@ export async function POST(request) {
       await replyMessage(event.replyToken, [
         {
           type: "text",
-          text: "普通車ね😊\n\n次は普通車のタイプ選択を作っていきます🚗",
+          text: "普通車ね😊\n\n次はどんなタイプか選んでね🚗",
+          quickReply: normalTypeQuickReply,
         },
       ]);
       continue;
