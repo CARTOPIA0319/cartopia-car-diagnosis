@@ -3,6 +3,7 @@ import inventory from "../../../data/inventory.json";
 const BUY_MENU_ID = "richmenu-45b4781911f21f5d5632ec63e211b449";
 const TOP_MENU_ID = "richmenu-19859bd6bf80b802dfc2171536ac089e";
 const VEHICLES_PER_PAGE = 9;
+const LOGO_BANNER_URL = "/E8D1A2AB-2334-4A73-AF07-FEC7756D044C.png";
 
 const topQuickReply = {
   items: [
@@ -513,72 +514,77 @@ function makeVehicleBubble(vehicle) {
   const isPublicVehicle = vehicle.sourceStatus === "掲載在庫";
   const gooUrl = isPublicVehicle ? validUrl(vehicle.gooUrl) : "";
 
-  const bodyAction = gooUrl
-    ? {
-        type: "uri",
-        uri: gooUrl,
-      }
-    : undefined;
-
   return {
     type: "bubble",
     size: "mega",
 
-    ...(imageUrl
-      ? {
-          hero: makeHeroImage(imageUrl, vehicle, gooUrl),
-        }
-      : {}),
+    hero: {
+      type: "box",
+      layout: "vertical",
+      contents: [
+        ...(imageUrl ? [makeHeroImage(imageUrl, vehicle, gooUrl)] : []),
+        makeLogoBanner(),
+      ],
+    },
 
     body: {
       type: "box",
       layout: "vertical",
       spacing: "sm",
-      paddingAll: "12px",
-      ...(bodyAction ? { action: bodyAction } : {}),
+      paddingAll: "0px",
+      ...(gooUrl ? { action: { type: "uri", uri: gooUrl } } : {}),
       contents: [
         makeVehicleTitleBox(vehicle),
         {
-          type: "text",
-          text: `支払総額 ${vehicle.totalPrice || "お問い合わせ"}`,
-          weight: "bold",
-          size: "xl",
-          color: "#D97706",
-          wrap: true,
-          margin: "sm",
+          type: "box",
+          layout: "vertical",
+          paddingStart: "14px",
+          paddingEnd: "14px",
+          paddingTop: "10px",
+          contents: [
+            {
+              type: "text",
+              text: `支払総額 ${vehicle.totalPrice || "お問い合わせ"}`,
+              weight: "bold",
+              size: "xl",
+              color: "#D97706",
+              wrap: true,
+            },
+            {
+              type: "text",
+              text: `車両本体価格 ${vehicle.bodyPrice || "お問い合わせ"}`,
+              size: "xs",
+              color: "#666666",
+              wrap: true,
+              margin: "xs",
+            },
+            ...(vehicle.gradeExtraInfo
+              ? [
+                  {
+                    type: "text",
+                    text: vehicle.gradeExtraInfo,
+                    size: "xs",
+                    color: "#333333",
+                    wrap: true,
+                    margin: "sm",
+                  },
+                ]
+              : []),
+            makeInfoRow(vehicle),
+            ...(gooUrl
+              ? [
+                  {
+                    type: "text",
+                    text: "タップで詳細を見る ↗",
+                    size: "xs",
+                    color: "#888888",
+                    align: "center",
+                    margin: "xs",
+                  },
+                ]
+              : []),
+          ],
         },
-        {
-          type: "text",
-          text: `車両本体価格 ${vehicle.bodyPrice || "お問い合わせ"}`,
-          size: "xs",
-          color: "#666666",
-          wrap: true,
-        },
-        ...(vehicle.gradeExtraInfo
-          ? [
-              {
-                type: "text",
-                text: vehicle.gradeExtraInfo,
-                size: "sm",
-                color: "#333333",
-                wrap: true,
-                margin: "sm",
-              },
-            ]
-          : []),
-        makeInfoRow(vehicle),
-        ...(gooUrl
-          ? [
-              {
-                type: "text",
-                text: "カードをタップで詳細を見る ↗",
-                size: "xs",
-                color: "#888888",
-                align: "center",
-                margin: "xs",
-              },
-            ]
-          : []),
       ],
     },
 
@@ -607,7 +613,7 @@ function makeHeroImage(imageUrl, vehicle, gooUrl) {
   return {
     type: "box",
     layout: "vertical",
-    height: "190px",
+    height: "176px",
     action: gooUrl ? { type: "uri", uri: gooUrl } : undefined,
     contents: [
       {
@@ -618,107 +624,55 @@ function makeHeroImage(imageUrl, vehicle, gooUrl) {
         aspectMode: "cover",
       },
       makeStatusRibbon(vehicle),
-      makeBrandPlate(),
     ],
   };
 }
 
 function makeStatusRibbon(vehicle) {
+  const status = displayStatus(vehicle);
+  const isLong = status.length >= 7;
+
   return {
     type: "box",
     layout: "horizontal",
     position: "absolute",
     offsetTop: "0px",
     offsetStart: "0px",
-    width: "138px",
+    width: isLong ? "168px" : "118px",
     height: "34px",
     backgroundColor: "#0B1F3A",
     contents: [
       {
         type: "text",
-        text: displayStatus(vehicle),
-        size: "xs",
+        text: status,
+        size: isLong ? "xxs" : "xs",
         color: "#E5D08A",
         weight: "bold",
         gravity: "center",
         align: "center",
+        wrap: false,
       },
       {
-        type: "text",
-        text: "／",
-        size: "xxl",
-        color: "#0B1F3A",
-        gravity: "center",
-        margin: "none",
+        type: "box",
+        layout: "vertical",
+        width: "30px",
+        height: "34px",
+        backgroundColor: "#0B1F3A",
+        offsetEnd: "-16px",
+        skewX: "-25deg",
+        contents: [],
       },
     ],
   };
 }
 
-function makeBrandPlate() {
+function makeLogoBanner() {
   return {
-    type: "box",
-    layout: "horizontal",
-    position: "absolute",
-    offsetBottom: "0px",
-    offsetStart: "0px",
-    offsetEnd: "0px",
-    height: "50px",
-    backgroundColor: "#00000099",
-    paddingStart: "10px",
-    paddingEnd: "10px",
-    paddingTop: "6px",
-    paddingBottom: "6px",
-    contents: [
-      {
-        type: "box",
-        layout: "vertical",
-        width: "38px",
-        height: "38px",
-        cornerRadius: "19px",
-        borderColor: "#E5D08A",
-        borderWidth: "2px",
-        justifyContent: "center",
-        alignItems: "center",
-        contents: [
-          {
-            type: "text",
-            text: "C",
-            size: "lg",
-            weight: "bold",
-            color: "#E5D08A",
-            align: "center",
-          },
-        ],
-      },
-      {
-        type: "box",
-        layout: "vertical",
-        margin: "sm",
-        spacing: "none",
-        contents: [
-          {
-            type: "text",
-            text: "CARTOPIA",
-            size: "sm",
-            color: "#E5D08A",
-            weight: "bold",
-          },
-          {
-            type: "text",
-            text: "－カーとぴあ－",
-            size: "xxs",
-            color: "#FFFFFF",
-          },
-          {
-            type: "text",
-            text: "車のことを、ずっと",
-            size: "xxs",
-            color: "#FFFFFF",
-          },
-        ],
-      },
-    ],
+    type: "image",
+    url: absolutePublicUrl(LOGO_BANNER_URL),
+    size: "full",
+    aspectRatio: "4:1",
+    aspectMode: "cover",
   };
 }
 
@@ -727,21 +681,23 @@ function makeVehicleTitleBox(vehicle) {
     type: "box",
     layout: "vertical",
     backgroundColor: "#0B1F3A",
-    cornerRadius: "md",
-    paddingAll: "9px",
+    paddingStart: "14px",
+    paddingEnd: "14px",
+    paddingTop: "10px",
+    paddingBottom: "10px",
     contents: [
       {
         type: "text",
         text: vehicle.carName || vehicle.title || "車両情報",
         weight: "bold",
-        size: "md",
+        size: "lg",
         color: "#E5D08A",
         wrap: true,
       },
       {
         type: "text",
         text: vehicle.gradeName || vehicle.description || "",
-        size: "xs",
+        size: "sm",
         color: "#FFFFFF",
         wrap: true,
         margin: "xs",
@@ -757,24 +713,25 @@ function makeInfoRow(vehicle) {
     spacing: "xs",
     margin: "sm",
     contents: [
-      makeInfoBox("初度登録", formatRegistrationYear(vehicle.year)),
-      makeInfoBox("走行距離", formatMileage(vehicle.mileage)),
-      makeInfoBox("車体色", vehicle.color || "-"),
+      makeInfoBox("初度登録", formatRegistrationYear(vehicle.year), "normal"),
+      makeInfoBox("走行距離", formatMileage(vehicle.mileage), "normal"),
+      makeInfoBox("車体色", vehicle.color || "-", "color"),
     ],
   };
 }
 
-function makeInfoBox(label, value) {
+function makeInfoBox(label, value, kind) {
+  const valueText = value || "-";
+  const isLongColor = kind === "color" && valueText.length >= 8;
+
   return {
     type: "box",
     layout: "vertical",
     flex: 1,
-    height: "58px",
+    height: "64px",
     backgroundColor: "#F3F4F6",
     cornerRadius: "md",
     paddingAll: "6px",
-    justifyContent: "center",
-    alignItems: "center",
     contents: [
       {
         type: "text",
@@ -782,17 +739,25 @@ function makeInfoBox(label, value) {
         size: "xxs",
         color: "#777777",
         align: "center",
-        wrap: true,
+        wrap: false,
       },
       {
-        type: "text",
-        text: value || "-",
-        size: "xs",
-        color: "#222222",
-        weight: "bold",
-        align: "center",
-        wrap: true,
-        margin: "xs",
+        type: "box",
+        layout: "vertical",
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        contents: [
+          {
+            type: "text",
+            text: valueText,
+            size: isLongColor ? "xxs" : "xs",
+            color: "#222222",
+            weight: "bold",
+            align: "center",
+            wrap: true,
+          },
+        ],
       },
     ],
   };
@@ -850,6 +815,25 @@ function formatMileage(mileageText) {
   }
 
   return `${Math.round(km).toLocaleString("ja-JP")}km`;
+}
+
+function absolutePublicUrl(path) {
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    process.env.VERCEL_URL ||
+    "";
+
+  const cleanPath = String(path || "").startsWith("/")
+    ? String(path || "")
+    : `/${path}`;
+
+  if (!baseUrl) return cleanPath;
+
+  const origin = String(baseUrl).startsWith("http")
+    ? String(baseUrl)
+    : `https://${baseUrl}`;
+
+  return `${origin}${cleanPath}`;
 }
 
 function validImageUrl(url) {
