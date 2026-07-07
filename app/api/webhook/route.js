@@ -3,7 +3,6 @@ import inventory from "../../../data/inventory.json";
 const BUY_MENU_ID = "richmenu-45b4781911f21f5d5632ec63e211b449";
 const TOP_MENU_ID = "richmenu-19859bd6bf80b802dfc2171536ac089e";
 const VEHICLES_PER_PAGE = 9;
-const LOGO_BANNER_URL = "/E8D1A2AB-2334-4A73-AF07-FEC7756D044C.png";
 
 const topQuickReply = {
   items: [
@@ -98,44 +97,28 @@ export async function POST(request) {
     if (text === "トップへ戻る") {
       await linkRichMenu(event.source.userId, TOP_MENU_ID);
       await replyMessage(event.replyToken, [
-        {
-          type: "text",
-          text: "😊 次は何する？\n\n気になるメニューを選んでね🚗",
-          quickReply: topQuickReply,
-        },
+        { type: "text", text: "😊 次は何する？\n\n気になるメニューを選んでね🚗", quickReply: topQuickReply },
       ]);
       continue;
     }
 
     if (text === "ざっくり診断") {
       await replyMessage(event.replyToken, [
-        {
-          type: "text",
-          text: "⚡ ざっくり診断を開始😊\n\nまずは車のサイズは軽？普通車？🚗",
-          quickReply: roughSizeQuickReply,
-        },
+        { type: "text", text: "⚡ ざっくり診断を開始😊\n\nまずは車のサイズは軽？普通車？🚗", quickReply: roughSizeQuickReply },
       ]);
       continue;
     }
 
     if (text === "軽自動車") {
       await replyMessage(event.replyToken, [
-        {
-          type: "text",
-          text: "軽自動車ね😊\n\nどんなタイプの軽を探してるの？🔍😊",
-          quickReply: lightTypeQuickReply,
-        },
+        { type: "text", text: "軽自動車ね😊\n\nどんなタイプの軽を探してるの？🔍😊", quickReply: lightTypeQuickReply },
       ]);
       continue;
     }
 
     if (text === "普通車") {
       await replyMessage(event.replyToken, [
-        {
-          type: "text",
-          text: "普通車ね😊\n\n次はどんなタイプか選んでね🚗",
-          quickReply: normalTypeQuickReply,
-        },
+        { type: "text", text: "普通車ね😊\n\n次はどんなタイプか選んでね🚗", quickReply: normalTypeQuickReply },
       ]);
       continue;
     }
@@ -306,9 +289,7 @@ function findVehicles(size, type) {
     .sort((a, b) => {
       const statusA = statusPriority(a);
       const statusB = statusPriority(b);
-
       if (statusA !== statusB) return statusA - statusB;
-
       return priceNumber(b.totalPrice) - priceNumber(a.totalPrice);
     });
 }
@@ -514,18 +495,9 @@ function makeVehicleBubble(vehicle) {
   const isPublicVehicle = vehicle.sourceStatus === "掲載在庫";
   const gooUrl = isPublicVehicle ? validUrl(vehicle.gooUrl) : "";
 
-  return {
+  const bubble = {
     type: "bubble",
     size: "mega",
-
-    hero: {
-      type: "box",
-      layout: "vertical",
-      contents: [
-        ...(imageUrl ? [makeHeroImage(imageUrl, vehicle, gooUrl)] : []),
-        makeLogoBanner(),
-      ],
-    },
 
     body: {
       type: "box",
@@ -534,6 +506,7 @@ function makeVehicleBubble(vehicle) {
       paddingAll: "0px",
       ...(gooUrl ? { action: { type: "uri", uri: gooUrl } } : {}),
       contents: [
+        ...(imageUrl ? [makeHeroImage(imageUrl, vehicle, gooUrl)] : []),
         makeVehicleTitleBox(vehicle),
         {
           type: "box",
@@ -607,6 +580,8 @@ function makeVehicleBubble(vehicle) {
       ],
     },
   };
+
+  return bubble;
 }
 
 function makeHeroImage(imageUrl, vehicle, gooUrl) {
@@ -638,9 +613,13 @@ function makeStatusRibbon(vehicle) {
     position: "absolute",
     offsetTop: "0px",
     offsetStart: "0px",
-    width: isLong ? "168px" : "118px",
-    height: "34px",
+    width: isLong ? "138px" : "104px",
+    height: "32px",
     backgroundColor: "#0B1F3A",
+    paddingStart: "8px",
+    paddingEnd: "8px",
+    justifyContent: "center",
+    alignItems: "center",
     contents: [
       {
         type: "text",
@@ -648,31 +627,10 @@ function makeStatusRibbon(vehicle) {
         size: isLong ? "xxs" : "xs",
         color: "#E5D08A",
         weight: "bold",
-        gravity: "center",
         align: "center",
         wrap: false,
       },
-      {
-        type: "box",
-        layout: "vertical",
-        width: "30px",
-        height: "34px",
-        backgroundColor: "#0B1F3A",
-        offsetEnd: "-16px",
-        skewX: "-25deg",
-        contents: [],
-      },
     ],
-  };
-}
-
-function makeLogoBanner() {
-  return {
-    type: "image",
-    url: absolutePublicUrl(LOGO_BANNER_URL),
-    size: "full",
-    aspectRatio: "4:1",
-    aspectMode: "cover",
   };
 }
 
@@ -815,25 +773,6 @@ function formatMileage(mileageText) {
   }
 
   return `${Math.round(km).toLocaleString("ja-JP")}km`;
-}
-
-function absolutePublicUrl(path) {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_BASE_URL ||
-    process.env.VERCEL_URL ||
-    "";
-
-  const cleanPath = String(path || "").startsWith("/")
-    ? String(path || "")
-    : `/${path}`;
-
-  if (!baseUrl) return cleanPath;
-
-  const origin = String(baseUrl).startsWith("http")
-    ? String(baseUrl)
-    : `https://${baseUrl}`;
-
-  return `${origin}${cleanPath}`;
 }
 
 function validImageUrl(url) {
