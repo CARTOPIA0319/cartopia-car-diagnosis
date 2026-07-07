@@ -2,6 +2,7 @@ import inventory from "../../../data/inventory.json";
 
 const BUY_MENU_ID = "richmenu-45b4781911f21f5d5632ec63e211b449";
 const TOP_MENU_ID = "richmenu-19859bd6bf80b802dfc2171536ac089e";
+const VEHICLES_PER_PAGE = 9;
 
 const topQuickReply = {
   items: [
@@ -69,6 +70,18 @@ export async function POST(request) {
         : "";
 
     const postbackData = event.type === "postback" ? event.postback?.data : "";
+
+    if (postbackData.startsWith("more|")) {
+      const [, size, rawType, offsetText] = postbackData.split("|");
+      const offset = Number(offsetText || "0");
+      const type = normalizeType(rawType);
+      const results = findVehicles(size, type);
+
+      await replyMessage(event.replyToken, [
+        makeVehiclePageCarouselMessage(results, size, rawType, offset),
+      ]);
+      continue;
+    }
 
     const isBuy =
       text === "くるまを買う" ||
@@ -144,29 +157,15 @@ export async function POST(request) {
         continue;
       }
 
-      const chunks = chunk(results, 5);
-
-      const messages = [
+      await replyMessage(event.replyToken, [
         {
           type: "text",
           text:
             `${size}・${rawType}のおすすめ在庫です😊\n\n` +
-            `展示販売中の車から先に、支払総額が高い順で${results.length}台すべて表示します🚗`,
+            `展示販売中の車から先に、支払総額が高い順で${results.length}台あります🚗`,
         },
-        ...chunks.slice(0, 4).map((vehicles, index) =>
-          makeCarouselMessage(vehicles, `${size}・${rawType} ${index + 1}`)
-        ),
-      ];
-
-      await replyMessage(event.replyToken, messages);
-
-      const remainingChunks = chunks.slice(4);
-      for (const vehicles of remainingChunks) {
-        await pushMessage(event.source.userId, [
-          makeCarouselMessage(vehicles, `${size}・${rawType}`)
-        ]);
-      }
-
+        makeVehiclePageCarouselMessage(results, size, rawType, 0),
+      ]);
       continue;
     }
 
@@ -325,21 +324,84 @@ function priceNumber(priceText) {
   return match ? Number(match[1]) : 0;
 }
 
-function chunk(array, size) {
-  const result = [];
-  for (let i = 0; i < array.length; i += size) {
-    result.push(array.slice(i, i + size));
-  }
-  return result;
-}
+function makeVehiclePageCarouselMessage(results, size, rawType, offset) {
+  const pageVehicles = results.slice(offset, offset + VEHICLES_PER_PAGE);
+  const nextOffset = offset + VEHICLES_PER_PAGE;
+  const hasMore = nextOffset < results.length;
 
-function makeCarouselMessage(vehicles, altText) {
+  const contents = pageVehicles.map(makeVehicleBubble);
+
+  if (hasMore) {
+    contents.push(makeMoreBubble(results.length, nextOffset, size, rawType));
+  }
+
   return {
     type: "flex",
-    altText: `${altText}のおすすめ在庫`,
+    altText: `${size}・${rawType}のおすすめ在庫`,
     contents: {
       type: "carousel",
-      contents: vehicles.map(makeVehicleBubble),
+      contents,
+    },
+  };
+}
+
+function makeMoreBubble(totalCount, nextOffset, size, rawType) {
+  const remaining = totalCount - nextOffset;
+  const nextCount = Math.min(VEHICLES_PER_PAGE, remaining);
+
+  return {
+    type: "bubble",
+    size: "mega",
+    body: {
+      type: "box",
+      layout: "vertical",
+      justifyContent: "center",
+      alignItems: "center",
+      spacing: "lg",
+      contents: [
+        {
+          type: "text",
+          text: "まだあります😊",
+          weight: "bold",
+          size: "xl",
+          align: "center",
+          wrap: true,
+        },
+        {
+          type: "text",
+          text: `あと${remaining}台あります🚗`,
+          size: "md",
+          color: "#555555",
+          align: "center",
+          wrap: true,
+        },
+        {
+          type: "text",
+          text: `次の${nextCount}台を見る？`,
+          size: "sm",
+          color: "#777777",
+          align: "center",
+          wrap: true,
+        },
+      ],
+    },
+    footer: {
+      type: "box",
+      layout: "vertical",
+      spacing: "sm",
+      contents: [
+        {
+          type: "button",
+          style: "primary",
+          color: "#0B1F3A",
+          action: {
+            type: "postback",
+            label: `さらに${nextCount}台見る`,
+            data: `more|${size}|${rawType}|${nextOffset}`,
+            displayText: `さらに${nextCount}台見る`,
+          },
+        },
+      ],
     },
   };
 }
@@ -505,24 +567,6 @@ async function replyMessage(replyToken, messages) {
   const result = await res.text();
   console.log("REPLY_STATUS:", res.status);
   console.log("REPLY_RESULT:", result);
-}
-
-async function pushMessage(userId, messages) {
-  const res = await fetch("https://api.line.me/v2/bot/message/push", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
-    },
-    body: JSON.stringify({
-      to: userId,
-      messages,
-    }),
-  });
-
-  const result = await res.text();
-  console.log("PUSH_STATUS:", res.status);
-  console.log("PUSH_RESULT:", result);
 }
 
 async function linkRichMenu(userId, richMenuId) {
