@@ -332,7 +332,7 @@ function makeVehiclePageCarouselMessage(results, size, rawType, offset) {
   const contents = pageVehicles.map(makeVehicleBubble);
 
   if (hasMore) {
-    contents.push(makeMoreBubble(results.length, nextOffset, size, rawType));
+    contents.push(makeMoreBubble(results, nextOffset, size, rawType));
   }
 
   return {
@@ -345,9 +345,10 @@ function makeVehiclePageCarouselMessage(results, size, rawType, offset) {
   };
 }
 
-function makeMoreBubble(totalCount, nextOffset, size, rawType) {
-  const remaining = totalCount - nextOffset;
-  const nextCount = Math.min(VEHICLES_PER_PAGE, remaining);
+function makeMoreBubble(results, nextOffset, size, rawType) {
+  const remaining = results.length - nextOffset;
+  const previewVehicles = results.slice(nextOffset, nextOffset + VEHICLES_PER_PAGE);
+  const nextCount = previewVehicles.length;
 
   return {
     type: "bubble",
@@ -355,54 +356,151 @@ function makeMoreBubble(totalCount, nextOffset, size, rawType) {
     body: {
       type: "box",
       layout: "vertical",
-      justifyContent: "center",
-      alignItems: "center",
-      spacing: "lg",
+      spacing: "md",
+      backgroundColor: "#F8F5EF",
+      paddingAll: "14px",
       contents: [
         {
-          type: "text",
-          text: "まだあります😊",
-          weight: "bold",
-          size: "xl",
-          align: "center",
-          wrap: true,
+          type: "box",
+          layout: "vertical",
+          backgroundColor: "#0B1F3A",
+          cornerRadius: "lg",
+          paddingAll: "14px",
+          contents: [
+            {
+              type: "text",
+              text: `他に該当車両が${remaining}台あります😊`,
+              weight: "bold",
+              size: "lg",
+              color: "#FFFFFF",
+              align: "center",
+              wrap: true,
+            },
+            {
+              type: "text",
+              text: "次に表示される車はこちらです🚗",
+              size: "sm",
+              color: "#E5D08A",
+              align: "center",
+              wrap: true,
+              margin: "xs",
+            },
+          ],
         },
         {
-          type: "text",
-          text: `あと${remaining}台あります🚗`,
-          size: "md",
-          color: "#555555",
-          align: "center",
-          wrap: true,
-        },
-        {
-          type: "text",
-          text: `次の${nextCount}台を見る？`,
-          size: "sm",
-          color: "#777777",
-          align: "center",
-          wrap: true,
+          type: "box",
+          layout: "vertical",
+          spacing: "sm",
+          contents: makePreviewRows(previewVehicles, size, rawType, nextOffset, nextCount),
         },
       ],
     },
-    footer: {
+  };
+}
+
+function makePreviewRows(vehicles, size, rawType, nextOffset, nextCount) {
+  const rows = [];
+
+  for (let i = 0; i < 8; i += 2) {
+    rows.push({
       type: "box",
-      layout: "vertical",
+      layout: "horizontal",
       spacing: "sm",
       contents: [
+        makePreviewImageBox(vehicles[i]),
+        makePreviewImageBox(vehicles[i + 1]),
+      ],
+    });
+  }
+
+  rows.push({
+    type: "box",
+    layout: "horizontal",
+    spacing: "sm",
+    contents: [
+      makePreviewImageBox(vehicles[8]),
+      makePreviewButtonBox(size, rawType, nextOffset, nextCount),
+    ],
+  });
+
+  return rows;
+}
+
+function makePreviewImageBox(vehicle) {
+  const imageUrl = validImageUrl(vehicle?.imageUrl);
+
+  if (!imageUrl) {
+    return {
+      type: "box",
+      layout: "vertical",
+      flex: 1,
+      height: "86px",
+      backgroundColor: "#E5E7EB",
+      cornerRadius: "md",
+      justifyContent: "center",
+      alignItems: "center",
+      contents: [
         {
-          type: "button",
-          style: "primary",
-          color: "#0B1F3A",
-          action: {
-            type: "postback",
-            label: `さらに${nextCount}台見る`,
-            data: `more|${size}|${rawType}|${nextOffset}`,
-            displayText: `さらに${nextCount}台見る`,
-          },
+          type: "text",
+          text: "画像準備中",
+          size: "xs",
+          color: "#999999",
+          align: "center",
         },
       ],
+    };
+  }
+
+  return {
+    type: "box",
+    layout: "vertical",
+    flex: 1,
+    cornerRadius: "md",
+    contents: [
+      {
+        type: "image",
+        url: imageUrl,
+        size: "full",
+        aspectRatio: "16:9",
+        aspectMode: "cover",
+      },
+    ],
+  };
+}
+
+function makePreviewButtonBox(size, rawType, nextOffset, nextCount) {
+  return {
+    type: "box",
+    layout: "vertical",
+    flex: 1,
+    height: "86px",
+    backgroundColor: "#0B1F3A",
+    cornerRadius: "md",
+    justifyContent: "center",
+    alignItems: "center",
+    action: {
+      type: "postback",
+      data: `more|${size}|${rawType}|${nextOffset}`,
+      displayText: `次の${nextCount}台を見る`,
     },
+    contents: [
+      {
+        type: "text",
+        text: `次の${nextCount}台`,
+        color: "#FFFFFF",
+        weight: "bold",
+        size: "md",
+        align: "center",
+      },
+      {
+        type: "text",
+        text: "を見る",
+        color: "#E5D08A",
+        weight: "bold",
+        size: "md",
+        align: "center",
+      },
+    ],
   };
 }
 
