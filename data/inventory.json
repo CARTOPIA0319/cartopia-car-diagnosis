@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-07-07T05:34:32.453Z",
+  "updatedAt": "2026-07-07T12:51:09.531Z",
   "source": "motorgate",
   "updateMode": "full-public-and-saved-refresh",
   "counts": {
     "publicVehicles": 45,
-    "savedVehicles": 20,
-    "vehicles": 65,
+    "savedVehicles": 19,
+    "vehicles": 64,
     "publicFoundRows": 45,
     "publicImageMapCount": 45
   },
@@ -17,21 +17,21 @@
       {
         "pageUrl": "https://motorgate.jp/stock/savelist",
         "status": 200,
-        "count": 20
+        "count": 19
       },
       {
         "pageUrl": "https://motorgate.jp/stock/savelist/index/2",
         "status": 200,
-        "count": 20
+        "count": 19
       }
     ],
     "typeResults": {
-      "success": 65,
+      "success": 64,
       "failed": 0
     },
     "gradeExtraInfo": {
       "found": 47,
-      "missing": 18
+      "missing": 17
     }
   },
   "vehicles": [
@@ -66,7 +66,7 @@
         "セダン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -104,7 +104,7 @@
         "セダン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -144,7 +144,7 @@
         "スポーティ",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -182,7 +182,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -220,7 +220,7 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -258,7 +258,7 @@
         "トラック",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -296,7 +296,7 @@
         "コンパクトカー",
         "SUV"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -336,7 +336,7 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -376,7 +376,7 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -414,7 +414,7 @@
         "ミニバン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -452,45 +452,7 @@
         "ミニバン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
-      "typeResult": {
-        "status": 200,
-        "success": true,
-        "containsFatalError": false
-      }
-    },
-    {
-      "stockId": "0902332A30251223W001",
-      "title": "エスティマハイブリッド アエラス　プレミアム",
-      "description": "エスティマハイブリッド アエラス　プレミアム ４ＷＤ　トヨタセーフティセンス　寒冷地仕様　純正大型ナビ　バックカメラ　ＥＴＣ　両側電動スライドドア　パワーシート　ハーフレザーシート　オットマン　３列目シート床下収納　ＡＣ１００Ｖ　ウォークスルー",
-      "carName": "エスティマハイブリッド",
-      "gradeName": "アエラス　プレミアム",
-      "gradeExtraInfo": "４ＷＤ　トヨタセーフティセンス　寒冷地仕様　純正大型ナビ　バックカメラ　ＥＴＣ　両側電動スライドドア　パワーシート　ハーフレザーシート　オットマン　３列目シート床下収納　ＡＣ１００Ｖ　ウォークスルー",
-      "classificationName": "AHR20W",
-      "year": "2018年",
-      "mileage": "5.6万K",
-      "color": "アイスチタニウムマイカメタリック",
-      "inspection": "車検整備付",
-      "displacement": "2.4L",
-      "bodyPrice": "302.1万円",
-      "totalPrice": "311.1万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30251223/H/70009023323025122300100.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30251223W001",
-      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230251223001&area_cd=11",
-      "sourceStatus": "掲載在庫",
-      "sourcePageUrl": "",
-      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251223W001&StockStatus=00180002&ScreenId=CB101GR",
-      "types": [
-        "普通車",
-        "ミニバン",
-        "EV・HV"
-      ],
-      "typeKeys": [
-        "普通車",
-        "ミニバン",
-        "EV・HV"
-      ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -528,7 +490,7 @@
         "ミニバン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -564,7 +526,7 @@
         "普通車",
         "ミニバン"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -604,7 +566,7 @@
         "スポーティ",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -642,7 +604,7 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -678,7 +640,7 @@
         "普通車",
         "バン・トラック"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -718,7 +680,7 @@
         "EV・HV",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -758,7 +720,7 @@
         "EV・HV",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -796,7 +758,7 @@
         "セダン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -836,7 +798,7 @@
         "ミニバン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -874,7 +836,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -910,7 +872,7 @@
         "普通車",
         "コンパクトカー"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -946,7 +908,7 @@
         "普通車",
         "コンパクトカー"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -984,7 +946,47 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
+      "typeResult": {
+        "status": 200,
+        "success": true,
+        "containsFatalError": false
+      }
+    },
+    {
+      "stockId": "0902332A30260421W003",
+      "title": "デミオ ＸＤツーリング",
+      "description": "デミオ ＸＤツーリング ４ＷＤ　ディーゼルターボ　純正ナビ　フルセグ　Ｂｌｕｅｔｏｏｔｈ　純正１６インチＡＷ　アームレスト　パドルシフト　クルコン　ＨＵＤ　ＬＥＤヘッドライト　横滑り防止　ステアリングスイッチ　スマートキー",
+      "carName": "デミオ",
+      "gradeName": "ＸＤツーリング",
+      "gradeExtraInfo": "４ＷＤ　ディーゼルターボ　純正ナビ　フルセグ　Ｂｌｕｅｔｏｏｔｈ　純正１６インチＡＷ　アームレスト　パドルシフト　クルコン　ＨＵＤ　ＬＥＤヘッドライト　横滑り防止　ステアリングスイッチ　スマートキー",
+      "classificationName": "DJ5AS",
+      "year": "2015年",
+      "mileage": "1.2万K",
+      "color": "スノーフレイクホワイトパールマイカ",
+      "inspection": "車検整備付",
+      "displacement": "1.5L",
+      "bodyPrice": "116.9万円",
+      "totalPrice": "125.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100300.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W003",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260421003&area_cd=11",
+      "sourceStatus": "掲載在庫",
+      "sourcePageUrl": "",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W003&StockStatus=00180002&ScreenId=CB101GR",
+      "types": [
+        "普通車",
+        "コンパクトカー",
+        "EV・HV",
+        "スポーティ"
+      ],
+      "typeKeys": [
+        "普通車",
+        "コンパクトカー",
+        "EV・HV",
+        "スポーティ"
+      ],
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1022,7 +1024,7 @@
         "ミニバン",
         "SUV"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1062,7 +1064,7 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1100,7 +1102,7 @@
         "ミニバン",
         "バン・トラック"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.517Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1140,7 +1142,7 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1178,7 +1180,7 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1218,7 +1220,7 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1254,7 +1256,7 @@
         "普通車",
         "コンパクトカー"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1292,7 +1294,7 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1330,7 +1332,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1366,7 +1368,7 @@
         "普通車",
         "SUV"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1404,7 +1406,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1442,7 +1444,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1480,7 +1482,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1516,7 +1518,7 @@
         "普通車",
         "SUV"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1554,7 +1556,7 @@
         "ミニバン",
         "バン・トラック"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1592,7 +1594,7 @@
         "ステーションワゴン",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1630,7 +1632,7 @@
         "ステーションワゴン",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1668,7 +1670,7 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1706,7 +1708,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1742,7 +1744,7 @@
         "普通車",
         "ミニバン"
       ],
-      "updatedAt": "2026-07-07T05:34:09.853Z",
+      "updatedAt": "2026-07-07T12:50:44.518Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1750,41 +1752,193 @@
       }
     },
     {
-      "stockId": "0902332A30260421W003",
-      "title": "デミオ",
-      "description": "デミオ",
-      "carName": "デミオ",
+      "stockId": "0902332A30260526W004",
+      "title": "ポルテ",
+      "description": "ポルテ",
+      "carName": "ポルテ",
       "gradeName": "",
       "gradeExtraInfo": "",
       "classificationName": "",
       "year": "",
-      "mileage": "11500万K",
+      "mileage": "83200万K",
       "color": "",
       "inspection": "",
       "displacement": "",
-      "bodyPrice": "116.3万円",
-      "totalPrice": "125.2万円",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026042100300.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W003",
+      "bodyPrice": "32.1万円",
+      "totalPrice": "38.3万円",
+      "imageUrl": "https://secure.goo-net.com/7000902332/30260526/Q/70009023323026052600400.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260526W004",
       "gooUrl": "",
       "sourceStatus": "一時保存",
       "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260421W003&ScreenId=SIH_001",
+      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260526W004&ScreenId=SIH_001",
       "types": [
         "普通車",
         "コンパクトカー",
-        "ステーションワゴン",
-        "EV・HV",
-        "スポーティ"
+        "ミニバン"
       ],
       "typeKeys": [
         "普通車",
         "コンパクトカー",
-        "ステーションワゴン",
-        "EV・HV",
+        "ミニバン"
+      ],
+      "updatedAt": "2026-07-07T12:51:09.531Z",
+      "typeResult": {
+        "status": 200,
+        "success": true,
+        "containsFatalError": false
+      }
+    },
+    {
+      "stockId": "0902332A30260422W003",
+      "title": "レガシィＢ４",
+      "description": "レガシィＢ４",
+      "carName": "レガシィＢ４",
+      "gradeName": "",
+      "gradeExtraInfo": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "81500万K",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "121.0万円",
+      "totalPrice": "132.3万円",
+      "imageUrl": "https://secure.goo-net.com/7000902332/30260422/Q/70009023323026042200300.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260422W003",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
+      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260422W003&ScreenId=SIH_001",
+      "types": [
+        "普通車",
+        "セダン",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
+      "typeKeys": [
+        "普通車",
+        "セダン",
+        "スポーティ"
+      ],
+      "updatedAt": "2026-07-07T12:51:09.531Z",
+      "typeResult": {
+        "status": 200,
+        "success": true,
+        "containsFatalError": false
+      }
+    },
+    {
+      "stockId": "0902332A30260626W001",
+      "title": "フィット",
+      "description": "フィット",
+      "carName": "フィット",
+      "gradeName": "",
+      "gradeExtraInfo": "４ＷＤ　ワンオーナー　ナビ　ＴＶ　バックカメラ　ＥＴＣ　純正エンジンスターター",
+      "classificationName": "",
+      "year": "",
+      "mileage": "75400万K",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "99.8万円",
+      "totalPrice": "108.3万円",
+      "imageUrl": "https://secure.goo-net.com/7000902332/30260626/Q/70009023323026062600100.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260626W001",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
+      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260626W001&ScreenId=SIH_001",
+      "types": [
+        "普通車",
+        "コンパクトカー",
+        "ステーションワゴン"
+      ],
+      "typeKeys": [
+        "普通車",
+        "コンパクトカー",
+        "ステーションワゴン"
+      ],
+      "updatedAt": "2026-07-07T12:51:09.531Z",
+      "typeResult": {
+        "status": 200,
+        "success": true,
+        "containsFatalError": false
+      }
+    },
+    {
+      "stockId": "0902332A30260628W002",
+      "title": "ヤリスクロス",
+      "description": "ヤリスクロス",
+      "carName": "ヤリスクロス",
+      "gradeName": "",
+      "gradeExtraInfo": "",
+      "classificationName": "",
+      "year": "",
+      "mileage": "4400万K",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "345.8万円",
+      "totalPrice": "352.2万円",
+      "imageUrl": "https://secure.goo-net.com/7000902332/30260628/Q/70009023323026062800200.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260628W002",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
+      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260628W002&ScreenId=SIH_001",
+      "types": [
+        "普通車",
+        "コンパクトカー",
+        "SUV",
+        "ステーションワゴン",
+        "EV・HV"
+      ],
+      "typeKeys": [
+        "普通車",
+        "コンパクトカー",
+        "SUV",
+        "ステーションワゴン",
+        "EV・HV"
+      ],
+      "updatedAt": "2026-07-07T12:51:09.531Z",
+      "typeResult": {
+        "status": 200,
+        "success": true,
+        "containsFatalError": false
+      }
+    },
+    {
+      "stockId": "0902332A30260706W001",
+      "title": "ハイゼットトラック",
+      "description": "ハイゼットトラック",
+      "carName": "ハイゼットトラック",
+      "gradeName": "",
+      "gradeExtraInfo": "４ＷＤ",
+      "classificationName": "",
+      "year": "",
+      "mileage": "19450万K",
+      "color": "",
+      "inspection": "",
+      "displacement": "",
+      "bodyPrice": "153.9万円",
+      "totalPrice": "157.7万円",
+      "imageUrl": "https://secure.goo-net.com/7000902332/30260706/Q/70009023323026070600100.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260706W001",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
+      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260706W001&ScreenId=SIH_001",
+      "types": [
+        "軽自動車",
+        "トラック",
+        "特にこだわりはない"
+      ],
+      "typeKeys": [
+        "軽自動車",
+        "トラック",
+        "特にこだわりはない"
+      ],
+      "updatedAt": "2026-07-07T12:51:09.531Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1822,7 +1976,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
+      "updatedAt": "2026-07-07T12:51:09.531Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1860,45 +2014,7 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
-      "typeResult": {
-        "status": 200,
-        "success": true,
-        "containsFatalError": false
-      }
-    },
-    {
-      "stockId": "0902332A30260706W001",
-      "title": "ハイゼットトラック",
-      "description": "ハイゼットトラック",
-      "carName": "ハイゼットトラック",
-      "gradeName": "",
-      "gradeExtraInfo": "４ＷＤ",
-      "classificationName": "",
-      "year": "",
-      "mileage": "19450万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "153.9万円",
-      "totalPrice": "157.7万円",
-      "imageUrl": "https://secure.goo-net.com/090/0902332/Q/0902332A30260706W00179.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260706W001",
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260706W001&ScreenId=SIH_001",
-      "types": [
-        "軽自動車",
-        "トラック",
-        "特にこだわりはない"
-      ],
-      "typeKeys": [
-        "軽自動車",
-        "トラック",
-        "特にこだわりはない"
-      ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
+      "updatedAt": "2026-07-07T12:51:09.531Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1938,7 +2054,7 @@
         "スポーティ",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
+      "updatedAt": "2026-07-07T12:51:09.531Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1978,7 +2094,7 @@
         "ステーションワゴン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
+      "updatedAt": "2026-07-07T12:51:09.531Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2018,7 +2134,7 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
+      "updatedAt": "2026-07-07T12:51:09.531Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2056,49 +2172,7 @@
         "SUV",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
-      "typeResult": {
-        "status": 200,
-        "success": true,
-        "containsFatalError": false
-      }
-    },
-    {
-      "stockId": "0902332A30260628W002",
-      "title": "ヤリスクロス",
-      "description": "ヤリスクロス",
-      "carName": "ヤリスクロス",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "4400万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "345.8万円",
-      "totalPrice": "352.2万円",
-      "imageUrl": "https://secure.goo-net.com/090/0902332/Q/0902332A30260628W00279.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260628W002",
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260628W002&ScreenId=SIH_001",
-      "types": [
-        "普通車",
-        "コンパクトカー",
-        "SUV",
-        "ステーションワゴン",
-        "EV・HV"
-      ],
-      "typeKeys": [
-        "普通車",
-        "コンパクトカー",
-        "SUV",
-        "ステーションワゴン",
-        "EV・HV"
-      ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
+      "updatedAt": "2026-07-07T12:51:09.531Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2136,7 +2210,7 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
+      "updatedAt": "2026-07-07T12:51:09.531Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2174,7 +2248,7 @@
         "セダン",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
+      "updatedAt": "2026-07-07T12:51:09.531Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2210,7 +2284,7 @@
         "普通車",
         "SUV"
       ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
+      "updatedAt": "2026-07-07T12:51:09.531Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2250,45 +2324,7 @@
         "スポーティ",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
-      "typeResult": {
-        "status": 200,
-        "success": true,
-        "containsFatalError": false
-      }
-    },
-    {
-      "stockId": "0902332A30260526W004",
-      "title": "ポルテ",
-      "description": "ポルテ",
-      "carName": "ポルテ",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "83200万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "32.1万円",
-      "totalPrice": "38.3万円",
-      "imageUrl": "https://secure.goo-net.com/090/0902332/Q/0902332A30260526W00479.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260526W004",
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260526W004&ScreenId=SIH_001",
-      "types": [
-        "普通車",
-        "コンパクトカー",
-        "ミニバン"
-      ],
-      "typeKeys": [
-        "普通車",
-        "コンパクトカー",
-        "ミニバン"
-      ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
+      "updatedAt": "2026-07-07T12:51:09.531Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2326,7 +2362,7 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
+      "updatedAt": "2026-07-07T12:51:09.531Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2362,45 +2398,7 @@
         "普通車",
         "ミニバン"
       ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
-      "typeResult": {
-        "status": 200,
-        "success": true,
-        "containsFatalError": false
-      }
-    },
-    {
-      "stockId": "0902332A30260422W003",
-      "title": "レガシィＢ４",
-      "description": "レガシィＢ４",
-      "carName": "レガシィＢ４",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "81500万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "121.0万円",
-      "totalPrice": "132.3万円",
-      "imageUrl": "https://secure.goo-net.com/090/0902332/Q/0902332A30260422W00379.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260422W003",
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260422W003&ScreenId=SIH_001",
-      "types": [
-        "普通車",
-        "セダン",
-        "スポーティ"
-      ],
-      "typeKeys": [
-        "普通車",
-        "セダン",
-        "スポーティ"
-      ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
+      "updatedAt": "2026-07-07T12:51:09.531Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2440,45 +2438,7 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
-      "typeResult": {
-        "status": 200,
-        "success": true,
-        "containsFatalError": false
-      }
-    },
-    {
-      "stockId": "0902332A30260626W001",
-      "title": "フィット",
-      "description": "フィット",
-      "carName": "フィット",
-      "gradeName": "",
-      "gradeExtraInfo": "４ＷＤ　ワンオーナー　ナビ　ＴＶ　バックカメラ　ＥＴＣ　純正エンジンスターター",
-      "classificationName": "",
-      "year": "",
-      "mileage": "75400万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "99.8万円",
-      "totalPrice": "108.3万円",
-      "imageUrl": "https://secure.goo-net.com/090/0902332/Q/0902332A30260626W00179.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260626W001",
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260626W001&ScreenId=SIH_001",
-      "types": [
-        "普通車",
-        "コンパクトカー",
-        "ステーションワゴン"
-      ],
-      "typeKeys": [
-        "普通車",
-        "コンパクトカー",
-        "ステーションワゴン"
-      ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
+      "updatedAt": "2026-07-07T12:51:09.531Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2518,7 +2478,7 @@
         "ステーションワゴン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-07T05:34:32.453Z",
+      "updatedAt": "2026-07-07T12:51:09.531Z",
       "typeResult": {
         "status": 200,
         "success": true,
