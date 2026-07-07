@@ -74,8 +74,7 @@ export async function POST(request) {
     if (postbackData.startsWith("more|")) {
       const [, size, rawType, offsetText] = postbackData.split("|");
       const offset = Number(offsetText || "0");
-      const type = normalizeType(rawType);
-      const results = findVehicles(size, type);
+      const results = findVehicles(size, normalizeType(rawType));
 
       await replyMessage(event.replyToken, [
         makeVehiclePageCarouselMessage(results, size, rawType, offset),
@@ -142,8 +141,7 @@ export async function POST(request) {
 
     if (isRoughSearchText(text)) {
       const [size, rawType] = text.split(" ");
-      const type = normalizeType(rawType);
-      const results = findVehicles(size, type);
+      const results = findVehicles(size, normalizeType(rawType));
 
       if (results.length === 0) {
         await replyMessage(event.replyToken, [
@@ -512,47 +510,65 @@ function displayStatus(vehicle) {
 
 function makeVehicleBubble(vehicle) {
   const imageUrl = validImageUrl(vehicle.imageUrl);
-
   const isPublicVehicle = vehicle.sourceStatus === "掲載在庫";
   const gooUrl = isPublicVehicle ? validUrl(vehicle.gooUrl) : "";
 
-  const detailContents = [
-    { type: "text", text: `年式：${vehicle.year || "-"}`, size: "sm", color: "#555555" },
-    { type: "text", text: `走行距離：${vehicle.mileage || "-"}`, size: "sm", color: "#555555" },
-    { type: "text", text: `色：${vehicle.color || "-"}`, size: "sm", color: "#555555", wrap: true },
-    { type: "text", text: `状態：${displayStatus(vehicle)}`, size: "sm", color: "#555555" },
-  ];
-
-  if (!isPublicVehicle) {
-    detailContents.push({
-      type: "text",
-      text: "✨ 仕上げ・掲載準備中",
-      size: "sm",
-      color: "#D97706",
-      wrap: true,
-    });
-  }
+  const bodyAction = gooUrl
+    ? {
+        type: "uri",
+        uri: gooUrl,
+      }
+    : undefined;
 
   const bubble = {
     type: "bubble",
     size: "mega",
+
+    ...(imageUrl
+      ? {
+          hero: makeHeroImage(imageUrl, vehicle, gooUrl),
+        }
+      : {}),
+
     body: {
       type: "box",
       layout: "vertical",
-      spacing: "md",
+      spacing: "sm",
+      paddingAll: "14px",
+      ...(bodyAction ? { action: bodyAction } : {}),
       contents: [
+        {
+          type: "text",
+          text: `支払総額 ${vehicle.totalPrice || "お問い合わせ"}`,
+          weight: "bold",
+          size: "xl",
+          color: "#D97706",
+          wrap: true,
+        },
+        {
+          type: "text",
+          text: `車両本体価格 ${vehicle.bodyPrice || "お問い合わせ"}`,
+          size: "xs",
+          color: "#666666",
+          wrap: true,
+        },
+        {
+          type: "separator",
+          margin: "sm",
+        },
         {
           type: "text",
           text: vehicle.carName || vehicle.title || "車両情報",
           weight: "bold",
-          size: "xl",
+          size: "lg",
+          color: "#0B1F3A",
           wrap: true,
         },
         {
           type: "text",
           text: vehicle.gradeName || vehicle.description || "",
           size: "sm",
-          color: "#555555",
+          color: "#444444",
           wrap: true,
         },
         ...(vehicle.gradeExtraInfo
@@ -566,48 +582,35 @@ function makeVehicleBubble(vehicle) {
               },
             ]
           : []),
-        {
-          type: "box",
-          layout: "vertical",
-          spacing: "xs",
-          contents: [
-            {
-              type: "text",
-              text: `車両本体価格 ${vehicle.bodyPrice || "お問い合わせ"}`,
-              size: "sm",
-              color: "#555555",
-              wrap: true,
-            },
-            {
-              type: "text",
-              text: `支払総額 ${vehicle.totalPrice || "お問い合わせ"}`,
-              weight: "bold",
-              size: "lg",
-              color: "#D97706",
-              wrap: true,
-            },
-          ],
-        },
-        {
-          type: "box",
-          layout: "vertical",
-          spacing: "xs",
-          contents: detailContents,
-        },
+        makeInfoRow(vehicle),
+        ...(gooUrl
+          ? [
+              {
+                type: "text",
+                text: "カードをタップで詳細を見る ↗",
+                size: "xs",
+                color: "#888888",
+                align: "center",
+                margin: "xs",
+              },
+            ]
+          : []),
       ],
     },
+
     footer: {
       type: "box",
       layout: "vertical",
-      spacing: "sm",
+      paddingAll: "10px",
       contents: [
         {
           type: "button",
           style: "primary",
+          height: "sm",
           color: "#0B1F3A",
           action: {
             type: "message",
-            label: "この車について相談する",
+            label: "💬 この車を相談",
             text: `この車について相談したい：${vehicle.carName || vehicle.title}`,
           },
         },
@@ -615,29 +618,138 @@ function makeVehicleBubble(vehicle) {
     },
   };
 
-  if (imageUrl) {
-    bubble.hero = {
-      type: "image",
-      url: imageUrl,
-      size: "full",
-      aspectRatio: "16:9",
-      aspectMode: "cover",
-    };
-  }
-
-  if (gooUrl) {
-    bubble.footer.contents.unshift({
-      type: "button",
-      style: "secondary",
-      action: {
-        type: "uri",
-        label: "詳細を見る",
-        uri: gooUrl,
-      },
-    });
-  }
-
   return bubble;
+}
+
+function makeHeroImage(imageUrl, vehicle, gooUrl) {
+  return {
+    type: "box",
+    layout: "vertical",
+    height: "190px",
+    action: gooUrl
+      ? {
+          type: "uri",
+          uri: gooUrl,
+        }
+      : undefined,
+    contents: [
+      {
+        type: "image",
+        url: imageUrl,
+        size: "full",
+        aspectRatio: "16:9",
+        aspectMode: "cover",
+      },
+      {
+        type: "box",
+        layout: "vertical",
+        position: "absolute",
+        offsetTop: "10px",
+        offsetStart: "10px",
+        backgroundColor: "#0B1F3A",
+        cornerRadius: "xl",
+        paddingAll: "6px",
+        contents: [
+          {
+            type: "text",
+            text: displayStatus(vehicle),
+            size: "xs",
+            color: "#FFFFFF",
+            weight: "bold",
+          },
+        ],
+      },
+      {
+        type: "box",
+        layout: "vertical",
+        position: "absolute",
+        offsetBottom: "10px",
+        offsetEnd: "10px",
+        backgroundColor: "#00000099",
+        cornerRadius: "md",
+        paddingAll: "5px",
+        contents: [
+          {
+            type: "text",
+            text: "CARTOPIA",
+            size: "xs",
+            color: "#E5D08A",
+            weight: "bold",
+          },
+        ],
+      },
+    ],
+  };
+}
+
+function makeInfoRow(vehicle) {
+  return {
+    type: "box",
+    layout: "horizontal",
+    spacing: "xs",
+    margin: "sm",
+    contents: [
+      makeInfoBox("初度登録", formatRegistrationYear(vehicle.year)),
+      makeInfoBox("走行距離", vehicle.mileage || "-"),
+      makeInfoBox("状態", displayStatus(vehicle)),
+    ],
+  };
+}
+
+function makeInfoBox(label, value) {
+  return {
+    type: "box",
+    layout: "vertical",
+    flex: 1,
+    backgroundColor: "#F3F4F6",
+    cornerRadius: "md",
+    paddingAll: "6px",
+    contents: [
+      {
+        type: "text",
+        text: label,
+        size: "xxs",
+        color: "#777777",
+        align: "center",
+        wrap: true,
+      },
+      {
+        type: "text",
+        text: value || "-",
+        size: "xs",
+        color: "#222222",
+        weight: "bold",
+        align: "center",
+        wrap: true,
+      },
+    ],
+  };
+}
+
+function formatRegistrationYear(yearText) {
+  if (!yearText) return "-";
+
+  const match = String(yearText).match(/(19|20)\d{2}/);
+  if (!match) return yearText;
+
+  const year = Number(match[0]);
+
+  if (year >= 2019) {
+    const reiwa = year - 2018;
+    return `令和${reiwa === 1 ? "元" : reiwa}年（${year}年）`;
+  }
+
+  if (year >= 1989) {
+    const heisei = year - 1988;
+    return `平成${heisei === 1 ? "元" : heisei}年（${year}年）`;
+  }
+
+  if (year >= 1926) {
+    const showa = year - 1925;
+    return `昭和${showa === 1 ? "元" : showa}年（${year}年）`;
+  }
+
+  return `${year}年`;
 }
 
 function validImageUrl(url) {
