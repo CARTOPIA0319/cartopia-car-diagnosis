@@ -144,13 +144,14 @@ export async function POST(request) {
         continue;
       }
 
-      const chunks = chunk(results, 12);
+      const chunks = chunk(results, 5);
+
       const messages = [
         {
           type: "text",
           text:
             `${size}・${rawType}のおすすめ在庫です😊\n\n` +
-            `支払総額が高い順に${results.length}台表示します🚗`,
+            `展示販売中の車から先に、支払総額が高い順で${results.length}台すべて表示します🚗`,
         },
         ...chunks.slice(0, 4).map((vehicles, index) =>
           makeCarouselMessage(vehicles, `${size}・${rawType} ${index + 1}`)
@@ -280,10 +281,7 @@ export async function POST(request) {
 }
 
 function isRoughSearchText(text) {
-  return (
-    text.startsWith("軽自動車 ") ||
-    text.startsWith("普通車 ")
-  );
+  return text.startsWith("軽自動車 ") || text.startsWith("普通車 ");
 }
 
 function normalizeType(type) {
@@ -307,7 +305,18 @@ function findVehicles(size, type) {
 
       return hasSize && hasType;
     })
-    .sort((a, b) => priceNumber(b.totalPrice) - priceNumber(a.totalPrice));
+    .sort((a, b) => {
+      const statusA = statusPriority(a);
+      const statusB = statusPriority(b);
+
+      if (statusA !== statusB) return statusA - statusB;
+
+      return priceNumber(b.totalPrice) - priceNumber(a.totalPrice);
+    });
+}
+
+function statusPriority(vehicle) {
+  return vehicle.sourceStatus === "掲載在庫" ? 0 : 1;
 }
 
 function priceNumber(priceText) {
@@ -335,9 +344,34 @@ function makeCarouselMessage(vehicles, altText) {
   };
 }
 
+function displayStatus(vehicle) {
+  if (vehicle.sourceStatus === "掲載在庫") return "展示販売中";
+  if (vehicle.sourceStatus === "一時保存") return "販売可・未仕上げ";
+  return vehicle.sourceStatus || "-";
+}
+
 function makeVehicleBubble(vehicle) {
   const imageUrl = validImageUrl(vehicle.imageUrl);
-  const detailUrl = validUrl(vehicle.detailUrl) || validUrl(vehicle.gooUrl);
+
+  const isPublicVehicle = vehicle.sourceStatus === "掲載在庫";
+  const gooUrl = isPublicVehicle ? validUrl(vehicle.gooUrl) : "";
+
+  const detailContents = [
+    { type: "text", text: `年式：${vehicle.year || "-"}`, size: "sm", color: "#555555" },
+    { type: "text", text: `走行距離：${vehicle.mileage || "-"}`, size: "sm", color: "#555555" },
+    { type: "text", text: `色：${vehicle.color || "-"}`, size: "sm", color: "#555555", wrap: true },
+    { type: "text", text: `状態：${displayStatus(vehicle)}`, size: "sm", color: "#555555" },
+  ];
+
+  if (!isPublicVehicle) {
+    detailContents.push({
+      type: "text",
+      text: "✨ 仕上げ・掲載準備中",
+      size: "sm",
+      color: "#D97706",
+      wrap: true,
+    });
+  }
 
   const bubble = {
     type: "bubble",
@@ -360,26 +394,45 @@ function makeVehicleBubble(vehicle) {
           size: "sm",
           color: "#555555",
           wrap: true,
-          maxLines: 3,
         },
-        {
-          type: "text",
-          text: `支払総額 ${vehicle.totalPrice || "お問い合わせ"}`,
-          weight: "bold",
-          size: "lg",
-          color: "#D97706",
-          wrap: true,
-        },
+        ...(vehicle.gradeExtraInfo
+          ? [
+              {
+                type: "text",
+                text: vehicle.gradeExtraInfo,
+                size: "sm",
+                color: "#333333",
+                wrap: true,
+              },
+            ]
+          : []),
         {
           type: "box",
           layout: "vertical",
           spacing: "xs",
           contents: [
-            { type: "text", text: `年式：${vehicle.year || "-"}`, size: "sm", color: "#555555" },
-            { type: "text", text: `走行距離：${vehicle.mileage || "-"}`, size: "sm", color: "#555555" },
-            { type: "text", text: `色：${vehicle.color || "-"}`, size: "sm", color: "#555555", wrap: true },
-            { type: "text", text: `状態：${vehicle.sourceStatus || "-"}`, size: "sm", color: "#555555" },
+            {
+              type: "text",
+              text: `車両本体価格 ${vehicle.bodyPrice || "お問い合わせ"}`,
+              size: "sm",
+              color: "#555555",
+              wrap: true,
+            },
+            {
+              type: "text",
+              text: `支払総額 ${vehicle.totalPrice || "お問い合わせ"}`,
+              weight: "bold",
+              size: "lg",
+              color: "#D97706",
+              wrap: true,
+            },
           ],
+        },
+        {
+          type: "box",
+          layout: "vertical",
+          spacing: "xs",
+          contents: detailContents,
         },
       ],
     },
@@ -412,14 +465,14 @@ function makeVehicleBubble(vehicle) {
     };
   }
 
-  if (detailUrl) {
+  if (gooUrl) {
     bubble.footer.contents.unshift({
       type: "button",
       style: "secondary",
       action: {
         type: "uri",
         label: "詳細を見る",
-        uri: detailUrl,
+        uri: gooUrl,
       },
     });
   }
