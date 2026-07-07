@@ -520,7 +520,7 @@ function makeVehicleBubble(vehicle) {
       }
     : undefined;
 
-  const bubble = {
+  return {
     type: "bubble",
     size: "mega",
 
@@ -534,9 +534,10 @@ function makeVehicleBubble(vehicle) {
       type: "box",
       layout: "vertical",
       spacing: "sm",
-      paddingAll: "14px",
+      paddingAll: "12px",
       ...(bodyAction ? { action: bodyAction } : {}),
       contents: [
+        makeVehicleTitleBox(vehicle),
         {
           type: "text",
           text: `支払総額 ${vehicle.totalPrice || "お問い合わせ"}`,
@@ -544,31 +545,13 @@ function makeVehicleBubble(vehicle) {
           size: "xl",
           color: "#D97706",
           wrap: true,
+          margin: "sm",
         },
         {
           type: "text",
           text: `車両本体価格 ${vehicle.bodyPrice || "お問い合わせ"}`,
           size: "xs",
           color: "#666666",
-          wrap: true,
-        },
-        {
-          type: "separator",
-          margin: "sm",
-        },
-        {
-          type: "text",
-          text: vehicle.carName || vehicle.title || "車両情報",
-          weight: "bold",
-          size: "lg",
-          color: "#0B1F3A",
-          wrap: true,
-        },
-        {
-          type: "text",
-          text: vehicle.gradeName || vehicle.description || "",
-          size: "sm",
-          color: "#444444",
           wrap: true,
         },
         ...(vehicle.gradeExtraInfo
@@ -579,6 +562,7 @@ function makeVehicleBubble(vehicle) {
                 size: "sm",
                 color: "#333333",
                 wrap: true,
+                margin: "sm",
               },
             ]
           : []),
@@ -617,8 +601,6 @@ function makeVehicleBubble(vehicle) {
       ],
     },
   };
-
-  return bubble;
 }
 
 function makeHeroImage(imageUrl, vehicle, gooUrl) {
@@ -626,12 +608,7 @@ function makeHeroImage(imageUrl, vehicle, gooUrl) {
     type: "box",
     layout: "vertical",
     height: "190px",
-    action: gooUrl
-      ? {
-          type: "uri",
-          uri: gooUrl,
-        }
-      : undefined,
+    action: gooUrl ? { type: "uri", uri: gooUrl } : undefined,
     contents: [
       {
         type: "image",
@@ -640,43 +617,134 @@ function makeHeroImage(imageUrl, vehicle, gooUrl) {
         aspectRatio: "16:9",
         aspectMode: "cover",
       },
+      makeStatusRibbon(vehicle),
+      makeBrandPlate(),
+    ],
+  };
+}
+
+function makeStatusRibbon(vehicle) {
+  return {
+    type: "box",
+    layout: "horizontal",
+    position: "absolute",
+    offsetTop: "0px",
+    offsetStart: "0px",
+    width: "138px",
+    height: "34px",
+    backgroundColor: "#0B1F3A",
+    contents: [
+      {
+        type: "text",
+        text: displayStatus(vehicle),
+        size: "xs",
+        color: "#E5D08A",
+        weight: "bold",
+        gravity: "center",
+        align: "center",
+      },
+      {
+        type: "text",
+        text: "／",
+        size: "xxl",
+        color: "#0B1F3A",
+        gravity: "center",
+        margin: "none",
+      },
+    ],
+  };
+}
+
+function makeBrandPlate() {
+  return {
+    type: "box",
+    layout: "horizontal",
+    position: "absolute",
+    offsetBottom: "0px",
+    offsetStart: "0px",
+    offsetEnd: "0px",
+    height: "50px",
+    backgroundColor: "#00000099",
+    paddingStart: "10px",
+    paddingEnd: "10px",
+    paddingTop: "6px",
+    paddingBottom: "6px",
+    contents: [
       {
         type: "box",
         layout: "vertical",
-        position: "absolute",
-        offsetTop: "10px",
-        offsetStart: "10px",
-        backgroundColor: "#0B1F3A",
-        cornerRadius: "xl",
-        paddingAll: "6px",
+        width: "38px",
+        height: "38px",
+        cornerRadius: "19px",
+        borderColor: "#E5D08A",
+        borderWidth: "2px",
+        justifyContent: "center",
+        alignItems: "center",
         contents: [
           {
             type: "text",
-            text: displayStatus(vehicle),
-            size: "xs",
-            color: "#FFFFFF",
+            text: "C",
+            size: "lg",
             weight: "bold",
+            color: "#E5D08A",
+            align: "center",
           },
         ],
       },
       {
         type: "box",
         layout: "vertical",
-        position: "absolute",
-        offsetBottom: "10px",
-        offsetEnd: "10px",
-        backgroundColor: "#00000099",
-        cornerRadius: "md",
-        paddingAll: "5px",
+        margin: "sm",
+        spacing: "none",
         contents: [
           {
             type: "text",
             text: "CARTOPIA",
-            size: "xs",
+            size: "sm",
             color: "#E5D08A",
             weight: "bold",
           },
+          {
+            type: "text",
+            text: "－カーとぴあ－",
+            size: "xxs",
+            color: "#FFFFFF",
+          },
+          {
+            type: "text",
+            text: "車のことを、ずっと",
+            size: "xxs",
+            color: "#FFFFFF",
+          },
         ],
+      },
+    ],
+  };
+}
+
+function makeVehicleTitleBox(vehicle) {
+  return {
+    type: "box",
+    layout: "vertical",
+    backgroundColor: "#0B1F3A",
+    cornerRadius: "md",
+    paddingAll: "9px",
+    contents: [
+      {
+        type: "text",
+        text: vehicle.carName || vehicle.title || "車両情報",
+        weight: "bold",
+        size: "md",
+        color: "#E5D08A",
+        wrap: true,
+      },
+      {
+        type: "text",
+        text: vehicle.gradeName || vehicle.description || "",
+        size: "xs",
+        color: "#FFFFFF",
+        wrap: true,
+        margin: "xs",
       },
     ],
   };
@@ -690,8 +758,8 @@ function makeInfoRow(vehicle) {
     margin: "sm",
     contents: [
       makeInfoBox("初度登録", formatRegistrationYear(vehicle.year)),
-      makeInfoBox("走行距離", vehicle.mileage || "-"),
-      makeInfoBox("状態", displayStatus(vehicle)),
+      makeInfoBox("走行距離", formatMileage(vehicle.mileage)),
+      makeInfoBox("車体色", vehicle.color || "-"),
     ],
   };
 }
@@ -701,9 +769,12 @@ function makeInfoBox(label, value) {
     type: "box",
     layout: "vertical",
     flex: 1,
+    height: "58px",
     backgroundColor: "#F3F4F6",
     cornerRadius: "md",
     paddingAll: "6px",
+    justifyContent: "center",
+    alignItems: "center",
     contents: [
       {
         type: "text",
@@ -721,6 +792,7 @@ function makeInfoBox(label, value) {
         weight: "bold",
         align: "center",
         wrap: true,
+        margin: "xs",
       },
     ],
   };
@@ -750,6 +822,34 @@ function formatRegistrationYear(yearText) {
   }
 
   return `${year}年`;
+}
+
+function formatMileage(mileageText) {
+  if (!mileageText) return "-";
+
+  const text = String(mileageText)
+    .replace(/Ｋ/g, "K")
+    .replace(/ｋ/g, "k")
+    .replace(/,/g, "")
+    .trim();
+
+  if (text.includes("走不明")) return "走不明";
+
+  const numberText = text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0];
+  if (!numberText) return mileageText;
+
+  const value = Number(numberText);
+  if (!Number.isFinite(value)) return mileageText;
+
+  let km;
+
+  if (text.includes("万K") || text.includes("万k") || text.includes("万km")) {
+    km = value >= 1000 ? value : value * 10000;
+  } else {
+    km = value;
+  }
+
+  return `${Math.round(km).toLocaleString("ja-JP")}km`;
 }
 
 function validImageUrl(url) {
