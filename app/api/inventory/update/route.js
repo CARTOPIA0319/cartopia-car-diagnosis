@@ -2,6 +2,25 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
+const BASE_URL = "https://motorgate.jp";
+const PUBLIC_LIST_URL =
+  "https://motorgate.jp/stock/newsearch/stocklist/index/1/100";
+
+const SAVED_LIST_URLS = [
+  "https://motorgate.jp/stock/savelist",
+  "https://motorgate.jp/stock/savelist/index/2",
+  "https://motorgate.jp/stock/savelist/index/3",
+];
+
+function json(data) {
+  return new Response(JSON.stringify(data, null, 2), {
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+    },
+  });
+}
+
 function addCookies(jar, setCookieText) {
   if (!setCookieText) return jar;
 
@@ -32,15 +51,6 @@ function jarToCookie(jar) {
 async function readUtf8Text(response) {
   const buffer = await response.arrayBuffer();
   return new TextDecoder("utf-8", { fatal: false }).decode(buffer);
-}
-
-function json(data) {
-  return new Response(JSON.stringify(data, null, 2), {
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "no-store",
-    },
-  });
 }
 
 function decodeHtmlEntities(text) {
@@ -91,7 +101,7 @@ function compactText(text) {
     .trim();
 }
 
-function absoluteUrl(src, baseUrl) {
+function absoluteUrl(src, baseUrl = BASE_URL) {
   if (!src) return "";
   if (src.startsWith("http://") || src.startsWith("https://")) return src;
   if (src.startsWith("//")) return `https:${src}`;
@@ -99,6 +109,84 @@ function absoluteUrl(src, baseUrl) {
   return new URL(src, baseUrl).toString();
 }
 
+function fixBasicMojibake(text) {
+  return String(text || "")
+    .replace(/蟷ｴ/g, "年")
+    .replace(/譛�/g, "月")
+    .replace(/荳⑫/g, "万K")
+    .replace(/荳��/g, "万円")
+    .replace(/讀�/g, "検")
+    .replace(/霆頑､懈紛蛯吩ｻ�/g, "車検整備付")
+    .replace(/萓｡譬ｼ/g, "価格")
+    .replace(/邱城｡�/g, "総額")
+    .trim();
+}
+
+function toHalfWidthAscii(text) {
+  return String(text || "").replace(/[！-～]/g, (char) =>
+    String.fromCharCode(char.charCodeAt(0) - 0xfee0)
+  );
+}
+
+function normalizeTypeKey(type) {
+  const value = toHalfWidthAscii(String(type || ""))
+    .replace(/：/g, ":")
+    .replace(/　/g, " ")
+    .trim();
+
+  if (/^suv$/i.test(value)) return "SUV";
+  if (/^ev・hv$/i.test(value)) return "EV・HV";
+  if (value === "ＳＵＶ") return "SUV";
+  if (value === "ＥＶ・ＨＶ") return "EV・HV";
+
+  return value;
+}
+
+function normalizeTypeText(text) {
+  return fixBasicMojibake(
+    decodeHtmlEntities(String(text || ""))
+      .replace(/Ｔ/g, "T")
+      .replace(/Ｙ/g, "Y")
+      .replace(/Ｐ/g, "P")
+      .replace(/Ｅ/g, "E")
+      .replace(/ｔ/g, "t")
+      .replace(/ｙ/g, "y")
+      .replace(/ｐ/g, "p")
+      .replace(/ｅ/g, "e")
+      .replace(/：/g, ":")
+      .replace(/\r/g, " ")
+      .replace(/\n/g, " ")
+      .replace(/　/g, " ")
+  );
+}
+
+function extractTypesFromText(text) {
+  const fixed = normalizeTypeText(text);
+  const types = [];
+  const regex = /TYPE\s*:\s*([^\s<>"'&]+)/gi;
+  let match;
+
+  while ((match = regex.exec(fixed)) !== null) {
+    const type = compactText(match[1]).replace(/[、,。]/g, "");
+
+    if (
+      type &&
+      !type.includes(".") &&
+      !type.includes("_") &&
+      !types.includes(type)
+    ) {
+      types.push(type);
+    }
+  }
+
+  return types;
+}
+
+function buildTypeKeys(types) {
+  return Array.from(
+    new Set(types.map((type) => normalizeTypeKey(type)).filter(Boolean))
+  );
+}
 function extractRawHrefValues(html) {
   return Array.from(
     String(html || "").matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi)
@@ -137,14 +225,14 @@ function extractTdByClass(rowHtml, className) {
 function extractNameAnchorHtml(nameCellHtml) {
   const carModelDiv =
     nameCellHtml.match(
-      /<div\\b[^>]*class=["'][^"']*car-model[^"']*["'][^>]*>([\\s\\S]*?)<\\/div>/i
+      /<div\b[^>]*class=["'][^"']*car-model[^"']*["'][^>]*>([\s\S]*?)<\/div>/i
     )?.[1] || nameCellHtml;
 
-  return carModelDiv.match(/<a\\b[^>]*>([\\s\\S]*?)<\\/a>/i)?.[1] || "";
+  return carModelDiv.match(/<a\b[^>]*>([\s\S]*?)<\/a>/i)?.[1] || "";
 }
 
 function extractLiTexts(html) {
-  return Array.from(String(html || "").matchAll(/<li\\b[^>]*>([\\s\\S]*?)<\\/li>/gi))
+  return Array.from(String(html || "").matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi))
     .map((m) => cleanHtmlToText(m[1]))
     .map((text) => compactText(text))
     .filter(Boolean);
@@ -214,84 +302,6 @@ function getQueryParamDecoded(urlText, name) {
   return fixBasicMojibake(percentDecodeUtf8(getQueryParamRaw(urlText, name)));
 }
 
-function fixBasicMojibake(text) {
-  return String(text || "")
-    .replace(/蟷ｴ/g, "年")
-    .replace(/譛�/g, "月")
-    .replace(/荳⑫/g, "万K")
-    .replace(/荳��/g, "万円")
-    .replace(/讀�/g, "検")
-    .replace(/霆頑､懈紛蛯吩ｻ�/g, "車検整備付")
-    .replace(/萓｡譬ｼ/g, "価格")
-    .replace(/邱城｡�/g, "総額")
-    .trim();
-}
-
-function toHalfWidthAscii(text) {
-  return String(text || "").replace(/[！-～]/g, (char) =>
-    String.fromCharCode(char.charCodeAt(0) - 0xfee0)
-  );
-}
-
-function normalizeTypeText(text) {
-  return fixBasicMojibake(
-    decodeHtmlEntities(String(text || ""))
-      .replace(/Ｔ/g, "T")
-      .replace(/Ｙ/g, "Y")
-      .replace(/Ｐ/g, "P")
-      .replace(/Ｅ/g, "E")
-      .replace(/ｔ/g, "t")
-      .replace(/ｙ/g, "y")
-      .replace(/ｐ/g, "p")
-      .replace(/ｅ/g, "e")
-      .replace(/：/g, ":")
-      .replace(/\r/g, " ")
-      .replace(/\n/g, " ")
-      .replace(/　/g, " ")
-  );
-}
-
-function normalizeTypeKey(type) {
-  const value = toHalfWidthAscii(String(type || ""))
-    .replace(/：/g, ":")
-    .replace(/　/g, " ")
-    .trim();
-
-  if (/^suv$/i.test(value)) return "SUV";
-  if (/^ev・hv$/i.test(value)) return "EV・HV";
-  if (value === "ＳＵＶ") return "SUV";
-  if (value === "ＥＶ・ＨＶ") return "EV・HV";
-
-  return value;
-}
-function extractTypesFromText(text) {
-  const fixed = normalizeTypeText(text);
-  const types = [];
-  const regex = /TYPE\s*:\s*([^\s<>"'&]+)/gi;
-  let match;
-
-  while ((match = regex.exec(fixed)) !== null) {
-    const type = compactText(match[1]).replace(/[、,。]/g, "");
-
-    if (
-      type &&
-      !type.includes(".") &&
-      !type.includes("_") &&
-      !types.includes(type)
-    ) {
-      types.push(type);
-    }
-  }
-
-  return types;
-}
-
-function buildTypeKeys(types) {
-  return Array.from(
-    new Set(types.map((type) => normalizeTypeKey(type)).filter(Boolean))
-  );
-}
-
 function extractVehicleRows(html) {
   const rows = [];
   const regex =
@@ -309,7 +319,61 @@ function extractVehicleRows(html) {
   return rows;
 }
 
-function parseVehicleRow(row, baseUrl, qualityImageMap) {
+function extractValueNearLabel(html, label) {
+  const text = String(html || "");
+
+  const patterns = [
+    new RegExp(
+      `${label}[\\s\\S]{0,800}?<input\\b[^>]*value=["']([^"']*)["'][^>]*>`,
+      "i"
+    ),
+    new RegExp(
+      `${label}[\\s\\S]{0,800}?<textarea\\b[^>]*>([\\s\\S]*?)<\\/textarea>`,
+      "i"
+    ),
+    new RegExp(
+      `${label}[\\s\\S]{0,800}?<td\\b[^>]*>([\\s\\S]*?)<\\/td>`,
+      "i"
+    ),
+  ];
+
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match?.[1]) {
+      return compactText(cleanHtmlToText(decodeHtmlEntities(match[1])));
+    }
+  }
+
+  return "";
+}
+
+function extractInputValueByNameLike(html, nameLike) {
+  const regex = new RegExp(
+    `<input\\b[^>]*name=["'][^"']*${nameLike}[^"']*["'][^>]*value=["']([^"']*)["'][^>]*>`,
+    "i"
+  );
+
+  return compactText(cleanHtmlToText(decodeHtmlEntities(html.match(regex)?.[1] || "")));
+}
+
+function extractTextareaValueByNameLike(html, nameLike) {
+  const regex = new RegExp(
+    `<textarea\\b[^>]*name=["'][^"']*${nameLike}[^"']*["'][^>]*>([\\s\\S]*?)<\\/textarea>`,
+    "i"
+  );
+
+  return compactText(cleanHtmlToText(decodeHtmlEntities(html.match(regex)?.[1] || "")));
+}
+
+function extractGradeExtraInfo(html) {
+  return (
+    extractValueNearLabel(html, "グレード付加情報") ||
+    extractTextareaValueByNameLike(html, "grade") ||
+    extractInputValueByNameLike(html, "grade")
+  );
+}
+
+function parseVehicleRow(row, baseUrl, qualityImageMap, sourceStatus) {
   const { stockId, rowHtml } = row;
 
   const rawHrefs = extractRawHrefValues(rowHtml);
@@ -320,7 +384,10 @@ function parseVehicleRow(row, baseUrl, qualityImageMap) {
     rawHrefs.find((href) => href.includes("get_tire_from_car_model")) || "";
 
   const detailUrl = findFirstUrl(urls, "/stock/detail");
-  const editUrl = findFirstUrl(urls, "/car/edit/new");
+  const editUrl =
+    findFirstUrl(urls, "/car/edit/new") ||
+    findFirstUrl(urls, "/car/newregist/register");
+
   const gooUrl = findFirstUrl(urls, "goo-net.com");
 
   const carName = getQueryParamDecoded(rawTireHref, "car_name");
@@ -386,6 +453,7 @@ function parseVehicleRow(row, baseUrl, qualityImageMap) {
     description,
     carName,
     gradeName,
+    gradeExtraInfo: "",
     classificationName,
     year,
     mileage,
@@ -398,19 +466,23 @@ function parseVehicleRow(row, baseUrl, qualityImageMap) {
     detailUrl,
     editUrl,
     gooUrl,
+    sourceStatus,
     types: [],
     typeKeys: [],
   };
 }
-
-async function fetchVehicleTypesFromEditPage(jar, vehicle) {
+async function fetchVehicleDetailFromEditPage(jar, vehicle) {
   if (!vehicle.editUrl) {
     return {
+      ...vehicle,
+      gradeExtraInfo: "",
       types: [],
       typeKeys: [],
-      status: null,
-      success: false,
-      reason: "editUrl not found",
+      typeResult: {
+        status: null,
+        success: false,
+        reason: "editUrl not found",
+      },
     };
   }
 
@@ -432,12 +504,18 @@ async function fetchVehicleTypesFromEditPage(jar, vehicle) {
   const types = Array.from(new Set([...typesFromHtml, ...typesFromText]));
   const typeKeys = buildTypeKeys(types);
 
+  const gradeExtraInfo = extractGradeExtraInfo(html);
+
   return {
+    ...vehicle,
+    gradeExtraInfo,
     types,
     typeKeys,
-    status: res.status,
-    success: types.length > 0,
-    reason: types.length > 0 ? "" : "TYPE not found",
+    typeResult: {
+      status: res.status,
+      success: types.length > 0,
+      reason: types.length > 0 ? "" : "TYPE not found",
+    },
   };
 }
 
@@ -462,16 +540,9 @@ async function mapWithConcurrency(items, limit, mapper) {
   return results;
 }
 
-async function attachVehicleTypes(jar, vehicles) {
+async function attachVehicleDetails(jar, vehicles) {
   return await mapWithConcurrency(vehicles, 5, async (vehicle) => {
-    const typeResult = await fetchVehicleTypesFromEditPage(jar, vehicle);
-
-    return {
-      ...vehicle,
-      types: typeResult.types,
-      typeKeys: typeResult.typeKeys,
-      typeResult,
-    };
+    return await fetchVehicleDetailFromEditPage(jar, vehicle);
   });
 }
 
@@ -482,6 +553,7 @@ function toInventoryVehicle(vehicle) {
     description: vehicle.description,
     carName: vehicle.carName,
     gradeName: vehicle.gradeName,
+    gradeExtraInfo: vehicle.gradeExtraInfo || "",
     classificationName: vehicle.classificationName,
     year: vehicle.year,
     mileage: vehicle.mileage,
@@ -493,10 +565,11 @@ function toInventoryVehicle(vehicle) {
     imageUrl: vehicle.imageUrl,
     detailUrl: vehicle.detailUrl,
     gooUrl: vehicle.gooUrl,
-    sourceStatus: "掲載在庫",
+    sourceStatus: vehicle.sourceStatus,
     types: vehicle.types || [],
     typeKeys: vehicle.typeKeys || [],
     updatedAt: new Date().toISOString(),
+    typeResult: vehicle.typeResult || null,
   };
 }
 
@@ -554,6 +627,102 @@ async function loginMotorgate() {
   };
 }
 
+async function fetchVehicleListPage(jar, url, sourceStatus) {
+  const res = await fetch(url, {
+    headers: {
+      Cookie: jarToCookie(jar),
+      Referer: "https://motorgate.jp/top",
+      "User-Agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+      "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+    },
+  });
+
+  const html = await readUtf8Text(res);
+  const qualityImageMap = extractQualityImageMap(html, url);
+  const vehicleRows = extractVehicleRows(html);
+
+  const parsedVehicles = vehicleRows.map((row) =>
+    parseVehicleRow(row, url, qualityImageMap, sourceStatus)
+  );
+
+  return {
+    url,
+    status: res.status,
+    containsLoginForm: html.includes('name="client_pw"'),
+    foundRows: vehicleRows.length,
+    imageMapCount: Object.keys(qualityImageMap).length,
+    vehicles: parsedVehicles,
+  };
+}
+
+async function fetchPublishedVehicles(jar) {
+  const page = await fetchVehicleListPage(
+    jar,
+    PUBLIC_LIST_URL,
+    "掲載在庫"
+  );
+
+  const vehiclesWithDetails = await attachVehicleDetails(jar, page.vehicles);
+
+  return {
+    ...page,
+    vehicles: vehiclesWithDetails.map(toInventoryVehicle),
+  };
+}
+
+async function fetchSavedVehicles(jar) {
+  const pages = [];
+  const allVehicles = [];
+
+  for (const url of SAVED_LIST_URLS) {
+    const page = await fetchVehicleListPage(
+      jar,
+      url,
+      "一時保存"
+    );
+
+    pages.push({
+      url,
+      status: page.status,
+      foundRows: page.foundRows,
+      imageMapCount: page.imageMapCount,
+      containsLoginForm: page.containsLoginForm,
+    });
+
+    allVehicles.push(...page.vehicles);
+
+    if (page.foundRows === 0) break;
+  }
+
+  const uniqueMap = new Map();
+
+  for (const vehicle of allVehicles) {
+    if (vehicle.stockId) uniqueMap.set(vehicle.stockId, vehicle);
+  }
+
+  const uniqueVehicles = Array.from(uniqueMap.values());
+  const vehiclesWithDetails = await attachVehicleDetails(jar, uniqueVehicles);
+
+  return {
+    pages,
+    vehicles: vehiclesWithDetails.map(toInventoryVehicle),
+  };
+}
+
+function mergeVehicles(publishedVehicles, savedVehicles) {
+  const map = new Map();
+
+  for (const vehicle of publishedVehicles || []) {
+    if (vehicle.stockId) map.set(vehicle.stockId, vehicle);
+  }
+
+  for (const vehicle of savedVehicles || []) {
+    if (vehicle.stockId) map.set(vehicle.stockId, vehicle);
+  }
+
+  return Array.from(map.values());
+}
 async function fetchCurrentInventoryFromGitHub() {
   const token = process.env.GITHUB_TOKEN;
   const owner = process.env.GITHUB_OWNER || "CARTOPIA0319";
@@ -563,13 +732,10 @@ async function fetchCurrentInventoryFromGitHub() {
 
   if (!token) {
     return {
+      sha: null,
       inventory: {
-        updatedAt: "",
-        source: "motorgate",
-        counts: {},
         vehicles: [],
       },
-      sha: null,
     };
   }
 
@@ -585,13 +751,10 @@ async function fetchCurrentInventoryFromGitHub() {
 
   if (!current.ok) {
     return {
+      sha: null,
       inventory: {
-        updatedAt: "",
-        source: "motorgate",
-        counts: {},
         vehicles: [],
       },
-      sha: null,
     };
   }
 
@@ -599,69 +762,9 @@ async function fetchCurrentInventoryFromGitHub() {
   const text = Buffer.from(currentJson.content || "", "base64").toString("utf8");
 
   return {
-    inventory: JSON.parse(text),
     sha: currentJson.sha || null,
+    inventory: JSON.parse(text),
   };
-}
-async function fetchFullInventoryFromMotorgate() {
-  const { jar, loginStatus } = await loginMotorgate();
-
-  const publicListUrl =
-    "https://motorgate.jp/stock/newsearch/stocklist/index/1/100";
-
-  const res = await fetch(publicListUrl, {
-    headers: {
-      Cookie: jarToCookie(jar),
-      Referer: "https://motorgate.jp/top",
-      "User-Agent":
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
-      "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
-    },
-  });
-
-  const html = await readUtf8Text(res);
-
-  const qualityImageMap = extractQualityImageMap(html, publicListUrl);
-  const vehicleRows = extractVehicleRows(html);
-
-  const parsedVehicles = vehicleRows.map((row) =>
-    parseVehicleRow(row, publicListUrl, qualityImageMap)
-  );
-
-  const vehiclesWithTypes = await attachVehicleTypes(jar, parsedVehicles);
-  const inventoryVehicles = vehiclesWithTypes.map(toInventoryVehicle);
-
-  return {
-    loginStatus,
-    listStatus: res.status,
-    containsLoginForm: html.includes('name="client_pw"'),
-    foundRows: vehicleRows.length,
-    parsedVehicles: parsedVehicles.length,
-    imageMapCount: Object.keys(qualityImageMap).length,
-    vehicles: inventoryVehicles,
-  };
-}
-
-function keepSavedVehicles(oldVehicles) {
-  return (oldVehicles || []).filter(
-    (vehicle) => vehicle.sourceStatus === "一時保存"
-  );
-}
-
-function mergePublishedAndSavedVehicles(publishedVehicles, savedVehicles) {
-  const map = new Map();
-
-  for (const vehicle of publishedVehicles || []) {
-    if (vehicle.stockId) map.set(vehicle.stockId, vehicle);
-  }
-
-  for (const vehicle of savedVehicles || []) {
-    if (vehicle.stockId && !map.has(vehicle.stockId)) {
-      map.set(vehicle.stockId, vehicle);
-    }
-  }
-
-  return Array.from(map.values());
 }
 
 async function commitInventoryToGitHub(inventoryData, existingSha) {
@@ -713,38 +816,64 @@ async function commitInventoryToGitHub(inventoryData, existingSha) {
   };
 }
 
+function summarizeTypeResults(vehicles) {
+  const success = vehicles.filter((vehicle) => vehicle.typeResult?.success).length;
+  const failed = vehicles.length - success;
+
+  return {
+    success,
+    failed,
+  };
+}
+
+function summarizeGradeExtraInfo(vehicles) {
+  const found = vehicles.filter((vehicle) => vehicle.gradeExtraInfo).length;
+  const missing = vehicles.length - found;
+
+  return {
+    found,
+    missing,
+  };
+}
+
 export async function GET(request) {
   try {
     const url = new URL(request.url);
     const save = url.searchParams.get("save") === "1";
 
     const current = await fetchCurrentInventoryFromGitHub();
-    const result = await fetchFullInventoryFromMotorgate();
+    const { jar, loginStatus } = await loginMotorgate();
 
-    const savedVehicles = keepSavedVehicles(current.inventory.vehicles || []);
-    const mergedVehicles = mergePublishedAndSavedVehicles(
-      result.vehicles,
-      savedVehicles
-    );
+    const published = await fetchPublishedVehicles(jar);
+    const saved = await fetchSavedVehicles(jar);
+
+    const vehicles = mergeVehicles(published.vehicles, saved.vehicles);
 
     const inventoryData = {
       updatedAt: new Date().toISOString(),
       source: "motorgate",
-      updateMode: save ? "full-auto-refresh" : "preview",
+      updateMode: save ? "full-public-and-saved-refresh" : "preview",
       counts: {
-        publicVehicles: result.vehicles.length,
-        savedVehiclesKept: savedVehicles.length,
-        vehicles: mergedVehicles.length,
-        foundRows: result.foundRows,
-        parsedVehicles: result.parsedVehicles,
-        imageMapCount: result.imageMapCount,
+        publicVehicles: published.vehicles.length,
+        savedVehicles: saved.vehicles.length,
+        vehicles: vehicles.length,
+        publicFoundRows: published.foundRows,
+        savedFoundRows: saved.pages.reduce((sum, page) => sum + page.foundRows, 0),
+        publicImageMapCount: published.imageMapCount,
+        savedImageMapCount: saved.pages.reduce(
+          (sum, page) => sum + page.imageMapCount,
+          0
+        ),
       },
       checks: {
-        loginStatus: result.loginStatus,
-        listStatus: result.listStatus,
-        containsLoginForm: result.containsLoginForm,
+        loginStatus,
+        publicListStatus: published.status,
+        publicContainsLoginForm: published.containsLoginForm,
+        savedPages: saved.pages,
+        typeResults: summarizeTypeResults(vehicles),
+        gradeExtraInfo: summarizeGradeExtraInfo(vehicles),
       },
-      vehicles: save ? mergedVehicles : result.vehicles,
+      vehicles,
     };
 
     const github = save
@@ -756,12 +885,10 @@ export async function GET(request) {
 
     return json({
       success: true,
-      mode: save ? "full-auto-refresh" : "preview",
-      loginStatus: result.loginStatus,
-      listStatus: result.listStatus,
-      containsLoginForm: result.containsLoginForm,
-      counts: inventoryData.counts,
+      mode: inventoryData.updateMode,
       github,
+      counts: inventoryData.counts,
+      checks: inventoryData.checks,
       inventory: inventoryData,
     });
   } catch (e) {
