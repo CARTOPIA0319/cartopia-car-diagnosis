@@ -3,7 +3,8 @@ import inventory from "../../../data/inventory.json";
 const BUY_MENU_ID = "richmenu-45b4781911f21f5d5632ec63e211b449";
 const TOP_MENU_ID = "richmenu-19859bd6bf80b802dfc2171536ac089e";
 const VEHICLES_PER_PAGE = 9;
-const LOGO_BANNER_URL = "/E8D1A2AB-2334-4A73-AF07-FEC7756D044C.png";
+const LOGO_BANNER_URL =
+  "https://cartopia-car-diagnosis.vercel.app/E8D1A2AB-2334-4A73-AF07-FEC7756D044C.png";
 
 const topQuickReply = {
   items: [
@@ -325,7 +326,6 @@ function makeVehiclePageCarouselMessage(results, size, rawType, offset) {
     },
   };
 }
-
 function makeMoreBubble(results, nextOffset, size, rawType) {
   const remaining = results.length - nextOffset;
   const previewVehicles = results.slice(nextOffset, nextOffset + VEHICLES_PER_PAGE);
@@ -496,7 +496,7 @@ function makeVehicleBubble(vehicle) {
   const isPublicVehicle = vehicle.sourceStatus === "掲載在庫";
   const gooUrl = isPublicVehicle ? validUrl(vehicle.gooUrl) : "";
 
-  const bubble = {
+  return {
     type: "bubble",
     size: "mega",
 
@@ -582,8 +582,6 @@ function makeVehicleBubble(vehicle) {
       ],
     },
   };
-
-  return bubble;
 }
 
 function makeHeroImage(imageUrl, vehicle, gooUrl) {
@@ -608,7 +606,7 @@ function makeHeroImage(imageUrl, vehicle, gooUrl) {
 function makeLogoBanner() {
   return {
     type: "image",
-    url: absolutePublicUrl(LOGO_BANNER_URL),
+    url: LOGO_BANNER_URL,
     size: "full",
     aspectRatio: "5:1",
     aspectMode: "contain",
@@ -813,25 +811,6 @@ function formatMileage(mileageText) {
   }
 
   return `${Math.round(km).toLocaleString("ja-JP")}km`;
-}
-
-function absolutePublicUrl(path) {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_BASE_URL ||
-    process.env.VERCEL_URL ||
-    "";
-
-  const cleanPath = String(path || "").startsWith("/")
-    ? String(path || "")
-    : `/${path}`;
-
-  if (!baseUrl) return cleanPath;
-
-  const origin = String(baseUrl).startsWith("http")
-    ? String(baseUrl)
-    : `https://${baseUrl}`;
-
-  return `${origin}${cleanPath}`;
 }
 
 function validImageUrl(url) {
