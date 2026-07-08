@@ -3,8 +3,6 @@ import inventory from "../../../data/inventory.json";
 const BUY_MENU_ID = "richmenu-45b4781911f21f5d5632ec63e211b449";
 const TOP_MENU_ID = "richmenu-19859bd6bf80b802dfc2171536ac089e";
 const VEHICLES_PER_PAGE = 9;
-const LOGO_BANNER_URL =
-  "https://cartopia-car-diagnosis.vercel.app/E8D1A2AB-2334-4A73-AF07-FEC7756D044C.png";
 
 const topQuickReply = {
   items: [
@@ -326,6 +324,7 @@ function makeVehiclePageCarouselMessage(results, size, rawType, offset) {
     },
   };
 }
+
 function makeMoreBubble(results, nextOffset, size, rawType) {
   const remaining = results.length - nextOffset;
   const previewVehicles = results.slice(nextOffset, nextOffset + VEHICLES_PER_PAGE);
@@ -508,7 +507,6 @@ function makeVehicleBubble(vehicle) {
       ...(gooUrl ? { action: { type: "uri", uri: gooUrl } } : {}),
       contents: [
         ...(imageUrl ? [makeHeroImage(imageUrl, vehicle, gooUrl)] : []),
-        makeLogoBanner(),
         makeVehicleTitleBox(vehicle),
         {
           type: "box",
@@ -600,16 +598,6 @@ function makeHeroImage(imageUrl, vehicle, gooUrl) {
       },
       makeStatusRibbon(vehicle),
     ],
-  };
-}
-
-function makeLogoBanner() {
-  return {
-    type: "image",
-    url: LOGO_BANNER_URL,
-    size: "full",
-    aspectRatio: "5:1",
-    aspectMode: "contain",
   };
 }
 
