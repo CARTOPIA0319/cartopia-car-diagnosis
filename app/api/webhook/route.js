@@ -536,7 +536,7 @@ function makeVehicleBubble(vehicle) {
                   {
                     type: "text",
                     text: vehicle.gradeExtraInfo,
-                    size: "xs",
+                    size: "xxs",
                     color: "#333333",
                     wrap: true,
                     margin: "sm",
@@ -686,7 +686,7 @@ function makeInfoBox(label, value, kind) {
     type: "box",
     layout: "vertical",
     flex: 1,
-    height: "64px",
+    height: "78px",
     backgroundColor: "#F3F4F6",
     cornerRadius: "md",
     paddingAll: "6px",
