@@ -340,6 +340,11 @@ function makeMoreBubble(results, nextOffset, size, rawType) {
       spacing: "xs",
       backgroundColor: "#F8F5EF",
       paddingAll: "8px",
+      action: {
+        type: "postback",
+        data: `more|${size}|${rawType}|${nextOffset}`,
+        displayText: `次の${nextCount}台を見る`,
+      },
       contents: [
         {
           type: "box",
@@ -391,10 +396,10 @@ function makeMoreBubble(results, nextOffset, size, rawType) {
 }
 
 function getPreviewHeight(nextCount) {
-  if (nextCount <= 2) return "170px";
-  if (nextCount <= 4) return "126px";
-  if (nextCount <= 6) return "102px";
-  return "84px";
+  if (nextCount <= 2) return "154px";
+  if (nextCount <= 4) return "116px";
+  if (nextCount <= 6) return "94px";
+  return "78px";
 }
 
 function makePreviewRows(vehicles, size, rawType, nextOffset, nextCount, previewHeight) {
@@ -406,6 +411,10 @@ function makePreviewRows(vehicles, size, rawType, nextOffset, nextCount, preview
     makePreviewButtonBox(size, rawType, nextOffset, nextCount, previewHeight)
   );
 
+  if (previewItems.length % 2 === 1) {
+    previewItems.push(makeInvisibleSpacer(previewHeight));
+  }
+
   const rows = [];
 
   for (let i = 0; i < previewItems.length; i += 2) {
@@ -413,7 +422,7 @@ function makePreviewRows(vehicles, size, rawType, nextOffset, nextCount, preview
       type: "box",
       layout: "horizontal",
       spacing: "xs",
-      contents: previewItems.slice(i, i + 2),
+      contents: [previewItems[i], previewItems[i + 1]],
     });
   }
 
@@ -431,17 +440,7 @@ function makePreviewImageBox(vehicle, previewHeight) {
       height: previewHeight,
       backgroundColor: "#0B1F3A",
       cornerRadius: "md",
-      justifyContent: "center",
-      alignItems: "center",
-      contents: [
-        {
-          type: "text",
-          text: "写真未設定",
-          size: "xxs",
-          color: "#E5D08A",
-          align: "center",
-        },
-      ],
+      contents: [],
     };
   }
 
@@ -460,6 +459,17 @@ function makePreviewImageBox(vehicle, previewHeight) {
         aspectMode: "cover",
       },
     ],
+  };
+}
+
+function makeInvisibleSpacer(previewHeight) {
+  return {
+    type: "box",
+    layout: "vertical",
+    flex: 1,
+    height: previewHeight,
+    backgroundColor: "#F8F5EF",
+    contents: [],
   };
 }
 
