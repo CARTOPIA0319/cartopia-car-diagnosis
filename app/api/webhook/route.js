@@ -532,18 +532,7 @@ function makeVehicleBubble(vehicle) {
               wrap: true,
               margin: "none",
             },
-            ...(vehicle.gradeExtraInfo
-              ? [
-                  {
-                    type: "text",
-                    text: vehicle.gradeExtraInfo,
-                    size: "xxs",
-                    color: "#333333",
-                    wrap: true,
-                    margin: "sm",
-                  },
-                ]
-              : []),
+            makeGradeExtraBox(vehicle),
             makeInfoRow(vehicle),
             ...(gooUrl
               ? [
@@ -645,6 +634,25 @@ function makeVehicleTitleBox(vehicle) {
   };
 }
 
+function makeGradeExtraBox(vehicle) {
+  return {
+    type: "box",
+    layout: "vertical",
+    height: "66px",
+    margin: "sm",
+    contents: [
+      {
+        type: "text",
+        text: vehicle.gradeExtraInfo || "",
+        size: "xxs",
+        color: "#333333",
+        wrap: true,
+        maxLines: 4,
+      },
+    ],
+  };
+}
+
 function makeInfoRow(vehicle) {
   return {
     type: "box",
@@ -709,29 +717,158 @@ function getInfoValueSize(valueText, kind) {
 
   const plain = String(valueText || "").replace(/\n/g, "");
 
-  if (plain.length <= 7) return "xs";
+  if (plain.length <= 6) return "xs";
   return "xxs";
 }
 
 function formatColorName(colorText) {
-  const text = String(colorText || "").trim();
+  const text = String(colorText || "")
+    .replace(/\s+/g, "")
+    .trim();
 
   if (!text) return "-";
 
-  const charsPerLine = 7;
   const maxLines = 3;
-  const maxChars = charsPerLine * maxLines;
+  const maxCharsPerLine = 7;
+  const tokens = splitColorIntoTokens(text);
+  const lines = packTokensIntoLines(tokens, maxCharsPerLine);
 
-  if (text.length <= charsPerLine) {
-    return text;
+  if (lines.length <= maxLines) {
+    return lines.join("\n");
   }
 
-  if (text.length <= maxChars) {
-    return splitTextByLength(text, charsPerLine).join("\n");
+  const visibleLines = lines.slice(0, maxLines);
+  const hiddenText = lines.slice(maxLines).join("");
+  const lastLine = visibleLines[maxLines - 1] + hiddenText;
+
+  visibleLines[maxLines - 1] = truncateText(lastLine, maxCharsPerLine);
+
+  return visibleLines.join("\n");
+}
+
+function splitColorIntoTokens(text) {
+  const colorWords = [
+    "クリスタルシャイン",
+    "ホワイトパール",
+    "スーパーブラック",
+    "プレシャス",
+    "ラグジュアリー",
+    "クリスタル",
+    "メタリック",
+    "ブラック",
+    "ホワイト",
+    "シルバー",
+    "グリーン",
+    "ブルー",
+    "ブラウン",
+    "パープル",
+    "レッド",
+    "オレンジ",
+    "イエロー",
+    "ベージュ",
+    "グレー",
+    "グレイ",
+    "パール",
+    "マイカ",
+    "ガラス",
+    "フレーク",
+    "シャイン",
+    "アッシュ",
+    "ダーク",
+    "ライト",
+    "クール",
+    "スター",
+    "チタン",
+    "カッパー",
+    "ブロンズ",
+    "カーキ",
+    "アイボリー",
+    "クリーム",
+    "ワイン",
+    "ピンク",
+    "ゴールド",
+    "ネイビー",
+    "ターコイズ",
+  ].sort((a, b) => b.length - a.length);
+
+  const tokens = [];
+  let remaining = text;
+
+  while (remaining.length > 0) {
+    const matched = colorWords.find((word) => remaining.startsWith(word));
+
+    if (matched) {
+      tokens.push(matched);
+      remaining = remaining.slice(matched.length);
+      continue;
+    }
+
+    tokens.push(remaining[0]);
+    remaining = remaining.slice(1);
   }
 
-  const shortened = text.slice(0, maxChars - 1) + "…";
-  return splitTextByLength(shortened, charsPerLine).join("\n");
+  return mergeSingleCharTokens(tokens);
+}
+
+function mergeSingleCharTokens(tokens) {
+  const result = [];
+
+  for (const token of tokens) {
+    const lastIndex = result.length - 1;
+
+    if (
+      token.length === 1 &&
+      lastIndex >= 0 &&
+      result[lastIndex].length < 4
+    ) {
+      result[lastIndex] += token;
+    } else {
+      result.push(token);
+    }
+  }
+
+  return result;
+}
+
+function packTokensIntoLines(tokens, maxCharsPerLine) {
+  const lines = [];
+  let current = "";
+
+  for (const token of tokens) {
+    if (token.length > maxCharsPerLine) {
+      if (current) {
+        lines.push(current);
+        current = "";
+      }
+
+      const pieces = splitTextByLength(token, maxCharsPerLine);
+      lines.push(...pieces);
+      continue;
+    }
+
+    if (!current) {
+      current = token;
+      continue;
+    }
+
+    if ((current + token).length <= maxCharsPerLine) {
+      current += token;
+    } else {
+      lines.push(current);
+      current = token;
+    }
+  }
+
+  if (current) {
+    lines.push(current);
+  }
+
+  return lines;
+}
+
+function truncateText(text, maxChars) {
+  if (text.length <= maxChars) return text;
+  return `${text.slice(0, Math.max(1, maxChars - 1))}…`;
 }
 
 function splitTextByLength(text, length) {
