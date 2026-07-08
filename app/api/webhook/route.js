@@ -76,6 +76,16 @@ export async function POST(request) {
       const offset = Number(offsetText || "0");
       const results = findVehicles(size, normalizeType(rawType));
 
+      if (!results.length || offset >= results.length) {
+        await replyMessage(event.replyToken, [
+          {
+            type: "text",
+            text: "表示できる在庫はここまでです😊",
+          },
+        ]);
+        continue;
+      }
+
       await replyMessage(event.replyToken, [
         makeVehiclePageCarouselMessage(results, size, rawType, offset),
       ]);
@@ -340,21 +350,13 @@ function makeMoreBubble(results, nextOffset, size, rawType) {
       spacing: "xs",
       backgroundColor: "#F8F5EF",
       paddingAll: "8px",
-      action: {
-        type: "postback",
-        data: `more|${size}|${rawType}|${nextOffset}`,
-        displayText: `次の${nextCount}台を見る`,
-      },
       contents: [
         {
           type: "box",
           layout: "vertical",
           backgroundColor: "#0B1F3A",
           cornerRadius: "lg",
-          paddingTop: "8px",
-          paddingBottom: "8px",
-          paddingStart: "8px",
-          paddingEnd: "8px",
+          paddingAll: "8px",
           contents: [
             {
               type: "text",
@@ -381,14 +383,7 @@ function makeMoreBubble(results, nextOffset, size, rawType) {
           layout: "vertical",
           spacing: "xs",
           margin: "xs",
-          contents: makePreviewRows(
-            previewVehicles,
-            size,
-            rawType,
-            nextOffset,
-            nextCount,
-            previewHeight
-          ),
+          contents: makePreviewRows(previewVehicles, size, rawType, nextOffset, nextCount, previewHeight),
         },
       ],
     },
@@ -396,10 +391,10 @@ function makeMoreBubble(results, nextOffset, size, rawType) {
 }
 
 function getPreviewHeight(nextCount) {
-  if (nextCount <= 2) return "154px";
-  if (nextCount <= 4) return "116px";
-  if (nextCount <= 6) return "94px";
-  return "78px";
+  if (nextCount <= 2) return "220px";
+  if (nextCount <= 4) return "146px";
+  if (nextCount <= 6) return "108px";
+  return "82px";
 }
 
 function makePreviewRows(vehicles, size, rawType, nextOffset, nextCount, previewHeight) {
@@ -411,10 +406,6 @@ function makePreviewRows(vehicles, size, rawType, nextOffset, nextCount, preview
     makePreviewButtonBox(size, rawType, nextOffset, nextCount, previewHeight)
   );
 
-  if (previewItems.length % 2 === 1) {
-    previewItems.push(makeInvisibleSpacer(previewHeight));
-  }
-
   const rows = [];
 
   for (let i = 0; i < previewItems.length; i += 2) {
@@ -422,7 +413,7 @@ function makePreviewRows(vehicles, size, rawType, nextOffset, nextCount, preview
       type: "box",
       layout: "horizontal",
       spacing: "xs",
-      contents: [previewItems[i], previewItems[i + 1]],
+      contents: previewItems.slice(i, i + 2),
     });
   }
 
@@ -440,7 +431,11 @@ function makePreviewImageBox(vehicle, previewHeight) {
       height: previewHeight,
       backgroundColor: "#0B1F3A",
       cornerRadius: "md",
-      contents: [],
+      contents: [
+        {
+          type: "filler",
+        },
+      ],
     };
   }
 
@@ -459,17 +454,6 @@ function makePreviewImageBox(vehicle, previewHeight) {
         aspectMode: "cover",
       },
     ],
-  };
-}
-
-function makeInvisibleSpacer(previewHeight) {
-  return {
-    type: "box",
-    layout: "vertical",
-    flex: 1,
-    height: previewHeight,
-    backgroundColor: "#F8F5EF",
-    contents: [],
   };
 }
 
@@ -529,7 +513,6 @@ function makeVehicleBubble(vehicle) {
       layout: "vertical",
       spacing: "none",
       paddingAll: "0px",
-      ...(gooUrl ? { action: { type: "uri", uri: gooUrl } } : {}),
       contents: [
         ...(imageUrl ? [makeHeroImage(imageUrl, vehicle, gooUrl)] : []),
         makeVehicleTitleBox(vehicle),
@@ -544,7 +527,7 @@ function makeVehicleBubble(vehicle) {
           contents: [
             {
               type: "text",
-              text: `支払総額 ${vehicle.totalPrice || "お問い合わせ"}`,
+              text: `支払総額 ${safeText(vehicle.totalPrice, "お問い合わせ")}`,
               weight: "bold",
               size: "xl",
               color: "#D97706",
@@ -552,7 +535,7 @@ function makeVehicleBubble(vehicle) {
             },
             {
               type: "text",
-              text: `車両本体価格 ${vehicle.bodyPrice || "お問い合わせ"}`,
+              text: `車両本体価格 ${safeText(vehicle.bodyPrice, "お問い合わせ")}`,
               size: "xs",
               color: "#666666",
               wrap: true,
@@ -560,19 +543,7 @@ function makeVehicleBubble(vehicle) {
             },
             makeGradeExtraBox(vehicle),
             makeInfoRow(vehicle),
-            ...(gooUrl
-              ? [
-                  {
-                    type: "text",
-                    text: "タップで詳細を見る ↗",
-                    size: "xs",
-                    color: "#888888",
-                    align: "center",
-                    margin: "xs",
-                  },
-                ]
-              : []),
-            makeConsultButton(vehicle),
+            makeCardButtons(vehicle, gooUrl),
           ],
         },
       ],
@@ -585,7 +556,6 @@ function makeHeroImage(imageUrl, vehicle, gooUrl) {
     type: "box",
     layout: "vertical",
     height: "176px",
-    action: gooUrl ? { type: "uri", uri: gooUrl } : undefined,
     contents: [
       {
         type: "image",
@@ -593,6 +563,7 @@ function makeHeroImage(imageUrl, vehicle, gooUrl) {
         size: "full",
         aspectRatio: "16:9",
         aspectMode: "cover",
+        ...(gooUrl ? { action: { type: "uri", uri: gooUrl } } : {}),
       },
       makeStatusRibbon(vehicle),
     ],
@@ -642,7 +613,7 @@ function makeVehicleTitleBox(vehicle) {
     contents: [
       {
         type: "text",
-        text: vehicle.carName || vehicle.title || "車両情報",
+        text: safeText(vehicle.carName || vehicle.title, "車両情報"),
         weight: "bold",
         size: "lg",
         color: "#E5D08A",
@@ -650,7 +621,7 @@ function makeVehicleTitleBox(vehicle) {
       },
       {
         type: "text",
-        text: vehicle.gradeName || vehicle.description || "",
+        text: safeText(vehicle.gradeName || vehicle.description, ""),
         size: "sm",
         color: "#FFFFFF",
         wrap: true,
@@ -669,7 +640,7 @@ function makeGradeExtraBox(vehicle) {
     contents: [
       {
         type: "text",
-        text: vehicle.gradeExtraInfo || "",
+        text: safeText(vehicle.gradeExtraInfo, ""),
         size: "xxs",
         color: "#333333",
         wrap: true,
@@ -694,7 +665,7 @@ function makeInfoRow(vehicle) {
 }
 
 function makeInfoBox(label, value, kind) {
-  const valueText = value || "-";
+  const valueText = safeText(value, "-");
   const isColor = kind === "color";
   const valueSize = getInfoValueSize(valueText, kind);
 
@@ -842,11 +813,7 @@ function mergeSingleCharTokens(tokens) {
   for (const token of tokens) {
     const lastIndex = result.length - 1;
 
-    if (
-      token.length === 1 &&
-      lastIndex >= 0 &&
-      result[lastIndex].length < 4
-    ) {
+    if (token.length === 1 && lastIndex >= 0 && result[lastIndex].length < 4) {
       result[lastIndex] += token;
     } else {
       result.push(token);
@@ -907,18 +874,42 @@ function splitTextByLength(text, length) {
   return result;
 }
 
-function makeConsultButton(vehicle) {
-  return {
+function makeCardButtons(vehicle, gooUrl) {
+  const contents = [];
+
+  if (gooUrl) {
+    contents.push({
+      type: "button",
+      style: "secondary",
+      height: "sm",
+      flex: 1,
+      action: {
+        type: "uri",
+        label: "詳細を見る",
+        uri: gooUrl,
+      },
+    });
+  }
+
+  contents.push({
     type: "button",
     style: "primary",
     height: "sm",
     color: "#0B1F3A",
-    margin: "sm",
+    flex: 1,
     action: {
       type: "message",
       label: "💬 この車を相談",
-      text: `この車について相談したい：${vehicle.carName || vehicle.title}`,
+      text: `この車について相談したい：${safeText(vehicle.carName || vehicle.title, "車両情報")}`,
     },
+  });
+
+  return {
+    type: "box",
+    layout: "horizontal",
+    spacing: "xs",
+    margin: "sm",
+    contents,
   };
 }
 
@@ -926,7 +917,7 @@ function formatRegistrationYear(yearText) {
   if (!yearText) return "-";
 
   const match = String(yearText).match(/(19|20)\d{2}/);
-  if (!match) return yearText;
+  if (!match) return safeText(yearText, "-");
 
   const year = Number(match[0]);
 
@@ -960,10 +951,10 @@ function formatMileage(mileageText) {
   if (text.includes("走不明")) return "走不明";
 
   const numberText = text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0];
-  if (!numberText) return mileageText;
+  if (!numberText) return safeText(mileageText, "-");
 
   const value = Number(numberText);
-  if (!Number.isFinite(value)) return mileageText;
+  if (!Number.isFinite(value)) return safeText(mileageText, "-");
 
   let km;
 
@@ -974,6 +965,11 @@ function formatMileage(mileageText) {
   }
 
   return `${Math.round(km).toLocaleString("ja-JP")}km`;
+}
+
+function safeText(value, fallback = "-") {
+  if (value === undefined || value === null || value === "") return fallback;
+  return String(value);
 }
 
 function validImageUrl(url) {
