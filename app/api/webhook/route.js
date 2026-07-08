@@ -498,11 +498,10 @@ function makeVehicleBubble(vehicle) {
   return {
     type: "bubble",
     size: "mega",
-
     body: {
       type: "box",
       layout: "vertical",
-      spacing: "sm",
+      spacing: "none",
       paddingAll: "0px",
       ...(gooUrl ? { action: { type: "uri", uri: gooUrl } } : {}),
       contents: [
@@ -514,6 +513,8 @@ function makeVehicleBubble(vehicle) {
           paddingStart: "14px",
           paddingEnd: "14px",
           paddingTop: "10px",
+          paddingBottom: "10px",
+          spacing: "xs",
           contents: [
             {
               type: "text",
@@ -529,7 +530,7 @@ function makeVehicleBubble(vehicle) {
               size: "xs",
               color: "#666666",
               wrap: true,
-              margin: "xs",
+              margin: "none",
             },
             ...(vehicle.gradeExtraInfo
               ? [
@@ -556,26 +557,8 @@ function makeVehicleBubble(vehicle) {
                   },
                 ]
               : []),
+            makeConsultButton(vehicle),
           ],
-        },
-      ],
-    },
-
-    footer: {
-      type: "box",
-      layout: "vertical",
-      paddingAll: "10px",
-      contents: [
-        {
-          type: "button",
-          style: "primary",
-          height: "sm",
-          color: "#0B1F3A",
-          action: {
-            type: "message",
-            label: "💬 この車を相談",
-            text: `この車について相談したい：${vehicle.carName || vehicle.title}`,
-          },
         },
       ],
     },
@@ -745,6 +728,21 @@ function formatColorName(colorText) {
   }
 
   return `${text.slice(0, 8)}\n${text.slice(8, 14)}…`;
+}
+
+function makeConsultButton(vehicle) {
+  return {
+    type: "button",
+    style: "primary",
+    height: "sm",
+    color: "#0B1F3A",
+    margin: "sm",
+    action: {
+      type: "message",
+      label: "💬 この車を相談",
+      text: `この車について相談したい：${vehicle.carName || vehicle.title}`,
+    },
+  };
 }
 
 function formatRegistrationYear(yearText) {
