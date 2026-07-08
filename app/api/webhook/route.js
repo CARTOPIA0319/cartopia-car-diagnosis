@@ -696,7 +696,7 @@ function makeInfoBox(label, value, kind) {
             weight: "bold",
             align: "center",
             wrap: true,
-            maxLines: isColor ? 2 : 3,
+            maxLines: isColor ? 3 : 3,
           },
         ],
       },
@@ -709,8 +709,7 @@ function getInfoValueSize(valueText, kind) {
 
   const plain = String(valueText || "").replace(/\n/g, "");
 
-  if (plain.length <= 8) return "xs";
-  if (plain.length <= 16) return "xxs";
+  if (plain.length <= 7) return "xs";
   return "xxs";
 }
 
@@ -719,15 +718,30 @@ function formatColorName(colorText) {
 
   if (!text) return "-";
 
-  if (text.length <= 8) {
+  const charsPerLine = 7;
+  const maxLines = 3;
+  const maxChars = charsPerLine * maxLines;
+
+  if (text.length <= charsPerLine) {
     return text;
   }
 
-  if (text.length <= 16) {
-    return `${text.slice(0, 8)}\n${text.slice(8)}`;
+  if (text.length <= maxChars) {
+    return splitTextByLength(text, charsPerLine).join("\n");
   }
 
-  return `${text.slice(0, 8)}\n${text.slice(8, 14)}…`;
+  const shortened = text.slice(0, maxChars - 1) + "…";
+  return splitTextByLength(shortened, charsPerLine).join("\n");
+}
+
+function splitTextByLength(text, length) {
+  const result = [];
+
+  for (let i = 0; i < text.length; i += length) {
+    result.push(text.slice(i, i + length));
+  }
+
+  return result;
 }
 
 function makeConsultButton(vehicle) {
