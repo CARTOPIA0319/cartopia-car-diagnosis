@@ -3,6 +3,7 @@ import inventory from "../../../data/inventory.json";
 const BUY_MENU_ID = "richmenu-45b4781911f21f5d5632ec63e211b449";
 const TOP_MENU_ID = "richmenu-19859bd6bf80b802dfc2171536ac089e";
 const VEHICLES_PER_PAGE = 9;
+const PREVIEW_HEIGHT = "86px";
 
 const topQuickReply = {
   items: [
@@ -286,6 +287,8 @@ function findVehicles(size, type) {
 
   return vehicles
     .filter((vehicle) => {
+      if (!vehicle) return false;
+
       const keys = [...(vehicle.types || []), ...(vehicle.typeKeys || [])];
 
       const hasSize = keys.includes(size);
@@ -305,7 +308,7 @@ function findVehicles(size, type) {
 }
 
 function statusPriority(vehicle) {
-  return vehicle.sourceStatus === "掲載在庫" ? 0 : 1;
+  return vehicle?.sourceStatus === "掲載在庫" ? 0 : 1;
 }
 
 function priceNumber(priceText) {
@@ -339,7 +342,6 @@ function makeMoreBubble(results, nextOffset, size, rawType) {
   const remaining = results.length - nextOffset;
   const previewVehicles = results.slice(nextOffset, nextOffset + VEHICLES_PER_PAGE);
   const nextCount = previewVehicles.length;
-  const previewHeight = getPreviewHeight(nextCount);
 
   return {
     type: "bubble",
@@ -347,33 +349,33 @@ function makeMoreBubble(results, nextOffset, size, rawType) {
     body: {
       type: "box",
       layout: "vertical",
-      spacing: "xs",
+      spacing: "sm",
       backgroundColor: "#F8F5EF",
-      paddingAll: "8px",
+      paddingAll: "14px",
       contents: [
         {
           type: "box",
           layout: "vertical",
           backgroundColor: "#0B1F3A",
           cornerRadius: "lg",
-          paddingAll: "8px",
+          paddingAll: "12px",
           contents: [
             {
               type: "text",
               text: `他に該当車が${remaining}台あるよ😊`,
               weight: "bold",
-              size: remaining >= 10 ? "sm" : "md",
+              size: remaining >= 10 ? "md" : "lg",
               color: "#FFFFFF",
               align: "center",
-              wrap: false,
+              wrap: true,
             },
             {
               type: "text",
               text: "次に表示される車はこちら💁",
-              size: "xs",
+              size: "sm",
               color: "#E5D08A",
               align: "center",
-              wrap: false,
+              wrap: true,
               margin: "xs",
             },
           ],
@@ -381,46 +383,40 @@ function makeMoreBubble(results, nextOffset, size, rawType) {
         {
           type: "box",
           layout: "vertical",
-          spacing: "xs",
-          margin: "xs",
-          contents: makePreviewRows(previewVehicles, size, rawType, nextOffset, nextCount, previewHeight),
+          spacing: "sm",
+          contents: makePreviewRows(previewVehicles, size, rawType, nextOffset, nextCount),
         },
       ],
     },
   };
 }
 
-function getPreviewHeight(nextCount) {
-  if (nextCount <= 2) return "220px";
-  if (nextCount <= 4) return "146px";
-  if (nextCount <= 6) return "108px";
-  return "82px";
-}
+function makePreviewRows(vehicles, size, rawType, nextOffset, nextCount) {
+  const previewItems = vehicles.map(makePreviewImageBox);
 
-function makePreviewRows(vehicles, size, rawType, nextOffset, nextCount, previewHeight) {
-  const previewItems = vehicles.map((vehicle) =>
-    makePreviewImageBox(vehicle, previewHeight)
-  );
-
-  previewItems.push(
-    makePreviewButtonBox(size, rawType, nextOffset, nextCount, previewHeight)
-  );
+  previewItems.push(makePreviewButtonBox(size, rawType, nextOffset, nextCount));
 
   const rows = [];
 
   for (let i = 0; i < previewItems.length; i += 2) {
+    const rowItems = previewItems.slice(i, i + 2);
+
+    if (rowItems.length === 1) {
+      rowItems.push(makePreviewSpacerBox());
+    }
+
     rows.push({
       type: "box",
       layout: "horizontal",
-      spacing: "xs",
-      contents: previewItems.slice(i, i + 2),
+      spacing: "sm",
+      contents: rowItems,
     });
   }
 
   return rows;
 }
 
-function makePreviewImageBox(vehicle, previewHeight) {
+function makePreviewImageBox(vehicle) {
   const imageUrl = validImageUrl(vehicle?.imageUrl);
 
   if (!imageUrl) {
@@ -428,12 +424,15 @@ function makePreviewImageBox(vehicle, previewHeight) {
       type: "box",
       layout: "vertical",
       flex: 1,
-      height: previewHeight,
-      backgroundColor: "#0B1F3A",
+      height: PREVIEW_HEIGHT,
+      backgroundColor: "#F8F5EF",
       cornerRadius: "md",
       contents: [
         {
-          type: "filler",
+          type: "text",
+          text: " ",
+          size: "xxs",
+          color: "#F8F5EF",
         },
       ],
     };
@@ -443,7 +442,7 @@ function makePreviewImageBox(vehicle, previewHeight) {
     type: "box",
     layout: "vertical",
     flex: 1,
-    height: previewHeight,
+    height: PREVIEW_HEIGHT,
     cornerRadius: "md",
     contents: [
       {
@@ -457,12 +456,30 @@ function makePreviewImageBox(vehicle, previewHeight) {
   };
 }
 
-function makePreviewButtonBox(size, rawType, nextOffset, nextCount, previewHeight) {
+function makePreviewSpacerBox() {
   return {
     type: "box",
     layout: "vertical",
     flex: 1,
-    height: previewHeight,
+    height: PREVIEW_HEIGHT,
+    backgroundColor: "#F8F5EF",
+    contents: [
+      {
+        type: "text",
+        text: " ",
+        size: "xxs",
+        color: "#F8F5EF",
+      },
+    ],
+  };
+}
+
+function makePreviewButtonBox(size, rawType, nextOffset, nextCount) {
+  return {
+    type: "box",
+    layout: "vertical",
+    flex: 1,
+    height: PREVIEW_HEIGHT,
     backgroundColor: "#0B1F3A",
     cornerRadius: "md",
     justifyContent: "center",
@@ -478,7 +495,7 @@ function makePreviewButtonBox(size, rawType, nextOffset, nextCount, previewHeigh
         text: `次の${nextCount}台`,
         color: "#FFFFFF",
         weight: "bold",
-        size: nextCount <= 4 ? "md" : "sm",
+        size: "md",
         align: "center",
       },
       {
@@ -486,7 +503,7 @@ function makePreviewButtonBox(size, rawType, nextOffset, nextCount, previewHeigh
         text: "を見る",
         color: "#E5D08A",
         weight: "bold",
-        size: nextCount <= 4 ? "md" : "sm",
+        size: "md",
         align: "center",
         margin: "none",
       },
@@ -495,15 +512,18 @@ function makePreviewButtonBox(size, rawType, nextOffset, nextCount, previewHeigh
 }
 
 function displayStatus(vehicle) {
-  if (vehicle.sourceStatus === "掲載在庫") return "展示販売中";
-  if (vehicle.sourceStatus === "一時保存") return "販売可・未仕上げ";
-  return vehicle.sourceStatus || "-";
+  const status = safeText(vehicle?.sourceStatus, "-");
+
+  if (status === "掲載在庫") return "展示販売中";
+  if (status === "一時保存") return "販売可・未仕上げ";
+
+  return status;
 }
 
 function makeVehicleBubble(vehicle) {
-  const imageUrl = validImageUrl(vehicle.imageUrl);
-  const isPublicVehicle = vehicle.sourceStatus === "掲載在庫";
-  const gooUrl = isPublicVehicle ? validUrl(vehicle.gooUrl) : "";
+  const imageUrl = validImageUrl(vehicle?.imageUrl);
+  const isPublicVehicle = vehicle?.sourceStatus === "掲載在庫";
+  const gooUrl = isPublicVehicle ? validUrl(vehicle?.gooUrl) : "";
 
   return {
     type: "bubble",
@@ -527,7 +547,7 @@ function makeVehicleBubble(vehicle) {
           contents: [
             {
               type: "text",
-              text: `支払総額 ${safeText(vehicle.totalPrice, "お問い合わせ")}`,
+              text: `支払総額 ${safeText(vehicle?.totalPrice, "お問い合わせ")}`,
               weight: "bold",
               size: "xl",
               color: "#D97706",
@@ -535,7 +555,7 @@ function makeVehicleBubble(vehicle) {
             },
             {
               type: "text",
-              text: `車両本体価格 ${safeText(vehicle.bodyPrice, "お問い合わせ")}`,
+              text: `車両本体価格 ${safeText(vehicle?.bodyPrice, "お問い合わせ")}`,
               size: "xs",
               color: "#666666",
               wrap: true,
@@ -543,7 +563,19 @@ function makeVehicleBubble(vehicle) {
             },
             makeGradeExtraBox(vehicle),
             makeInfoRow(vehicle),
-            makeCardButtons(vehicle, gooUrl),
+            ...(gooUrl
+              ? [
+                  {
+                    type: "text",
+                    text: "タップで詳細を見る ↗",
+                    size: "xs",
+                    color: "#888888",
+                    align: "center",
+                    margin: "xs",
+                  },
+                ]
+              : []),
+            makeConsultButton(vehicle),
           ],
         },
       ],
@@ -556,6 +588,7 @@ function makeHeroImage(imageUrl, vehicle, gooUrl) {
     type: "box",
     layout: "vertical",
     height: "176px",
+    ...(gooUrl ? { action: { type: "uri", uri: gooUrl } } : {}),
     contents: [
       {
         type: "image",
@@ -563,7 +596,6 @@ function makeHeroImage(imageUrl, vehicle, gooUrl) {
         size: "full",
         aspectRatio: "16:9",
         aspectMode: "cover",
-        ...(gooUrl ? { action: { type: "uri", uri: gooUrl } } : {}),
       },
       makeStatusRibbon(vehicle),
     ],
@@ -613,7 +645,7 @@ function makeVehicleTitleBox(vehicle) {
     contents: [
       {
         type: "text",
-        text: safeText(vehicle.carName || vehicle.title, "車両情報"),
+        text: safeText(vehicle?.carName || vehicle?.title, "車両情報"),
         weight: "bold",
         size: "lg",
         color: "#E5D08A",
@@ -621,7 +653,7 @@ function makeVehicleTitleBox(vehicle) {
       },
       {
         type: "text",
-        text: safeText(vehicle.gradeName || vehicle.description, ""),
+        text: safeText(vehicle?.gradeName || vehicle?.description, ""),
         size: "sm",
         color: "#FFFFFF",
         wrap: true,
@@ -640,7 +672,7 @@ function makeGradeExtraBox(vehicle) {
     contents: [
       {
         type: "text",
-        text: safeText(vehicle.gradeExtraInfo, ""),
+        text: safeText(vehicle?.gradeExtraInfo, ""),
         size: "xxs",
         color: "#333333",
         wrap: true,
@@ -657,9 +689,9 @@ function makeInfoRow(vehicle) {
     spacing: "xs",
     margin: "sm",
     contents: [
-      makeInfoBox("初度登録", formatRegistrationYear(vehicle.year), "normal"),
-      makeInfoBox("走行距離", formatMileage(vehicle.mileage), "normal"),
-      makeInfoBox("車体色", formatColorName(vehicle.color), "color"),
+      makeInfoBox("初度登録", formatRegistrationYear(vehicle?.year), "normal"),
+      makeInfoBox("走行距離", formatMileage(vehicle?.mileage), "normal"),
+      makeInfoBox("車体色", formatColorName(vehicle?.color), "color"),
     ],
   };
 }
@@ -874,42 +906,18 @@ function splitTextByLength(text, length) {
   return result;
 }
 
-function makeCardButtons(vehicle, gooUrl) {
-  const contents = [];
-
-  if (gooUrl) {
-    contents.push({
-      type: "button",
-      style: "secondary",
-      height: "sm",
-      flex: 1,
-      action: {
-        type: "uri",
-        label: "詳細を見る",
-        uri: gooUrl,
-      },
-    });
-  }
-
-  contents.push({
+function makeConsultButton(vehicle) {
+  return {
     type: "button",
     style: "primary",
     height: "sm",
     color: "#0B1F3A",
-    flex: 1,
+    margin: "sm",
     action: {
       type: "message",
       label: "💬 この車を相談",
-      text: `この車について相談したい：${safeText(vehicle.carName || vehicle.title, "車両情報")}`,
+      text: `この車について相談したい：${safeText(vehicle?.carName || vehicle?.title, "車両情報")}`,
     },
-  });
-
-  return {
-    type: "box",
-    layout: "horizontal",
-    spacing: "xs",
-    margin: "sm",
-    contents,
   };
 }
 
