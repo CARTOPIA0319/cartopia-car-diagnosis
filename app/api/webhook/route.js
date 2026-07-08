@@ -3,6 +3,7 @@ import inventory from "../../../data/inventory.json";
 const BUY_MENU_ID = "richmenu-45b4781911f21f5d5632ec63e211b449";
 const TOP_MENU_ID = "richmenu-19859bd6bf80b802dfc2171536ac089e";
 const VEHICLES_PER_PAGE = 9;
+const LOGO_BANNER_URL = "/E8D1A2AB-2334-4A73-AF07-FEC7756D044C.png";
 
 const topQuickReply = {
   items: [
@@ -507,6 +508,7 @@ function makeVehicleBubble(vehicle) {
       ...(gooUrl ? { action: { type: "uri", uri: gooUrl } } : {}),
       contents: [
         ...(imageUrl ? [makeHeroImage(imageUrl, vehicle, gooUrl)] : []),
+        makeLogoBanner(),
         makeVehicleTitleBox(vehicle),
         {
           type: "box",
@@ -603,6 +605,16 @@ function makeHeroImage(imageUrl, vehicle, gooUrl) {
   };
 }
 
+function makeLogoBanner() {
+  return {
+    type: "image",
+    url: absolutePublicUrl(LOGO_BANNER_URL),
+    size: "full",
+    aspectRatio: "5:1",
+    aspectMode: "contain",
+  };
+}
+
 function makeStatusRibbon(vehicle) {
   const status = displayStatus(vehicle);
   const isLong = status.length >= 7;
@@ -673,20 +685,21 @@ function makeInfoRow(vehicle) {
     contents: [
       makeInfoBox("初度登録", formatRegistrationYear(vehicle.year), "normal"),
       makeInfoBox("走行距離", formatMileage(vehicle.mileage), "normal"),
-      makeInfoBox("車体色", vehicle.color || "-", "color"),
+      makeInfoBox("車体色", formatColorName(vehicle.color), "color"),
     ],
   };
 }
 
 function makeInfoBox(label, value, kind) {
   const valueText = value || "-";
-  const isLongColor = kind === "color" && valueText.length >= 8;
+  const isColor = kind === "color";
+  const valueSize = getInfoValueSize(valueText, kind);
 
   return {
     type: "box",
     layout: "vertical",
     flex: 1,
-    height: "78px",
+    height: "64px",
     backgroundColor: "#F3F4F6",
     cornerRadius: "md",
     paddingAll: "6px",
@@ -709,16 +722,43 @@ function makeInfoBox(label, value, kind) {
           {
             type: "text",
             text: valueText,
-            size: isLongColor ? "xxs" : "xs",
+            size: valueSize,
             color: "#222222",
             weight: "bold",
             align: "center",
             wrap: true,
+            maxLines: isColor ? 2 : 3,
           },
         ],
       },
     ],
   };
+}
+
+function getInfoValueSize(valueText, kind) {
+  if (kind !== "color") return "xs";
+
+  const plain = String(valueText || "").replace(/\n/g, "");
+
+  if (plain.length <= 8) return "xs";
+  if (plain.length <= 16) return "xxs";
+  return "xxs";
+}
+
+function formatColorName(colorText) {
+  const text = String(colorText || "").trim();
+
+  if (!text) return "-";
+
+  if (text.length <= 8) {
+    return text;
+  }
+
+  if (text.length <= 16) {
+    return `${text.slice(0, 8)}\n${text.slice(8)}`;
+  }
+
+  return `${text.slice(0, 8)}\n${text.slice(8, 14)}…`;
 }
 
 function formatRegistrationYear(yearText) {
@@ -773,6 +813,25 @@ function formatMileage(mileageText) {
   }
 
   return `${Math.round(km).toLocaleString("ja-JP")}km`;
+}
+
+function absolutePublicUrl(path) {
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    process.env.VERCEL_URL ||
+    "";
+
+  const cleanPath = String(path || "").startsWith("/")
+    ? String(path || "")
+    : `/${path}`;
+
+  if (!baseUrl) return cleanPath;
+
+  const origin = String(baseUrl).startsWith("http")
+    ? String(baseUrl)
+    : `https://${baseUrl}`;
+
+  return `${origin}${cleanPath}`;
 }
 
 function validImageUrl(url) {
