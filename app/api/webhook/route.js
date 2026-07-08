@@ -336,33 +336,33 @@ function makeMoreBubble(results, nextOffset, size, rawType) {
     body: {
       type: "box",
       layout: "vertical",
-      spacing: "md",
+      spacing: "sm",
       backgroundColor: "#F8F5EF",
-      paddingAll: "14px",
+      paddingAll: "10px",
       contents: [
         {
           type: "box",
           layout: "vertical",
           backgroundColor: "#0B1F3A",
           cornerRadius: "lg",
-          paddingAll: "14px",
+          paddingAll: "10px",
           contents: [
             {
               type: "text",
-              text: `他に該当車両が${remaining}台あります😊`,
+              text: `他に該当車が${remaining}台あるよ😊`,
               weight: "bold",
-              size: "lg",
+              size: "md",
               color: "#FFFFFF",
               align: "center",
-              wrap: true,
+              wrap: false,
             },
             {
               type: "text",
-              text: "次に表示される車はこちらです🚗",
-              size: "sm",
+              text: "次に表示される車はこちら💁",
+              size: "xs",
               color: "#E5D08A",
               align: "center",
-              wrap: true,
+              wrap: false,
               margin: "xs",
             },
           ],
@@ -370,7 +370,7 @@ function makeMoreBubble(results, nextOffset, size, rawType) {
         {
           type: "box",
           layout: "vertical",
-          spacing: "sm",
+          spacing: "xs",
           contents: makePreviewRows(previewVehicles, size, rawType, nextOffset, nextCount),
         },
       ],
@@ -379,29 +379,19 @@ function makeMoreBubble(results, nextOffset, size, rawType) {
 }
 
 function makePreviewRows(vehicles, size, rawType, nextOffset, nextCount) {
+  const previewItems = vehicles.map((vehicle) => makePreviewImageBox(vehicle));
+  previewItems.push(makePreviewButtonBox(size, rawType, nextOffset, nextCount));
+
   const rows = [];
 
-  for (let i = 0; i < 8; i += 2) {
+  for (let i = 0; i < previewItems.length; i += 2) {
     rows.push({
       type: "box",
       layout: "horizontal",
-      spacing: "sm",
-      contents: [
-        makePreviewImageBox(vehicles[i]),
-        makePreviewImageBox(vehicles[i + 1]),
-      ],
+      spacing: "xs",
+      contents: previewItems.slice(i, i + 2),
     });
   }
-
-  rows.push({
-    type: "box",
-    layout: "horizontal",
-    spacing: "sm",
-    contents: [
-      makePreviewImageBox(vehicles[8]),
-      makePreviewButtonBox(size, rawType, nextOffset, nextCount),
-    ],
-  });
 
   return rows;
 }
@@ -414,17 +404,17 @@ function makePreviewImageBox(vehicle) {
       type: "box",
       layout: "vertical",
       flex: 1,
-      height: "86px",
-      backgroundColor: "#E5E7EB",
+      height: "62px",
+      backgroundColor: "#0B1F3A",
       cornerRadius: "md",
       justifyContent: "center",
       alignItems: "center",
       contents: [
         {
           type: "text",
-          text: "画像準備中",
-          size: "xs",
-          color: "#999999",
+          text: "写真未設定",
+          size: "xxs",
+          color: "#E5D08A",
           align: "center",
         },
       ],
@@ -435,6 +425,7 @@ function makePreviewImageBox(vehicle) {
     type: "box",
     layout: "vertical",
     flex: 1,
+    height: "62px",
     cornerRadius: "md",
     contents: [
       {
@@ -453,7 +444,7 @@ function makePreviewButtonBox(size, rawType, nextOffset, nextCount) {
     type: "box",
     layout: "vertical",
     flex: 1,
-    height: "86px",
+    height: "62px",
     backgroundColor: "#0B1F3A",
     cornerRadius: "md",
     justifyContent: "center",
@@ -469,7 +460,7 @@ function makePreviewButtonBox(size, rawType, nextOffset, nextCount) {
         text: `次の${nextCount}台`,
         color: "#FFFFFF",
         weight: "bold",
-        size: "md",
+        size: "sm",
         align: "center",
       },
       {
@@ -477,8 +468,9 @@ function makePreviewButtonBox(size, rawType, nextOffset, nextCount) {
         text: "を見る",
         color: "#E5D08A",
         weight: "bold",
-        size: "md",
+        size: "sm",
         align: "center",
+        margin: "none",
       },
     ],
   };
