@@ -329,6 +329,7 @@ function makeMoreBubble(results, nextOffset, size, rawType) {
   const remaining = results.length - nextOffset;
   const previewVehicles = results.slice(nextOffset, nextOffset + VEHICLES_PER_PAGE);
   const nextCount = previewVehicles.length;
+  const previewHeight = getPreviewHeight(nextCount);
 
   return {
     type: "bubble",
@@ -336,22 +337,25 @@ function makeMoreBubble(results, nextOffset, size, rawType) {
     body: {
       type: "box",
       layout: "vertical",
-      spacing: "sm",
+      spacing: "xs",
       backgroundColor: "#F8F5EF",
-      paddingAll: "10px",
+      paddingAll: "8px",
       contents: [
         {
           type: "box",
           layout: "vertical",
           backgroundColor: "#0B1F3A",
           cornerRadius: "lg",
-          paddingAll: "10px",
+          paddingTop: "8px",
+          paddingBottom: "8px",
+          paddingStart: "8px",
+          paddingEnd: "8px",
           contents: [
             {
               type: "text",
               text: `他に該当車が${remaining}台あるよ😊`,
               weight: "bold",
-              size: "md",
+              size: remaining >= 10 ? "sm" : "md",
               color: "#FFFFFF",
               align: "center",
               wrap: false,
@@ -371,16 +375,36 @@ function makeMoreBubble(results, nextOffset, size, rawType) {
           type: "box",
           layout: "vertical",
           spacing: "xs",
-          contents: makePreviewRows(previewVehicles, size, rawType, nextOffset, nextCount),
+          margin: "xs",
+          contents: makePreviewRows(
+            previewVehicles,
+            size,
+            rawType,
+            nextOffset,
+            nextCount,
+            previewHeight
+          ),
         },
       ],
     },
   };
 }
 
-function makePreviewRows(vehicles, size, rawType, nextOffset, nextCount) {
-  const previewItems = vehicles.map((vehicle) => makePreviewImageBox(vehicle));
-  previewItems.push(makePreviewButtonBox(size, rawType, nextOffset, nextCount));
+function getPreviewHeight(nextCount) {
+  if (nextCount <= 2) return "170px";
+  if (nextCount <= 4) return "126px";
+  if (nextCount <= 6) return "102px";
+  return "84px";
+}
+
+function makePreviewRows(vehicles, size, rawType, nextOffset, nextCount, previewHeight) {
+  const previewItems = vehicles.map((vehicle) =>
+    makePreviewImageBox(vehicle, previewHeight)
+  );
+
+  previewItems.push(
+    makePreviewButtonBox(size, rawType, nextOffset, nextCount, previewHeight)
+  );
 
   const rows = [];
 
@@ -396,7 +420,7 @@ function makePreviewRows(vehicles, size, rawType, nextOffset, nextCount) {
   return rows;
 }
 
-function makePreviewImageBox(vehicle) {
+function makePreviewImageBox(vehicle, previewHeight) {
   const imageUrl = validImageUrl(vehicle?.imageUrl);
 
   if (!imageUrl) {
@@ -404,7 +428,7 @@ function makePreviewImageBox(vehicle) {
       type: "box",
       layout: "vertical",
       flex: 1,
-      height: "62px",
+      height: previewHeight,
       backgroundColor: "#0B1F3A",
       cornerRadius: "md",
       justifyContent: "center",
@@ -425,7 +449,7 @@ function makePreviewImageBox(vehicle) {
     type: "box",
     layout: "vertical",
     flex: 1,
-    height: "62px",
+    height: previewHeight,
     cornerRadius: "md",
     contents: [
       {
@@ -439,12 +463,12 @@ function makePreviewImageBox(vehicle) {
   };
 }
 
-function makePreviewButtonBox(size, rawType, nextOffset, nextCount) {
+function makePreviewButtonBox(size, rawType, nextOffset, nextCount, previewHeight) {
   return {
     type: "box",
     layout: "vertical",
     flex: 1,
-    height: "62px",
+    height: previewHeight,
     backgroundColor: "#0B1F3A",
     cornerRadius: "md",
     justifyContent: "center",
@@ -460,7 +484,7 @@ function makePreviewButtonBox(size, rawType, nextOffset, nextCount) {
         text: `次の${nextCount}台`,
         color: "#FFFFFF",
         weight: "bold",
-        size: "sm",
+        size: nextCount <= 4 ? "md" : "sm",
         align: "center",
       },
       {
@@ -468,7 +492,7 @@ function makePreviewButtonBox(size, rawType, nextOffset, nextCount) {
         text: "を見る",
         color: "#E5D08A",
         weight: "bold",
-        size: "sm",
+        size: nextCount <= 4 ? "md" : "sm",
         align: "center",
         margin: "none",
       },
