@@ -429,10 +429,7 @@ function makePreviewImageBox(vehicle) {
       cornerRadius: "md",
       contents: [
         {
-          type: "text",
-          text: " ",
-          size: "xxs",
-          color: "#F8F5EF",
+          type: "filler",
         },
       ],
     };
@@ -465,10 +462,7 @@ function makePreviewSpacerBox() {
     backgroundColor: "#F8F5EF",
     contents: [
       {
-        type: "text",
-        text: " ",
-        size: "xxs",
-        color: "#F8F5EF",
+        type: "filler",
       },
     ],
   };
@@ -524,6 +518,45 @@ function makeVehicleBubble(vehicle) {
   const imageUrl = validImageUrl(vehicle?.imageUrl);
   const isPublicVehicle = vehicle?.sourceStatus === "掲載在庫";
   const gooUrl = isPublicVehicle ? validUrl(vehicle?.gooUrl) : "";
+  const gradeExtraInfo = optionalText(vehicle?.gradeExtraInfo);
+
+  const bodyContents = [
+    {
+      type: "text",
+      text: `支払総額 ${safeText(vehicle?.totalPrice, "お問い合わせ")}`,
+      weight: "bold",
+      size: "xl",
+      color: "#D97706",
+      wrap: true,
+    },
+    {
+      type: "text",
+      text: `車両本体価格 ${safeText(vehicle?.bodyPrice, "お問い合わせ")}`,
+      size: "xs",
+      color: "#666666",
+      wrap: true,
+      margin: "none",
+    },
+  ];
+
+  if (gradeExtraInfo) {
+    bodyContents.push(makeGradeExtraBox(gradeExtraInfo));
+  }
+
+  bodyContents.push(makeInfoRow(vehicle));
+
+  if (gooUrl) {
+    bodyContents.push({
+      type: "text",
+      text: "タップで詳細を見る ↗",
+      size: "xs",
+      color: "#888888",
+      align: "center",
+      margin: "xs",
+    });
+  }
+
+  bodyContents.push(makeConsultButton(vehicle));
 
   return {
     type: "bubble",
@@ -544,39 +577,7 @@ function makeVehicleBubble(vehicle) {
           paddingTop: "10px",
           paddingBottom: "10px",
           spacing: "xs",
-          contents: [
-            {
-              type: "text",
-              text: `支払総額 ${safeText(vehicle?.totalPrice, "お問い合わせ")}`,
-              weight: "bold",
-              size: "xl",
-              color: "#D97706",
-              wrap: true,
-            },
-            {
-              type: "text",
-              text: `車両本体価格 ${safeText(vehicle?.bodyPrice, "お問い合わせ")}`,
-              size: "xs",
-              color: "#666666",
-              wrap: true,
-              margin: "none",
-            },
-            makeGradeExtraBox(vehicle),
-            makeInfoRow(vehicle),
-            ...(gooUrl
-              ? [
-                  {
-                    type: "text",
-                    text: "タップで詳細を見る ↗",
-                    size: "xs",
-                    color: "#888888",
-                    align: "center",
-                    margin: "xs",
-                  },
-                ]
-              : []),
-            makeConsultButton(vehicle),
-          ],
+          contents: bodyContents,
         },
       ],
     },
@@ -634,6 +635,31 @@ function makeStatusRibbon(vehicle) {
 }
 
 function makeVehicleTitleBox(vehicle) {
+  const title = safeText(vehicle?.carName || vehicle?.title, "車両情報");
+  const subTitle = optionalText(vehicle?.gradeName || vehicle?.description);
+
+  const contents = [
+    {
+      type: "text",
+      text: title,
+      weight: "bold",
+      size: "lg",
+      color: "#E5D08A",
+      wrap: true,
+    },
+  ];
+
+  if (subTitle) {
+    contents.push({
+      type: "text",
+      text: subTitle,
+      size: "sm",
+      color: "#FFFFFF",
+      wrap: true,
+      margin: "xs",
+    });
+  }
+
   return {
     type: "box",
     layout: "vertical",
@@ -642,37 +668,19 @@ function makeVehicleTitleBox(vehicle) {
     paddingEnd: "14px",
     paddingTop: "10px",
     paddingBottom: "10px",
-    contents: [
-      {
-        type: "text",
-        text: safeText(vehicle?.carName || vehicle?.title, "車両情報"),
-        weight: "bold",
-        size: "lg",
-        color: "#E5D08A",
-        wrap: true,
-      },
-      {
-        type: "text",
-        text: safeText(vehicle?.gradeName || vehicle?.description, ""),
-        size: "sm",
-        color: "#FFFFFF",
-        wrap: true,
-        margin: "xs",
-      },
-    ],
+    contents,
   };
 }
 
-function makeGradeExtraBox(vehicle) {
+function makeGradeExtraBox(gradeExtraInfo) {
   return {
     type: "box",
     layout: "vertical",
-    height: "66px",
     margin: "sm",
     contents: [
       {
         type: "text",
-        text: safeText(vehicle?.gradeExtraInfo, ""),
+        text: gradeExtraInfo,
         size: "xxs",
         color: "#333333",
         wrap: true,
@@ -976,8 +984,23 @@ function formatMileage(mileageText) {
 }
 
 function safeText(value, fallback = "-") {
-  if (value === undefined || value === null || value === "") return fallback;
-  return String(value);
+  if (value === undefined || value === null) return fallback;
+
+  const text = String(value);
+
+  if (text.trim() === "") return fallback;
+
+  return text;
+}
+
+function optionalText(value) {
+  if (value === undefined || value === null) return "";
+
+  const text = String(value);
+
+  if (text.trim() === "") return "";
+
+  return text;
 }
 
 function validImageUrl(url) {
