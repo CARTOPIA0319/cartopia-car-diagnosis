@@ -192,6 +192,7 @@ function buildTypeKeys(types) {
     new Set(types.map((type) => normalizeTypeKey(type)).filter(Boolean))
   );
 }
+
 function uniqueByStockId(vehicles) {
   const map = new Map();
 
@@ -453,6 +454,7 @@ function normalizeYear(value) {
 
   return year ? `${year}年` : text;
 }
+
 function extractImageCandidates(html) {
   const raw = String(html || "");
   const urls = [];
@@ -688,6 +690,7 @@ async function loginMotorgate() {
 
   return { jar, loginStatus: login.status };
 }
+
 async function fetchVehicleDetailFromEditPage(jar, vehicle) {
   if (!vehicle.editUrl) {
     return {
@@ -760,7 +763,7 @@ async function mapWithConcurrency(items, limit, mapper) {
 }
 
 async function attachVehicleDetails(jar, vehicles) {
-  return await mapWithConcurrency(vehicles, 5, async (vehicle) => {
+  return await mapWithConcurrency(vehicles, 12, async (vehicle) => {
     return await fetchVehicleDetailFromEditPage(jar, vehicle);
   });
 }
@@ -971,6 +974,8 @@ function summarizeGradeExtraInfo(vehicles) {
 }
 
 export async function GET(request) {
+  const startedAt = new Date();
+
   try {
     const url = new URL(request.url);
     const save = url.searchParams.get("save") === "1";
@@ -982,13 +987,24 @@ export async function GET(request) {
     const savedResult = await fetchSavedVehicles(jar);
 
     const vehicles = mergeVehicles(publicResult.vehicles, savedResult.vehicles);
+    const finishedAt = new Date();
+    const durationSeconds = Math.round((finishedAt.getTime() - startedAt.getTime()) / 1000);
 
     const inventoryData = {
-      updatedAt: new Date().toISOString(),
+      updatedAt: finishedAt.toISOString(),
       source: "motorgate",
       updateMode: save
         ? "full-public-and-saved-refresh"
         : "preview-full-public-and-saved-refresh",
+      lastUpdateStatus: {
+        success: true,
+        statusText: "正常更新",
+        startedAt: startedAt.toISOString(),
+        finishedAt: finishedAt.toISOString(),
+        durationSeconds,
+        error: "",
+        timeout: false,
+      },
       counts: {
         publicVehicles: publicResult.vehicles.length,
         savedVehicles: savedResult.vehicles.length,
@@ -1020,11 +1036,24 @@ export async function GET(request) {
       github,
       counts: inventoryData.counts,
       checks: inventoryData.checks,
+      lastUpdateStatus: inventoryData.lastUpdateStatus,
       inventory: inventoryData,
     });
   } catch (e) {
+    const finishedAt = new Date();
+    const durationSeconds = Math.round((finishedAt.getTime() - startedAt.getTime()) / 1000);
+
     return json({
       success: false,
+      lastUpdateStatus: {
+        success: false,
+        statusText: "更新失敗",
+        startedAt: startedAt.toISOString(),
+        finishedAt: finishedAt.toISOString(),
+        durationSeconds,
+        error: e.message,
+        timeout: String(e.message || "").toLowerCase().includes("timeout"),
+      },
       error: e.message,
       stack: e.stack,
     });
