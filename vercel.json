@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/inventory/update?save=1",
-      "schedule": "0 20 * * *"
+      "schedule": "0 * * * *"
     }
   ]
 }
