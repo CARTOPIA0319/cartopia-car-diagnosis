@@ -359,8 +359,41 @@ function extractVehicleRows(html) {
   return rows;
 }
 
+function escapeRegExp(value) {
+  return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function extractAttribute(tagHtml, attributeName) {
+  const escaped = escapeRegExp(attributeName);
+  const regex = new RegExp(`${escaped}\\s*=\\s*["']([^"']*)["']`, "i");
+  return decodeHtmlEntities(String(tagHtml || "").match(regex)?.[1] || "");
+}
+
+function normalizeLooseKey(value) {
+  return toHalfWidthAscii(String(value || ""))
+    .toLowerCase()
+    .replace(/[\s_\-:[\]（）()]/g, "");
+}
+
+function extractSelectedOptionText(selectHtml) {
+  const selectedOption =
+    String(selectHtml || "").match(
+      /<option\b[^>]*selected[^>]*>([\s\S]*?)<\/option>/i
+    )?.[1] || "";
+
+  if (selectedOption) {
+    return compactText(cleanHtmlToText(selectedOption));
+  }
+
+  const firstOption =
+    String(selectHtml || "").match(/<option\b[^>]*>([\s\S]*?)<\/option>/i)?.[1] ||
+    "";
+
+  return compactText(cleanHtmlToText(firstOption));
+}
+
 function extractValueByName(html, name) {
-  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const escaped = escapeRegExp(name);
 
   const inputRegex = new RegExp(
     `<input\\b[^>]*name=["']${escaped}["'][^>]*>`,
@@ -393,12 +426,71 @@ function extractValueByName(html, name) {
   const selectHtml = String(html || "").match(selectRegex)?.[1] || "";
 
   if (selectHtml) {
-    const selectedOption =
-      selectHtml.match(/<option\b[^>]*selected[^>]*>([\s\S]*?)<\/option>/i)
-        ?.[1] || "";
+    return extractSelectedOptionText(selectHtml);
+  }
 
-    if (selectedOption) {
-      return compactText(cleanHtmlToText(selectedOption));
+  return "";
+}
+
+function extractValueByAnyName(html, names) {
+  for (const name of names) {
+    const value = extractValueByName(html, name);
+
+    if (value) return value;
+  }
+
+  return "";
+}
+
+function extractValueByLooseName(html, keywords) {
+  const htmlText = String(html || "");
+  const normalizedKeywords = keywords.map(normalizeLooseKey).filter(Boolean);
+
+  const inputMatches = Array.from(htmlText.matchAll(/<input\b[^>]*>/gi));
+
+  for (const match of inputMatches) {
+    const tag = match[0];
+    const key = normalizeLooseKey(
+      `${extractAttribute(tag, "name")} ${extractAttribute(tag, "id")} ${extractAttribute(tag, "class")}`
+    );
+
+    if (normalizedKeywords.some((keyword) => key.includes(keyword))) {
+      const value = extractAttribute(tag, "value");
+      if (value) return compactText(cleanHtmlToText(value));
+    }
+  }
+
+  const textareaMatches = Array.from(
+    htmlText.matchAll(/<textarea\b([^>]*)>([\s\S]*?)<\/textarea>/gi)
+  );
+
+  for (const match of textareaMatches) {
+    const attrs = match[1] || "";
+    const body = match[2] || "";
+    const key = normalizeLooseKey(
+      `${extractAttribute(attrs, "name")} ${extractAttribute(attrs, "id")} ${extractAttribute(attrs, "class")}`
+    );
+
+    if (normalizedKeywords.some((keyword) => key.includes(keyword))) {
+      const value = compactText(cleanHtmlToText(body));
+      if (value) return value;
+    }
+  }
+
+  const selectMatches = Array.from(
+    htmlText.matchAll(/<select\b([^>]*)>([\s\S]*?)<\/select>/gi)
+  );
+
+  for (const match of selectMatches) {
+    const attrs = match[1] || "";
+    const body = match[2] || "";
+    const key = normalizeLooseKey(
+      `${extractAttribute(attrs, "name")} ${extractAttribute(attrs, "id")} ${extractAttribute(attrs, "class")}`
+    );
+
+    if (normalizedKeywords.some((keyword) => key.includes(keyword))) {
+      const value = extractSelectedOptionText(body);
+      if (value) return value;
     }
   }
 
@@ -407,22 +499,105 @@ function extractValueByName(html, name) {
 
 function extractValueNearLabel(html, label) {
   const text = String(html || "");
+  const escapedLabel = escapeRegExp(label);
 
   const patterns = [
     new RegExp(
-      `${label}[\\s\\S]{0,800}?<input\\b[^>]*value=["']([^"']*)["'][^>]*>`,
+      `${escapedLabel}[\\s\\S]{0,1000}?<input\\b[^>]*value=["']([^"']*)["'][^>]*>`,
       "i"
     ),
     new RegExp(
-      `${label}[\\s\\S]{0,800}?<textarea\\b[^>]*>([\\s\\S]*?)<\\/textarea>`,
+      `${escapedLabel}[\\s\\S]{0,1000}?<textarea\\b[^>]*>([\\s\\S]*?)<\\/textarea>`,
+      "i"
+    ),
+    new RegExp(
+      `${escapedLabel}[\\s\\S]{0,1000}?<select\\b[^>]*>([\\s\\S]*?)<\\/select>`,
       "i"
     ),
   ];
 
   for (const pattern of patterns) {
     const match = text.match(pattern);
+
     if (match?.[1]) {
+      if (pattern.source.includes("<select")) {
+        return extractSelectedOptionText(match[1]);
+      }
+
       return compactText(cleanHtmlToText(decodeHtmlEntities(match[1])));
+    }
+  }
+
+  return "";
+}
+
+function extractValueNearAnyLabel(html, labels) {
+  for (const label of labels) {
+    const value = extractValueNearLabel(html, label);
+
+    if (value) return value;
+  }
+
+  return "";
+}
+
+function lineContainsAnyLabel(line, labels) {
+  return labels.some((label) => String(line || "").includes(label));
+}
+
+function cleanLabeledValue(value, stopLabels = []) {
+  let text = compactText(value)
+    .replace(/^[：:\s]+/, "")
+    .replace(/[｜|]/g, " ")
+    .trim();
+
+  for (const stopLabel of stopLabels) {
+    const index = text.indexOf(stopLabel);
+
+    if (index > 0) {
+      text = text.slice(0, index).trim();
+    }
+  }
+
+  return compactText(text);
+}
+
+function extractLineValueByLabels(text, labels, stopLabels = []) {
+  const lines = String(text || "")
+    .split(/\n+/)
+    .map((line) => compactText(line))
+    .filter(Boolean);
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    for (const label of labels) {
+      const index = line.indexOf(label);
+
+      if (index >= 0) {
+        const afterLabel = cleanLabeledValue(
+          line.slice(index + label.length),
+          stopLabels
+        );
+
+        if (
+          afterLabel &&
+          !lineContainsAnyLabel(afterLabel, labels) &&
+          !lineContainsAnyLabel(afterLabel, stopLabels)
+        ) {
+          return afterLabel;
+        }
+
+        for (let j = i + 1; j <= i + 4 && j < lines.length; j++) {
+          const nextLine = cleanLabeledValue(lines[j], stopLabels);
+
+          if (!nextLine) continue;
+          if (lineContainsAnyLabel(nextLine, labels)) continue;
+          if (lineContainsAnyLabel(nextLine, stopLabels)) break;
+
+          return nextLine;
+        }
+      }
     }
   }
 
@@ -472,11 +647,68 @@ function normalizeYear(value) {
   const text = compactText(value);
 
   if (!text) return "";
-  if (text.includes("年")) return text;
 
-  const year = text.match(/(?:19|20)\d{2}/)?.[0] || "";
+  const westernWithMonth = text.match(/((?:19|20)\d{2})\s*年\s*([0-9]{1,2})\s*月/);
 
-  return year ? `${year}年` : text;
+  if (westernWithMonth) {
+    return `${westernWithMonth[1]}年${westernWithMonth[2]}月`;
+  }
+
+  const westernYear = text.match(/((?:19|20)\d{2})\s*年?/);
+
+  if (westernYear) {
+    return `${westernYear[1]}年`;
+  }
+
+  const warekiWithMonth = text.match(/((?:令和|平成|昭和)\s*[0-9元]+\s*年\s*[0-9]{1,2}\s*月)/);
+
+  if (warekiWithMonth) {
+    return compactText(warekiWithMonth[1]).replace(/\s+/g, "");
+  }
+
+  const warekiYear = text.match(/((?:令和|平成|昭和)\s*[0-9元]+\s*年)/);
+
+  if (warekiYear) {
+    return compactText(warekiYear[1]).replace(/\s+/g, "");
+  }
+
+  if (text.includes("年")) return text.slice(0, 30);
+
+  return text;
+}
+
+function normalizeColor(value) {
+  let text = compactText(fixBasicMojibake(value))
+    .replace(/^(車体色|ボディカラー|外装色|カラー|色)\s*[：:]\s*/g, "")
+    .replace(/^(車体色|ボディカラー|外装色|カラー|色)\s+/g, "")
+    .replace(/カラーコード[\s\S]*$/g, "")
+    .replace(/色コード[\s\S]*$/g, "")
+    .trim();
+
+  const stopLabels = [
+    "初度登録",
+    "初年度登録",
+    "年式",
+    "走行距離",
+    "走行",
+    "車検",
+    "排気量",
+    "価格",
+    "支払総額",
+    "型式",
+    "グレード",
+    "修復歴",
+  ];
+
+  for (const label of stopLabels) {
+    const index = text.indexOf(label);
+
+    if (index > 0) {
+      text = text.slice(0, index).trim();
+    }
+  }
+
+  return compactText(text).slice(0, 80);
 }
 
 function extractImageCandidates(html) {
@@ -517,39 +749,174 @@ function extractSavedVehicleDetails(html) {
   const text = cleanHtmlToText(html);
 
   const year = normalizeYear(
-    extractValueByName(html, "Nenshiki") ||
-      extractValueByName(html, "Year") ||
-      extractValueByName(html, "ModelYear") ||
-      extractFirstMatch(text, /((?:19|20)\d{2}年)/)
+    extractValueNearAnyLabel(html, [
+      "初度登録",
+      "初年度登録",
+      "初度登録年月",
+      "初年度登録年月",
+      "年式",
+      "モデル年式",
+    ]) ||
+      extractValueByAnyName(html, [
+        "Nenshiki",
+        "nenshiki",
+        "Year",
+        "year",
+        "ModelYear",
+        "model_year",
+        "FirstRegistration",
+        "first_registration",
+        "FirstRegist",
+        "first_regist",
+        "FirstRegistYear",
+        "first_regist_year",
+        "FirstRegistrationYear",
+        "first_registration_year",
+        "RegistYear",
+        "regist_year",
+        "RegistrationYear",
+        "registration_year",
+      ]) ||
+      extractValueByLooseName(html, [
+        "初度登録",
+        "初年度登録",
+        "nenshiki",
+        "modelyear",
+        "model_year",
+        "firstregistration",
+        "first_registration",
+        "firstregist",
+        "first_regist",
+        "registrationyear",
+        "registration_year",
+        "registyear",
+        "regist_year",
+      ]) ||
+      extractLineValueByLabels(
+        text,
+        ["初度登録", "初年度登録", "初度登録年月", "初年度登録年月", "年式"],
+        ["走行距離", "走行", "車体色", "ボディカラー", "外装色", "カラー", "車検", "排気量"]
+      ) ||
+      extractFirstMatch(text, /((?:19|20)\d{2}\s*年\s*[0-9]{1,2}\s*月)/) ||
+      extractFirstMatch(text, /((?:19|20)\d{2}\s*年)/) ||
+      extractFirstMatch(text, /((?:令和|平成|昭和)\s*[0-9元]+\s*年\s*[0-9]{1,2}\s*月)/) ||
+      extractFirstMatch(text, /((?:令和|平成|昭和)\s*[0-9元]+\s*年)/)
   );
 
   const mileage = normalizeMileage(
-    extractValueByName(html, "Soukou") ||
-      extractValueByName(html, "SoukouKyori") ||
-      extractValueByName(html, "Mileage") ||
+    extractValueNearAnyLabel(html, ["走行距離", "走行"]) ||
+      extractValueByAnyName(html, [
+        "Soukou",
+        "soukou",
+        "SoukouKyori",
+        "soukou_kyori",
+        "Mileage",
+        "mileage",
+        "MileageDistance",
+        "mileage_distance",
+      ]) ||
+      extractValueByLooseName(html, [
+        "走行距離",
+        "soukou",
+        "soukoukyori",
+        "soukou_kyori",
+        "mileage",
+        "mileagedistance",
+      ]) ||
+      extractLineValueByLabels(
+        text,
+        ["走行距離", "走行"],
+        ["初度登録", "初年度登録", "車体色", "ボディカラー", "外装色", "カラー", "車検", "排気量"]
+      ) ||
       extractFirstMatch(text, /(\d+(?:\.\d+)?万[ＫKk])/) ||
       (text.includes("走不明") ? "走不明" : "")
   );
 
-  const color =
-    extractValueByName(html, "BodyColor") ||
-    extractValueByName(html, "Color") ||
-    extractValueByName(html, "CarColor") ||
-    extractValueByName(html, "BodyColorName") ||
-    "";
+  const color = normalizeColor(
+    extractValueNearAnyLabel(html, [
+      "車体色",
+      "ボディカラー",
+      "外装色",
+      "カラー",
+    ]) ||
+      extractValueByAnyName(html, [
+        "BodyColor",
+        "body_color",
+        "BodyColorName",
+        "body_color_name",
+        "Color",
+        "color",
+        "CarColor",
+        "car_color",
+        "CarColorName",
+        "car_color_name",
+        "ExteriorColor",
+        "exterior_color",
+        "ExteriorColorName",
+        "exterior_color_name",
+      ]) ||
+      extractValueByLooseName(html, [
+        "車体色",
+        "ボディカラー",
+        "外装色",
+        "bodycolor",
+        "body_color",
+        "bodycolorname",
+        "body_color_name",
+        "carcolor",
+        "car_color",
+        "exteriorcolor",
+        "exterior_color",
+        "colorname",
+        "color_name",
+      ]) ||
+      extractLineValueByLabels(
+        text,
+        ["車体色", "ボディカラー", "外装色", "カラー"],
+        ["初度登録", "初年度登録", "年式", "走行距離", "走行", "車検", "排気量", "価格", "支払総額"]
+      )
+  );
 
   const bodyPrice = normalizePrice(
-    extractValueByName(html, "Kakaku") ||
-      extractValueByName(html, "Price") ||
-      extractValueByName(html, "BodyPrice") ||
+    extractValueNearAnyLabel(html, ["車両本体価格", "本体価格", "価格"]) ||
+      extractValueByAnyName(html, [
+        "Kakaku",
+        "kakaku",
+        "Price",
+        "price",
+        "BodyPrice",
+        "body_price",
+      ]) ||
+      extractValueByLooseName(html, [
+        "kakaku",
+        "bodyprice",
+        "body_price",
+        "vehicleprice",
+        "vehicle_price",
+      ]) ||
       extractFirstMatch(text, /価格\s*([0-9]+(?:\.[0-9]+)?万円)/)
   );
 
   const totalPrice = normalizePrice(
-    extractValueByName(html, "TotalPrice") ||
-      extractValueByName(html, "Total") ||
-      extractValueByName(html, "SiharaiTotal") ||
-      extractValueByName(html, "ShiharaiTotal") ||
+    extractValueNearAnyLabel(html, ["支払総額", "総額"]) ||
+      extractValueByAnyName(html, [
+        "TotalPrice",
+        "total_price",
+        "Total",
+        "total",
+        "SiharaiTotal",
+        "siharai_total",
+        "ShiharaiTotal",
+        "shiharai_total",
+      ]) ||
+      extractValueByLooseName(html, [
+        "totalprice",
+        "total_price",
+        "siharaitotal",
+        "siharai_total",
+        "shiharaitotal",
+        "shiharai_total",
+      ]) ||
       extractFirstMatch(text, /総額\s*([0-9]+(?:\.[0-9]+)?万円)/)
   );
 
