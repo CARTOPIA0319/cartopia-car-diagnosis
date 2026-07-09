@@ -20,6 +20,30 @@ function json(data) {
   });
 }
 
+function isTimeoutError(error) {
+  const text = `${error?.name || ""} ${error?.message || ""}`.toLowerCase();
+  return (
+    text.includes("timeout") ||
+    text.includes("abort") ||
+    text.includes("aborted") ||
+    text.includes("the operation was aborted")
+  );
+}
+
+async function fetchWithTimeout(url, options = {}, timeoutMs = 30000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 function addCookies(jar, setCookieText) {
   if (!setCookieText) return jar;
 
@@ -370,8 +394,8 @@ function extractValueByName(html, name) {
 
   if (selectHtml) {
     const selectedOption =
-      selectHtml.match(/<option\b[^>]*selected[^>]*>([\s\S]*?)<\/option>/i)?.[1] ||
-      "";
+      selectHtml.match(/<option\b[^>]*selected[^>]*>([\s\S]*?)<\/option>/i)
+        ?.[1] || "";
 
     if (selectedOption) {
       return compactText(cleanHtmlToText(selectedOption));
@@ -459,11 +483,15 @@ function extractImageCandidates(html) {
   const raw = String(html || "");
   const urls = [];
 
-  for (const match of raw.matchAll(/https?:\/\/[^"'\\\s>]+?\.(?:jpg|jpeg|png|webp)/gi)) {
+  for (const match of raw.matchAll(
+    /https?:\/\/[^"'\\\s>]+?\.(?:jpg|jpeg|png|webp)/gi
+  )) {
     urls.push(decodeHtmlEntities(match[0]));
   }
 
-  for (const match of raw.matchAll(/value=["']([^"']+\.(?:jpg|jpeg|png|webp))["']/gi)) {
+  for (const match of raw.matchAll(
+    /value=["']([^"']+\.(?:jpg|jpeg|png|webp))["']/gi
+  )) {
     urls.push(decodeHtmlEntities(match[1]));
   }
 
@@ -555,10 +583,15 @@ function parsePublicVehicleRow(row, baseUrl, qualityImageMap) {
 
   const carName = getQueryParamDecoded(rawTireHref, "car_name");
   const gradeName = getQueryParamDecoded(rawTireHref, "grade_name");
-  const classificationName = getQueryParamDecoded(rawTireHref, "classification_name");
+  const classificationName = getQueryParamDecoded(
+    rawTireHref,
+    "classification_name"
+  );
 
   const nameCellHtml = extractTdByClass(rowHtml, "item__name");
-  const visibleTitleRaw = compactText(cleanHtmlToText(extractNameAnchorHtml(nameCellHtml)));
+  const visibleTitleRaw = compactText(
+    cleanHtmlToText(extractNameAnchorHtml(nameCellHtml))
+  );
   const visibleTitleFixed = fixBasicMojibake(visibleTitleRaw);
 
   const infoCellHtml = extractTdByClass(rowHtml, "item__info");
@@ -566,8 +599,14 @@ function parsePublicVehicleRow(row, baseUrl, qualityImageMap) {
 
   const costCellHtml = extractTdByClass(rowHtml, "item__cost");
 
-  const bodyPriceNumber = extractSpanById(costCellHtml, `kakaku_display_${stockId}`);
-  const totalPriceNumber = extractSpanById(costCellHtml, `total_display_${stockId}`);
+  const bodyPriceNumber = extractSpanById(
+    costCellHtml,
+    `kakaku_display_${stockId}`
+  );
+  const totalPriceNumber = extractSpanById(
+    costCellHtml,
+    `total_display_${stockId}`
+  );
 
   const realRowImages = rowImages.filter(
     (imageUrl) =>
@@ -583,7 +622,10 @@ function parsePublicVehicleRow(row, baseUrl, qualityImageMap) {
   return {
     stockId,
     title,
-    description: visibleTitleFixed && !visibleTitleFixed.includes("�") ? visibleTitleFixed : title,
+    description:
+      visibleTitleFixed && !visibleTitleFixed.includes("�")
+        ? visibleTitleFixed
+        : title,
     carName,
     gradeName,
     gradeExtraInfo: "",
@@ -608,7 +650,9 @@ function parsePublicVehicleRow(row, baseUrl, qualityImageMap) {
 function extractSavedVehicles(html, pageUrl) {
   const stockIds = Array.from(
     new Set(
-      [...String(html || "").matchAll(/StockId=([A-Za-z0-9]+)/g)].map((m) => m[1])
+      [...String(html || "").matchAll(/StockId=([A-Za-z0-9]+)/g)].map(
+        (m) => m[1]
+      )
     )
   );
 
@@ -652,12 +696,17 @@ async function loginMotorgate() {
   const loginUrl = "https://motorgate.jp/login/index";
   const jar = {};
 
-  const loginPage = await fetch(loginUrl, {
-    headers: {
-      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
-      "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+  const loginPage = await fetchWithTimeout(
+    loginUrl,
+    {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+        "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+      },
     },
-  });
+    30000
+  );
 
   addCookies(jar, loginPage.headers.get("set-cookie") || "");
 
@@ -666,25 +715,30 @@ async function loginMotorgate() {
   const csrf = loginHtml.match(/name="fuel_csrf_token"\s+value="([^"]+)"/)?.[1];
   const sessionId = loginHtml.match(/name="session_id"\s+value="([^"]+)"/)?.[1];
 
-  const login = await fetch(loginUrl, {
-    method: "POST",
-    redirect: "manual",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Origin: "https://motorgate.jp",
-      Referer: loginUrl,
-      Cookie: jarToCookie(jar),
-      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
-      "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+  const login = await fetchWithTimeout(
+    loginUrl,
+    {
+      method: "POST",
+      redirect: "manual",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Origin: "https://motorgate.jp",
+        Referer: loginUrl,
+        Cookie: jarToCookie(jar),
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+        "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+      },
+      body: new URLSearchParams({
+        fuel_csrf_token: csrf || "",
+        session_id: sessionId || "",
+        client_id: clientId || "",
+        user_id: "",
+        client_pw: password || "",
+      }),
     },
-    body: new URLSearchParams({
-      fuel_csrf_token: csrf || "",
-      session_id: sessionId || "",
-      client_id: clientId || "",
-      user_id: "",
-      client_pw: password || "",
-    }),
-  });
+    30000
+  );
 
   addCookies(jar, login.headers.get("set-cookie") || "");
 
@@ -699,48 +753,69 @@ async function fetchVehicleDetailFromEditPage(jar, vehicle) {
         status: null,
         success: false,
         reason: "editUrl not found",
+        timeout: false,
+        error: "",
       },
     };
   }
 
-  const res = await fetch(vehicle.editUrl, {
-    headers: {
-      Cookie: jarToCookie(jar),
-      Referer:
-        vehicle.sourceStatus === "一時保存"
-          ? "https://motorgate.jp/stock/savelist"
-          : "https://motorgate.jp/top",
-      "User-Agent":
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
-      "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
-    },
-  });
+  try {
+    const res = await fetchWithTimeout(
+      vehicle.editUrl,
+      {
+        headers: {
+          Cookie: jarToCookie(jar),
+          Referer:
+            vehicle.sourceStatus === "一時保存"
+              ? "https://motorgate.jp/stock/savelist"
+              : "https://motorgate.jp/top",
+          "User-Agent":
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+          "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+        },
+      },
+      25000
+    );
 
-  const html = await readUtf8Text(res);
-  const text = cleanHtmlToText(html);
+    const html = await readUtf8Text(res);
+    const text = cleanHtmlToText(html);
 
-  const types = Array.from(
-    new Set([...extractTypesFromText(html), ...extractTypesFromText(text)])
-  );
-  const typeKeys = buildTypeKeys(types);
+    const types = Array.from(
+      new Set([...extractTypesFromText(html), ...extractTypesFromText(text)])
+    );
+    const typeKeys = buildTypeKeys(types);
 
-  const savedDetails =
-    vehicle.sourceStatus === "一時保存" ? extractSavedVehicleDetails(html) : {};
+    const savedDetails =
+      vehicle.sourceStatus === "一時保存" ? extractSavedVehicleDetails(html) : {};
 
-  const gradeExtraInfo = extractGradeExtraInfo(html);
+    const gradeExtraInfo = extractGradeExtraInfo(html);
 
-  return {
-    ...vehicle,
-    ...savedDetails,
-    gradeExtraInfo: gradeExtraInfo || savedDetails.gradeExtraInfo || "",
-    types,
-    typeKeys,
-    typeResult: {
-      status: res.status,
-      success: typeKeys.length > 0,
-      containsFatalError: html.includes("FatalError"),
-    },
-  };
+    return {
+      ...vehicle,
+      ...savedDetails,
+      gradeExtraInfo: gradeExtraInfo || savedDetails.gradeExtraInfo || "",
+      types,
+      typeKeys,
+      typeResult: {
+        status: res.status,
+        success: typeKeys.length > 0,
+        containsFatalError: html.includes("FatalError"),
+        timeout: false,
+        error: "",
+      },
+    };
+  } catch (error) {
+    return {
+      ...vehicle,
+      typeResult: {
+        status: null,
+        success: false,
+        containsFatalError: false,
+        timeout: isTimeoutError(error),
+        error: error.message || String(error),
+      },
+    };
+  }
 }
 
 async function mapWithConcurrency(items, limit, mapper) {
@@ -798,15 +873,19 @@ function toInventoryVehicle(vehicle) {
 }
 
 async function fetchPublicVehicles(jar) {
-  const res = await fetch(PUBLIC_LIST_URL, {
-    headers: {
-      Cookie: jarToCookie(jar),
-      Referer: "https://motorgate.jp/top",
-      "User-Agent":
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
-      "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+  const res = await fetchWithTimeout(
+    PUBLIC_LIST_URL,
+    {
+      headers: {
+        Cookie: jarToCookie(jar),
+        Referer: "https://motorgate.jp/top",
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+        "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+      },
     },
-  });
+    30000
+  );
 
   const html = await readUtf8Text(res);
   const qualityImageMap = extractQualityImageMap(html, PUBLIC_LIST_URL);
@@ -828,15 +907,19 @@ async function fetchPublicVehicles(jar) {
 }
 
 async function fetchSavedPage(jar, pageUrl) {
-  const res = await fetch(pageUrl, {
-    headers: {
-      Cookie: jarToCookie(jar),
-      Referer: "https://motorgate.jp/top",
-      "User-Agent":
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
-      "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+  const res = await fetchWithTimeout(
+    pageUrl,
+    {
+      headers: {
+        Cookie: jarToCookie(jar),
+        Referer: "https://motorgate.jp/top",
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+        "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+      },
     },
-  });
+    30000
+  );
 
   const html = await readUtf8Text(res);
   const vehicles = extractSavedVehicles(html, pageUrl);
@@ -885,14 +968,18 @@ async function fetchCurrentInventoryFromGitHub() {
 
   const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
 
-  const current = await fetch(`${apiUrl}?ref=${branch}&t=${Date.now()}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/vnd.github+json",
-      "User-Agent": "cartopia-inventory-updater",
-      "Cache-Control": "no-store",
+  const current = await fetchWithTimeout(
+    `${apiUrl}?ref=${branch}&t=${Date.now()}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/vnd.github+json",
+        "User-Agent": "cartopia-inventory-updater",
+        "Cache-Control": "no-store",
+      },
     },
-  });
+    30000
+  );
 
   if (!current.ok) {
     return { sha: null, inventory: { vehicles: [] } };
@@ -907,7 +994,11 @@ async function fetchCurrentInventoryFromGitHub() {
   };
 }
 
-async function commitInventoryToGitHub(inventoryData, existingSha) {
+async function commitInventoryToGitHub(
+  inventoryData,
+  existingSha,
+  message = "refresh public and saved inventory data"
+) {
   const token = process.env.GITHUB_TOKEN;
   const owner = process.env.GITHUB_OWNER || "CARTOPIA0319";
   const repo = process.env.GITHUB_REPO || "cartopia-car-diagnosis";
@@ -922,23 +1013,30 @@ async function commitInventoryToGitHub(inventoryData, existingSha) {
   }
 
   const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-  const content = Buffer.from(JSON.stringify(inventoryData, null, 2), "utf8").toString("base64");
+  const content = Buffer.from(
+    JSON.stringify(inventoryData, null, 2),
+    "utf8"
+  ).toString("base64");
 
-  const save = await fetch(apiUrl, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/vnd.github+json",
-      "Content-Type": "application/json",
-      "User-Agent": "cartopia-inventory-updater",
+  const save = await fetchWithTimeout(
+    apiUrl,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/vnd.github+json",
+        "Content-Type": "application/json",
+        "User-Agent": "cartopia-inventory-updater",
+      },
+      body: JSON.stringify({
+        message,
+        content,
+        branch,
+        ...(existingSha ? { sha: existingSha } : {}),
+      }),
     },
-    body: JSON.stringify({
-      message: "refresh public and saved inventory data",
-      content,
-      branch,
-      ...(existingSha ? { sha: existingSha } : {}),
-    }),
-  });
+    30000
+  );
 
   const saveJson = await save.json();
 
@@ -948,21 +1046,20 @@ async function commitInventoryToGitHub(inventoryData, existingSha) {
     path,
     branch,
     commit: saveJson.commit?.html_url || "",
+    commitSha: saveJson.commit?.sha || "",
     error: save.ok ? "" : saveJson,
   };
 }
 
 function mergeVehicles(publicVehicles, savedVehicles) {
-  return uniqueByStockId([
-    ...(publicVehicles || []),
-    ...(savedVehicles || []),
-  ]);
+  return uniqueByStockId([...(publicVehicles || []), ...(savedVehicles || [])]);
 }
 
 function summarizeTypeResults(vehicles) {
   return {
     success: vehicles.filter((v) => v.typeResult?.success).length,
     failed: vehicles.filter((v) => !v.typeResult?.success).length,
+    timeout: vehicles.filter((v) => v.typeResult?.timeout).length,
   };
 }
 
@@ -973,14 +1070,39 @@ function summarizeGradeExtraInfo(vehicles) {
   };
 }
 
+function getTriggerLabel(request, save) {
+  const cronHeader = request.headers.get("x-vercel-cron");
+  const userAgent = request.headers.get("user-agent") || "";
+
+  if (cronHeader || userAgent.toLowerCase().includes("vercel")) {
+    return "自動更新";
+  }
+
+  return save ? "URL保存更新" : "URLプレビュー";
+}
+
+function buildFailureInventoryData(currentInventory, status) {
+  return {
+    ...(currentInventory || {}),
+    lastFailedAt: status.finishedAt,
+    lastUpdateStatus: status,
+  };
+}
+
 export async function GET(request) {
   const startedAt = new Date();
+  const url = new URL(request.url);
+  const save = url.searchParams.get("save") === "1";
+  const trigger = getTriggerLabel(request, save);
+
+  let current = {
+    sha: null,
+    inventory: { vehicles: [] },
+  };
 
   try {
-    const url = new URL(request.url);
-    const save = url.searchParams.get("save") === "1";
+    current = await fetchCurrentInventoryFromGitHub();
 
-    const current = await fetchCurrentInventoryFromGitHub();
     const { jar, loginStatus } = await loginMotorgate();
 
     const publicResult = await fetchPublicVehicles(jar);
@@ -988,7 +1110,40 @@ export async function GET(request) {
 
     const vehicles = mergeVehicles(publicResult.vehicles, savedResult.vehicles);
     const finishedAt = new Date();
-    const durationSeconds = Math.round((finishedAt.getTime() - startedAt.getTime()) / 1000);
+    const durationSeconds = Math.round(
+      (finishedAt.getTime() - startedAt.getTime()) / 1000
+    );
+
+    const typeResults = summarizeTypeResults(vehicles);
+    const success =
+      loginStatus === 302 &&
+      publicResult.status === 200 &&
+      !publicResult.containsLoginForm &&
+      vehicles.length > 0;
+
+    const errorText = success
+      ? ""
+      : [
+          loginStatus !== 302 ? `ログイン異常: ${loginStatus}` : "",
+          publicResult.status !== 200 ? `掲載在庫取得異常: ${publicResult.status}` : "",
+          publicResult.containsLoginForm ? "ログインフォームが表示されています" : "",
+          vehicles.length === 0 ? "在庫取得件数が0件です" : "",
+        ]
+          .filter(Boolean)
+          .join(" / ");
+
+    const lastUpdateStatus = {
+      success,
+      statusText: success ? "正常更新" : "更新確認が必要",
+      trigger,
+      startedAt: startedAt.toISOString(),
+      finishedAt: finishedAt.toISOString(),
+      durationSeconds,
+      error: errorText,
+      timeout: false,
+      typeFailed: typeResults.failed,
+      typeTimeout: typeResults.timeout,
+    };
 
     const inventoryData = {
       updatedAt: finishedAt.toISOString(),
@@ -996,15 +1151,7 @@ export async function GET(request) {
       updateMode: save
         ? "full-public-and-saved-refresh"
         : "preview-full-public-and-saved-refresh",
-      lastUpdateStatus: {
-        success: true,
-        statusText: "正常更新",
-        startedAt: startedAt.toISOString(),
-        finishedAt: finishedAt.toISOString(),
-        durationSeconds,
-        error: "",
-        timeout: false,
-      },
+      lastUpdateStatus,
       counts: {
         publicVehicles: publicResult.vehicles.length,
         savedVehicles: savedResult.vehicles.length,
@@ -1017,21 +1164,25 @@ export async function GET(request) {
         publicListStatus: publicResult.status,
         publicContainsLoginForm: publicResult.containsLoginForm,
         savedPages: savedResult.pages,
-        typeResults: summarizeTypeResults(vehicles),
+        typeResults,
         gradeExtraInfo: summarizeGradeExtraInfo(vehicles),
       },
       vehicles,
     };
 
     const github = save
-      ? await commitInventoryToGitHub(inventoryData, current.sha)
+      ? await commitInventoryToGitHub(
+          inventoryData,
+          current.sha,
+          "refresh public and saved inventory data"
+        )
       : {
           saved: false,
           reason: "preview only. add ?save=1 to save data/inventory.json",
         };
 
     return json({
-      success: true,
+      success,
       mode: inventoryData.updateMode,
       github,
       counts: inventoryData.counts,
@@ -1039,23 +1190,58 @@ export async function GET(request) {
       lastUpdateStatus: inventoryData.lastUpdateStatus,
       inventory: inventoryData,
     });
-  } catch (e) {
+  } catch (error) {
     const finishedAt = new Date();
-    const durationSeconds = Math.round((finishedAt.getTime() - startedAt.getTime()) / 1000);
+    const durationSeconds = Math.round(
+      (finishedAt.getTime() - startedAt.getTime()) / 1000
+    );
+
+    const failureStatus = {
+      success: false,
+      statusText: "更新失敗",
+      trigger,
+      startedAt: startedAt.toISOString(),
+      finishedAt: finishedAt.toISOString(),
+      durationSeconds,
+      error: error.message || String(error),
+      timeout: isTimeoutError(error),
+      typeFailed: null,
+      typeTimeout: null,
+    };
+
+    let github = {
+      saved: false,
+      reason: "failure status was not saved",
+    };
+
+    if (save) {
+      try {
+        const failedInventoryData = buildFailureInventoryData(
+          current.inventory,
+          failureStatus
+        );
+
+        github = await commitInventoryToGitHub(
+          failedInventoryData,
+          current.sha,
+          "record failed inventory update status"
+        );
+      } catch (commitError) {
+        github = {
+          saved: false,
+          reason: "failed to save failure status",
+          error: commitError.message || String(commitError),
+        };
+      }
+    }
 
     return json({
       success: false,
-      lastUpdateStatus: {
-        success: false,
-        statusText: "更新失敗",
-        startedAt: startedAt.toISOString(),
-        finishedAt: finishedAt.toISOString(),
-        durationSeconds,
-        error: e.message,
-        timeout: String(e.message || "").toLowerCase().includes("timeout"),
-      },
-      error: e.message,
-      stack: e.stack,
+      mode: save ? "full-public-and-saved-refresh" : "preview-full-public-and-saved-refresh",
+      github,
+      lastUpdateStatus: failureStatus,
+      error: error.message || String(error),
+      stack: error.stack || "",
     });
   }
 }
