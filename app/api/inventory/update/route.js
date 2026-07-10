@@ -3,13 +3,13 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
 const BASE_URL = "https://motorgate.jp";
-const PUBLIC_LIST_URL =
-  "https://motorgate.jp/stock/newsearch/stocklist/index/1/100";
-
+const PUBLIC_LIST_URL = `${BASE_URL}/stock/newsearch/stocklist/index/1/100`;
 const SAVED_LIST_URLS = [
-  "https://motorgate.jp/stock/savelist",
-  "https://motorgate.jp/stock/savelist/index/2",
+  `${BASE_URL}/stock/savelist`,
+  `${BASE_URL}/stock/savelist/index/2`,
 ];
+const USER_AGENT =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36";
 
 function json(data) {
   return new Response(JSON.stringify(data, null, 2), {
@@ -22,12 +22,7 @@ function json(data) {
 
 function isTimeoutError(error) {
   const text = `${error?.name || ""} ${error?.message || ""}`.toLowerCase();
-  return (
-    text.includes("timeout") ||
-    text.includes("abort") ||
-    text.includes("aborted") ||
-    text.includes("the operation was aborted")
-  );
+  return text.includes("timeout") || text.includes("abort");
 }
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = 30000) {
@@ -35,10 +30,7 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 30000) {
   const timer = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    return await fetch(url, {
-      ...options,
-      signal: controller.signal,
-    });
+    return await fetch(url, { ...options, signal: controller.signal });
   } finally {
     clearTimeout(timer);
   }
@@ -47,19 +39,15 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 30000) {
 function addCookies(jar, setCookieText) {
   if (!setCookieText) return jar;
 
-  const pieces = setCookieText.split(/,\s*(?=[^;,]+=)/);
-
-  for (const piece of pieces) {
+  for (const piece of setCookieText.split(/,\s*(?=[^;,]+=)/)) {
     const first = piece.split(";")[0].trim();
     const eq = first.indexOf("=");
+    if (eq <= 0) continue;
 
-    if (eq > 0) {
-      const name = first.slice(0, eq);
-      const value = first.slice(eq + 1);
-
-      if (value !== "deleted") jar[name] = value;
-      else delete jar[name];
-    }
+    const name = first.slice(0, eq);
+    const value = first.slice(eq + 1);
+    if (value === "deleted") delete jar[name];
+    else jar[name] = value;
   }
 
   return jar;
@@ -71,25 +59,48 @@ function jarToCookie(jar) {
     .join("; ");
 }
 
-async function readUtf8Text(response) {
+function normalizeCharset(value) {
+  const text = String(value || "").toLowerCase();
+  if (/shift[_-]?jis|sjis|windows-31j|ms932|cp932/.test(text)) {
+    return "shift_jis";
+  }
+  if (text.includes("euc-jp")) return "euc-jp";
+  return "utf-8";
+}
+
+async function readResponseText(response) {
   const buffer = await response.arrayBuffer();
-  return new TextDecoder("utf-8", { fatal: false }).decode(buffer);
+  const bytes = new Uint8Array(buffer);
+  const contentType = response.headers.get("content-type") || "";
+  let charset = contentType.match(/charset\s*=\s*([^;\s]+)/i)?.[1] || "";
+
+  if (!charset) {
+    const head = Buffer.from(bytes.slice(0, 4096)).toString("latin1");
+    charset =
+      head.match(/charset=["']?\s*([^\s"'/>]+)/i)?.[1] || "utf-8";
+  }
+
+  try {
+    return new TextDecoder(normalizeCharset(charset), { fatal: false }).decode(
+      bytes
+    );
+  } catch {
+    return new TextDecoder("utf-8", { fatal: false }).decode(bytes);
+  }
 }
 
 function decodeHtmlEntities(text) {
   return String(text || "")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
     .replace(/&#x([0-9a-f]+);/gi, (_, hex) =>
-      String.fromCharCode(parseInt(hex, 16))
+      String.fromCodePoint(parseInt(hex, 16))
     )
-    .replace(/&#(\d+);/g, (_, num) =>
-      String.fromCharCode(parseInt(num, 10))
-    );
+    .replace(/&#(\d+);/g, (_, num) => String.fromCodePoint(parseInt(num, 10)));
 }
 
 function cleanHtmlToText(html) {
@@ -98,18 +109,12 @@ function cleanHtmlToText(html) {
       .replace(/<script[\s\S]*?<\/script>/gi, " ")
       .replace(/<style[\s\S]*?<\/style>/gi, " ")
       .replace(/<br\s*\/?>/gi, "\n")
-      .replace(/<\/p>/gi, "\n")
-      .replace(/<\/div>/gi, "\n")
-      .replace(/<\/li>/gi, "\n")
-      .replace(/<\/td>/gi, "\n")
-      .replace(/<\/th>/gi, "\n")
-      .replace(/<\/tr>/gi, "\n")
+      .replace(/<\/(p|div|li|td|th|tr|dt|dd)>/gi, "\n")
       .replace(/<[^>]+>/g, " ")
   )
     .replace(/\r/g, "\n")
     .replace(/[ \t]+/g, " ")
-    .replace(/\n[ \t]+/g, "\n")
-    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n[ \t]+|[ \t]+\n/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
@@ -126,27 +131,26 @@ function compactText(text) {
 
 function absoluteUrl(src, baseUrl = BASE_URL) {
   if (!src) return "";
-  if (src.startsWith("http://") || src.startsWith("https://")) return src;
+  if (/^https?:\/\//i.test(src)) return src;
   if (src.startsWith("//")) return `https:${src}`;
-  if (src.startsWith("/")) return new URL(src, baseUrl).toString();
   return new URL(src, baseUrl).toString();
 }
 
 function fixBasicMojibake(text) {
   return String(text || "")
-    .replace(/蟷ｴ/g, "年")
-    .replace(/譛�/g, "月")
-    .replace(/荳⑫/g, "万K")
-    .replace(/荳��/g, "万円")
-    .replace(/讀�/g, "検")
-    .replace(/霆頑､懈紛蛯吩ｻ�/g, "車検整備付")
-    .replace(/萓｡譬ｼ/g, "価格")
-    .replace(/邱城｡�/g, "総額")
+    .replace(/è·ï½´/g, "å¹´")
+    .replace(/è­ï¿½/g, "æ")
+    .replace(/è³â«/g, "ä¸K")
+    .replace(/è³ï¿½ï¿½/g, "ä¸å")
+    .replace(/è®ï¿½/g, "æ¤")
+    .replace(/éé ï½¤æç´è¯å©ï½»ï¿½/g, "è»æ¤æ´åä»")
+    .replace(/èï½¡è­¬ï½¼/g, "ä¾¡æ ¼")
+    .replace(/é±åï½¡ï¿½/g, "ç·é¡")
     .trim();
 }
 
 function toHalfWidthAscii(text) {
-  return String(text || "").replace(/[！-～]/g, (char) =>
+  return String(text || "").replace(/[ï¼-ï½]/g, (char) =>
     String.fromCharCode(char.charCodeAt(0) - 0xfee0)
   );
 }
@@ -154,37 +158,25 @@ function toHalfWidthAscii(text) {
 function normalizeTypeText(text) {
   return fixBasicMojibake(
     decodeHtmlEntities(String(text || ""))
-      .replace(/Ｔ/g, "T")
-      .replace(/Ｙ/g, "Y")
-      .replace(/Ｐ/g, "P")
-      .replace(/Ｅ/g, "E")
-      .replace(/Ｖ/g, "V")
-      .replace(/Ｈ/g, "H")
-      .replace(/Ｓ/g, "S")
-      .replace(/Ｕ/g, "U")
-      .replace(/ｔ/g, "t")
-      .replace(/ｙ/g, "y")
-      .replace(/ｐ/g, "p")
-      .replace(/ｅ/g, "e")
-      .replace(/ｖ/g, "v")
-      .replace(/ｈ/g, "h")
-      .replace(/：/g, ":")
-      .replace(/\r/g, " ")
-      .replace(/\n/g, " ")
-      .replace(/　/g, " ")
+      .replace(/[ï¼´ï¼¹ï¼°ï¼¥ï¼¶ï¼¨ï¼³ï¼µ]/g, (char) =>
+        String.fromCharCode(char.charCodeAt(0) - 0xfee0)
+      )
+      .replace(/[ï½ï½ï½ï½ï½ï½ï½ï½]/g, (char) =>
+        String.fromCharCode(char.charCodeAt(0) - 0xfee0)
+      )
+      .replace(/ï¼/g, ":")
+      .replace(/[\r\nã]/g, " ")
   );
 }
 
 function normalizeTypeKey(type) {
   const value = toHalfWidthAscii(String(type || ""))
-    .replace(/：/g, ":")
-    .replace(/　/g, " ")
+    .replace(/ï¼/g, ":")
+    .replace(/ã/g, " ")
     .trim();
 
   if (/^suv$/i.test(value)) return "SUV";
-  if (/^ev・hv$/i.test(value)) return "EV・HV";
-  if (/^e[vｖ]・h[vｖ]$/i.test(value)) return "EV・HV";
-
+  if (/^e[vï½]ã»h[vï½]$/i.test(value)) return "EVã»HV";
   return value;
 }
 
@@ -195,16 +187,13 @@ function extractTypesFromText(text) {
   let match;
 
   while ((match = regex.exec(fixed)) !== null) {
-    const type = compactText(match[1]).replace(/[、,。]/g, "");
-
+    const value = compactText(match[1]).replace(/[ã,ã]/g, "");
     if (
-      type &&
-      !type.includes(".") &&
-      !type.includes("_") &&
-      !type.includes("…") &&
-      !types.includes(type)
+      value &&
+      !/[._â¦]/.test(value) &&
+      !types.includes(value)
     ) {
-      types.push(type);
+      types.push(value);
     }
   }
 
@@ -213,25 +202,35 @@ function extractTypesFromText(text) {
 
 function buildTypeKeys(types) {
   return Array.from(
-    new Set(types.map((type) => normalizeTypeKey(type)).filter(Boolean))
+    new Set((types || []).map(normalizeTypeKey).filter(Boolean))
   );
 }
 
 function uniqueByStockId(vehicles) {
   const map = new Map();
-
   for (const vehicle of vehicles || []) {
-    if (vehicle.stockId) map.set(vehicle.stockId, vehicle);
+    if (vehicle?.stockId) map.set(vehicle.stockId, vehicle);
   }
-
   return Array.from(map.values());
+}
+
+function escapeRegExp(value) {
+  return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function extractAttribute(tagHtml, attributeName) {
+  const regex = new RegExp(
+    `${escapeRegExp(attributeName)}\\s*=\\s*["']([^"']*)["']`,
+    "i"
+  );
+  return decodeHtmlEntities(String(tagHtml || "").match(regex)?.[1] || "");
 }
 
 function extractRawHrefValues(html) {
   return Array.from(
     String(html || "").matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi)
   )
-    .map((m) => decodeHtmlEntities(m[1]))
+    .map((match) => decodeHtmlEntities(match[1]))
     .filter(Boolean);
 }
 
@@ -245,373 +244,443 @@ function extractImageValues(html, baseUrl) {
   return Array.from(
     String(html || "").matchAll(/<img\b[^>]*src=["']([^"']+)["'][^>]*>/gi)
   )
-    .map((m) => absoluteUrl(decodeHtmlEntities(m[1]), baseUrl))
+    .map((match) => absoluteUrl(decodeHtmlEntities(match[1]), baseUrl))
     .filter(Boolean);
 }
 
-function findFirstUrl(urls, includesText) {
-  return urls.find((url) => url.includes(includesText)) || "";
+function findFirstUrl(urls, text) {
+  return (urls || []).find((url) => url.includes(text)) || "";
 }
 
 function extractTdByClass(rowHtml, className) {
   const regex = new RegExp(
-    `<td\\b[^>]*class=["'][^"']*${className}[^"']*["'][^>]*>([\\s\\S]*?)<\\/td>`,
+    `<td\\b[^>]*class=["'][^"']*${escapeRegExp(className)}[^"']*["'][^>]*>([\\s\\S]*?)<\\/td>`,
     "i"
   );
-
-  return rowHtml.match(regex)?.[1] || "";
-}
-
-function extractNameAnchorHtml(nameCellHtml) {
-  const carModelDiv =
-    nameCellHtml.match(
-      /<div\b[^>]*class=["'][^"']*car-model[^"']*["'][^>]*>([\s\S]*?)<\/div>/i
-    )?.[1] || nameCellHtml;
-
-  return carModelDiv.match(/<a\b[^>]*>([\s\S]*?)<\/a>/i)?.[1] || "";
+  return String(rowHtml || "").match(regex)?.[1] || "";
 }
 
 function extractLiTexts(html) {
   return Array.from(String(html || "").matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi))
-    .map((m) => cleanHtmlToText(m[1]))
-    .map((text) => compactText(text))
+    .map((match) => compactText(cleanHtmlToText(match[1])))
     .filter(Boolean);
 }
 
 function extractSpanById(html, idPart) {
   const regex = new RegExp(
-    `<span\\b[^>]*id=["'][^"']*${idPart}[^"']*["'][^>]*>([\\s\\S]*?)<\\/span>`,
+    `<span\\b[^>]*id=["'][^"']*${escapeRegExp(idPart)}[^"']*["'][^>]*>([\\s\\S]*?)<\\/span>`,
     "i"
   );
-
-  return compactText(cleanHtmlToText(html.match(regex)?.[1] || ""));
+  return compactText(cleanHtmlToText(String(html || "").match(regex)?.[1] || ""));
 }
 
 function extractQualityImageMap(html, baseUrl) {
   const map = {};
-  const regex = /<input\b[^>]*name=['"]quality_img_url\[\]['"][^>]*>/gi;
-  const inputs = String(html || "").match(regex) || [];
+  const inputs =
+    String(html || "").match(
+      /<input\b[^>]*name=["']quality_img_url\[\]["'][^>]*>/gi
+    ) || [];
 
   for (const input of inputs) {
     const id =
       input.match(/data-quality-img-url-id=["']([^"']+)["']/i)?.[1] ||
       input.match(/id=["']quality_img_url_([^"']+)["']/i)?.[1] ||
       "";
-
     const value = input.match(/value=["']([^"']+)["']/i)?.[1] || "";
-
-    if (id && value) {
-      map[id] = absoluteUrl(decodeHtmlEntities(value), baseUrl);
-    }
+    if (id && value) map[id] = absoluteUrl(decodeHtmlEntities(value), baseUrl);
   }
 
   return map;
 }
 
-function percentDecodeUtf8(value) {
-  const text = String(value || "").replace(/\+/g, "%20");
-  const bytes = [];
-
-  for (let i = 0; i < text.length; i++) {
-    if (
-      text[i] === "%" &&
-      i + 2 < text.length &&
-      /^[0-9a-fA-F]{2}$/.test(text.slice(i + 1, i + 3))
-    ) {
-      bytes.push(parseInt(text.slice(i + 1, i + 3), 16));
-      i += 2;
-    } else {
-      bytes.push(...new TextEncoder().encode(text[i]));
-    }
-  }
-
-  return new TextDecoder("utf-8", { fatal: false }).decode(
-    Uint8Array.from(bytes)
-  );
-}
-
-function getQueryParamRaw(urlText, name) {
-  const text = decodeHtmlEntities(String(urlText || ""));
-  const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const regex = new RegExp(`[?&]${escapedName}=([^&#"']*)`, "i");
-  const match = text.match(regex);
-  return match ? match[1] : "";
-}
-
 function getQueryParamDecoded(urlText, name) {
-  return fixBasicMojibake(percentDecodeUtf8(getQueryParamRaw(urlText, name)));
+  const match = decodeHtmlEntities(String(urlText || "")).match(
+    new RegExp(`[?&]${escapeRegExp(name)}=([^&#"']*)`, "i")
+  );
+
+  if (!match) return "";
+  try {
+    return fixBasicMojibake(decodeURIComponent(match[1].replace(/\+/g, "%20")));
+  } catch {
+    return fixBasicMojibake(match[1]);
+  }
 }
 
 function extractVehicleRows(html) {
   const rows = [];
   const regex =
     /<tr\b[^>]*id=["']tr_([A-Za-z0-9]+)["'][^>]*>([\s\S]*?)(?=<tr\b[^>]*id=["']tr_[A-Za-z0-9]+["']|<\/tbody>|<\/table>)/gi;
-
   let match;
 
-  while ((match = regex.exec(html)) !== null) {
-    rows.push({
-      stockId: match[1],
-      rowHtml: match[0],
-    });
+  while ((match = regex.exec(String(html || ""))) !== null) {
+    rows.push({ stockId: match[1], rowHtml: match[0] });
   }
 
   return rows;
 }
 
-function escapeRegExp(value) {
-  return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-function extractAttribute(tagHtml, attributeName) {
-  const escaped = escapeRegExp(attributeName);
-  const regex = new RegExp(`${escaped}\\s*=\\s*["']([^"']*)["']`, "i");
-  return decodeHtmlEntities(String(tagHtml || "").match(regex)?.[1] || "");
-}
-
 function normalizeLooseKey(value) {
   return toHalfWidthAscii(String(value || ""))
     .toLowerCase()
-    .replace(/[\s_\-:[\]（）()]/g, "");
+    .replace(/[\s_\-:[\]ï¼ï¼()]/g, "");
 }
 
-function extractSelectedOptionText(selectHtml) {
-  const selectedOption =
-    String(selectHtml || "").match(
-      /<option\b[^>]*selected[^>]*>([\s\S]*?)<\/option>/i
-    )?.[1] || "";
+function extractSelectedOption(selectHtml) {
+  const options = Array.from(
+    String(selectHtml || "").matchAll(/<option\b([^>]*)>([\s\S]*?)<\/option>/gi)
+  );
+  const selected = options.find((option) => /\bselected\b/i.test(option[1] || ""));
+  if (!selected) return { value: "", text: "" };
 
-  if (selectedOption) {
-    return compactText(cleanHtmlToText(selectedOption));
-  }
-
-  const firstOption =
-    String(selectHtml || "").match(/<option\b[^>]*>([\s\S]*?)<\/option>/i)?.[1] ||
-    "";
-
-  return compactText(cleanHtmlToText(firstOption));
+  return {
+    value: extractAttribute(selected[1], "value"),
+    text: compactText(cleanHtmlToText(selected[2])),
+  };
 }
 
-function extractValueByName(html, name) {
-  const escaped = escapeRegExp(name);
+function extractControls(html) {
+  const source = String(html || "");
+  const controls = [];
 
-  const inputRegex = new RegExp(
-    `<input\\b[^>]*name=["']${escaped}["'][^>]*>`,
-    "i"
-  );
+  for (const match of source.matchAll(/<input\b([^>]*)>/gi)) {
+    const attrs = match[1] || "";
+    const type = extractAttribute(attrs, "type").toLowerCase();
+    if ((type === "radio" || type === "checkbox") && !/\bchecked\b/i.test(attrs)) {
+      continue;
+    }
 
-  const textareaRegex = new RegExp(
-    `<textarea\\b[^>]*name=["']${escaped}["'][^>]*>([\\s\\S]*?)<\\/textarea>`,
-    "i"
-  );
-
-  const selectRegex = new RegExp(
-    `<select\\b[^>]*name=["']${escaped}["'][^>]*>([\\s\\S]*?)<\\/select>`,
-    "i"
-  );
-
-  const input = String(html || "").match(inputRegex)?.[0] || "";
-
-  if (input) {
-    const value = input.match(/value=["']([^"']*)["']/i)?.[1] || "";
-    return compactText(cleanHtmlToText(value));
+    controls.push({
+      name: extractAttribute(attrs, "name"),
+      id: extractAttribute(attrs, "id"),
+      className: extractAttribute(attrs, "class"),
+      value: compactText(cleanHtmlToText(extractAttribute(attrs, "value"))),
+      text: "",
+    });
   }
 
-  const textarea = String(html || "").match(textareaRegex)?.[1] || "";
-
-  if (textarea) {
-    return compactText(cleanHtmlToText(textarea));
+  for (const match of source.matchAll(/<textarea\b([^>]*)>([\s\S]*?)<\/textarea>/gi)) {
+    const attrs = match[1] || "";
+    controls.push({
+      name: extractAttribute(attrs, "name"),
+      id: extractAttribute(attrs, "id"),
+      className: extractAttribute(attrs, "class"),
+      value: compactText(cleanHtmlToText(match[2])),
+      text: "",
+    });
   }
 
-  const selectHtml = String(html || "").match(selectRegex)?.[1] || "";
+  for (const match of source.matchAll(/<select\b([^>]*)>([\s\S]*?)<\/select>/gi)) {
+    const attrs = match[1] || "";
+    const selected = extractSelectedOption(match[2]);
+    controls.push({
+      name: extractAttribute(attrs, "name"),
+      id: extractAttribute(attrs, "id"),
+      className: extractAttribute(attrs, "class"),
+      value: selected.value,
+      text: selected.text,
+    });
+  }
 
-  if (selectHtml) {
-    return extractSelectedOptionText(selectHtml);
+  return controls;
+}
+
+function findFieldRegion(html, labels) {
+  const source = String(html || "");
+
+  for (const label of labels) {
+    const index = source.indexOf(label);
+    if (index < 0) continue;
+
+    for (const [startTag, endTag] of [
+      ["<tr", "</tr>"],
+      ["<li", "</li>"],
+      ["<dl", "</dl>"],
+      ["<fieldset", "</fieldset>"],
+    ]) {
+      const start = source.lastIndexOf(startTag, index);
+      const end = source.indexOf(endTag, index);
+      if (start >= 0 && end >= 0 && end + endTag.length - start <= 12000) {
+        return source.slice(start, end + endTag.length);
+      }
+    }
+
+    return source.slice(Math.max(0, index - 500), Math.min(source.length, index + 5000));
   }
 
   return "";
 }
 
-function extractValueByAnyName(html, names) {
-  for (const name of names) {
-    const value = extractValueByName(html, name);
+function controlsByKeys(html, keys) {
+  const targets = keys.map(normalizeLooseKey).filter(Boolean);
+  return extractControls(html).filter((control) => {
+    const key = normalizeLooseKey(`${control.name} ${control.id} ${control.className}`);
+    return targets.some((target) => key.includes(target));
+  });
+}
 
+function controlValues(controls) {
+  const values = [];
+
+  for (const control of controls || []) {
+    for (const raw of [control.text, control.value]) {
+      const value = compactText(raw);
+      if (
+        value &&
+        !/^(é¸æ|é¸æãã¦ãã ãã|æªé¸æ|ãªã|--|---|0)$/i.test(value) &&
+        !values.includes(value)
+      ) {
+        values.push(value);
+      }
+    }
+  }
+
+  return values;
+}
+
+function extractValueByNames(html, names) {
+  const controls = extractControls(html);
+  const targets = names.map(normalizeLooseKey).filter(Boolean);
+
+  for (const control of controls) {
+    const name = normalizeLooseKey(control.name);
+    const id = normalizeLooseKey(control.id);
+    if (!targets.some((target) => name === target || id === target)) continue;
+
+    const value = compactText(control.text || control.value);
+    if (value) return value;
+  }
+
+  for (const control of controls) {
+    const name = normalizeLooseKey(control.name);
+    const id = normalizeLooseKey(control.id);
+    if (
+      !targets.some(
+        (target) =>
+          target.length >= 5 && (name.includes(target) || id.includes(target))
+      )
+    ) {
+      continue;
+    }
+
+    const value = compactText(control.text || control.value);
     if (value) return value;
   }
 
   return "";
 }
 
-function extractValueByLooseName(html, keywords) {
-  const htmlText = String(html || "");
-  const normalizedKeywords = keywords.map(normalizeLooseKey).filter(Boolean);
+function extractValueNearLabels(html, labels) {
+  const region = findFieldRegion(html, labels);
+  const values = controlValues(extractControls(region));
+  if (values.length) return values[0];
 
-  const inputMatches = Array.from(htmlText.matchAll(/<input\b[^>]*>/gi));
-
-  for (const match of inputMatches) {
-    const tag = match[0];
-    const key = normalizeLooseKey(
-      `${extractAttribute(tag, "name")} ${extractAttribute(tag, "id")} ${extractAttribute(tag, "class")}`
+  let text = compactText(cleanHtmlToText(region));
+  for (const label of labels) {
+    text = text.replace(
+      new RegExp(`^.*?${escapeRegExp(label)}\\s*[ï¼:]?\\s*`, "i"),
+      ""
     );
-
-    if (normalizedKeywords.some((keyword) => key.includes(keyword))) {
-      const value = extractAttribute(tag, "value");
-      if (value) return compactText(cleanHtmlToText(value));
-    }
   }
-
-  const textareaMatches = Array.from(
-    htmlText.matchAll(/<textarea\b([^>]*)>([\s\S]*?)<\/textarea>/gi)
-  );
-
-  for (const match of textareaMatches) {
-    const attrs = match[1] || "";
-    const body = match[2] || "";
-    const key = normalizeLooseKey(
-      `${extractAttribute(attrs, "name")} ${extractAttribute(attrs, "id")} ${extractAttribute(attrs, "class")}`
-    );
-
-    if (normalizedKeywords.some((keyword) => key.includes(keyword))) {
-      const value = compactText(cleanHtmlToText(body));
-      if (value) return value;
-    }
-  }
-
-  const selectMatches = Array.from(
-    htmlText.matchAll(/<select\b([^>]*)>([\s\S]*?)<\/select>/gi)
-  );
-
-  for (const match of selectMatches) {
-    const attrs = match[1] || "";
-    const body = match[2] || "";
-    const key = normalizeLooseKey(
-      `${extractAttribute(attrs, "name")} ${extractAttribute(attrs, "id")} ${extractAttribute(attrs, "class")}`
-    );
-
-    if (normalizedKeywords.some((keyword) => key.includes(keyword))) {
-      const value = extractSelectedOptionText(body);
-      if (value) return value;
-    }
-  }
-
-  return "";
+  return text;
 }
 
-function extractValueNearLabel(html, label) {
-  const text = String(html || "");
-  const escapedLabel = escapeRegExp(label);
+function parseYear(value) {
+  const text = compactText(value);
+  const western = text.match(/((?:19|20)\d{2})\s*(?:å¹´|[\/-])?\s*([01]?\d)?/);
+  if (western) {
+    const month = Number(western[2] || 0);
+    return {
+      year: Number(western[1]),
+      month: month >= 1 && month <= 12 ? month : null,
+    };
+  }
 
-  const patterns = [
-    new RegExp(
-      `${escapedLabel}[\\s\\S]{0,1000}?<input\\b[^>]*value=["']([^"']*)["'][^>]*>`,
-      "i"
-    ),
-    new RegExp(
-      `${escapedLabel}[\\s\\S]{0,1000}?<textarea\\b[^>]*>([\\s\\S]*?)<\\/textarea>`,
-      "i"
-    ),
-    new RegExp(
-      `${escapedLabel}[\\s\\S]{0,1000}?<select\\b[^>]*>([\\s\\S]*?)<\\/select>`,
-      "i"
-    ),
+  const era = text.match(/(ä»¤å|å¹³æ|æ­å)\s*(å|\d+)\s*å¹´?\s*([01]?\d)?/);
+  if (!era) return null;
+
+  const eraYear = era[2] === "å" ? 1 : Number(era[2]);
+  const base = era[1] === "ä»¤å" ? 2018 : era[1] === "å¹³æ" ? 1988 : 1925;
+  const month = Number(era[3] || 0);
+
+  return {
+    year: base + eraYear,
+    month: month >= 1 && month <= 12 ? month : null,
+  };
+}
+
+function extractRegistrationYear(html) {
+  const labels = [
+    "ååº¦ç»é²å¹´æ",
+    "åå¹´åº¦ç»é²å¹´æ",
+    "ååº¦ç»é²",
+    "åå¹´åº¦ç»é²",
+    "ååº¦æ¤æ»å¹´æ",
+    "å¹´å¼",
+  ];
+  const keys = [
+    "nenshiki",
+    "syodo",
+    "shodo",
+    "firstregistration",
+    "firstregist",
+    "registrationyear",
+    "registyear",
+    "modelyear",
   ];
 
-  for (const pattern of patterns) {
-    const match = text.match(pattern);
+  const region = findFieldRegion(html, labels);
+  const values = controlValues([
+    ...extractControls(region),
+    ...controlsByKeys(html, keys),
+  ]);
 
-    if (match?.[1]) {
-      if (pattern.source.includes("<select")) {
-        return extractSelectedOptionText(match[1]);
-      }
-
-      return compactText(cleanHtmlToText(decodeHtmlEntities(match[1])));
+  for (const value of values) {
+    const parsed = parseYear(value);
+    if (parsed) {
+      return parsed.month
+        ? `${parsed.year}å¹´${parsed.month}æ`
+        : `${parsed.year}å¹´`;
     }
   }
 
-  return "";
+  const numbers = values
+    .map((value) => Number(toHalfWidthAscii(value).replace(/[^0-9]/g, "")))
+    .filter(Number.isFinite);
+  const year = numbers.find((value) => value >= 1920 && value <= 2035);
+  const month = numbers.find(
+    (value) => value >= 1 && value <= 12 && value !== year
+  );
+
+  if (year) return month ? `${year}å¹´${month}æ` : `${year}å¹´`;
+
+  const parsed = parseYear(cleanHtmlToText(region));
+  if (!parsed) return "";
+  return parsed.month
+    ? `${parsed.year}å¹´${parsed.month}æ`
+    : `${parsed.year}å¹´`;
 }
 
-function extractValueNearAnyLabel(html, labels) {
-  for (const label of labels) {
-    const value = extractValueNearLabel(html, label);
-
-    if (value) return value;
-  }
-
-  return "";
-}
-
-function lineContainsAnyLabel(line, labels) {
-  return labels.some((label) => String(line || "").includes(label));
-}
-
-function cleanLabeledValue(value, stopLabels = []) {
-  let text = compactText(value)
-    .replace(/^[：:\s]+/, "")
-    .replace(/[｜|]/g, " ")
+function cleanColor(value) {
+  let text = compactText(fixBasicMojibake(value))
+    .replace(
+      /^(è»ä½è²|ããã£ã«ã©ã¼|ããã£ã¼ã«ã©ã¼|å¤è£è²|ã«ã©ã¼|è²)\s*[ï¼:]?\s*/,
+      ""
+    )
+    .replace(/(ã«ã©ã¼ã³ã¼ã|è²ã³ã¼ã)[\s\S]*$/, "")
     .trim();
 
-  for (const stopLabel of stopLabels) {
-    const index = text.indexOf(stopLabel);
+  for (const stop of [
+    "ååº¦ç»é²",
+    "åå¹´åº¦ç»é²",
+    "å¹´å¼",
+    "èµ°è¡è·é¢",
+    "èµ°è¡",
+    "è»æ¤",
+    "ææ°é",
+    "ä¾¡æ ¼",
+    "æ¯æç·é¡",
+    "åå¼",
+    "ã°ã¬ã¼ã",
+    "ä¿®å¾©æ­´",
+  ]) {
+    const index = text.indexOf(stop);
+    if (index > 0) text = text.slice(0, index).trim();
+  }
 
-    if (index > 0) {
-      text = text.slice(0, index).trim();
+  return text.slice(0, 100);
+}
+
+function colorScore(value, control = null) {
+  const text = compactText(value);
+  if (!text || /^(é¸æ|é¸æãã¦ãã ãã|æªé¸æ|ãªã|ãã®ä»|--|---)$/i.test(text)) {
+    return -999;
+  }
+  if (/^#[0-9a-f]{3,8}$/i.test(text) || /^\d+$/.test(text)) return -999;
+
+  let score = Math.min(text.length, 40);
+  if (/[ã-ãã¡-ã¶ä¸-é¾ ]/.test(text)) score += 40;
+  if (
+    /(ãã¼ã«|ã¡ã¿ãªãã¯|ãã©ãã¯|ãã¯ã¤ã|ã·ã«ãã¼|ã°ã¬ã¼|ãã«ã¼|ã¬ãã|ãã©ã¦ã³|ãã¼ã¸ã¥|ãã¤ã«|ã¯ãªã¹ã¿ã«|ã¢ã¤ããªã¼|ã°ãªã¼ã³|ãªã¬ã³ã¸|ã¤ã¨ã­ã¼|ãã³ã¯|ãã¼ãã«|ã´ã¼ã«ã|ã«ã¼ã­|ãã­ã³ãº)/.test(
+      text
+    )
+  ) {
+    score += 35;
+  }
+
+  if (control) {
+    const key = normalizeLooseKey(`${control.name} ${control.id}`);
+    if (key.includes("name")) score += 10;
+    if (key.includes("color") || key.includes("iro")) score += 10;
+    if (key.includes("code")) score -= 30;
+  }
+
+  return score;
+}
+
+function extractBodyColor(html) {
+  const labels = [
+    "è»ä½è²",
+    "ããã£ã«ã©ã¼",
+    "ããã£ã¼ã«ã©ã¼",
+    "å¤è£è²",
+    "ã«ã©ã¼",
+  ];
+  const keys = [
+    "bodycolor",
+    "carcolor",
+    "exteriorcolor",
+    "colorname",
+    "bodyiro",
+    "car_iro",
+  ];
+
+  const region = findFieldRegion(html, labels);
+  const controls = [
+    ...extractControls(region),
+    ...controlsByKeys(html, keys),
+  ];
+  const candidates = [];
+
+  for (const control of controls) {
+    for (const raw of [control.text, control.value]) {
+      const value = cleanColor(raw);
+      const score = colorScore(value, control);
+      if (score > -999) candidates.push({ value, score });
     }
   }
 
-  return compactText(text);
+  const regionText = cleanColor(cleanHtmlToText(region));
+  const regionScore = colorScore(regionText);
+  if (regionScore > -999) candidates.push({ value: regionText, score: regionScore });
+
+  candidates.sort((a, b) => b.score - a.score);
+  return candidates[0]?.value || "";
 }
 
-function extractLineValueByLabels(text, labels, stopLabels = []) {
-  const lines = String(text || "")
-    .split(/\n+/)
-    .map((line) => compactText(line))
-    .filter(Boolean);
+function normalizePrice(value) {
+  const text = compactText(value);
+  if (!text) return "";
+  if (text.includes("ä¸å")) return text;
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+  const number = text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0] || "";
+  return number ? `${number}ä¸å` : text;
+}
 
-    for (const label of labels) {
-      const index = line.indexOf(label);
+function normalizeMileage(value) {
+  const text = compactText(value);
+  if (!text) return "";
+  if (text.includes("èµ°ä¸æ")) return "èµ°ä¸æ";
+  if (/ä¸[ï¼«Kk]/.test(text)) return text.replace(/ä¸[ï¼«Kk]/, "ä¸K");
 
-      if (index >= 0) {
-        const afterLabel = cleanLabeledValue(
-          line.slice(index + label.length),
-          stopLabels
-        );
+  const numberText = text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0] || "";
+  if (!numberText) return text;
 
-        if (
-          afterLabel &&
-          !lineContainsAnyLabel(afterLabel, labels) &&
-          !lineContainsAnyLabel(afterLabel, stopLabels)
-        ) {
-          return afterLabel;
-        }
-
-        for (let j = i + 1; j <= i + 4 && j < lines.length; j++) {
-          const nextLine = cleanLabeledValue(lines[j], stopLabels);
-
-          if (!nextLine) continue;
-          if (lineContainsAnyLabel(nextLine, labels)) continue;
-          if (lineContainsAnyLabel(nextLine, stopLabels)) break;
-
-          return nextLine;
-        }
-      }
-    }
+  const number = Number(numberText);
+  if (!Number.isFinite(number)) return text;
+  if (/km|ï¼«ï¼­|ï½ï½/i.test(text) || number >= 1000) {
+    return `${Math.round(number).toLocaleString("ja-JP")}km`;
   }
-
-  return "";
-}
-
-function extractGradeExtraInfo(html) {
-  return (
-    extractValueNearLabel(html, "グレード付加情報") ||
-    extractValueByName(html, "grade_additional_info") ||
-    extractValueByName(html, "grade_info") ||
-    extractValueByName(html, "GradeAddition") ||
-    ""
-  );
+  return `${numberText}ä¸K`;
 }
 
 function extractFirstMatch(text, regex) {
@@ -619,334 +688,100 @@ function extractFirstMatch(text, regex) {
   return match ? match[1] || match[0] : "";
 }
 
-function normalizePrice(value) {
-  const text = compactText(value);
-
-  if (!text) return "";
-  if (text.includes("万円")) return text;
-
-  const numeric = text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0] || "";
-
-  return numeric ? `${numeric}万円` : text;
-}
-
-function normalizeMileage(value) {
-  const text = compactText(value);
-
-  if (!text) return "";
-  if (text.includes("万K")) return text;
-  if (text.includes("万k")) return text.replace("万k", "万K");
-  if (text.includes("走不明")) return "走不明";
-
-  const numeric = text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0] || "";
-
-  return numeric ? `${numeric}万K` : text;
-}
-
-function normalizeYear(value) {
-  const text = compactText(value);
-
-  if (!text) return "";
-
-  const westernWithMonth = text.match(/((?:19|20)\d{2})\s*年\s*([0-9]{1,2})\s*月/);
-
-  if (westernWithMonth) {
-    return `${westernWithMonth[1]}年${westernWithMonth[2]}月`;
-  }
-
-  const westernYear = text.match(/((?:19|20)\d{2})\s*年?/);
-
-  if (westernYear) {
-    return `${westernYear[1]}年`;
-  }
-
-  const warekiWithMonth = text.match(/((?:令和|平成|昭和)\s*[0-9元]+\s*年\s*[0-9]{1,2}\s*月)/);
-
-  if (warekiWithMonth) {
-    return compactText(warekiWithMonth[1]).replace(/\s+/g, "");
-  }
-
-  const warekiYear = text.match(/((?:令和|平成|昭和)\s*[0-9元]+\s*年)/);
-
-  if (warekiYear) {
-    return compactText(warekiYear[1]).replace(/\s+/g, "");
-  }
-
-  if (text.includes("年")) return text.slice(0, 30);
-
-  return text;
-}
-
-function normalizeColor(value) {
-  let text = compactText(fixBasicMojibake(value))
-    .replace(/^(車体色|ボディカラー|外装色|カラー|色)\s*[：:]\s*/g, "")
-    .replace(/^(車体色|ボディカラー|外装色|カラー|色)\s+/g, "")
-    .replace(/カラーコード[\s\S]*$/g, "")
-    .replace(/色コード[\s\S]*$/g, "")
-    .trim();
-
-  const stopLabels = [
-    "初度登録",
-    "初年度登録",
-    "年式",
-    "走行距離",
-    "走行",
-    "車検",
-    "排気量",
-    "価格",
-    "支払総額",
-    "型式",
-    "グレード",
-    "修復歴",
-  ];
-
-  for (const label of stopLabels) {
-    const index = text.indexOf(label);
-
-    if (index > 0) {
-      text = text.slice(0, index).trim();
-    }
-  }
-
-  return compactText(text).slice(0, 80);
-}
-
 function extractImageCandidates(html) {
-  const raw = String(html || "");
   const urls = [];
+  const source = String(html || "");
 
-  for (const match of raw.matchAll(
-    /https?:\/\/[^"'\\\s>]+?\.(?:jpg|jpeg|png|webp)/gi
+  for (const match of source.matchAll(
+    /https?:\/\/[^"'\\\s>]+?\.(?:jpg|jpeg|png|webp)(?:\?[^"'\\\s>]*)?/gi
   )) {
     urls.push(decodeHtmlEntities(match[0]));
   }
 
-  for (const match of raw.matchAll(
-    /value=["']([^"']+\.(?:jpg|jpeg|png|webp))["']/gi
+  for (const match of source.matchAll(
+    /value=["']([^"']+\.(?:jpg|jpeg|png|webp)(?:\?[^"']*)?)["']/gi
   )) {
-    urls.push(decodeHtmlEntities(match[1]));
+    urls.push(absoluteUrl(decodeHtmlEntities(match[1])));
   }
 
   return Array.from(new Set(urls))
     .filter((url) => !url.includes("/common/"))
-    .filter((url) => !url.includes("logo"))
-    .filter((url) => !url.includes("noimage"))
-    .filter((url) => !url.includes("nophoto"));
+    .filter((url) => !/logo|noimage|nophoto/i.test(url));
 }
 
 function extractFirstImageUrl(html) {
-  const candidates = extractImageCandidates(html);
-
+  const images = extractImageCandidates(html);
   return (
-    candidates.find((url) => url.includes("picture") && url.includes("goo-net")) ||
-    candidates.find((url) => url.includes("goo-net")) ||
-    candidates[0] ||
+    images.find((url) => url.includes("picture") && url.includes("goo-net")) ||
+    images.find((url) => url.includes("goo-net")) ||
+    images[0] ||
     ""
   );
 }
 
-function extractSavedVehicleDetails(html) {
+function extractCommonVehicleDetails(html) {
   const text = cleanHtmlToText(html);
 
-  const year = normalizeYear(
-    extractValueNearAnyLabel(html, [
-      "初度登録",
-      "初年度登録",
-      "初度登録年月",
-      "初年度登録年月",
-      "年式",
-      "モデル年式",
-    ]) ||
-      extractValueByAnyName(html, [
-        "Nenshiki",
-        "nenshiki",
-        "Year",
-        "year",
-        "ModelYear",
-        "model_year",
-        "FirstRegistration",
-        "first_registration",
-        "FirstRegist",
-        "first_regist",
-        "FirstRegistYear",
-        "first_regist_year",
-        "FirstRegistrationYear",
-        "first_registration_year",
-        "RegistYear",
-        "regist_year",
-        "RegistrationYear",
-        "registration_year",
-      ]) ||
-      extractValueByLooseName(html, [
-        "初度登録",
-        "初年度登録",
-        "nenshiki",
-        "modelyear",
-        "model_year",
-        "firstregistration",
-        "first_registration",
-        "firstregist",
-        "first_regist",
-        "registrationyear",
-        "registration_year",
-        "registyear",
-        "regist_year",
-      ]) ||
-      extractLineValueByLabels(
-        text,
-        ["初度登録", "初年度登録", "初度登録年月", "初年度登録年月", "年式"],
-        ["走行距離", "走行", "車体色", "ボディカラー", "外装色", "カラー", "車検", "排気量"]
-      ) ||
-      extractFirstMatch(text, /((?:19|20)\d{2}\s*年\s*[0-9]{1,2}\s*月)/) ||
-      extractFirstMatch(text, /((?:19|20)\d{2}\s*年)/) ||
-      extractFirstMatch(text, /((?:令和|平成|昭和)\s*[0-9元]+\s*年\s*[0-9]{1,2}\s*月)/) ||
-      extractFirstMatch(text, /((?:令和|平成|昭和)\s*[0-9元]+\s*年)/)
-  );
-
   const mileage = normalizeMileage(
-    extractValueNearAnyLabel(html, ["走行距離", "走行"]) ||
-      extractValueByAnyName(html, [
-        "Soukou",
-        "soukou",
-        "SoukouKyori",
-        "soukou_kyori",
-        "Mileage",
-        "mileage",
-        "MileageDistance",
-        "mileage_distance",
-      ]) ||
-      extractValueByLooseName(html, [
-        "走行距離",
-        "soukou",
-        "soukoukyori",
-        "soukou_kyori",
-        "mileage",
-        "mileagedistance",
-      ]) ||
-      extractLineValueByLabels(
-        text,
-        ["走行距離", "走行"],
-        ["初度登録", "初年度登録", "車体色", "ボディカラー", "外装色", "カラー", "車検", "排気量"]
-      ) ||
-      extractFirstMatch(text, /(\d+(?:\.\d+)?万[ＫKk])/) ||
-      (text.includes("走不明") ? "走不明" : "")
-  );
-
-  const color = normalizeColor(
-    extractValueNearAnyLabel(html, [
-      "車体色",
-      "ボディカラー",
-      "外装色",
-      "カラー",
+    extractValueByNames(html, [
+      "Soukou",
+      "SoukouKyori",
+      "Mileage",
+      "MileageDistance",
     ]) ||
-      extractValueByAnyName(html, [
-        "BodyColor",
-        "body_color",
-        "BodyColorName",
-        "body_color_name",
-        "Color",
-        "color",
-        "CarColor",
-        "car_color",
-        "CarColorName",
-        "car_color_name",
-        "ExteriorColor",
-        "exterior_color",
-        "ExteriorColorName",
-        "exterior_color_name",
-      ]) ||
-      extractValueByLooseName(html, [
-        "車体色",
-        "ボディカラー",
-        "外装色",
-        "bodycolor",
-        "body_color",
-        "bodycolorname",
-        "body_color_name",
-        "carcolor",
-        "car_color",
-        "exteriorcolor",
-        "exterior_color",
-        "colorname",
-        "color_name",
-      ]) ||
-      extractLineValueByLabels(
-        text,
-        ["車体色", "ボディカラー", "外装色", "カラー"],
-        ["初度登録", "初年度登録", "年式", "走行距離", "走行", "車検", "排気量", "価格", "支払総額"]
-      )
+      extractValueNearLabels(html, ["èµ°è¡è·é¢", "èµ°è¡"]) ||
+      extractFirstMatch(text, /(\d+(?:\.\d+)?ä¸[ï¼«Kk])/) ||
+      extractFirstMatch(text, /(\d{1,3}(?:,\d{3})+\s*(?:km|ï¼«ï¼­|ï½ï½))/i) ||
+      (text.includes("èµ°ä¸æ") ? "èµ°ä¸æ" : "")
   );
 
   const bodyPrice = normalizePrice(
-    extractValueNearAnyLabel(html, ["車両本体価格", "本体価格", "価格"]) ||
-      extractValueByAnyName(html, [
-        "Kakaku",
-        "kakaku",
-        "Price",
-        "price",
-        "BodyPrice",
-        "body_price",
-      ]) ||
-      extractValueByLooseName(html, [
-        "kakaku",
-        "bodyprice",
-        "body_price",
-        "vehicleprice",
-        "vehicle_price",
-      ]) ||
-      extractFirstMatch(text, /価格\s*([0-9]+(?:\.[0-9]+)?万円)/)
+    extractValueByNames(html, ["Kakaku", "BodyPrice", "VehiclePrice"]) ||
+      extractValueNearLabels(html, ["è»ä¸¡æ¬ä½ä¾¡æ ¼", "æ¬ä½ä¾¡æ ¼"]) ||
+      extractFirstMatch(
+        text,
+        /(?:è»ä¸¡æ¬ä½ä¾¡æ ¼|æ¬ä½ä¾¡æ ¼|ä¾¡æ ¼)\s*([0-9]+(?:\.[0-9]+)?ä¸å)/
+      )
   );
 
   const totalPrice = normalizePrice(
-    extractValueNearAnyLabel(html, ["支払総額", "総額"]) ||
-      extractValueByAnyName(html, [
-        "TotalPrice",
-        "total_price",
-        "Total",
-        "total",
-        "SiharaiTotal",
-        "siharai_total",
-        "ShiharaiTotal",
-        "shiharai_total",
-      ]) ||
-      extractValueByLooseName(html, [
-        "totalprice",
-        "total_price",
-        "siharaitotal",
-        "siharai_total",
-        "shiharaitotal",
-        "shiharai_total",
-      ]) ||
-      extractFirstMatch(text, /総額\s*([0-9]+(?:\.[0-9]+)?万円)/)
+    extractValueByNames(html, [
+      "TotalPrice",
+      "SiharaiTotal",
+      "ShiharaiTotal",
+    ]) ||
+      extractValueNearLabels(html, ["æ¯æç·é¡", "ç·é¡"]) ||
+      extractFirstMatch(
+        text,
+        /(?:æ¯æç·é¡|ç·é¡)\s*([0-9]+(?:\.[0-9]+)?ä¸å)/
+      )
   );
 
-  const gradeExtraInfo = extractGradeExtraInfo(html);
-  const imageUrl = extractFirstImageUrl(html);
-
   return {
-    year,
+    year: extractRegistrationYear(html),
     mileage,
-    color,
+    color: extractBodyColor(html),
     bodyPrice,
     totalPrice,
-    gradeExtraInfo,
-    imageUrl,
+    gradeExtraInfo:
+      extractValueNearLabels(html, ["ã°ã¬ã¼ãä»å æå ±"]) ||
+      extractValueByNames(html, [
+        "grade_additional_info",
+        "grade_info",
+        "GradeAddition",
+      ]) ||
+      "",
+    imageUrl: extractFirstImageUrl(html),
   };
 }
 
 function parsePublicVehicleRow(row, baseUrl, qualityImageMap) {
   const { stockId, rowHtml } = row;
-
   const rawHrefs = extractRawHrefValues(rowHtml);
   const urls = extractHrefValues(rowHtml, baseUrl);
   const rowImages = extractImageValues(rowHtml, baseUrl);
-
   const rawTireHref =
     rawHrefs.find((href) => href.includes("get_tire_from_car_model")) || "";
-
-  const detailUrl = findFirstUrl(urls, "/stock/detail");
-  const editUrl = findFirstUrl(urls, "/car/edit/new");
-  const gooUrl = findFirstUrl(urls, "goo-net.com");
 
   const carName = getQueryParamDecoded(rawTireHref, "car_name");
   const gradeName = getQueryParamDecoded(rawTireHref, "grade_name");
@@ -955,132 +790,120 @@ function parsePublicVehicleRow(row, baseUrl, qualityImageMap) {
     "classification_name"
   );
 
-  const nameCellHtml = extractTdByClass(rowHtml, "item__name");
-  const visibleTitleRaw = compactText(
-    cleanHtmlToText(extractNameAnchorHtml(nameCellHtml))
+  const nameCell = extractTdByClass(rowHtml, "item__name");
+  const visibleTitle = fixBasicMojibake(
+    compactText(
+      cleanHtmlToText(
+        nameCell.match(/<a\b[^>]*>([\s\S]*?)<\/a>/i)?.[1] || nameCell
+      )
+    )
   );
-  const visibleTitleFixed = fixBasicMojibake(visibleTitleRaw);
-
-  const infoCellHtml = extractTdByClass(rowHtml, "item__info");
-  const infoItemsFixed = extractLiTexts(infoCellHtml).map(fixBasicMojibake);
-
-  const costCellHtml = extractTdByClass(rowHtml, "item__cost");
-
-  const bodyPriceNumber = extractSpanById(
-    costCellHtml,
-    `kakaku_display_${stockId}`
+  const infoItems = extractLiTexts(extractTdByClass(rowHtml, "item__info")).map(
+    fixBasicMojibake
   );
-  const totalPriceNumber = extractSpanById(
-    costCellHtml,
-    `total_display_${stockId}`
+  const costCell = extractTdByClass(rowHtml, "item__cost");
+  const bodyPrice = extractSpanById(costCell, `kakaku_display_${stockId}`);
+  const totalPrice = extractSpanById(costCell, `total_display_${stockId}`);
+  const realImages = rowImages.filter(
+    (url) =>
+      !url.includes("car_nophoto") &&
+      !url.includes("total_price_unset") &&
+      !url.includes("/common/")
   );
-
-  const realRowImages = rowImages.filter(
-    (imageUrl) =>
-      !imageUrl.includes("car_nophoto") &&
-      !imageUrl.includes("total_price_unset") &&
-      !imageUrl.includes("/common/")
-  );
-
-  const imageUrl = qualityImageMap[stockId] || realRowImages[0] || "";
-
   const title = [carName, gradeName].filter(Boolean).join(" ").trim();
 
   return {
     stockId,
     title,
     description:
-      visibleTitleFixed && !visibleTitleFixed.includes("�")
-        ? visibleTitleFixed
-        : title,
+      visibleTitle && !visibleTitle.includes("ï¿½") ? visibleTitle : title,
     carName,
     gradeName,
     gradeExtraInfo: "",
     classificationName,
-    year: infoItemsFixed[0] || "",
-    mileage: infoItemsFixed[1] || "",
-    color: infoItemsFixed[2] || "",
-    inspection: infoItemsFixed[3] || "",
-    displacement: infoItemsFixed[4] || "",
-    bodyPrice: bodyPriceNumber ? `${fixBasicMojibake(bodyPriceNumber)}万円` : "",
-    totalPrice: totalPriceNumber ? `${fixBasicMojibake(totalPriceNumber)}万円` : "",
-    imageUrl,
-    detailUrl,
-    editUrl,
-    gooUrl,
-    sourceStatus: "掲載在庫",
+    year: infoItems[0] || "",
+    mileage: infoItems[1] || "",
+    color: infoItems[2] || "",
+    inspection: infoItems[3] || "",
+    displacement: infoItems[4] || "",
+    bodyPrice: bodyPrice ? `${bodyPrice}ä¸å` : "",
+    totalPrice: totalPrice ? `${totalPrice}ä¸å` : "",
+    imageUrl: qualityImageMap[stockId] || realImages[0] || "",
+    detailUrl: findFirstUrl(urls, "/stock/detail"),
+    editUrl: findFirstUrl(urls, "/car/edit/new"),
+    gooUrl: findFirstUrl(urls, "goo-net.com"),
+    sourceStatus: "æ²è¼å¨åº«",
+    sourcePageUrl: "",
     types: [],
     typeKeys: [],
   };
 }
 
 function extractSavedVehicles(html, pageUrl) {
+  const source = String(html || "");
   const stockIds = Array.from(
-    new Set(
-      [...String(html || "").matchAll(/StockId=([A-Za-z0-9]+)/g)].map(
-        (m) => m[1]
-      )
-    )
+    new Set([...source.matchAll(/StockId=([A-Za-z0-9]+)/g)].map((m) => m[1]))
   );
 
-  const titles = [
-    ...String(html || "").matchAll(/stock\/detail[\s\S]*?>(.*?)<\/a>/gi),
-  ]
-    .map((m) => compactText(cleanHtmlToText(m[1])))
-    .filter(Boolean);
+  return stockIds.map((stockId) => {
+    const index = source.indexOf(`StockId=${stockId}`);
+    const windowHtml = source.slice(
+      Math.max(0, index - 2500),
+      Math.min(source.length, index + 5000)
+    );
+    const title = compactText(
+      cleanHtmlToText(
+        windowHtml.match(/<a\b[^>]*stock\/detail[^>]*>([\s\S]*?)<\/a>/i)?.[1] ||
+          ""
+      )
+    );
 
-  return stockIds.map((stockId, index) => ({
-    stockId,
-    title: titles[index] || "",
-    description: titles[index] || "",
-    carName: titles[index] || "",
-    gradeName: "",
-    gradeExtraInfo: "",
-    classificationName: "",
-    year: "",
-    mileage: "",
-    color: "",
-    inspection: "",
-    displacement: "",
-    bodyPrice: "",
-    totalPrice: "",
-    imageUrl: "",
-    gooUrl: "",
-    sourceStatus: "一時保存",
-    sourcePageUrl: pageUrl,
-    editUrl: `https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=${stockId}&ScreenId=SIH_001`,
-    detailUrl: `https://motorgate.jp/stock/detail?ClientId=0902332&StockId=${stockId}`,
-    types: [],
-    typeKeys: [],
-    updatedAt: new Date().toISOString(),
-  }));
+    return {
+      stockId,
+      title,
+      description: title,
+      carName: title,
+      gradeName: "",
+      gradeExtraInfo: "",
+      classificationName: "",
+      year: "",
+      mileage: "",
+      color: "",
+      inspection: "",
+      displacement: "",
+      bodyPrice: "",
+      totalPrice: "",
+      imageUrl: "",
+      gooUrl: "",
+      sourceStatus: "ä¸æä¿å­",
+      sourcePageUrl: pageUrl,
+      editUrl: `${BASE_URL}/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=${stockId}&ScreenId=SIH_001`,
+      detailUrl: `${BASE_URL}/stock/detail?ClientId=0902332&StockId=${stockId}`,
+      types: [],
+      typeKeys: [],
+    };
+  });
 }
 
 async function loginMotorgate() {
-  const clientId = process.env.MOTORGATE_CLIENT_ID;
-  const password = process.env.MOTORGATE_PASSWORD;
-
-  const loginUrl = "https://motorgate.jp/login/index";
+  const loginUrl = `${BASE_URL}/login/index`;
   const jar = {};
 
   const loginPage = await fetchWithTimeout(
     loginUrl,
     {
       headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+        "User-Agent": USER_AGENT,
         "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
       },
     },
     30000
   );
-
   addCookies(jar, loginPage.headers.get("set-cookie") || "");
 
-  const loginHtml = await readUtf8Text(loginPage);
-
-  const csrf = loginHtml.match(/name="fuel_csrf_token"\s+value="([^"]+)"/)?.[1];
-  const sessionId = loginHtml.match(/name="session_id"\s+value="([^"]+)"/)?.[1];
+  const html = await readResponseText(loginPage);
+  const csrf = html.match(/name=["']fuel_csrf_token["'][^>]*value=["']([^"']+)/i)?.[1];
+  const sessionId = html.match(/name=["']session_id["'][^>]*value=["']([^"']+)/i)?.[1];
 
   const login = await fetchWithTimeout(
     loginUrl,
@@ -1089,27 +912,31 @@ async function loginMotorgate() {
       redirect: "manual",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
-        Origin: "https://motorgate.jp",
+        Origin: BASE_URL,
         Referer: loginUrl,
         Cookie: jarToCookie(jar),
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+        "User-Agent": USER_AGENT,
         "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
       },
       body: new URLSearchParams({
         fuel_csrf_token: csrf || "",
         session_id: sessionId || "",
-        client_id: clientId || "",
+        client_id: process.env.MOTORGATE_CLIENT_ID || "",
         user_id: "",
-        client_pw: password || "",
+        client_pw: process.env.MOTORGATE_PASSWORD || "",
       }),
     },
     30000
   );
-
   addCookies(jar, login.headers.get("set-cookie") || "");
 
   return { jar, loginStatus: login.status };
+}
+
+function chooseDetailValue(vehicle, detailValue, currentValue) {
+  return vehicle.sourceStatus === "ä¸æä¿å­"
+    ? detailValue || currentValue || ""
+    : currentValue || detailValue || "";
 }
 
 async function fetchVehicleDetailFromEditPage(jar, vehicle) {
@@ -1123,52 +950,55 @@ async function fetchVehicleDetailFromEditPage(jar, vehicle) {
         timeout: false,
         error: "",
       },
+      detailResult: { year: false, color: false },
     };
   }
 
   try {
-    const res = await fetchWithTimeout(
+    const response = await fetchWithTimeout(
       vehicle.editUrl,
       {
         headers: {
           Cookie: jarToCookie(jar),
           Referer:
-            vehicle.sourceStatus === "一時保存"
-              ? "https://motorgate.jp/stock/savelist"
-              : "https://motorgate.jp/top",
-          "User-Agent":
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+            vehicle.sourceStatus === "ä¸æä¿å­"
+              ? `${BASE_URL}/stock/savelist`
+              : `${BASE_URL}/top`,
+          "User-Agent": USER_AGENT,
           "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
         },
       },
       25000
     );
 
-    const html = await readUtf8Text(res);
+    const html = await readResponseText(response);
     const text = cleanHtmlToText(html);
-
     const types = Array.from(
       new Set([...extractTypesFromText(html), ...extractTypesFromText(text)])
     );
-    const typeKeys = buildTypeKeys(types);
-
-    const savedDetails =
-      vehicle.sourceStatus === "一時保存" ? extractSavedVehicleDetails(html) : {};
-
-    const gradeExtraInfo = extractGradeExtraInfo(html);
+    const details = extractCommonVehicleDetails(html);
 
     return {
       ...vehicle,
-      ...savedDetails,
-      gradeExtraInfo: gradeExtraInfo || savedDetails.gradeExtraInfo || "",
+      year: chooseDetailValue(vehicle, details.year, vehicle.year),
+      mileage: chooseDetailValue(vehicle, details.mileage, vehicle.mileage),
+      color: chooseDetailValue(vehicle, details.color, vehicle.color),
+      bodyPrice: chooseDetailValue(vehicle, details.bodyPrice, vehicle.bodyPrice),
+      totalPrice: chooseDetailValue(vehicle, details.totalPrice, vehicle.totalPrice),
+      imageUrl: chooseDetailValue(vehicle, details.imageUrl, vehicle.imageUrl),
+      gradeExtraInfo: details.gradeExtraInfo || vehicle.gradeExtraInfo || "",
       types,
-      typeKeys,
+      typeKeys: buildTypeKeys(types),
       typeResult: {
-        status: res.status,
-        success: typeKeys.length > 0,
+        status: response.status,
+        success: types.length > 0,
         containsFatalError: html.includes("FatalError"),
         timeout: false,
         error: "",
+      },
+      detailResult: {
+        year: Boolean(details.year),
+        color: Boolean(details.color),
       },
     };
   } catch (error) {
@@ -1181,33 +1011,33 @@ async function fetchVehicleDetailFromEditPage(jar, vehicle) {
         timeout: isTimeoutError(error),
         error: error.message || String(error),
       },
+      detailResult: { year: false, color: false },
     };
   }
 }
 
 async function mapWithConcurrency(items, limit, mapper) {
-  const results = [];
-  let index = 0;
+  const results = new Array(items.length);
+  let nextIndex = 0;
 
   async function worker() {
-    while (index < items.length) {
-      const currentIndex = index;
-      index += 1;
-      results[currentIndex] = await mapper(items[currentIndex], currentIndex);
+    while (true) {
+      const index = nextIndex++;
+      if (index >= items.length) return;
+      results[index] = await mapper(items[index], index);
     }
   }
 
   await Promise.all(
     Array.from({ length: Math.min(limit, items.length) }, () => worker())
   );
-
   return results;
 }
 
 async function attachVehicleDetails(jar, vehicles) {
-  return await mapWithConcurrency(vehicles, 12, async (vehicle) => {
-    return await fetchVehicleDetailFromEditPage(jar, vehicle);
-  });
+  return mapWithConcurrency(vehicles, 12, (vehicle) =>
+    fetchVehicleDetailFromEditPage(jar, vehicle)
+  );
 }
 
 function toInventoryVehicle(vehicle) {
@@ -1236,64 +1066,62 @@ function toInventoryVehicle(vehicle) {
     typeKeys: vehicle.typeKeys || [],
     updatedAt: new Date().toISOString(),
     typeResult: vehicle.typeResult || null,
+    detailResult: vehicle.detailResult || null,
   };
 }
 
 async function fetchPublicVehicles(jar) {
-  const res = await fetchWithTimeout(
+  const response = await fetchWithTimeout(
     PUBLIC_LIST_URL,
     {
       headers: {
         Cookie: jarToCookie(jar),
-        Referer: "https://motorgate.jp/top",
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+        Referer: `${BASE_URL}/top`,
+        "User-Agent": USER_AGENT,
         "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
       },
     },
     30000
   );
 
-  const html = await readUtf8Text(res);
-  const qualityImageMap = extractQualityImageMap(html, PUBLIC_LIST_URL);
+  const html = await readResponseText(response);
+  const imageMap = extractQualityImageMap(html, PUBLIC_LIST_URL);
   const rows = extractVehicleRows(html);
-
   const vehicles = rows.map((row) =>
-    parsePublicVehicleRow(row, PUBLIC_LIST_URL, qualityImageMap)
+    parsePublicVehicleRow(row, PUBLIC_LIST_URL, imageMap)
   );
-
-  const vehiclesWithDetails = await attachVehicleDetails(jar, vehicles);
+  const detailed = await attachVehicleDetails(jar, vehicles);
 
   return {
-    status: res.status,
-    containsLoginForm: html.includes('name="client_pw"'),
+    status: response.status,
+    containsLoginForm:
+      html.includes('name="client_pw"') || html.includes("name='client_pw'"),
     foundRows: rows.length,
-    imageMapCount: Object.keys(qualityImageMap).length,
-    vehicles: vehiclesWithDetails.map(toInventoryVehicle),
+    imageMapCount: Object.keys(imageMap).length,
+    vehicles: detailed.map(toInventoryVehicle),
   };
 }
 
 async function fetchSavedPage(jar, pageUrl) {
-  const res = await fetchWithTimeout(
+  const response = await fetchWithTimeout(
     pageUrl,
     {
       headers: {
         Cookie: jarToCookie(jar),
-        Referer: "https://motorgate.jp/top",
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+        Referer: `${BASE_URL}/top`,
+        "User-Agent": USER_AGENT,
         "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
       },
     },
     30000
   );
 
-  const html = await readUtf8Text(res);
+  const html = await readResponseText(response);
   const vehicles = extractSavedVehicles(html, pageUrl);
 
   return {
     pageUrl,
-    status: res.status,
+    status: response.status,
     count: vehicles.length,
     vehicles,
   };
@@ -1305,20 +1133,19 @@ async function fetchSavedVehicles(jar) {
   for (const pageUrl of SAVED_LIST_URLS) {
     const page = await fetchSavedPage(jar, pageUrl);
     pages.push(page);
-
     if (page.count === 0) break;
   }
 
   const vehicles = uniqueByStockId(pages.flatMap((page) => page.vehicles));
-  const vehiclesWithDetails = await attachVehicleDetails(jar, vehicles);
+  const detailed = await attachVehicleDetails(jar, vehicles);
 
   return {
-    pages: pages.map((page) => ({
-      pageUrl: page.pageUrl,
-      status: page.status,
-      count: page.count,
+    pages: pages.map(({ pageUrl, status, count }) => ({
+      pageUrl,
+      status,
+      count,
     })),
-    vehicles: vehiclesWithDetails.map(toInventoryVehicle),
+    vehicles: detailed.map(toInventoryVehicle),
   };
 }
 
@@ -1329,13 +1156,10 @@ async function fetchCurrentInventoryFromGitHub() {
   const branch = process.env.GITHUB_BRANCH || "main";
   const path = "data/inventory.json";
 
-  if (!token) {
-    return { sha: null, inventory: { vehicles: [] } };
-  }
+  if (!token) return { sha: null, inventory: { vehicles: [] } };
 
   const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-
-  const current = await fetchWithTimeout(
+  const response = await fetchWithTimeout(
     `${apiUrl}?ref=${branch}&t=${Date.now()}`,
     {
       headers: {
@@ -1348,16 +1172,14 @@ async function fetchCurrentInventoryFromGitHub() {
     30000
   );
 
-  if (!current.ok) {
-    return { sha: null, inventory: { vehicles: [] } };
-  }
+  if (!response.ok) return { sha: null, inventory: { vehicles: [] } };
 
-  const currentJson = await current.json();
-  const text = Buffer.from(currentJson.content || "", "base64").toString("utf8");
-
+  const data = await response.json();
   return {
-    sha: currentJson.sha || null,
-    inventory: JSON.parse(text),
+    sha: data.sha || null,
+    inventory: JSON.parse(
+      Buffer.from(data.content || "", "base64").toString("utf8")
+    ),
   };
 }
 
@@ -1372,20 +1194,10 @@ async function commitInventoryToGitHub(
   const branch = process.env.GITHUB_BRANCH || "main";
   const path = "data/inventory.json";
 
-  if (!token) {
-    return {
-      saved: false,
-      reason: "GITHUB_TOKEN is not set",
-    };
-  }
+  if (!token) return { saved: false, reason: "GITHUB_TOKEN is not set" };
 
   const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-  const content = Buffer.from(
-    JSON.stringify(inventoryData, null, 2),
-    "utf8"
-  ).toString("base64");
-
-  const save = await fetchWithTimeout(
+  const response = await fetchWithTimeout(
     apiUrl,
     {
       method: "PUT",
@@ -1397,7 +1209,10 @@ async function commitInventoryToGitHub(
       },
       body: JSON.stringify({
         message,
-        content,
+        content: Buffer.from(
+          JSON.stringify(inventoryData, null, 2),
+          "utf8"
+        ).toString("base64"),
         branch,
         ...(existingSha ? { sha: existingSha } : {}),
       }),
@@ -1405,16 +1220,15 @@ async function commitInventoryToGitHub(
     30000
   );
 
-  const saveJson = await save.json();
-
+  const data = await response.json();
   return {
-    saved: save.ok,
-    status: save.status,
+    saved: response.ok,
+    status: response.status,
     path,
     branch,
-    commit: saveJson.commit?.html_url || "",
-    commitSha: saveJson.commit?.sha || "",
-    error: save.ok ? "" : saveJson,
+    commit: data.commit?.html_url || "",
+    commitSha: data.commit?.sha || "",
+    error: response.ok ? "" : data,
   };
 }
 
@@ -1424,28 +1238,39 @@ function mergeVehicles(publicVehicles, savedVehicles) {
 
 function summarizeTypeResults(vehicles) {
   return {
-    success: vehicles.filter((v) => v.typeResult?.success).length,
-    failed: vehicles.filter((v) => !v.typeResult?.success).length,
-    timeout: vehicles.filter((v) => v.typeResult?.timeout).length,
+    success: vehicles.filter((vehicle) => vehicle.typeResult?.success).length,
+    failed: vehicles.filter((vehicle) => !vehicle.typeResult?.success).length,
+    timeout: vehicles.filter((vehicle) => vehicle.typeResult?.timeout).length,
   };
 }
 
 function summarizeGradeExtraInfo(vehicles) {
   return {
-    found: vehicles.filter((v) => v.gradeExtraInfo).length,
-    missing: vehicles.filter((v) => !v.gradeExtraInfo).length,
+    found: vehicles.filter((vehicle) => vehicle.gradeExtraInfo).length,
+    missing: vehicles.filter((vehicle) => !vehicle.gradeExtraInfo).length,
+  };
+}
+
+function summarizeSavedDetailFields(vehicles) {
+  const saved = vehicles.filter(
+    (vehicle) => vehicle.sourceStatus === "ä¸æä¿å­"
+  );
+  return {
+    total: saved.length,
+    yearFound: saved.filter((vehicle) => vehicle.year).length,
+    yearMissing: saved.filter((vehicle) => !vehicle.year).length,
+    colorFound: saved.filter((vehicle) => vehicle.color).length,
+    colorMissing: saved.filter((vehicle) => !vehicle.color).length,
   };
 }
 
 function getTriggerLabel(request, save) {
   const cronHeader = request.headers.get("x-vercel-cron");
   const userAgent = request.headers.get("user-agent") || "";
-
   if (cronHeader || userAgent.toLowerCase().includes("vercel")) {
-    return "自動更新";
+    return "èªåæ´æ°";
   }
-
-  return save ? "URL保存更新" : "URLプレビュー";
+  return save ? "URLä¿å­æ´æ°" : "URLãã¬ãã¥ã¼";
 }
 
 function buildFailureInventoryData(currentInventory, status) {
@@ -1461,55 +1286,55 @@ export async function GET(request) {
   const url = new URL(request.url);
   const save = url.searchParams.get("save") === "1";
   const trigger = getTriggerLabel(request, save);
-
-  let current = {
-    sha: null,
-    inventory: { vehicles: [] },
-  };
+  let current = { sha: null, inventory: { vehicles: [] } };
 
   try {
     current = await fetchCurrentInventoryFromGitHub();
-
     const { jar, loginStatus } = await loginMotorgate();
-
     const publicResult = await fetchPublicVehicles(jar);
     const savedResult = await fetchSavedVehicles(jar);
-
     const vehicles = mergeVehicles(publicResult.vehicles, savedResult.vehicles);
     const finishedAt = new Date();
     const durationSeconds = Math.round(
       (finishedAt.getTime() - startedAt.getTime()) / 1000
     );
-
     const typeResults = summarizeTypeResults(vehicles);
+    const savedDetailFields = summarizeSavedDetailFields(vehicles);
+
     const success =
       loginStatus === 302 &&
       publicResult.status === 200 &&
       !publicResult.containsLoginForm &&
       vehicles.length > 0;
 
-    const errorText = success
+    const error = success
       ? ""
       : [
-          loginStatus !== 302 ? `ログイン異常: ${loginStatus}` : "",
-          publicResult.status !== 200 ? `掲載在庫取得異常: ${publicResult.status}` : "",
-          publicResult.containsLoginForm ? "ログインフォームが表示されています" : "",
-          vehicles.length === 0 ? "在庫取得件数が0件です" : "",
+          loginStatus !== 302 ? `ã­ã°ã¤ã³ç°å¸¸: ${loginStatus}` : "",
+          publicResult.status !== 200
+            ? `æ²è¼å¨åº«åå¾ç°å¸¸: ${publicResult.status}`
+            : "",
+          publicResult.containsLoginForm
+            ? "ã­ã°ã¤ã³ãã©ã¼ã ãè¡¨ç¤ºããã¦ãã¾ã"
+            : "",
+          vehicles.length === 0 ? "å¨åº«åå¾ä»¶æ°ã0ä»¶ã§ã" : "",
         ]
           .filter(Boolean)
           .join(" / ");
 
     const lastUpdateStatus = {
       success,
-      statusText: success ? "正常更新" : "更新確認が必要",
+      statusText: success ? "æ­£å¸¸æ´æ°" : "æ´æ°ç¢ºèªãå¿è¦",
       trigger,
       startedAt: startedAt.toISOString(),
       finishedAt: finishedAt.toISOString(),
       durationSeconds,
-      error: errorText,
+      error,
       timeout: false,
       typeFailed: typeResults.failed,
       typeTimeout: typeResults.timeout,
+      savedYearMissing: savedDetailFields.yearMissing,
+      savedColorMissing: savedDetailFields.colorMissing,
     };
 
     const inventoryData = {
@@ -1533,16 +1358,13 @@ export async function GET(request) {
         savedPages: savedResult.pages,
         typeResults,
         gradeExtraInfo: summarizeGradeExtraInfo(vehicles),
+        savedDetailFields,
       },
       vehicles,
     };
 
     const github = save
-      ? await commitInventoryToGitHub(
-          inventoryData,
-          current.sha,
-          "refresh public and saved inventory data"
-        )
+      ? await commitInventoryToGitHub(inventoryData, current.sha)
       : {
           saved: false,
           reason: "preview only. add ?save=1 to save data/inventory.json",
@@ -1554,42 +1376,34 @@ export async function GET(request) {
       github,
       counts: inventoryData.counts,
       checks: inventoryData.checks,
-      lastUpdateStatus: inventoryData.lastUpdateStatus,
+      lastUpdateStatus,
       inventory: inventoryData,
     });
   } catch (error) {
     const finishedAt = new Date();
-    const durationSeconds = Math.round(
-      (finishedAt.getTime() - startedAt.getTime()) / 1000
-    );
-
     const failureStatus = {
       success: false,
-      statusText: "更新失敗",
+      statusText: "æ´æ°å¤±æ",
       trigger,
       startedAt: startedAt.toISOString(),
       finishedAt: finishedAt.toISOString(),
-      durationSeconds,
+      durationSeconds: Math.round(
+        (finishedAt.getTime() - startedAt.getTime()) / 1000
+      ),
       error: error.message || String(error),
       timeout: isTimeoutError(error),
       typeFailed: null,
       typeTimeout: null,
+      savedYearMissing: null,
+      savedColorMissing: null,
     };
 
-    let github = {
-      saved: false,
-      reason: "failure status was not saved",
-    };
+    let github = { saved: false, reason: "failure status was not saved" };
 
     if (save) {
       try {
-        const failedInventoryData = buildFailureInventoryData(
-          current.inventory,
-          failureStatus
-        );
-
         github = await commitInventoryToGitHub(
-          failedInventoryData,
+          buildFailureInventoryData(current.inventory, failureStatus),
           current.sha,
           "record failed inventory update status"
         );
@@ -1604,7 +1418,9 @@ export async function GET(request) {
 
     return json({
       success: false,
-      mode: save ? "full-public-and-saved-refresh" : "preview-full-public-and-saved-refresh",
+      mode: save
+        ? "full-public-and-saved-refresh"
+        : "preview-full-public-and-saved-refresh",
       github,
       lastUpdateStatus: failureStatus,
       error: error.message || String(error),
