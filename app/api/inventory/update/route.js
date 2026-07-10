@@ -1285,6 +1285,7 @@ export async function GET(request) {
   const startedAt = new Date();
   const url = new URL(request.url);
   const save = url.searchParams.get("save") === "1";
+  const summary = url.searchParams.get("summary") === "1";
   const trigger = getTriggerLabel(request, save);
   let current = { sha: null, inventory: { vehicles: [] } };
 
@@ -1370,6 +1371,17 @@ export async function GET(request) {
           reason: "preview only. add ?save=1 to save data/inventory.json",
         };
 
+    if (summary) {
+      return json({
+        success,
+        mode: inventoryData.updateMode,
+        github,
+        counts: inventoryData.counts,
+        savedDetailFields,
+        lastUpdateStatus,
+      });
+    }
+
     return json({
       success,
       mode: inventoryData.updateMode,
@@ -1416,7 +1428,7 @@ export async function GET(request) {
       }
     }
 
-    return json({
+    const failureResponse = {
       success: false,
       mode: save
         ? "full-public-and-saved-refresh"
@@ -1424,6 +1436,14 @@ export async function GET(request) {
       github,
       lastUpdateStatus: failureStatus,
       error: error.message || String(error),
+    };
+
+    if (summary) {
+      return json(failureResponse);
+    }
+
+    return json({
+      ...failureResponse,
       stack: error.stack || "",
     });
   }
