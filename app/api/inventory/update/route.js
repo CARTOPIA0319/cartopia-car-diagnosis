@@ -4,10 +4,13 @@ export const maxDuration = 300;
 
 const BASE_URL = "https://motorgate.jp";
 const PUBLIC_LIST_URL = `${BASE_URL}/stock/newsearch/stocklist/index/1/100`;
-const SAVED_LIST_URLS = [
-  `${BASE_URL}/stock/savelist`,
-  `${BASE_URL}/stock/savelist/index/2`,
-];
+const SAVED_LIST_URLS = Array.from({ length: 10 }, (_, index) =>
+  index === 0
+    ? `${BASE_URL}/stock/savelist`
+    : `${BASE_URL}/stock/savelist/index/${index + 1}`
+);
+const SAVED_DETAIL_CONCURRENCY = 4;
+const SAVED_DETAIL_RETRIES = 2;
 const USER_AGENT =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36";
 
@@ -36,10 +39,11 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 30000) {
   }
 }
 
+
 function addCookies(jar, setCookieText) {
   if (!setCookieText) return jar;
 
-  for (const piece of setCookieText.split(/,\s*(?=[^;,]+=)/)) {
+  for (const piece of String(setCookieText).split(/,\s*(?=[^;,]+=)/)) {
     const first = piece.split(";")[0].trim();
     const eq = first.indexOf("=");
     if (eq <= 0) continue;
@@ -48,6 +52,19 @@ function addCookies(jar, setCookieText) {
     const value = first.slice(eq + 1);
     if (value === "deleted") delete jar[name];
     else jar[name] = value;
+  }
+
+  return jar;
+}
+
+function addResponseCookies(jar, response) {
+  const values =
+    typeof response?.headers?.getSetCookie === "function"
+      ? response.headers.getSetCookie()
+      : [response?.headers?.get("set-cookie") || ""];
+
+  for (const value of values) {
+    addCookies(jar, value);
   }
 
   return jar;
@@ -508,6 +525,7 @@ function parseYear(value) {
   };
 }
 
+
 function extractRegistrationYear(html) {
   const labels = [
     "ååº¦ç»é²å¹´æ",
@@ -526,37 +544,70 @@ function extractRegistrationYear(html) {
     "registrationyear",
     "registyear",
     "modelyear",
+    "year",
   ];
 
   const region = findFieldRegion(html, labels);
-  const values = controlValues([
+  const controls = [
     ...extractControls(region),
     ...controlsByKeys(html, keys),
-  ]);
+  ];
+  const values = controlValues(controls);
 
   for (const value of values) {
     const parsed = parseYear(value);
     if (parsed) {
       return parsed.month
-        ? `${parsed.year}å¹´${parsed.month}æ`
+        ? `${parsed.year}å¹´${String(parsed.month).padStart(2, "0")}æ`
         : `${parsed.year}å¹´`;
     }
   }
 
-  const numbers = values
+  const joined = values.join(" ");
+  const eraName = joined.match(/ä»¤å|å¹³æ|æ­å/)?.[0] || "";
+  if (eraName) {
+    const numericValues = values
+      .map((value) =>
+        value.includes("å")
+          ? 1
+          : Number(toHalfWidthAscii(value).replace(/[^0-9]/g, ""))
+      )
+      .filter((value) => Number.isFinite(value) && value >= 1);
+
+    const eraYear = numericValues.find((value) => value <= 99);
+    const month = numericValues.find(
+      (value, index) => index > 0 && value >= 1 && value <= 12
+    );
+
+    if (eraYear) {
+      const base =
+        eraName === "ä»¤å" ? 2018 : eraName === "å¹³æ" ? 1988 : 1925;
+      const westernYear = base + eraYear;
+      return month
+        ? `${westernYear}å¹´${String(month).padStart(2, "0")}æ`
+        : `${westernYear}å¹´`;
+    }
+  }
+
+  const numericValues = values
     .map((value) => Number(toHalfWidthAscii(value).replace(/[^0-9]/g, "")))
     .filter(Number.isFinite);
-  const year = numbers.find((value) => value >= 1920 && value <= 2035);
-  const month = numbers.find(
+  const year = numericValues.find((value) => value >= 1920 && value <= 2035);
+  const month = numericValues.find(
     (value) => value >= 1 && value <= 12 && value !== year
   );
 
-  if (year) return month ? `${year}å¹´${month}æ` : `${year}å¹´`;
+  if (year) {
+    return month
+      ? `${year}å¹´${String(month).padStart(2, "0")}æ`
+      : `${year}å¹´`;
+  }
 
   const parsed = parseYear(cleanHtmlToText(region));
   if (!parsed) return "";
+
   return parsed.month
-    ? `${parsed.year}å¹´${parsed.month}æ`
+    ? `${parsed.year}å¹´${String(parsed.month).padStart(2, "0")}æ`
     : `${parsed.year}å¹´`;
 }
 
@@ -666,21 +717,38 @@ function normalizePrice(value) {
   return number ? `${number}ä¸å` : text;
 }
 
+
 function normalizeMileage(value) {
-  const text = compactText(value);
+  const text = compactText(toHalfWidthAscii(value))
+    .replace(/,/g, "")
+    .replace(/\s+/g, "");
+
   if (!text) return "";
   if (text.includes("èµ°ä¸æ")) return "èµ°ä¸æ";
-  if (/ä¸[ï¼«Kk]/.test(text)) return text.replace(/ä¸[ï¼«Kk]/, "ä¸K");
+
+  const manMatch = text.match(/([0-9]+(?:\.[0-9]+)?)ä¸[ï¼«Kk]?/);
+  if (manMatch) {
+    const man = Number(manMatch[1]);
+    return Number.isFinite(man) ? `${man}ä¸K` : text;
+  }
 
   const numberText = text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0] || "";
   if (!numberText) return text;
 
   const number = Number(numberText);
   if (!Number.isFinite(number)) return text;
-  if (/km|ï¼«ï¼­|ï½ï½/i.test(text) || number >= 1000) {
-    return `${Math.round(number).toLocaleString("ja-JP")}km`;
+
+  const looksLikeKm =
+    /km|ï¼«ï¼­|ï½ï½/i.test(text) ||
+    /èµ°è¡è·é¢|èµ°è¡/.test(text) ||
+    number >= 1000;
+
+  if (looksLikeKm) {
+    const truncated = Math.floor(number / 1000) / 10;
+    return `${truncated.toFixed(1)}ä¸K`;
   }
-  return `${numberText}ä¸K`;
+
+  return `${number}ä¸K`;
 }
 
 function extractFirstMatch(text, regex) {
@@ -719,6 +787,7 @@ function extractFirstImageUrl(html) {
   );
 }
 
+
 function extractCommonVehicleDetails(html) {
   const text = cleanHtmlToText(html);
 
@@ -728,15 +797,24 @@ function extractCommonVehicleDetails(html) {
       "SoukouKyori",
       "Mileage",
       "MileageDistance",
+      "RunDistance",
     ]) ||
       extractValueNearLabels(html, ["èµ°è¡è·é¢", "èµ°è¡"]) ||
       extractFirstMatch(text, /(\d+(?:\.\d+)?ä¸[ï¼«Kk])/) ||
-      extractFirstMatch(text, /(\d{1,3}(?:,\d{3})+\s*(?:km|ï¼«ï¼­|ï½ï½))/i) ||
+      extractFirstMatch(
+        text,
+        /(\d{1,7}(?:,\d{3})*\s*(?:km|ï¼«ï¼­|ï½ï½))/i
+      ) ||
       (text.includes("èµ°ä¸æ") ? "èµ°ä¸æ" : "")
   );
 
   const bodyPrice = normalizePrice(
-    extractValueByNames(html, ["Kakaku", "BodyPrice", "VehiclePrice"]) ||
+    extractValueByNames(html, [
+      "Kakaku",
+      "BodyPrice",
+      "VehiclePrice",
+      "CarPrice",
+    ]) ||
       extractValueNearLabels(html, ["è»ä¸¡æ¬ä½ä¾¡æ ¼", "æ¬ä½ä¾¡æ ¼"]) ||
       extractFirstMatch(
         text,
@@ -749,6 +827,7 @@ function extractCommonVehicleDetails(html) {
       "TotalPrice",
       "SiharaiTotal",
       "ShiharaiTotal",
+      "PaymentTotal",
     ]) ||
       extractValueNearLabels(html, ["æ¯æç·é¡", "ç·é¡"]) ||
       extractFirstMatch(
@@ -757,10 +836,65 @@ function extractCommonVehicleDetails(html) {
       )
   );
 
+  const carName =
+    extractValueByNames(html, [
+      "CarName",
+      "Syamei",
+      "Shamei",
+      "VehicleName",
+      "car_name",
+    ]) ||
+    extractValueNearLabels(html, ["è»å"]) ||
+    "";
+
+  const gradeName =
+    extractValueByNames(html, [
+      "GradeName",
+      "Grade",
+      "grade_name",
+      "Gurade",
+    ]) ||
+    extractValueNearLabels(html, ["ã°ã¬ã¼ã"]) ||
+    "";
+
+  const classificationName =
+    extractValueByNames(html, [
+      "Katashiki",
+      "ClassificationName",
+      "ModelCode",
+      "classification_name",
+    ]) ||
+    extractValueNearLabels(html, ["åå¼"]) ||
+    "";
+
+  const inspection =
+    extractValueByNames(html, [
+      "Shaken",
+      "Inspection",
+      "InspectionDate",
+      "Syaken",
+    ]) ||
+    extractValueNearLabels(html, ["è»æ¤"]) ||
+    "";
+
+  const displacement =
+    extractValueByNames(html, [
+      "Haikiryo",
+      "Displacement",
+      "EngineDisplacement",
+    ]) ||
+    extractValueNearLabels(html, ["ææ°é"]) ||
+    "";
+
   return {
+    carName,
+    gradeName,
+    classificationName,
     year: extractRegistrationYear(html),
     mileage,
     color: extractBodyColor(html),
+    inspection,
+    displacement,
     bodyPrice,
     totalPrice,
     gradeExtraInfo:
@@ -839,24 +973,61 @@ function parsePublicVehicleRow(row, baseUrl, qualityImageMap) {
   };
 }
 
+
 function extractSavedVehicles(html, pageUrl) {
   const source = String(html || "");
   const stockIds = Array.from(
-    new Set([...source.matchAll(/StockId=([A-Za-z0-9]+)/g)].map((m) => m[1]))
+    new Set([...source.matchAll(/StockId=([A-Za-z0-9]+)/gi)].map((m) => m[1]))
   );
 
   return stockIds.map((stockId) => {
-    const index = source.indexOf(`StockId=${stockId}`);
+    const index = source.search(
+      new RegExp(`StockId=${escapeRegExp(stockId)}`, "i")
+    );
     const windowHtml = source.slice(
-      Math.max(0, index - 2500),
-      Math.min(source.length, index + 5000)
+      Math.max(0, index - 5000),
+      Math.min(source.length, index + 10000)
     );
-    const title = compactText(
-      cleanHtmlToText(
-        windowHtml.match(/<a\b[^>]*stock\/detail[^>]*>([\s\S]*?)<\/a>/i)?.[1] ||
-          ""
-      )
+
+    const rawHrefs = extractRawHrefValues(windowHtml);
+    const urls = rawHrefs
+      .map((href) => absoluteUrl(href, pageUrl))
+      .filter(Boolean);
+
+    const detailAnchor =
+      windowHtml.match(
+        new RegExp(
+          `<a\\b[^>]*href=["'][^"']*StockId=${escapeRegExp(
+            stockId
+          )}[^"']*["'][^>]*>([\\s\\S]*?)<\\/a>`,
+          "i"
+        )
+      )?.[1] ||
+      windowHtml.match(/<a\b[^>]*stock\/detail[^>]*>([\s\S]*?)<\/a>/i)?.[1] ||
+      "";
+
+    const title = compactText(cleanHtmlToText(detailAnchor));
+
+    const discoveredEditUrls = urls.filter(
+      (url) =>
+        url.includes("/car/newregist/register") ||
+        url.includes("/car/edit/new")
     );
+
+    const editUrls = Array.from(
+      new Set([
+        ...discoveredEditUrls,
+        `${BASE_URL}/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=${stockId}&ScreenId=SIH_001`,
+        `${BASE_URL}/car/edit/new?kbn=1&ClientId=0902332&StockId=${stockId}&StockStatus=00180002&ScreenId=CB101GR`,
+      ])
+    );
+
+    const detailUrl =
+      urls.find(
+        (url) =>
+          url.includes("/stock/detail") && url.includes(`StockId=${stockId}`)
+      ) ||
+      `${BASE_URL}/stock/detail?ClientId=0902332&StockId=${stockId}`;
 
     return {
       stockId,
@@ -877,8 +1048,9 @@ function extractSavedVehicles(html, pageUrl) {
       gooUrl: "",
       sourceStatus: "ä¸æä¿å­",
       sourcePageUrl: pageUrl,
-      editUrl: `${BASE_URL}/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=${stockId}&ScreenId=SIH_001`,
-      detailUrl: `${BASE_URL}/stock/detail?ClientId=0902332&StockId=${stockId}`,
+      editUrl: editUrls[0] || "",
+      editUrls,
+      detailUrl,
       types: [],
       typeKeys: [],
     };
@@ -899,7 +1071,7 @@ async function loginMotorgate() {
     },
     30000
   );
-  addCookies(jar, loginPage.headers.get("set-cookie") || "");
+  addResponseCookies(jar, loginPage);
 
   const html = await readResponseText(loginPage);
   const csrf = html.match(/name=["']fuel_csrf_token["'][^>]*value=["']([^"']+)/i)?.[1];
@@ -928,92 +1100,356 @@ async function loginMotorgate() {
     },
     30000
   );
-  addCookies(jar, login.headers.get("set-cookie") || "");
+  addResponseCookies(jar, login);
 
   return { jar, loginStatus: login.status };
 }
 
-function chooseDetailValue(vehicle, detailValue, currentValue) {
-  return vehicle.sourceStatus === "ä¸æä¿å­"
-    ? detailValue || currentValue || ""
-    : currentValue || detailValue || "";
+
+function chooseDetailValue(vehicle, detailValue, currentValue, previousValue = "") {
+  if (vehicle.sourceStatus === "ä¸æä¿å­") {
+    return detailValue || currentValue || previousValue || "";
+  }
+
+  return currentValue || detailValue || previousValue || "";
 }
 
-async function fetchVehicleDetailFromEditPage(jar, vehicle) {
-  if (!vehicle.editUrl) {
+function mergePreviousVehicle(vehicle, previousVehicle) {
+  if (!previousVehicle) return vehicle;
+
+  const result = { ...vehicle };
+  for (const key of [
+    "title",
+    "description",
+    "carName",
+    "gradeName",
+    "gradeExtraInfo",
+    "classificationName",
+    "year",
+    "mileage",
+    "color",
+    "inspection",
+    "displacement",
+    "bodyPrice",
+    "totalPrice",
+    "imageUrl",
+    "detailUrl",
+    "gooUrl",
+  ]) {
+    if (!result[key] && previousVehicle[key]) {
+      result[key] = previousVehicle[key];
+    }
+  }
+
+  if ((!result.types || result.types.length === 0) && previousVehicle.types) {
+    result.types = previousVehicle.types;
+  }
+  if (
+    (!result.typeKeys || result.typeKeys.length === 0) &&
+    previousVehicle.typeKeys
+  ) {
+    result.typeKeys = previousVehicle.typeKeys;
+  }
+
+  return result;
+}
+
+function buildDetailUrlCandidates(vehicle) {
+  return Array.from(
+    new Set(
+      [
+        ...(vehicle.editUrls || []),
+        vehicle.editUrl,
+        vehicle.detailUrl,
+      ].filter(Boolean)
+    )
+  );
+}
+
+function countUsefulDetails(details) {
+  return [
+    details.carName,
+    details.gradeName,
+    details.classificationName,
+    details.year,
+    details.mileage,
+    details.color,
+    details.inspection,
+    details.displacement,
+    details.bodyPrice,
+    details.totalPrice,
+    details.gradeExtraInfo,
+    details.imageUrl,
+  ].filter(Boolean).length;
+}
+
+async function fetchVehicleDetailFromEditPage(
+  jar,
+  vehicle,
+  previousVehicle = null
+) {
+  const candidates = buildDetailUrlCandidates(vehicle);
+
+  if (candidates.length === 0) {
+    const fallback = mergePreviousVehicle(vehicle, previousVehicle);
     return {
-      ...vehicle,
+      ...fallback,
       typeResult: {
         status: null,
         success: false,
-        reason: "editUrl not found",
-        timeout: false,
-        error: "",
-      },
-      detailResult: { year: false, color: false },
-    };
-  }
-
-  try {
-    const response = await fetchWithTimeout(
-      vehicle.editUrl,
-      {
-        headers: {
-          Cookie: jarToCookie(jar),
-          Referer:
-            vehicle.sourceStatus === "ä¸æä¿å­"
-              ? `${BASE_URL}/stock/savelist`
-              : `${BASE_URL}/top`,
-          "User-Agent": USER_AGENT,
-          "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
-        },
-      },
-      25000
-    );
-
-    const html = await readResponseText(response);
-    const text = cleanHtmlToText(html);
-    const types = Array.from(
-      new Set([...extractTypesFromText(html), ...extractTypesFromText(text)])
-    );
-    const details = extractCommonVehicleDetails(html);
-
-    return {
-      ...vehicle,
-      year: chooseDetailValue(vehicle, details.year, vehicle.year),
-      mileage: chooseDetailValue(vehicle, details.mileage, vehicle.mileage),
-      color: chooseDetailValue(vehicle, details.color, vehicle.color),
-      bodyPrice: chooseDetailValue(vehicle, details.bodyPrice, vehicle.bodyPrice),
-      totalPrice: chooseDetailValue(vehicle, details.totalPrice, vehicle.totalPrice),
-      imageUrl: chooseDetailValue(vehicle, details.imageUrl, vehicle.imageUrl),
-      gradeExtraInfo: details.gradeExtraInfo || vehicle.gradeExtraInfo || "",
-      types,
-      typeKeys: buildTypeKeys(types),
-      typeResult: {
-        status: response.status,
-        success: types.length > 0,
-        containsFatalError: html.includes("FatalError"),
+        reason: "detail URL not found",
         timeout: false,
         error: "",
       },
       detailResult: {
-        year: Boolean(details.year),
-        color: Boolean(details.color),
-      },
-    };
-  } catch (error) {
-    return {
-      ...vehicle,
-      typeResult: {
-        status: null,
         success: false,
-        containsFatalError: false,
-        timeout: isTimeoutError(error),
-        error: error.message || String(error),
+        url: "",
+        attempts: 0,
+        usedPrevious: Boolean(previousVehicle),
+        year: Boolean(fallback.year),
+        mileage: Boolean(fallback.mileage),
+        color: Boolean(fallback.color),
       },
-      detailResult: { year: false, color: false },
     };
   }
+
+  let best = null;
+  const attemptErrors = [];
+  let attemptCount = 0;
+
+  for (const candidateUrl of candidates) {
+    for (let retry = 0; retry <= SAVED_DETAIL_RETRIES; retry += 1) {
+      attemptCount += 1;
+
+      try {
+        const response = await fetchWithTimeout(
+          candidateUrl,
+          {
+            cache: "no-store",
+            headers: {
+              Cookie: jarToCookie(jar),
+              Referer:
+                vehicle.sourceStatus === "ä¸æä¿å­"
+                  ? `${BASE_URL}/stock/savelist`
+                  : `${BASE_URL}/top`,
+              "User-Agent": USER_AGENT,
+              "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+              "Cache-Control": "no-store",
+            },
+          },
+          30000
+        );
+
+        const html = await readResponseText(response);
+        const containsLoginForm =
+          html.includes('name="client_pw"') ||
+          html.includes("name='client_pw'");
+
+        if (!response.ok || containsLoginForm) {
+          attemptErrors.push(
+            `${candidateUrl}: HTTP ${response.status}${
+              containsLoginForm ? " login form" : ""
+            }`
+          );
+          continue;
+        }
+
+        const text = cleanHtmlToText(html);
+        const types = Array.from(
+          new Set([
+            ...extractTypesFromText(html),
+            ...extractTypesFromText(text),
+          ])
+        );
+        const details = extractCommonVehicleDetails(html);
+        const score = countUsefulDetails(details) + types.length;
+
+        if (!best || score > best.score) {
+          best = {
+            url: candidateUrl,
+            status: response.status,
+            html,
+            details,
+            types,
+            score,
+          };
+        }
+
+        if (
+          details.year &&
+          details.mileage &&
+          details.color &&
+          (details.carName || vehicle.carName)
+        ) {
+          break;
+        }
+      } catch (error) {
+        attemptErrors.push(
+          `${candidateUrl}: ${error.message || String(error)}`
+        );
+      }
+    }
+
+    if (
+      best?.details?.year &&
+      best?.details?.mileage &&
+      best?.details?.color
+    ) {
+      break;
+    }
+  }
+
+  if (!best) {
+    const fallback = mergePreviousVehicle(vehicle, previousVehicle);
+    return {
+      ...fallback,
+      typeResult: {
+        status: null,
+        success: Boolean(fallback.types?.length),
+        containsFatalError: false,
+        timeout: attemptErrors.some((text) =>
+          /timeout|abort/i.test(text)
+        ),
+        error: attemptErrors.join(" / "),
+      },
+      detailResult: {
+        success: false,
+        url: "",
+        attempts: attemptCount,
+        usedPrevious: Boolean(previousVehicle),
+        year: Boolean(fallback.year),
+        mileage: Boolean(fallback.mileage),
+        color: Boolean(fallback.color),
+      },
+    };
+  }
+
+  const details = best.details;
+  const previous = previousVehicle || {};
+  const types =
+    best.types.length > 0
+      ? best.types
+      : vehicle.types?.length
+        ? vehicle.types
+        : previous.types || [];
+  const typeKeys =
+    types.length > 0
+      ? buildTypeKeys(types)
+      : vehicle.typeKeys?.length
+        ? vehicle.typeKeys
+        : previous.typeKeys || [];
+
+  const carName = chooseDetailValue(
+    vehicle,
+    details.carName,
+    vehicle.carName,
+    previous.carName
+  );
+  const gradeName = chooseDetailValue(
+    vehicle,
+    details.gradeName,
+    vehicle.gradeName,
+    previous.gradeName
+  );
+  const title =
+    [carName, gradeName].filter(Boolean).join(" ").trim() ||
+    vehicle.title ||
+    previous.title ||
+    "";
+
+  const result = {
+    ...vehicle,
+    title,
+    description:
+      vehicle.description || previous.description || title,
+    carName,
+    gradeName,
+    classificationName: chooseDetailValue(
+      vehicle,
+      details.classificationName,
+      vehicle.classificationName,
+      previous.classificationName
+    ),
+    year: chooseDetailValue(
+      vehicle,
+      details.year,
+      vehicle.year,
+      previous.year
+    ),
+    mileage: chooseDetailValue(
+      vehicle,
+      details.mileage,
+      vehicle.mileage,
+      previous.mileage
+    ),
+    color: chooseDetailValue(
+      vehicle,
+      details.color,
+      vehicle.color,
+      previous.color
+    ),
+    inspection: chooseDetailValue(
+      vehicle,
+      details.inspection,
+      vehicle.inspection,
+      previous.inspection
+    ),
+    displacement: chooseDetailValue(
+      vehicle,
+      details.displacement,
+      vehicle.displacement,
+      previous.displacement
+    ),
+    bodyPrice: chooseDetailValue(
+      vehicle,
+      details.bodyPrice,
+      vehicle.bodyPrice,
+      previous.bodyPrice
+    ),
+    totalPrice: chooseDetailValue(
+      vehicle,
+      details.totalPrice,
+      vehicle.totalPrice,
+      previous.totalPrice
+    ),
+    imageUrl: chooseDetailValue(
+      vehicle,
+      details.imageUrl,
+      vehicle.imageUrl,
+      previous.imageUrl
+    ),
+    gradeExtraInfo:
+      details.gradeExtraInfo ||
+      vehicle.gradeExtraInfo ||
+      previous.gradeExtraInfo ||
+      "",
+    editUrl: best.url.includes("/stock/detail")
+      ? vehicle.editUrl
+      : best.url,
+    types,
+    typeKeys,
+    typeResult: {
+      status: best.status,
+      success: types.length > 0,
+      containsFatalError: best.html.includes("FatalError"),
+      timeout: false,
+      error: attemptErrors.join(" / "),
+    },
+    detailResult: {
+      success: true,
+      url: best.url,
+      attempts: attemptCount,
+      usedPrevious: Boolean(
+        previousVehicle &&
+          (!details.year || !details.mileage || !details.color)
+      ),
+      year: Boolean(details.year),
+      mileage: Boolean(details.mileage),
+      color: Boolean(details.color),
+    },
+  };
+
+  return mergePreviousVehicle(result, previousVehicle);
 }
 
 async function mapWithConcurrency(items, limit, mapper) {
@@ -1034,9 +1470,19 @@ async function mapWithConcurrency(items, limit, mapper) {
   return results;
 }
 
-async function attachVehicleDetails(jar, vehicles) {
-  return mapWithConcurrency(vehicles, 12, (vehicle) =>
-    fetchVehicleDetailFromEditPage(jar, vehicle)
+
+async function attachVehicleDetails(jar, vehicles, previousMap = new Map()) {
+  const isSavedBatch = vehicles.some(
+    (vehicle) => vehicle.sourceStatus === "ä¸æä¿å­"
+  );
+  const concurrency = isSavedBatch ? SAVED_DETAIL_CONCURRENCY : 10;
+
+  return mapWithConcurrency(vehicles, concurrency, (vehicle) =>
+    fetchVehicleDetailFromEditPage(
+      jar,
+      vehicle,
+      previousMap.get(vehicle.stockId) || null
+    )
   );
 }
 
@@ -1062,6 +1508,7 @@ function toInventoryVehicle(vehicle) {
     sourceStatus: vehicle.sourceStatus,
     sourcePageUrl: vehicle.sourcePageUrl || "",
     editUrl: vehicle.editUrl || "",
+    editUrls: vehicle.editUrls || [],
     types: vehicle.types || [],
     typeKeys: vehicle.typeKeys || [],
     updatedAt: new Date().toISOString(),
@@ -1127,23 +1574,51 @@ async function fetchSavedPage(jar, pageUrl) {
   };
 }
 
-async function fetchSavedVehicles(jar) {
+
+async function fetchSavedVehicles(jar, currentVehicles = []) {
   const pages = [];
+  const allVehicles = [];
+  const seenStockIds = new Set();
 
   for (const pageUrl of SAVED_LIST_URLS) {
     const page = await fetchSavedPage(jar, pageUrl);
-    pages.push(page);
-    if (page.count === 0) break;
+    const newVehicles = page.vehicles.filter(
+      (vehicle) => !seenStockIds.has(vehicle.stockId)
+    );
+
+    for (const vehicle of newVehicles) {
+      seenStockIds.add(vehicle.stockId);
+      allVehicles.push(vehicle);
+    }
+
+    pages.push({
+      ...page,
+      newCount: newVehicles.length,
+    });
+
+    if (page.count === 0 || newVehicles.length === 0) {
+      break;
+    }
   }
 
-  const vehicles = uniqueByStockId(pages.flatMap((page) => page.vehicles));
-  const detailed = await attachVehicleDetails(jar, vehicles);
+  const previousMap = new Map(
+    (currentVehicles || [])
+      .filter((vehicle) => vehicle?.stockId)
+      .map((vehicle) => [vehicle.stockId, vehicle])
+  );
+
+  const detailed = await attachVehicleDetails(
+    jar,
+    uniqueByStockId(allVehicles),
+    previousMap
+  );
 
   return {
-    pages: pages.map(({ pageUrl, status, count }) => ({
+    pages: pages.map(({ pageUrl, status, count, newCount }) => ({
       pageUrl,
       status,
       count,
+      newCount,
     })),
     vehicles: detailed.map(toInventoryVehicle),
   };
@@ -1183,6 +1658,7 @@ async function fetchCurrentInventoryFromGitHub() {
   };
 }
 
+
 async function commitInventoryToGitHub(
   inventoryData,
   existingSha,
@@ -1197,38 +1673,53 @@ async function commitInventoryToGitHub(
   if (!token) return { saved: false, reason: "GITHUB_TOKEN is not set" };
 
   const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-  const response = await fetchWithTimeout(
-    apiUrl,
-    {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/vnd.github+json",
-        "Content-Type": "application/json",
-        "User-Agent": "cartopia-inventory-updater",
-      },
-      body: JSON.stringify({
-        message,
-        content: Buffer.from(
-          JSON.stringify(inventoryData, null, 2),
-          "utf8"
-        ).toString("base64"),
-        branch,
-        ...(existingSha ? { sha: existingSha } : {}),
-      }),
-    },
-    30000
-  );
+  const content = Buffer.from(
+    JSON.stringify(inventoryData, null, 2),
+    "utf8"
+  ).toString("base64");
 
-  const data = await response.json();
+  async function put(sha) {
+    const response = await fetchWithTimeout(
+      apiUrl,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/vnd.github+json",
+          "Content-Type": "application/json",
+          "User-Agent": "cartopia-inventory-updater",
+        },
+        body: JSON.stringify({
+          message,
+          content,
+          branch,
+          ...(sha ? { sha } : {}),
+        }),
+      },
+      30000
+    );
+
+    return {
+      response,
+      data: await response.json(),
+    };
+  }
+
+  let result = await put(existingSha);
+
+  if (result.response.status === 409) {
+    const latest = await fetchCurrentInventoryFromGitHub();
+    result = await put(latest.sha);
+  }
+
   return {
-    saved: response.ok,
-    status: response.status,
+    saved: result.response.ok,
+    status: result.response.status,
     path,
     branch,
-    commit: data.commit?.html_url || "",
-    commitSha: data.commit?.sha || "",
-    error: response.ok ? "" : data,
+    commit: result.data.commit?.html_url || "",
+    commitSha: result.data.commit?.sha || "",
+    error: result.response.ok ? "" : result.data,
   };
 }
 
@@ -1261,6 +1752,11 @@ function summarizeSavedDetailFields(vehicles) {
     yearMissing: saved.filter((vehicle) => !vehicle.year).length,
     colorFound: saved.filter((vehicle) => vehicle.color).length,
     colorMissing: saved.filter((vehicle) => !vehicle.color).length,
+    mileageFound: saved.filter((vehicle) => vehicle.mileage).length,
+    mileageMissing: saved.filter((vehicle) => !vehicle.mileage).length,
+    detailFetchFailed: saved.filter(
+      (vehicle) => vehicle.detailResult?.success === false
+    ).length,
   };
 }
 
@@ -1293,7 +1789,10 @@ export async function GET(request) {
     current = await fetchCurrentInventoryFromGitHub();
     const { jar, loginStatus } = await loginMotorgate();
     const publicResult = await fetchPublicVehicles(jar);
-    const savedResult = await fetchSavedVehicles(jar);
+    const savedResult = await fetchSavedVehicles(
+      jar,
+      current.inventory?.vehicles || []
+    );
     const vehicles = mergeVehicles(publicResult.vehicles, savedResult.vehicles);
     const finishedAt = new Date();
     const durationSeconds = Math.round(
@@ -1306,6 +1805,7 @@ export async function GET(request) {
       loginStatus === 302 &&
       publicResult.status === 200 &&
       !publicResult.containsLoginForm &&
+      savedResult.pages.every((page) => page.status === 200) &&
       vehicles.length > 0;
 
     const error = success
@@ -1317,6 +1817,9 @@ export async function GET(request) {
             : "",
           publicResult.containsLoginForm
             ? "ã­ã°ã¤ã³ãã©ã¼ã ãè¡¨ç¤ºããã¦ãã¾ã"
+            : "",
+          savedResult.pages.some((page) => page.status !== 200)
+            ? "ä¸æä¿å­å¨åº«ãã¼ã¸ã®åå¾ã«å¤±æãã¦ãã¾ã"
             : "",
           vehicles.length === 0 ? "å¨åº«åå¾ä»¶æ°ã0ä»¶ã§ã" : "",
         ]
@@ -1336,6 +1839,8 @@ export async function GET(request) {
       typeTimeout: typeResults.timeout,
       savedYearMissing: savedDetailFields.yearMissing,
       savedColorMissing: savedDetailFields.colorMissing,
+      savedMileageMissing: savedDetailFields.mileageMissing,
+      savedDetailFetchFailed: savedDetailFields.detailFetchFailed,
     };
 
     const inventoryData = {
@@ -1408,6 +1913,8 @@ export async function GET(request) {
       typeTimeout: null,
       savedYearMissing: null,
       savedColorMissing: null,
+      savedMileageMissing: null,
+      savedDetailFetchFailed: null,
     };
 
     let github = { saved: false, reason: "failure status was not saved" };
