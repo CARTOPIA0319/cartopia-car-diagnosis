@@ -155,19 +155,19 @@ function absoluteUrl(src, baseUrl = BASE_URL) {
 
 function fixBasicMojibake(text) {
   return String(text || "")
-    .replace(/è·ï½´/g, "å¹´")
-    .replace(/è­ï¿½/g, "æ")
-    .replace(/è³â«/g, "ä¸K")
-    .replace(/è³ï¿½ï¿½/g, "ä¸å")
-    .replace(/è®ï¿½/g, "æ¤")
-    .replace(/éé ï½¤æç´è¯å©ï½»ï¿½/g, "è»æ¤æ´åä»")
-    .replace(/èï½¡è­¬ï½¼/g, "ä¾¡æ ¼")
-    .replace(/é±åï½¡ï¿½/g, "ç·é¡")
+    .replace(/Ã¨ÂÂ·Ã¯Â½Â´/g, "Ã¥Â¹Â´")
+    .replace(/Ã¨Â­ÂÃ¯Â¿Â½/g, "Ã¦ÂÂ")
+    .replace(/Ã¨ÂÂ³Ã¢ÂÂ«/g, "Ã¤Â¸ÂK")
+    .replace(/Ã¨ÂÂ³Ã¯Â¿Â½Ã¯Â¿Â½/g, "Ã¤Â¸ÂÃ¥ÂÂ")
+    .replace(/Ã¨Â®ÂÃ¯Â¿Â½/g, "Ã¦Â¤Â")
+    .replace(/Ã©ÂÂÃ©Â ÂÃ¯Â½Â¤Ã¦ÂÂÃ§Â´ÂÃ¨ÂÂ¯Ã¥ÂÂ©Ã¯Â½Â»Ã¯Â¿Â½/g, "Ã¨Â»ÂÃ¦Â¤ÂÃ¦ÂÂ´Ã¥ÂÂÃ¤Â»Â")
+    .replace(/Ã¨ÂÂÃ¯Â½Â¡Ã¨Â­Â¬Ã¯Â½Â¼/g, "Ã¤Â¾Â¡Ã¦Â Â¼")
+    .replace(/Ã©ÂÂ±Ã¥ÂÂÃ¯Â½Â¡Ã¯Â¿Â½/g, "Ã§Â·ÂÃ©Â¡Â")
     .trim();
 }
 
 function toHalfWidthAscii(text) {
-  return String(text || "").replace(/[ï¼-ï½]/g, (char) =>
+  return String(text || "").replace(/[Ã¯Â¼Â-Ã¯Â½Â]/g, (char) =>
     String.fromCharCode(char.charCodeAt(0) - 0xfee0)
   );
 }
@@ -175,25 +175,25 @@ function toHalfWidthAscii(text) {
 function normalizeTypeText(text) {
   return fixBasicMojibake(
     decodeHtmlEntities(String(text || ""))
-      .replace(/[ï¼´ï¼¹ï¼°ï¼¥ï¼¶ï¼¨ï¼³ï¼µ]/g, (char) =>
+      .replace(/[Ã¯Â¼Â´Ã¯Â¼Â¹Ã¯Â¼Â°Ã¯Â¼Â¥Ã¯Â¼Â¶Ã¯Â¼Â¨Ã¯Â¼Â³Ã¯Â¼Âµ]/g, (char) =>
         String.fromCharCode(char.charCodeAt(0) - 0xfee0)
       )
-      .replace(/[ï½ï½ï½ï½ï½ï½ï½ï½]/g, (char) =>
+      .replace(/[Ã¯Â½ÂÃ¯Â½ÂÃ¯Â½ÂÃ¯Â½ÂÃ¯Â½ÂÃ¯Â½ÂÃ¯Â½ÂÃ¯Â½Â]/g, (char) =>
         String.fromCharCode(char.charCodeAt(0) - 0xfee0)
       )
-      .replace(/ï¼/g, ":")
-      .replace(/[\r\nã]/g, " ")
+      .replace(/Ã¯Â¼Â/g, ":")
+      .replace(/[\r\nÃ£ÂÂ]/g, " ")
   );
 }
 
 function normalizeTypeKey(type) {
   const value = toHalfWidthAscii(String(type || ""))
-    .replace(/ï¼/g, ":")
-    .replace(/ã/g, " ")
+    .replace(/Ã¯Â¼Â/g, ":")
+    .replace(/Ã£ÂÂ/g, " ")
     .trim();
 
   if (/^suv$/i.test(value)) return "SUV";
-  if (/^e[vï½]ã»h[vï½]$/i.test(value)) return "EVã»HV";
+  if (/^e[vÃ¯Â½Â]Ã£ÂÂ»h[vÃ¯Â½Â]$/i.test(value)) return "EVÃ£ÂÂ»HV";
   return value;
 }
 
@@ -204,10 +204,10 @@ function extractTypesFromText(text) {
   let match;
 
   while ((match = regex.exec(fixed)) !== null) {
-    const value = compactText(match[1]).replace(/[ã,ã]/g, "");
+    const value = compactText(match[1]).replace(/[Ã£ÂÂ,Ã£ÂÂ]/g, "");
     if (
       value &&
-      !/[._â¦]/.test(value) &&
+      !/[._Ã¢ÂÂ¦]/.test(value) &&
       !types.includes(value)
     ) {
       types.push(value);
@@ -339,7 +339,7 @@ function extractVehicleRows(html) {
 function normalizeLooseKey(value) {
   return toHalfWidthAscii(String(value || ""))
     .toLowerCase()
-    .replace(/[\s_\-:[\]ï¼ï¼()]/g, "");
+    .replace(/[\s_\-:[\]Ã¯Â¼ÂÃ¯Â¼Â()]/g, "");
 }
 
 function extractSelectedOption(selectHtml) {
@@ -443,7 +443,7 @@ function controlValues(controls) {
       const value = compactText(raw);
       if (
         value &&
-        !/^(é¸æ|é¸æãã¦ãã ãã|æªé¸æ|ãªã|--|---|0)$/i.test(value) &&
+        !/^(Ã©ÂÂ¸Ã¦ÂÂ|Ã©ÂÂ¸Ã¦ÂÂÃ£ÂÂÃ£ÂÂ¦Ã£ÂÂÃ£ÂÂ Ã£ÂÂÃ£ÂÂ|Ã¦ÂÂªÃ©ÂÂ¸Ã¦ÂÂ|Ã£ÂÂªÃ£ÂÂ|--|---|0)$/i.test(value) &&
         !values.includes(value)
       ) {
         values.push(value);
@@ -494,7 +494,7 @@ function extractValueNearLabels(html, labels) {
   let text = compactText(cleanHtmlToText(region));
   for (const label of labels) {
     text = text.replace(
-      new RegExp(`^.*?${escapeRegExp(label)}\\s*[ï¼:]?\\s*`, "i"),
+      new RegExp(`^.*?${escapeRegExp(label)}\\s*[Ã¯Â¼Â:]?\\s*`, "i"),
       ""
     );
   }
@@ -503,7 +503,7 @@ function extractValueNearLabels(html, labels) {
 
 function parseYear(value) {
   const text = compactText(value);
-  const western = text.match(/((?:19|20)\d{2})\s*(?:å¹´|[\/-])?\s*([01]?\d)?/);
+  const western = text.match(/((?:19|20)\d{2})\s*(?:Ã¥Â¹Â´|[\/-])?\s*([01]?\d)?/);
   if (western) {
     const month = Number(western[2] || 0);
     return {
@@ -512,11 +512,11 @@ function parseYear(value) {
     };
   }
 
-  const era = text.match(/(ä»¤å|å¹³æ|æ­å)\s*(å|\d+)\s*å¹´?\s*([01]?\d)?/);
+  const era = text.match(/(Ã¤Â»Â¤Ã¥ÂÂ|Ã¥Â¹Â³Ã¦ÂÂ|Ã¦ÂÂ­Ã¥ÂÂ)\s*(Ã¥ÂÂ|\d+)\s*Ã¥Â¹Â´?\s*([01]?\d)?/);
   if (!era) return null;
 
-  const eraYear = era[2] === "å" ? 1 : Number(era[2]);
-  const base = era[1] === "ä»¤å" ? 2018 : era[1] === "å¹³æ" ? 1988 : 1925;
+  const eraYear = era[2] === "Ã¥ÂÂ" ? 1 : Number(era[2]);
+  const base = era[1] === "Ã¤Â»Â¤Ã¥ÂÂ" ? 2018 : era[1] === "Ã¥Â¹Â³Ã¦ÂÂ" ? 1988 : 1925;
   const month = Number(era[3] || 0);
 
   return {
@@ -528,12 +528,12 @@ function parseYear(value) {
 
 function extractRegistrationYear(html) {
   const labels = [
-    "ååº¦ç»é²å¹´æ",
-    "åå¹´åº¦ç»é²å¹´æ",
-    "ååº¦ç»é²",
-    "åå¹´åº¦ç»é²",
-    "ååº¦æ¤æ»å¹´æ",
-    "å¹´å¼",
+    "Ã¥ÂÂÃ¥ÂºÂ¦Ã§ÂÂ»Ã©ÂÂ²Ã¥Â¹Â´Ã¦ÂÂ",
+    "Ã¥ÂÂÃ¥Â¹Â´Ã¥ÂºÂ¦Ã§ÂÂ»Ã©ÂÂ²Ã¥Â¹Â´Ã¦ÂÂ",
+    "Ã¥ÂÂÃ¥ÂºÂ¦Ã§ÂÂ»Ã©ÂÂ²",
+    "Ã¥ÂÂÃ¥Â¹Â´Ã¥ÂºÂ¦Ã§ÂÂ»Ã©ÂÂ²",
+    "Ã¥ÂÂÃ¥ÂºÂ¦Ã¦Â¤ÂÃ¦ÂÂ»Ã¥Â¹Â´Ã¦ÂÂ",
+    "Ã¥Â¹Â´Ã¥Â¼Â",
   ];
   const keys = [
     "nenshiki",
@@ -558,17 +558,17 @@ function extractRegistrationYear(html) {
     const parsed = parseYear(value);
     if (parsed) {
       return parsed.month
-        ? `${parsed.year}å¹´${String(parsed.month).padStart(2, "0")}æ`
-        : `${parsed.year}å¹´`;
+        ? `${parsed.year}Ã¥Â¹Â´${String(parsed.month).padStart(2, "0")}Ã¦ÂÂ`
+        : `${parsed.year}Ã¥Â¹Â´`;
     }
   }
 
   const joined = values.join(" ");
-  const eraName = joined.match(/ä»¤å|å¹³æ|æ­å/)?.[0] || "";
+  const eraName = joined.match(/Ã¤Â»Â¤Ã¥ÂÂ|Ã¥Â¹Â³Ã¦ÂÂ|Ã¦ÂÂ­Ã¥ÂÂ/)?.[0] || "";
   if (eraName) {
     const numericValues = values
       .map((value) =>
-        value.includes("å")
+        value.includes("Ã¥ÂÂ")
           ? 1
           : Number(toHalfWidthAscii(value).replace(/[^0-9]/g, ""))
       )
@@ -581,11 +581,11 @@ function extractRegistrationYear(html) {
 
     if (eraYear) {
       const base =
-        eraName === "ä»¤å" ? 2018 : eraName === "å¹³æ" ? 1988 : 1925;
+        eraName === "Ã¤Â»Â¤Ã¥ÂÂ" ? 2018 : eraName === "Ã¥Â¹Â³Ã¦ÂÂ" ? 1988 : 1925;
       const westernYear = base + eraYear;
       return month
-        ? `${westernYear}å¹´${String(month).padStart(2, "0")}æ`
-        : `${westernYear}å¹´`;
+        ? `${westernYear}Ã¥Â¹Â´${String(month).padStart(2, "0")}Ã¦ÂÂ`
+        : `${westernYear}Ã¥Â¹Â´`;
     }
   }
 
@@ -599,40 +599,40 @@ function extractRegistrationYear(html) {
 
   if (year) {
     return month
-      ? `${year}å¹´${String(month).padStart(2, "0")}æ`
-      : `${year}å¹´`;
+      ? `${year}Ã¥Â¹Â´${String(month).padStart(2, "0")}Ã¦ÂÂ`
+      : `${year}Ã¥Â¹Â´`;
   }
 
   const parsed = parseYear(cleanHtmlToText(region));
   if (!parsed) return "";
 
   return parsed.month
-    ? `${parsed.year}å¹´${String(parsed.month).padStart(2, "0")}æ`
-    : `${parsed.year}å¹´`;
+    ? `${parsed.year}Ã¥Â¹Â´${String(parsed.month).padStart(2, "0")}Ã¦ÂÂ`
+    : `${parsed.year}Ã¥Â¹Â´`;
 }
 
 function cleanColor(value) {
   let text = compactText(fixBasicMojibake(value))
     .replace(
-      /^(è»ä½è²|ããã£ã«ã©ã¼|ããã£ã¼ã«ã©ã¼|å¤è£è²|ã«ã©ã¼|è²)\s*[ï¼:]?\s*/,
+      /^(Ã¨Â»ÂÃ¤Â½ÂÃ¨ÂÂ²|Ã£ÂÂÃ£ÂÂÃ£ÂÂ£Ã£ÂÂ«Ã£ÂÂ©Ã£ÂÂ¼|Ã£ÂÂÃ£ÂÂÃ£ÂÂ£Ã£ÂÂ¼Ã£ÂÂ«Ã£ÂÂ©Ã£ÂÂ¼|Ã¥Â¤ÂÃ¨Â£ÂÃ¨ÂÂ²|Ã£ÂÂ«Ã£ÂÂ©Ã£ÂÂ¼|Ã¨ÂÂ²)\s*[Ã¯Â¼Â:]?\s*/,
       ""
     )
-    .replace(/(ã«ã©ã¼ã³ã¼ã|è²ã³ã¼ã)[\s\S]*$/, "")
+    .replace(/(Ã£ÂÂ«Ã£ÂÂ©Ã£ÂÂ¼Ã£ÂÂ³Ã£ÂÂ¼Ã£ÂÂ|Ã¨ÂÂ²Ã£ÂÂ³Ã£ÂÂ¼Ã£ÂÂ)[\s\S]*$/, "")
     .trim();
 
   for (const stop of [
-    "ååº¦ç»é²",
-    "åå¹´åº¦ç»é²",
-    "å¹´å¼",
-    "èµ°è¡è·é¢",
-    "èµ°è¡",
-    "è»æ¤",
-    "ææ°é",
-    "ä¾¡æ ¼",
-    "æ¯æç·é¡",
-    "åå¼",
-    "ã°ã¬ã¼ã",
-    "ä¿®å¾©æ­´",
+    "Ã¥ÂÂÃ¥ÂºÂ¦Ã§ÂÂ»Ã©ÂÂ²",
+    "Ã¥ÂÂÃ¥Â¹Â´Ã¥ÂºÂ¦Ã§ÂÂ»Ã©ÂÂ²",
+    "Ã¥Â¹Â´Ã¥Â¼Â",
+    "Ã¨ÂµÂ°Ã¨Â¡ÂÃ¨Â·ÂÃ©ÂÂ¢",
+    "Ã¨ÂµÂ°Ã¨Â¡Â",
+    "Ã¨Â»ÂÃ¦Â¤Â",
+    "Ã¦ÂÂÃ¦Â°ÂÃ©ÂÂ",
+    "Ã¤Â¾Â¡Ã¦Â Â¼",
+    "Ã¦ÂÂ¯Ã¦ÂÂÃ§Â·ÂÃ©Â¡Â",
+    "Ã¥ÂÂÃ¥Â¼Â",
+    "Ã£ÂÂ°Ã£ÂÂ¬Ã£ÂÂ¼Ã£ÂÂ",
+    "Ã¤Â¿Â®Ã¥Â¾Â©Ã¦Â­Â´",
   ]) {
     const index = text.indexOf(stop);
     if (index > 0) text = text.slice(0, index).trim();
@@ -643,15 +643,15 @@ function cleanColor(value) {
 
 function colorScore(value, control = null) {
   const text = compactText(value);
-  if (!text || /^(é¸æ|é¸æãã¦ãã ãã|æªé¸æ|ãªã|ãã®ä»|--|---)$/i.test(text)) {
+  if (!text || /^(Ã©ÂÂ¸Ã¦ÂÂ|Ã©ÂÂ¸Ã¦ÂÂÃ£ÂÂÃ£ÂÂ¦Ã£ÂÂÃ£ÂÂ Ã£ÂÂÃ£ÂÂ|Ã¦ÂÂªÃ©ÂÂ¸Ã¦ÂÂ|Ã£ÂÂªÃ£ÂÂ|Ã£ÂÂÃ£ÂÂ®Ã¤Â»Â|--|---)$/i.test(text)) {
     return -999;
   }
   if (/^#[0-9a-f]{3,8}$/i.test(text) || /^\d+$/.test(text)) return -999;
 
   let score = Math.min(text.length, 40);
-  if (/[ã-ãã¡-ã¶ä¸-é¾ ]/.test(text)) score += 40;
+  if (/[Ã£ÂÂ-Ã£ÂÂÃ£ÂÂ¡-Ã£ÂÂ¶Ã¤Â¸Â-Ã©Â¾Â ]/.test(text)) score += 40;
   if (
-    /(ãã¼ã«|ã¡ã¿ãªãã¯|ãã©ãã¯|ãã¯ã¤ã|ã·ã«ãã¼|ã°ã¬ã¼|ãã«ã¼|ã¬ãã|ãã©ã¦ã³|ãã¼ã¸ã¥|ãã¤ã«|ã¯ãªã¹ã¿ã«|ã¢ã¤ããªã¼|ã°ãªã¼ã³|ãªã¬ã³ã¸|ã¤ã¨ã­ã¼|ãã³ã¯|ãã¼ãã«|ã´ã¼ã«ã|ã«ã¼ã­|ãã­ã³ãº)/.test(
+    /(Ã£ÂÂÃ£ÂÂ¼Ã£ÂÂ«|Ã£ÂÂ¡Ã£ÂÂ¿Ã£ÂÂªÃ£ÂÂÃ£ÂÂ¯|Ã£ÂÂÃ£ÂÂ©Ã£ÂÂÃ£ÂÂ¯|Ã£ÂÂÃ£ÂÂ¯Ã£ÂÂ¤Ã£ÂÂ|Ã£ÂÂ·Ã£ÂÂ«Ã£ÂÂÃ£ÂÂ¼|Ã£ÂÂ°Ã£ÂÂ¬Ã£ÂÂ¼|Ã£ÂÂÃ£ÂÂ«Ã£ÂÂ¼|Ã£ÂÂ¬Ã£ÂÂÃ£ÂÂ|Ã£ÂÂÃ£ÂÂ©Ã£ÂÂ¦Ã£ÂÂ³|Ã£ÂÂÃ£ÂÂ¼Ã£ÂÂ¸Ã£ÂÂ¥|Ã£ÂÂÃ£ÂÂ¤Ã£ÂÂ«|Ã£ÂÂ¯Ã£ÂÂªÃ£ÂÂ¹Ã£ÂÂ¿Ã£ÂÂ«|Ã£ÂÂ¢Ã£ÂÂ¤Ã£ÂÂÃ£ÂÂªÃ£ÂÂ¼|Ã£ÂÂ°Ã£ÂÂªÃ£ÂÂ¼Ã£ÂÂ³|Ã£ÂÂªÃ£ÂÂ¬Ã£ÂÂ³Ã£ÂÂ¸|Ã£ÂÂ¤Ã£ÂÂ¨Ã£ÂÂ­Ã£ÂÂ¼|Ã£ÂÂÃ£ÂÂ³Ã£ÂÂ¯|Ã£ÂÂÃ£ÂÂ¼Ã£ÂÂÃ£ÂÂ«|Ã£ÂÂ´Ã£ÂÂ¼Ã£ÂÂ«Ã£ÂÂ|Ã£ÂÂ«Ã£ÂÂ¼Ã£ÂÂ­|Ã£ÂÂÃ£ÂÂ­Ã£ÂÂ³Ã£ÂÂº)/.test(
       text
     )
   ) {
@@ -670,11 +670,11 @@ function colorScore(value, control = null) {
 
 function extractBodyColor(html) {
   const labels = [
-    "è»ä½è²",
-    "ããã£ã«ã©ã¼",
-    "ããã£ã¼ã«ã©ã¼",
-    "å¤è£è²",
-    "ã«ã©ã¼",
+    "Ã¨Â»ÂÃ¤Â½ÂÃ¨ÂÂ²",
+    "Ã£ÂÂÃ£ÂÂÃ£ÂÂ£Ã£ÂÂ«Ã£ÂÂ©Ã£ÂÂ¼",
+    "Ã£ÂÂÃ£ÂÂÃ£ÂÂ£Ã£ÂÂ¼Ã£ÂÂ«Ã£ÂÂ©Ã£ÂÂ¼",
+    "Ã¥Â¤ÂÃ¨Â£ÂÃ¨ÂÂ²",
+    "Ã£ÂÂ«Ã£ÂÂ©Ã£ÂÂ¼",
   ];
   const keys = [
     "bodycolor",
@@ -711,10 +711,10 @@ function extractBodyColor(html) {
 function normalizePrice(value) {
   const text = compactText(value);
   if (!text) return "";
-  if (text.includes("ä¸å")) return text;
+  if (text.includes("Ã¤Â¸ÂÃ¥ÂÂ")) return text;
 
   const number = text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0] || "";
-  return number ? `${number}ä¸å` : text;
+  return number ? `${number}Ã¤Â¸ÂÃ¥ÂÂ` : text;
 }
 
 
@@ -724,12 +724,12 @@ function normalizeMileage(value) {
     .replace(/\s+/g, "");
 
   if (!text) return "";
-  if (text.includes("èµ°ä¸æ")) return "èµ°ä¸æ";
+  if (text.includes("Ã¨ÂµÂ°Ã¤Â¸ÂÃ¦ÂÂ")) return "Ã¨ÂµÂ°Ã¤Â¸ÂÃ¦ÂÂ";
 
-  const manMatch = text.match(/([0-9]+(?:\.[0-9]+)?)ä¸[ï¼«Kk]?/);
+  const manMatch = text.match(/([0-9]+(?:\.[0-9]+)?)Ã¤Â¸Â[Ã¯Â¼Â«Kk]?/);
   if (manMatch) {
     const man = Number(manMatch[1]);
-    return Number.isFinite(man) ? `${man}ä¸K` : text;
+    return Number.isFinite(man) ? `${man}Ã¤Â¸ÂK` : text;
   }
 
   const numberText = text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0] || "";
@@ -739,16 +739,16 @@ function normalizeMileage(value) {
   if (!Number.isFinite(number)) return text;
 
   const looksLikeKm =
-    /km|ï¼«ï¼­|ï½ï½/i.test(text) ||
-    /èµ°è¡è·é¢|èµ°è¡/.test(text) ||
+    /km|Ã¯Â¼Â«Ã¯Â¼Â­|Ã¯Â½ÂÃ¯Â½Â/i.test(text) ||
+    /Ã¨ÂµÂ°Ã¨Â¡ÂÃ¨Â·ÂÃ©ÂÂ¢|Ã¨ÂµÂ°Ã¨Â¡Â/.test(text) ||
     number >= 1000;
 
   if (looksLikeKm) {
     const truncated = Math.floor(number / 1000) / 10;
-    return `${truncated.toFixed(1)}ä¸K`;
+    return `${truncated.toFixed(1)}Ã¤Â¸ÂK`;
   }
 
-  return `${number}ä¸K`;
+  return `${number}Ã¤Â¸ÂK`;
 }
 
 function extractFirstMatch(text, regex) {
@@ -779,7 +779,12 @@ function extractImageCandidates(html) {
 
 function extractFirstImageUrl(html) {
   const images = extractImageCandidates(html);
-  return chooseBestVehicleImage(images);
+  return (
+    images.find((url) => url.includes("picture") && url.includes("goo-net")) ||
+    images.find((url) => url.includes("goo-net")) ||
+    images[0] ||
+    ""
+  );
 }
 
 
@@ -794,13 +799,13 @@ function extractCommonVehicleDetails(html) {
       "MileageDistance",
       "RunDistance",
     ]) ||
-      extractValueNearLabels(html, ["èµ°è¡è·é¢", "èµ°è¡"]) ||
-      extractFirstMatch(text, /(\d+(?:\.\d+)?ä¸[ï¼«Kk])/) ||
+      extractValueNearLabels(html, ["Ã¨ÂµÂ°Ã¨Â¡ÂÃ¨Â·ÂÃ©ÂÂ¢", "Ã¨ÂµÂ°Ã¨Â¡Â"]) ||
+      extractFirstMatch(text, /(\d+(?:\.\d+)?Ã¤Â¸Â[Ã¯Â¼Â«Kk])/) ||
       extractFirstMatch(
         text,
-        /(\d{1,7}(?:,\d{3})*\s*(?:km|ï¼«ï¼­|ï½ï½))/i
+        /(\d{1,7}(?:,\d{3})*\s*(?:km|Ã¯Â¼Â«Ã¯Â¼Â­|Ã¯Â½ÂÃ¯Â½Â))/i
       ) ||
-      (text.includes("èµ°ä¸æ") ? "èµ°ä¸æ" : "")
+      (text.includes("Ã¨ÂµÂ°Ã¤Â¸ÂÃ¦ÂÂ") ? "Ã¨ÂµÂ°Ã¤Â¸ÂÃ¦ÂÂ" : "")
   );
 
   const bodyPrice = normalizePrice(
@@ -810,10 +815,10 @@ function extractCommonVehicleDetails(html) {
       "VehiclePrice",
       "CarPrice",
     ]) ||
-      extractValueNearLabels(html, ["è»ä¸¡æ¬ä½ä¾¡æ ¼", "æ¬ä½ä¾¡æ ¼"]) ||
+      extractValueNearLabels(html, ["Ã¨Â»ÂÃ¤Â¸Â¡Ã¦ÂÂ¬Ã¤Â½ÂÃ¤Â¾Â¡Ã¦Â Â¼", "Ã¦ÂÂ¬Ã¤Â½ÂÃ¤Â¾Â¡Ã¦Â Â¼"]) ||
       extractFirstMatch(
         text,
-        /(?:è»ä¸¡æ¬ä½ä¾¡æ ¼|æ¬ä½ä¾¡æ ¼|ä¾¡æ ¼)\s*([0-9]+(?:\.[0-9]+)?ä¸å)/
+        /(?:Ã¨Â»ÂÃ¤Â¸Â¡Ã¦ÂÂ¬Ã¤Â½ÂÃ¤Â¾Â¡Ã¦Â Â¼|Ã¦ÂÂ¬Ã¤Â½ÂÃ¤Â¾Â¡Ã¦Â Â¼|Ã¤Â¾Â¡Ã¦Â Â¼)\s*([0-9]+(?:\.[0-9]+)?Ã¤Â¸ÂÃ¥ÂÂ)/
       )
   );
 
@@ -824,10 +829,10 @@ function extractCommonVehicleDetails(html) {
       "ShiharaiTotal",
       "PaymentTotal",
     ]) ||
-      extractValueNearLabels(html, ["æ¯æç·é¡", "ç·é¡"]) ||
+      extractValueNearLabels(html, ["Ã¦ÂÂ¯Ã¦ÂÂÃ§Â·ÂÃ©Â¡Â", "Ã§Â·ÂÃ©Â¡Â"]) ||
       extractFirstMatch(
         text,
-        /(?:æ¯æç·é¡|ç·é¡)\s*([0-9]+(?:\.[0-9]+)?ä¸å)/
+        /(?:Ã¦ÂÂ¯Ã¦ÂÂÃ§Â·ÂÃ©Â¡Â|Ã§Â·ÂÃ©Â¡Â)\s*([0-9]+(?:\.[0-9]+)?Ã¤Â¸ÂÃ¥ÂÂ)/
       )
   );
 
@@ -839,7 +844,7 @@ function extractCommonVehicleDetails(html) {
       "VehicleName",
       "car_name",
     ]) ||
-    extractValueNearLabels(html, ["è»å"]) ||
+    extractValueNearLabels(html, ["Ã¨Â»ÂÃ¥ÂÂ"]) ||
     "";
 
   const gradeName =
@@ -849,7 +854,7 @@ function extractCommonVehicleDetails(html) {
       "grade_name",
       "Gurade",
     ]) ||
-    extractValueNearLabels(html, ["ã°ã¬ã¼ã"]) ||
+    extractValueNearLabels(html, ["Ã£ÂÂ°Ã£ÂÂ¬Ã£ÂÂ¼Ã£ÂÂ"]) ||
     "";
 
   const classificationName =
@@ -859,7 +864,7 @@ function extractCommonVehicleDetails(html) {
       "ModelCode",
       "classification_name",
     ]) ||
-    extractValueNearLabels(html, ["åå¼"]) ||
+    extractValueNearLabels(html, ["Ã¥ÂÂÃ¥Â¼Â"]) ||
     "";
 
   const inspection =
@@ -869,7 +874,7 @@ function extractCommonVehicleDetails(html) {
       "InspectionDate",
       "Syaken",
     ]) ||
-    extractValueNearLabels(html, ["è»æ¤"]) ||
+    extractValueNearLabels(html, ["Ã¨Â»ÂÃ¦Â¤Â"]) ||
     "";
 
   const displacement =
@@ -878,7 +883,7 @@ function extractCommonVehicleDetails(html) {
       "Displacement",
       "EngineDisplacement",
     ]) ||
-    extractValueNearLabels(html, ["ææ°é"]) ||
+    extractValueNearLabels(html, ["Ã¦ÂÂÃ¦Â°ÂÃ©ÂÂ"]) ||
     "";
 
   return {
@@ -893,7 +898,7 @@ function extractCommonVehicleDetails(html) {
     bodyPrice,
     totalPrice,
     gradeExtraInfo:
-      extractValueNearLabels(html, ["ã°ã¬ã¼ãä»å æå ±"]) ||
+      extractValueNearLabels(html, ["Ã£ÂÂ°Ã£ÂÂ¬Ã£ÂÂ¼Ã£ÂÂÃ¤Â»ÂÃ¥ÂÂ Ã¦ÂÂÃ¥Â Â±"]) ||
       extractValueByNames(html, [
         "grade_additional_info",
         "grade_info",
@@ -945,7 +950,7 @@ function parsePublicVehicleRow(row, baseUrl, qualityImageMap) {
     stockId,
     title,
     description:
-      visibleTitle && !visibleTitle.includes("ï¿½") ? visibleTitle : title,
+      visibleTitle && !visibleTitle.includes("Ã¯Â¿Â½") ? visibleTitle : title,
     carName,
     gradeName,
     gradeExtraInfo: "",
@@ -955,13 +960,13 @@ function parsePublicVehicleRow(row, baseUrl, qualityImageMap) {
     color: infoItems[2] || "",
     inspection: infoItems[3] || "",
     displacement: infoItems[4] || "",
-    bodyPrice: bodyPrice ? `${bodyPrice}ä¸å` : "",
-    totalPrice: totalPrice ? `${totalPrice}ä¸å` : "",
+    bodyPrice: bodyPrice ? `${bodyPrice}Ã¤Â¸ÂÃ¥ÂÂ` : "",
+    totalPrice: totalPrice ? `${totalPrice}Ã¤Â¸ÂÃ¥ÂÂ` : "",
     imageUrl: qualityImageMap[stockId] || realImages[0] || "",
     detailUrl: findFirstUrl(urls, "/stock/detail"),
     editUrl: findFirstUrl(urls, "/car/edit/new"),
     gooUrl: findFirstUrl(urls, "goo-net.com"),
-    sourceStatus: "æ²è¼å¨åº«",
+    sourceStatus: "Ã¦ÂÂ²Ã¨Â¼ÂÃ¥ÂÂ¨Ã¥ÂºÂ«",
     sourcePageUrl: "",
     types: [],
     typeKeys: [],
@@ -969,161 +974,89 @@ function parsePublicVehicleRow(row, baseUrl, qualityImageMap) {
 }
 
 
-function extractTableCells(rowHtml) {
-  return Array.from(
-    String(rowHtml || "").matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gi)
-  ).map((match) => match[1]);
+function normalizeSavedListImageUrl(url) {
+  const value = String(url || "");
+  if (!value) return "";
+
+  return value
+    .replace(/\/S\//g, "/H/")
+    .replace(/\/M\//g, "/H/")
+    .replace(/([_-])(?:s|small|thumb)(?=\.(?:jpg|jpeg|png|webp)(?:\?|$))/i, "$1l")
+    .replace(/([?&](?:size|width|w)=)(?:80|100|120|150|160|200|240|300)(?=&|$)/gi, "$11200");
 }
 
-function normalizeDisplacement(value) {
-  const text = compactText(toHalfWidthAscii(value))
-    .replace(/,/g, "")
-    .replace(/\s+/g, "");
-
-  if (!text) return "";
-  if (/cc$/i.test(text)) return text.replace(/cc$/i, "cc");
-  if (/l$/i.test(text)) return text.replace(/l$/i, "L");
-
-  const numberText = text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0] || "";
-  if (!numberText) return text;
-
-  const number = Number(numberText);
-  if (!Number.isFinite(number)) return text;
-  return number >= 100 ? `${numberText}cc` : `${numberText}L`;
-}
-
-function extractPricesFromCell(cellHtml) {
-  const text = compactText(cleanHtmlToText(cellHtml));
-  const prices = Array.from(
-    text.matchAll(/([0-9]+(?:\.[0-9]+)?)\s*ä¸å/g)
-  ).map((match) => `${match[1]}ä¸å`);
-
-  if (prices.length >= 2) {
-    return { bodyPrice: prices[0], totalPrice: prices[1] };
-  }
-
-  const numbers = Array.from(
-    text.matchAll(/([0-9]+(?:\.[0-9]+)?)/g)
-  ).map((match) => match[1]);
-
-  return {
-    bodyPrice: numbers[0] ? `${numbers[0]}ä¸å` : "",
-    totalPrice: numbers[1] ? `${numbers[1]}ä¸å` : "",
-  };
-}
-
-function upgradeGooImageUrl(url) {
-  let value = absoluteUrl(decodeHtmlEntities(url || ""));
-  if (!value || /noimage|nophoto|car_nophoto/i.test(value)) return "";
-
-  value = value
-    .replace(/^http:/i, "https:")
-    .replace(/secure\.goo-net\.com/i, "picture1.goo-net.com")
-    .replace(/\/Q\//i, "/H/")
-    .replace(/\/S\//i, "/H/")
-    .replace(/\/M\//i, "/H/")
-    .replace(/\/T\//i, "/H/");
-
-  if (/goo-net\.com/i.test(value) && /\.(?:jpg|jpeg|png|webp)(?:\?|$)/i.test(value)) {
-    value = value.replace(/\?.*$/, "");
-  }
-
-  return value;
-}
-
-function extractExtendedImageValues(html, baseUrl) {
-  const values = [];
-
-  for (const match of String(html || "").matchAll(/<img\b([^>]*)>/gi)) {
-    const attrs = match[1] || "";
-    for (const attribute of ["src", "data-src", "data-original", "data-lazy-src"]) {
-      const raw = extractAttribute(attrs, attribute);
-      if (raw) values.push(absoluteUrl(raw, baseUrl));
-    }
-  }
-
-  for (const href of extractRawHrefValues(html)) {
-    if (/\.(?:jpg|jpeg|png|webp)(?:\?|$)/i.test(href)) {
-      values.push(absoluteUrl(href, baseUrl));
-    }
-  }
-
-  return Array.from(new Set(values)).filter(Boolean);
-}
-
-function chooseBestVehicleImage(urls, stockId = "") {
-  const candidates = Array.from(
-    new Set((urls || []).map(upgradeGooImageUrl).filter(Boolean))
-  ).filter((url) => !url.includes("/common/"));
-
-  const withStockId = candidates.filter((url) =>
-    stockId ? url.toLowerCase().includes(stockId.toLowerCase()) : false
-  );
-  const pool = withStockId.length ? withStockId : candidates;
-
-  return (
-    pool.find((url) => /picture1\.goo-net\.com/i.test(url) && /\/H\//i.test(url)) ||
-    pool.find((url) => /picture1\.goo-net\.com/i.test(url)) ||
-    pool.find((url) => /\/H\//i.test(url)) ||
-    pool[0] ||
-    ""
-  );
-}
-
-function extractSavedVehicleRows(html) {
-  return Array.from(
-    String(html || "").matchAll(/<tr\b[^>]*>[\s\S]*?<\/tr>/gi)
-  )
+function extractSavedTableRows(html) {
+  return Array.from(String(html || "").matchAll(/<tr\b[^>]*>[\s\S]*?<\/tr>/gi))
     .map((match) => match[0])
     .filter((rowHtml) => /StockId=[A-Za-z0-9]+/i.test(rowHtml));
 }
 
-function extractSavedVehicles(html, pageUrl) {
-  const rows = extractSavedVehicleRows(html);
-  const vehicles = [];
+function extractTableCellTexts(rowHtml) {
+  return Array.from(
+    String(rowHtml || "").matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gi)
+  ).map((match) => compactText(cleanHtmlToText(match[1])));
+}
 
-  for (const rowHtml of rows) {
+function extractSavedRowNames(cells, yearIndex) {
+  const candidates = cells
+    .slice(0, Math.max(0, yearIndex))
+    .map((value) => compactText(value))
+    .filter(Boolean)
+    .filter((value) => !/^(é¸æ|åç|è»ä¸¡æå ±ãç·¨é)$/u.test(value))
+    .filter((value) => !/^\d+$/.test(toHalfWidthAscii(value)))
+    .filter((value) => !/^[-ââ]+$/.test(value));
+
+  return {
+    carName: candidates[0] || "",
+    gradeName: candidates[1] || "",
+  };
+}
+
+function extractSavedVehicles(html, pageUrl, qualityImageMap = {}) {
+  const rows = extractSavedTableRows(html);
+
+  return rows.map((rowHtml) => {
     const stockId =
       rowHtml.match(/StockId=([A-Za-z0-9]+)/i)?.[1] ||
-      extractAttribute(
-        rowHtml.match(/<input\b[^>]*name=["'][^"']*StockId[^"']*["'][^>]*>/i)?.[0] || "",
-        "value"
-      );
-
-    if (!stockId) continue;
-
-    const cells = extractTableCells(rowHtml);
-    const cellTexts = cells.map((cell) => compactText(cleanHtmlToText(cell)));
-    const yearIndex = cellTexts.findIndex((text) =>
-      /^(?:19|20)\d{2}å¹´?$/.test(toHalfWidthAscii(text).replace(/\s+/g, ""))
-    );
-
-    if (yearIndex < 3) continue;
-
-    const carName = cellTexts[yearIndex - 3] || "";
-    const gradeName = cellTexts[yearIndex - 2] || "";
-    const yearText = toHalfWidthAscii(cellTexts[yearIndex] || "").replace(/\s+/g, "");
-    const year = yearText.match(/((?:19|20)\d{2})/)?.[1]
-      ? `${yearText.match(/((?:19|20)\d{2})/)?.[1]}å¹´`
-      : yearText;
-    const displacement = normalizeDisplacement(cellTexts[yearIndex + 1] || "");
-    const color = compactText(cellTexts[yearIndex + 2] || "");
-    const mileage = normalizeMileage(cellTexts[yearIndex + 3] || "");
-    const prices = extractPricesFromCell(cells[yearIndex + 4] || "");
+      rowHtml.match(/id=["'][^"']*([A-Za-z0-9]{12,})[^"']*["']/i)?.[1] ||
+      "";
 
     const rawHrefs = extractRawHrefValues(rowHtml);
     const urls = rawHrefs
       .map((href) => absoluteUrl(href, pageUrl))
       .filter(Boolean);
-    const rowImages = extractExtendedImageValues(rowHtml, pageUrl);
-    const imageUrl = chooseBestVehicleImage(rowImages, stockId);
+    const rowImages = extractImageValues(rowHtml, pageUrl)
+      .map(normalizeSavedListImageUrl)
+      .filter(Boolean)
+      .filter((url) => !/logo|noimage|nophoto|\/common\//i.test(url));
+
+    const cells = extractTableCellTexts(rowHtml);
+    const yearIndex = cells.findIndex((value) => /(?:19|20)\d{2}\s*å¹´/u.test(value));
+    const mileageIndex = cells.findIndex(
+      (value, index) =>
+        index > yearIndex &&
+        /(?:\d+(?:\.\d+)?\s*ä¸\s*[Kï¼«k]|\d[\d,]*\s*(?:km|ï¼«ï¼­))/iu.test(value)
+    );
+    const priceIndexes = cells
+      .map((value, index) => ({ value, index }))
+      .filter(({ value, index }) => index > mileageIndex && /\d+(?:\.\d+)?\s*ä¸å/u.test(value));
+
+    const { carName, gradeName } = extractSavedRowNames(cells, yearIndex);
+    const year = yearIndex >= 0 ? cells[yearIndex] : "";
+    const displacement = yearIndex >= 0 ? cells[yearIndex + 1] || "" : "";
+    const color =
+      yearIndex >= 0 && mileageIndex > yearIndex + 1
+        ? compactText(cells.slice(yearIndex + 2, mileageIndex).join(" "))
+        : "";
+    const mileage = mileageIndex >= 0 ? normalizeMileage(cells[mileageIndex]) : "";
+    const bodyPrice = priceIndexes[0]?.value || "";
+    const totalPrice = priceIndexes[1]?.value || "";
 
     const discoveredEditUrls = urls.filter(
       (url) =>
         url.includes("/car/newregist/register") ||
         url.includes("/car/edit/new")
     );
-
     const editUrls = Array.from(
       new Set([
         ...discoveredEditUrls,
@@ -1131,17 +1064,19 @@ function extractSavedVehicles(html, pageUrl) {
         `${BASE_URL}/car/edit/new?kbn=1&ClientId=0902332&StockId=${stockId}&StockStatus=00180002&ScreenId=CB101GR`,
       ])
     );
-
     const detailUrl =
       urls.find(
         (url) =>
-          url.includes("/stock/detail") &&
-          url.toLowerCase().includes(`stockid=${stockId}`.toLowerCase())
-      ) || `${BASE_URL}/stock/detail?ClientId=0902332&StockId=${stockId}`;
+          url.includes("/stock/detail") && url.includes(`StockId=${stockId}`)
+      ) ||
+      `${BASE_URL}/stock/detail?ClientId=0902332&StockId=${stockId}`;
 
     const title = [carName, gradeName].filter(Boolean).join(" ").trim();
+    const imageUrl = normalizeSavedListImageUrl(
+      qualityImageMap[stockId] || rowImages[0] || ""
+    );
 
-    vehicles.push({
+    return {
       stockId,
       title,
       description: title,
@@ -1154,21 +1089,27 @@ function extractSavedVehicles(html, pageUrl) {
       color,
       inspection: "",
       displacement,
-      bodyPrice: prices.bodyPrice,
-      totalPrice: prices.totalPrice,
+      bodyPrice,
+      totalPrice,
       imageUrl,
       gooUrl: "",
-      sourceStatus: "ä¸æä¿å­",
+      sourceStatus: "Ã¤Â¸ÂÃ¦ÂÂÃ¤Â¿ÂÃ¥Â­Â",
       sourcePageUrl: pageUrl,
       editUrl: editUrls[0] || "",
       editUrls,
       detailUrl,
       types: [],
       typeKeys: [],
-    });
-  }
-
-  return uniqueByStockId(vehicles);
+      listResult: {
+        year: Boolean(year),
+        mileage: Boolean(mileage),
+        color: Boolean(color),
+        bodyPrice: Boolean(bodyPrice),
+        totalPrice: Boolean(totalPrice),
+        image: Boolean(imageUrl),
+      },
+    };
+  }).filter((vehicle) => vehicle.stockId);
 }
 
 async function loginMotorgate() {
@@ -1221,7 +1162,7 @@ async function loginMotorgate() {
 
 
 function chooseDetailValue(vehicle, detailValue, currentValue, previousValue = "") {
-  if (vehicle.sourceStatus === "ä¸æä¿å­") {
+  if (vehicle.sourceStatus === "Ã¤Â¸ÂÃ¦ÂÂÃ¤Â¿ÂÃ¥Â­Â") {
     return currentValue || detailValue || previousValue || "";
   }
 
@@ -1343,7 +1284,7 @@ async function fetchVehicleDetailFromEditPage(
             headers: {
               Cookie: jarToCookie(jar),
               Referer:
-                vehicle.sourceStatus === "ä¸æä¿å­"
+                vehicle.sourceStatus === "Ã¤Â¸ÂÃ¦ÂÂÃ¤Â¿ÂÃ¥Â­Â"
                   ? `${BASE_URL}/stock/savelist`
                   : `${BASE_URL}/top`,
               "User-Agent": USER_AGENT,
@@ -1587,7 +1528,7 @@ async function mapWithConcurrency(items, limit, mapper) {
 
 async function attachVehicleDetails(jar, vehicles, previousMap = new Map()) {
   const isSavedBatch = vehicles.some(
-    (vehicle) => vehicle.sourceStatus === "ä¸æä¿å­"
+    (vehicle) => vehicle.sourceStatus === "Ã¤Â¸ÂÃ¦ÂÂÃ¤Â¿ÂÃ¥Â­Â"
   );
   const concurrency = isSavedBatch ? SAVED_DETAIL_CONCURRENCY : 10;
 
@@ -1628,6 +1569,7 @@ function toInventoryVehicle(vehicle) {
     updatedAt: new Date().toISOString(),
     typeResult: vehicle.typeResult || null,
     detailResult: vehicle.detailResult || null,
+    listResult: vehicle.listResult || null,
   };
 }
 
@@ -1678,7 +1620,8 @@ async function fetchSavedPage(jar, pageUrl) {
   );
 
   const html = await readResponseText(response);
-  const vehicles = extractSavedVehicles(html, pageUrl);
+  const qualityImageMap = extractQualityImageMap(html, pageUrl);
+  const vehicles = extractSavedVehicles(html, pageUrl, qualityImageMap);
 
   return {
     pageUrl,
@@ -1858,7 +1801,7 @@ function summarizeGradeExtraInfo(vehicles) {
 
 function summarizeSavedDetailFields(vehicles) {
   const saved = vehicles.filter(
-    (vehicle) => vehicle.sourceStatus === "ä¸æä¿å­"
+    (vehicle) => vehicle.sourceStatus === "Ã¤Â¸ÂÃ¦ÂÂÃ¤Â¿ÂÃ¥Â­Â"
   );
   return {
     total: saved.length,
@@ -1878,9 +1821,9 @@ function getTriggerLabel(request, save) {
   const cronHeader = request.headers.get("x-vercel-cron");
   const userAgent = request.headers.get("user-agent") || "";
   if (cronHeader || userAgent.toLowerCase().includes("vercel")) {
-    return "èªåæ´æ°";
+    return "Ã¨ÂÂªÃ¥ÂÂÃ¦ÂÂ´Ã¦ÂÂ°";
   }
-  return save ? "URLä¿å­æ´æ°" : "URLãã¬ãã¥ã¼";
+  return save ? "URLÃ¤Â¿ÂÃ¥Â­ÂÃ¦ÂÂ´Ã¦ÂÂ°" : "URLÃ£ÂÂÃ£ÂÂ¬Ã£ÂÂÃ£ÂÂ¥Ã£ÂÂ¼";
 }
 
 function buildFailureInventoryData(currentInventory, status) {
@@ -1925,24 +1868,24 @@ export async function GET(request) {
     const error = success
       ? ""
       : [
-          loginStatus !== 302 ? `ã­ã°ã¤ã³ç°å¸¸: ${loginStatus}` : "",
+          loginStatus !== 302 ? `Ã£ÂÂ­Ã£ÂÂ°Ã£ÂÂ¤Ã£ÂÂ³Ã§ÂÂ°Ã¥Â¸Â¸: ${loginStatus}` : "",
           publicResult.status !== 200
-            ? `æ²è¼å¨åº«åå¾ç°å¸¸: ${publicResult.status}`
+            ? `Ã¦ÂÂ²Ã¨Â¼ÂÃ¥ÂÂ¨Ã¥ÂºÂ«Ã¥ÂÂÃ¥Â¾ÂÃ§ÂÂ°Ã¥Â¸Â¸: ${publicResult.status}`
             : "",
           publicResult.containsLoginForm
-            ? "ã­ã°ã¤ã³ãã©ã¼ã ãè¡¨ç¤ºããã¦ãã¾ã"
+            ? "Ã£ÂÂ­Ã£ÂÂ°Ã£ÂÂ¤Ã£ÂÂ³Ã£ÂÂÃ£ÂÂ©Ã£ÂÂ¼Ã£ÂÂ Ã£ÂÂÃ¨Â¡Â¨Ã§Â¤ÂºÃ£ÂÂÃ£ÂÂÃ£ÂÂ¦Ã£ÂÂÃ£ÂÂ¾Ã£ÂÂ"
             : "",
           savedResult.pages.some((page) => page.status !== 200)
-            ? "ä¸æä¿å­å¨åº«ãã¼ã¸ã®åå¾ã«å¤±æãã¦ãã¾ã"
+            ? "Ã¤Â¸ÂÃ¦ÂÂÃ¤Â¿ÂÃ¥Â­ÂÃ¥ÂÂ¨Ã¥ÂºÂ«Ã£ÂÂÃ£ÂÂ¼Ã£ÂÂ¸Ã£ÂÂ®Ã¥ÂÂÃ¥Â¾ÂÃ£ÂÂ«Ã¥Â¤Â±Ã¦ÂÂÃ£ÂÂÃ£ÂÂ¦Ã£ÂÂÃ£ÂÂ¾Ã£ÂÂ"
             : "",
-          vehicles.length === 0 ? "å¨åº«åå¾ä»¶æ°ã0ä»¶ã§ã" : "",
+          vehicles.length === 0 ? "Ã¥ÂÂ¨Ã¥ÂºÂ«Ã¥ÂÂÃ¥Â¾ÂÃ¤Â»Â¶Ã¦ÂÂ°Ã£ÂÂ0Ã¤Â»Â¶Ã£ÂÂ§Ã£ÂÂ" : "",
         ]
           .filter(Boolean)
           .join(" / ");
 
     const lastUpdateStatus = {
       success,
-      statusText: success ? "æ­£å¸¸æ´æ°" : "æ´æ°ç¢ºèªãå¿è¦",
+      statusText: success ? "Ã¦Â­Â£Ã¥Â¸Â¸Ã¦ÂÂ´Ã¦ÂÂ°" : "Ã¦ÂÂ´Ã¦ÂÂ°Ã§Â¢ÂºÃ¨ÂªÂÃ£ÂÂÃ¥Â¿ÂÃ¨Â¦Â",
       trigger,
       startedAt: startedAt.toISOString(),
       finishedAt: finishedAt.toISOString(),
@@ -2014,7 +1957,7 @@ export async function GET(request) {
     const finishedAt = new Date();
     const failureStatus = {
       success: false,
-      statusText: "æ´æ°å¤±æ",
+      statusText: "Ã¦ÂÂ´Ã¦ÂÂ°Ã¥Â¤Â±Ã¦ÂÂ",
       trigger,
       startedAt: startedAt.toISOString(),
       finishedAt: finishedAt.toISOString(),
