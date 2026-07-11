@@ -1,61 +1,254 @@
-import inventory from "../../../data/inventory.json";
+const INVENTORY_URL =
+  "https://raw.githubusercontent.com/CARTOPIA0319/cartopia-car-diagnosis/main/data/inventory.json";
 
 const BUY_MENU_ID = "richmenu-45b4781911f21f5d5632ec63e211b449";
 const TOP_MENU_ID = "richmenu-19859bd6bf80b802dfc2171536ac089e";
 const VEHICLES_PER_PAGE = 9;
 const PREVIEW_HEIGHT = "86px";
 
+async function loadInventory() {
+  const response = await fetch(`${INVENTORY_URL}?t=${Date.now()}`, {
+    cache: "no-store",
+    headers: {
+      "Cache-Control": "no-store, no-cache, must-revalidate",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`最新在庫データの取得に失敗しました: ${response.status}`);
+  }
+
+  const inventory = await response.json();
+
+  if (!inventory || !Array.isArray(inventory.vehicles)) {
+    throw new Error("最新在庫データの形式が正しくありません");
+  }
+
+  return inventory;
+}
+
 const topQuickReply = {
   items: [
-    { type: "action", action: { type: "message", label: "「買う」でできること", text: "「買う」でできること" } },
-    { type: "action", action: { type: "message", label: "「売る」でできること", text: "「売る」でできること" } },
-    { type: "action", action: { type: "message", label: "「予約」でできること", text: "「予約」でできること" } },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "「買う」でできること",
+        text: "「買う」でできること",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "「売る」でできること",
+        text: "「売る」でできること",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "「予約」でできること",
+        text: "「予約」でできること",
+      },
+    },
   ],
 };
 
 const buyQuickReply = {
   items: [
-    { type: "action", action: { type: "message", label: "ざっくり診断とは？", text: "ざっくり診断とは？" } },
-    { type: "action", action: { type: "message", label: "ぴったり診断とは？", text: "ぴったり診断とは？" } },
-    { type: "action", action: { type: "message", label: "車種が決まっている人は？", text: "車種が決まっている人は？" } },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "ざっくり診断とは？",
+        text: "ざっくり診断とは？",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "ぴったり診断とは？",
+        text: "ぴったり診断とは？",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "車種が決まっている人は？",
+        text: "車種が決まっている人は？",
+      },
+    },
   ],
 };
 
 const roughSizeQuickReply = {
   items: [
-    { type: "action", action: { type: "message", label: "軽自動車", text: "軽自動車" } },
-    { type: "action", action: { type: "message", label: "普通車", text: "普通車" } },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "軽自動車",
+        text: "軽自動車",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "普通車",
+        text: "普通車",
+      },
+    },
   ],
 };
 
 const lightTypeQuickReply = {
   items: [
-    { type: "action", action: { type: "message", label: "スライドドア", text: "軽自動車 スライドドア" } },
-    { type: "action", action: { type: "message", label: "スタンダード", text: "軽自動車 スタンダード" } },
-    { type: "action", action: { type: "message", label: "SUV", text: "軽自動車 SUV" } },
-    { type: "action", action: { type: "message", label: "トラック", text: "軽自動車 トラック" } },
-    { type: "action", action: { type: "message", label: "スポーティ", text: "軽自動車 スポーティ" } },
-    { type: "action", action: { type: "message", label: "こだわりなし", text: "軽自動車 こだわりなし" } },
-    { type: "action", action: { type: "message", label: "ひとつ戻る", text: "ざっくり診断" } },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "スライドドア",
+        text: "軽自動車 スライドドア",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "スタンダード",
+        text: "軽自動車 スタンダード",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "SUV",
+        text: "軽自動車 SUV",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "トラック",
+        text: "軽自動車 トラック",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "スポーティ",
+        text: "軽自動車 スポーティ",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "こだわりなし",
+        text: "軽自動車 こだわりなし",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "ひとつ戻る",
+        text: "ざっくり診断",
+      },
+    },
   ],
 };
 
 const normalTypeQuickReply = {
   items: [
-    { type: "action", action: { type: "message", label: "コンパクトカー", text: "普通車 コンパクトカー" } },
-    { type: "action", action: { type: "message", label: "ミニバン", text: "普通車 ミニバン" } },
-    { type: "action", action: { type: "message", label: "SUV", text: "普通車 SUV" } },
-    { type: "action", action: { type: "message", label: "セダン", text: "普通車 セダン" } },
-    { type: "action", action: { type: "message", label: "ステーションワゴン", text: "普通車 ステーションワゴン" } },
-    { type: "action", action: { type: "message", label: "低燃費・HV", text: "普通車 低燃費・ハイブリッド" } },
-    { type: "action", action: { type: "message", label: "スポーティ", text: "普通車 スポーティ" } },
-    { type: "action", action: { type: "message", label: "バン・トラック", text: "普通車 バン・トラック" } },
-    { type: "action", action: { type: "message", label: "ひとつ戻る", text: "ざっくり診断" } },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "コンパクトカー",
+        text: "普通車 コンパクトカー",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "ミニバン",
+        text: "普通車 ミニバン",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "SUV",
+        text: "普通車 SUV",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "セダン",
+        text: "普通車 セダン",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "ステーションワゴン",
+        text: "普通車 ステーションワゴン",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "低燃費・HV",
+        text: "普通車 低燃費・ハイブリッド",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "スポーティ",
+        text: "普通車 スポーティ",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "バン・トラック",
+        text: "普通車 バン・トラック",
+      },
+    },
+    {
+      type: "action",
+      action: {
+        type: "message",
+        label: "ひとつ戻る",
+        text: "ざっくり診断",
+      },
+    },
   ],
 };
 
 export async function GET() {
-  return Response.json({ status: "ok", name: "CARTOPIA main webhook" });
+  return Response.json({
+    status: "ok",
+    name: "CARTOPIA main webhook",
+  });
 }
 
 export async function POST(request) {
@@ -70,12 +263,14 @@ export async function POST(request) {
         ? event.message.text
         : "";
 
-    const postbackData = event.type === "postback" ? event.postback?.data : "";
+    const postbackData =
+      event.type === "postback" ? event.postback?.data : "";
 
     if (postbackData.startsWith("more|")) {
       const [, size, rawType, offsetText] = postbackData.split("|");
       const offset = Number(offsetText || "0");
-      const results = findVehicles(size, normalizeType(rawType));
+
+      const results = await findVehicles(size, normalizeType(rawType));
 
       if (!results.length || offset >= results.length) {
         await replyMessage(event.replyToken, [
@@ -99,44 +294,73 @@ export async function POST(request) {
 
     if (isBuy) {
       await linkRichMenu(event.source.userId, BUY_MENU_ID);
+
       await replyMessage(event.replyToken, [
-        { type: "text", text: "気になる項目を選んでください😊", quickReply: buyQuickReply },
+        {
+          type: "text",
+          text: "気になる項目を選んでください😊",
+          quickReply: buyQuickReply,
+        },
       ]);
       continue;
     }
 
     if (text === "トップへ戻る") {
       await linkRichMenu(event.source.userId, TOP_MENU_ID);
+
       await replyMessage(event.replyToken, [
-        { type: "text", text: "😊 次は何する？\n\n気になるメニューを選んでね🚗", quickReply: topQuickReply },
+        {
+          type: "text",
+          text: "😊 次は何する？\n\n気になるメニューを選んでね🚗",
+          quickReply: topQuickReply,
+        },
       ]);
       continue;
     }
 
     if (text === "ざっくり診断") {
       await replyMessage(event.replyToken, [
-        { type: "text", text: "⚡ ざっくり診断を開始😊\n\nまずは車のサイズは軽？普通車？🚗", quickReply: roughSizeQuickReply },
+        {
+          type: "text",
+          text:
+            "⚡ ざっくり診断を開始😊\n\n" +
+            "まずは車のサイズは軽？普通車？🚗",
+          quickReply: roughSizeQuickReply,
+        },
       ]);
       continue;
     }
 
     if (text === "軽自動車") {
       await replyMessage(event.replyToken, [
-        { type: "text", text: "軽自動車ね😊\n\nどんなタイプの軽を探してるの？🔍😊", quickReply: lightTypeQuickReply },
+        {
+          type: "text",
+          text:
+            "軽自動車ね😊\n\n" +
+            "どんなタイプの軽を探してるの？🔍😊",
+          quickReply: lightTypeQuickReply,
+        },
       ]);
       continue;
     }
 
     if (text === "普通車") {
       await replyMessage(event.replyToken, [
-        { type: "text", text: "普通車ね😊\n\n次はどんなタイプか選んでね🚗", quickReply: normalTypeQuickReply },
+        {
+          type: "text",
+          text:
+            "普通車ね😊\n\n" +
+            "次はどんなタイプか選んでね🚗",
+          quickReply: normalTypeQuickReply,
+        },
       ]);
       continue;
     }
 
     if (isRoughSearchText(text)) {
       const [size, rawType] = text.split(" ");
-      const results = findVehicles(size, normalizeType(rawType));
+
+      const results = await findVehicles(size, normalizeType(rawType));
 
       if (results.length === 0) {
         await replyMessage(event.replyToken, [
@@ -277,21 +501,32 @@ function isRoughSearchText(text) {
 }
 
 function normalizeType(type) {
-  if (type === "こだわりなし") return "特にこだわりはない";
-  if (type === "低燃費・ハイブリッド") return "EV・HV";
+  if (type === "こだわりなし") {
+    return "特にこだわりはない";
+  }
+
+  if (type === "低燃費・ハイブリッド") {
+    return "EV・HV";
+  }
+
   return type;
 }
 
-function findVehicles(size, type) {
+async function findVehicles(size, type) {
+  const inventory = await loadInventory();
   const vehicles = inventory.vehicles || [];
 
   return vehicles
     .filter((vehicle) => {
       if (!vehicle) return false;
 
-      const keys = [...(vehicle.types || []), ...(vehicle.typeKeys || [])];
+      const keys = [
+        ...(vehicle.types || []),
+        ...(vehicle.typeKeys || []),
+      ];
 
       const hasSize = keys.includes(size);
+
       const hasType =
         type === "特にこだわりはない"
           ? keys.includes("特にこだわりはない")
@@ -302,7 +537,11 @@ function findVehicles(size, type) {
     .sort((a, b) => {
       const statusA = statusPriority(a);
       const statusB = statusPriority(b);
-      if (statusA !== statusB) return statusA - statusB;
+
+      if (statusA !== statusB) {
+        return statusA - statusB;
+      }
+
       return priceNumber(b.totalPrice) - priceNumber(a.totalPrice);
     });
 }
@@ -313,19 +552,32 @@ function statusPriority(vehicle) {
 
 function priceNumber(priceText) {
   if (!priceText) return 0;
+
   const match = String(priceText).match(/([\d.]+)/);
+
   return match ? Number(match[1]) : 0;
 }
 
-function makeVehiclePageCarouselMessage(results, size, rawType, offset) {
-  const pageVehicles = results.slice(offset, offset + VEHICLES_PER_PAGE);
+function makeVehiclePageCarouselMessage(
+  results,
+  size,
+  rawType,
+  offset
+) {
+  const pageVehicles = results.slice(
+    offset,
+    offset + VEHICLES_PER_PAGE
+  );
+
   const nextOffset = offset + VEHICLES_PER_PAGE;
   const hasMore = nextOffset < results.length;
 
   const contents = pageVehicles.map(makeVehicleBubble);
 
   if (hasMore) {
-    contents.push(makeMoreBubble(results, nextOffset, size, rawType));
+    contents.push(
+      makeMoreBubble(results, nextOffset, size, rawType)
+    );
   }
 
   return {
@@ -340,7 +592,12 @@ function makeVehiclePageCarouselMessage(results, size, rawType, offset) {
 
 function makeMoreBubble(results, nextOffset, size, rawType) {
   const remaining = results.length - nextOffset;
-  const previewVehicles = results.slice(nextOffset, nextOffset + VEHICLES_PER_PAGE);
+
+  const previewVehicles = results.slice(
+    nextOffset,
+    nextOffset + VEHICLES_PER_PAGE
+  );
+
   const nextCount = previewVehicles.length;
 
   return {
@@ -384,17 +641,36 @@ function makeMoreBubble(results, nextOffset, size, rawType) {
           type: "box",
           layout: "vertical",
           spacing: "sm",
-          contents: makePreviewRows(previewVehicles, size, rawType, nextOffset, nextCount),
+          contents: makePreviewRows(
+            previewVehicles,
+            size,
+            rawType,
+            nextOffset,
+            nextCount
+          ),
         },
       ],
     },
   };
 }
 
-function makePreviewRows(vehicles, size, rawType, nextOffset, nextCount) {
+function makePreviewRows(
+  vehicles,
+  size,
+  rawType,
+  nextOffset,
+  nextCount
+) {
   const previewItems = vehicles.map(makePreviewImageBox);
 
-  previewItems.push(makePreviewButtonBox(size, rawType, nextOffset, nextCount));
+  previewItems.push(
+    makePreviewButtonBox(
+      size,
+      rawType,
+      nextOffset,
+      nextCount
+    )
+  );
 
   const rows = [];
 
@@ -468,7 +744,12 @@ function makePreviewSpacerBox() {
   };
 }
 
-function makePreviewButtonBox(size, rawType, nextOffset, nextCount) {
+function makePreviewButtonBox(
+  size,
+  rawType,
+  nextOffset,
+  nextCount
+) {
   return {
     type: "box",
     layout: "vertical",
@@ -523,7 +804,10 @@ function makeVehicleBubble(vehicle) {
   const bodyContents = [
     {
       type: "text",
-      text: `支払総額 ${safeText(vehicle?.totalPrice, "お問い合わせ")}`,
+      text: `支払総額 ${safeText(
+        vehicle?.totalPrice,
+        "お問い合わせ"
+      )}`,
       weight: "bold",
       size: "xl",
       color: "#D97706",
@@ -531,7 +815,10 @@ function makeVehicleBubble(vehicle) {
     },
     {
       type: "text",
-      text: `車両本体価格 ${safeText(vehicle?.bodyPrice, "お問い合わせ")}`,
+      text: `車両本体価格 ${safeText(
+        vehicle?.bodyPrice,
+        "お問い合わせ"
+      )}`,
       size: "xs",
       color: "#666666",
       wrap: true,
@@ -567,7 +854,9 @@ function makeVehicleBubble(vehicle) {
       spacing: "none",
       paddingAll: "0px",
       contents: [
-        ...(imageUrl ? [makeHeroImage(imageUrl, vehicle, gooUrl)] : []),
+        ...(imageUrl
+          ? [makeHeroImage(imageUrl, vehicle, gooUrl)]
+          : []),
         makeVehicleTitleBox(vehicle),
         {
           type: "box",
@@ -589,7 +878,14 @@ function makeHeroImage(imageUrl, vehicle, gooUrl) {
     type: "box",
     layout: "vertical",
     height: "176px",
-    ...(gooUrl ? { action: { type: "uri", uri: gooUrl } } : {}),
+    ...(gooUrl
+      ? {
+          action: {
+            type: "uri",
+            uri: gooUrl,
+          },
+        }
+      : {}),
     contents: [
       {
         type: "image",
@@ -635,8 +931,14 @@ function makeStatusRibbon(vehicle) {
 }
 
 function makeVehicleTitleBox(vehicle) {
-  const title = safeText(vehicle?.carName || vehicle?.title, "車両情報");
-  const subTitle = optionalText(vehicle?.gradeName || vehicle?.description);
+  const title = safeText(
+    vehicle?.carName || vehicle?.title,
+    "車両情報"
+  );
+
+  const subTitle = optionalText(
+    vehicle?.gradeName || vehicle?.description
+  );
 
   const contents = [
     {
@@ -697,9 +999,21 @@ function makeInfoRow(vehicle) {
     spacing: "xs",
     margin: "sm",
     contents: [
-      makeInfoBox("初度登録", formatRegistrationYear(vehicle?.year), "normal"),
-      makeInfoBox("走行距離", formatMileage(vehicle?.mileage), "normal"),
-      makeInfoBox("車体色", formatColorName(vehicle?.color), "color"),
+      makeInfoBox(
+        "初度登録",
+        formatRegistrationYear(vehicle?.year),
+        "normal"
+      ),
+      makeInfoBox(
+        "走行距離",
+        formatMileage(vehicle?.mileage),
+        "normal"
+      ),
+      makeInfoBox(
+        "車体色",
+        formatColorName(vehicle?.color),
+        "color"
+      ),
     ],
   };
 }
@@ -755,6 +1069,7 @@ function getInfoValueSize(valueText, kind) {
   const plain = String(valueText || "").replace(/\n/g, "");
 
   if (plain.length <= 6) return "xs";
+
   return "xxs";
 }
 
@@ -778,7 +1093,10 @@ function formatColorName(colorText) {
   const hiddenText = lines.slice(maxLines).join("");
   const lastLine = visibleLines[maxLines - 1] + hiddenText;
 
-  visibleLines[maxLines - 1] = truncateText(lastLine, maxCharsPerLine);
+  visibleLines[maxLines - 1] = truncateText(
+    lastLine,
+    maxCharsPerLine
+  );
 
   return visibleLines.join("\n");
 }
@@ -832,7 +1150,9 @@ function splitColorIntoTokens(text) {
   let remaining = text;
 
   while (remaining.length > 0) {
-    const matched = colorWords.find((word) => remaining.startsWith(word));
+    const matched = colorWords.find((word) =>
+      remaining.startsWith(word)
+    );
 
     if (matched) {
       tokens.push(matched);
@@ -853,7 +1173,11 @@ function mergeSingleCharTokens(tokens) {
   for (const token of tokens) {
     const lastIndex = result.length - 1;
 
-    if (token.length === 1 && lastIndex >= 0 && result[lastIndex].length < 4) {
+    if (
+      token.length === 1 &&
+      lastIndex >= 0 &&
+      result[lastIndex].length < 4
+    ) {
       result[lastIndex] += token;
     } else {
       result.push(token);
@@ -901,6 +1225,7 @@ function packTokensIntoLines(tokens, maxCharsPerLine) {
 
 function truncateText(text, maxChars) {
   if (text.length <= maxChars) return text;
+
   return `${text.slice(0, Math.max(1, maxChars - 1))}…`;
 }
 
@@ -924,7 +1249,10 @@ function makeConsultButton(vehicle) {
     action: {
       type: "message",
       label: "💬 この車を相談",
-      text: `この車について相談したい：${safeText(vehicle?.carName || vehicle?.title, "車両情報")}`,
+      text: `この車について相談したい：${safeText(
+        vehicle?.carName || vehicle?.title,
+        "車両情報"
+      )}`,
     },
   };
 }
@@ -933,22 +1261,28 @@ function formatRegistrationYear(yearText) {
   if (!yearText) return "-";
 
   const match = String(yearText).match(/(19|20)\d{2}/);
-  if (!match) return safeText(yearText, "-");
+
+  if (!match) {
+    return safeText(yearText, "-");
+  }
 
   const year = Number(match[0]);
 
   if (year >= 2019) {
     const reiwa = year - 2018;
+
     return `令和${reiwa === 1 ? "元" : reiwa}年（${year}年）`;
   }
 
   if (year >= 1989) {
     const heisei = year - 1988;
+
     return `平成${heisei === 1 ? "元" : heisei}年（${year}年）`;
   }
 
   if (year >= 1926) {
     const showa = year - 1925;
+
     return `昭和${showa === 1 ? "元" : showa}年（${year}年）`;
   }
 
@@ -964,17 +1298,30 @@ function formatMileage(mileageText) {
     .replace(/,/g, "")
     .trim();
 
-  if (text.includes("走不明")) return "走不明";
+  if (text.includes("走不明")) {
+    return "走不明";
+  }
 
-  const numberText = text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0];
-  if (!numberText) return safeText(mileageText, "-");
+  const numberText =
+    text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0];
+
+  if (!numberText) {
+    return safeText(mileageText, "-");
+  }
 
   const value = Number(numberText);
-  if (!Number.isFinite(value)) return safeText(mileageText, "-");
+
+  if (!Number.isFinite(value)) {
+    return safeText(mileageText, "-");
+  }
 
   let km;
 
-  if (text.includes("万K") || text.includes("万k") || text.includes("万km")) {
+  if (
+    text.includes("万K") ||
+    text.includes("万k") ||
+    text.includes("万km")
+  ) {
     km = value >= 1000 ? value : value * 10000;
   } else {
     km = value;
@@ -984,48 +1331,71 @@ function formatMileage(mileageText) {
 }
 
 function safeText(value, fallback = "-") {
-  if (value === undefined || value === null) return fallback;
+  if (value === undefined || value === null) {
+    return fallback;
+  }
 
   const text = String(value);
 
-  if (text.trim() === "") return fallback;
+  if (text.trim() === "") {
+    return fallback;
+  }
 
   return text;
 }
 
 function optionalText(value) {
-  if (value === undefined || value === null) return "";
+  if (value === undefined || value === null) {
+    return "";
+  }
 
   const text = String(value);
 
-  if (text.trim() === "") return "";
+  if (text.trim() === "") {
+    return "";
+  }
 
   return text;
 }
 
 function validImageUrl(url) {
   if (!url) return "";
+
   const text = String(url);
+
   return text.startsWith("https://") ? text : "";
 }
 
 function validUrl(url) {
   if (!url) return "";
+
   const text = String(url);
-  return text.startsWith("https://") || text.startsWith("http://") ? text : "";
+
+  return text.startsWith("https://") ||
+    text.startsWith("http://")
+    ? text
+    : "";
 }
 
 async function replyMessage(replyToken, messages) {
-  const res = await fetch("https://api.line.me/v2/bot/message/reply", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
-    },
-    body: JSON.stringify({ replyToken, messages }),
-  });
+  const res = await fetch(
+    "https://api.line.me/v2/bot/message/reply",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
+      },
+      body: JSON.stringify({
+        replyToken,
+        messages,
+      }),
+    }
+  );
 
   const result = await res.text();
+
   console.log("REPLY_STATUS:", res.status);
   console.log("REPLY_RESULT:", result);
 }
@@ -1036,12 +1406,14 @@ async function linkRichMenu(userId, richMenuId) {
     {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
+        Authorization:
+          `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
       },
     }
   );
 
   const result = await res.text();
+
   console.log("LINK_RICH_MENU_STATUS:", res.status);
   console.log("LINK_RICH_MENU_RESULT:", result);
 }
