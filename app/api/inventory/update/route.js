@@ -779,12 +779,7 @@ function extractImageCandidates(html) {
 
 function extractFirstImageUrl(html) {
   const images = extractImageCandidates(html);
-  return (
-    images.find((url) => url.includes("picture") && url.includes("goo-net")) ||
-    images.find((url) => url.includes("goo-net")) ||
-    images[0] ||
-    ""
-  );
+  return chooseBestVehicleImage(images);
 }
 
 
@@ -974,39 +969,154 @@ function parsePublicVehicleRow(row, baseUrl, qualityImageMap) {
 }
 
 
-function extractSavedVehicles(html, pageUrl) {
-  const source = String(html || "");
-  const stockIds = Array.from(
-    new Set([...source.matchAll(/StockId=([A-Za-z0-9]+)/gi)].map((m) => m[1]))
+function extractTableCells(rowHtml) {
+  return Array.from(
+    String(rowHtml || "").matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gi)
+  ).map((match) => match[1]);
+}
+
+function normalizeDisplacement(value) {
+  const text = compactText(toHalfWidthAscii(value))
+    .replace(/,/g, "")
+    .replace(/\s+/g, "");
+
+  if (!text) return "";
+  if (/cc$/i.test(text)) return text.replace(/cc$/i, "cc");
+  if (/l$/i.test(text)) return text.replace(/l$/i, "L");
+
+  const numberText = text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0] || "";
+  if (!numberText) return text;
+
+  const number = Number(numberText);
+  if (!Number.isFinite(number)) return text;
+  return number >= 100 ? `${numberText}cc` : `${numberText}L`;
+}
+
+function extractPricesFromCell(cellHtml) {
+  const text = compactText(cleanHtmlToText(cellHtml));
+  const prices = Array.from(
+    text.matchAll(/([0-9]+(?:\.[0-9]+)?)\s*ä¸å/g)
+  ).map((match) => `${match[1]}ä¸å`);
+
+  if (prices.length >= 2) {
+    return { bodyPrice: prices[0], totalPrice: prices[1] };
+  }
+
+  const numbers = Array.from(
+    text.matchAll(/([0-9]+(?:\.[0-9]+)?)/g)
+  ).map((match) => match[1]);
+
+  return {
+    bodyPrice: numbers[0] ? `${numbers[0]}ä¸å` : "",
+    totalPrice: numbers[1] ? `${numbers[1]}ä¸å` : "",
+  };
+}
+
+function upgradeGooImageUrl(url) {
+  let value = absoluteUrl(decodeHtmlEntities(url || ""));
+  if (!value || /noimage|nophoto|car_nophoto/i.test(value)) return "";
+
+  value = value
+    .replace(/^http:/i, "https:")
+    .replace(/secure\.goo-net\.com/i, "picture1.goo-net.com")
+    .replace(/\/Q\//i, "/H/")
+    .replace(/\/S\//i, "/H/")
+    .replace(/\/M\//i, "/H/")
+    .replace(/\/T\//i, "/H/");
+
+  if (/goo-net\.com/i.test(value) && /\.(?:jpg|jpeg|png|webp)(?:\?|$)/i.test(value)) {
+    value = value.replace(/\?.*$/, "");
+  }
+
+  return value;
+}
+
+function extractExtendedImageValues(html, baseUrl) {
+  const values = [];
+
+  for (const match of String(html || "").matchAll(/<img\b([^>]*)>/gi)) {
+    const attrs = match[1] || "";
+    for (const attribute of ["src", "data-src", "data-original", "data-lazy-src"]) {
+      const raw = extractAttribute(attrs, attribute);
+      if (raw) values.push(absoluteUrl(raw, baseUrl));
+    }
+  }
+
+  for (const href of extractRawHrefValues(html)) {
+    if (/\.(?:jpg|jpeg|png|webp)(?:\?|$)/i.test(href)) {
+      values.push(absoluteUrl(href, baseUrl));
+    }
+  }
+
+  return Array.from(new Set(values)).filter(Boolean);
+}
+
+function chooseBestVehicleImage(urls, stockId = "") {
+  const candidates = Array.from(
+    new Set((urls || []).map(upgradeGooImageUrl).filter(Boolean))
+  ).filter((url) => !url.includes("/common/"));
+
+  const withStockId = candidates.filter((url) =>
+    stockId ? url.toLowerCase().includes(stockId.toLowerCase()) : false
   );
+  const pool = withStockId.length ? withStockId : candidates;
 
-  return stockIds.map((stockId) => {
-    const index = source.search(
-      new RegExp(`StockId=${escapeRegExp(stockId)}`, "i")
-    );
-    const windowHtml = source.slice(
-      Math.max(0, index - 5000),
-      Math.min(source.length, index + 10000)
+  return (
+    pool.find((url) => /picture1\.goo-net\.com/i.test(url) && /\/H\//i.test(url)) ||
+    pool.find((url) => /picture1\.goo-net\.com/i.test(url)) ||
+    pool.find((url) => /\/H\//i.test(url)) ||
+    pool[0] ||
+    ""
+  );
+}
+
+function extractSavedVehicleRows(html) {
+  return Array.from(
+    String(html || "").matchAll(/<tr\b[^>]*>[\s\S]*?<\/tr>/gi)
+  )
+    .map((match) => match[0])
+    .filter((rowHtml) => /StockId=[A-Za-z0-9]+/i.test(rowHtml));
+}
+
+function extractSavedVehicles(html, pageUrl) {
+  const rows = extractSavedVehicleRows(html);
+  const vehicles = [];
+
+  for (const rowHtml of rows) {
+    const stockId =
+      rowHtml.match(/StockId=([A-Za-z0-9]+)/i)?.[1] ||
+      extractAttribute(
+        rowHtml.match(/<input\b[^>]*name=["'][^"']*StockId[^"']*["'][^>]*>/i)?.[0] || "",
+        "value"
+      );
+
+    if (!stockId) continue;
+
+    const cells = extractTableCells(rowHtml);
+    const cellTexts = cells.map((cell) => compactText(cleanHtmlToText(cell)));
+    const yearIndex = cellTexts.findIndex((text) =>
+      /^(?:19|20)\d{2}å¹´?$/.test(toHalfWidthAscii(text).replace(/\s+/g, ""))
     );
 
-    const rawHrefs = extractRawHrefValues(windowHtml);
+    if (yearIndex < 3) continue;
+
+    const carName = cellTexts[yearIndex - 3] || "";
+    const gradeName = cellTexts[yearIndex - 2] || "";
+    const yearText = toHalfWidthAscii(cellTexts[yearIndex] || "").replace(/\s+/g, "");
+    const year = yearText.match(/((?:19|20)\d{2})/)?.[1]
+      ? `${yearText.match(/((?:19|20)\d{2})/)?.[1]}å¹´`
+      : yearText;
+    const displacement = normalizeDisplacement(cellTexts[yearIndex + 1] || "");
+    const color = compactText(cellTexts[yearIndex + 2] || "");
+    const mileage = normalizeMileage(cellTexts[yearIndex + 3] || "");
+    const prices = extractPricesFromCell(cells[yearIndex + 4] || "");
+
+    const rawHrefs = extractRawHrefValues(rowHtml);
     const urls = rawHrefs
       .map((href) => absoluteUrl(href, pageUrl))
       .filter(Boolean);
-
-    const detailAnchor =
-      windowHtml.match(
-        new RegExp(
-          `<a\\b[^>]*href=["'][^"']*StockId=${escapeRegExp(
-            stockId
-          )}[^"']*["'][^>]*>([\\s\\S]*?)<\\/a>`,
-          "i"
-        )
-      )?.[1] ||
-      windowHtml.match(/<a\b[^>]*stock\/detail[^>]*>([\s\S]*?)<\/a>/i)?.[1] ||
-      "";
-
-    const title = compactText(cleanHtmlToText(detailAnchor));
+    const rowImages = extractExtendedImageValues(rowHtml, pageUrl);
+    const imageUrl = chooseBestVehicleImage(rowImages, stockId);
 
     const discoveredEditUrls = urls.filter(
       (url) =>
@@ -1025,26 +1135,28 @@ function extractSavedVehicles(html, pageUrl) {
     const detailUrl =
       urls.find(
         (url) =>
-          url.includes("/stock/detail") && url.includes(`StockId=${stockId}`)
-      ) ||
-      `${BASE_URL}/stock/detail?ClientId=0902332&StockId=${stockId}`;
+          url.includes("/stock/detail") &&
+          url.toLowerCase().includes(`stockid=${stockId}`.toLowerCase())
+      ) || `${BASE_URL}/stock/detail?ClientId=0902332&StockId=${stockId}`;
 
-    return {
+    const title = [carName, gradeName].filter(Boolean).join(" ").trim();
+
+    vehicles.push({
       stockId,
       title,
       description: title,
-      carName: title,
-      gradeName: "",
+      carName,
+      gradeName,
       gradeExtraInfo: "",
       classificationName: "",
-      year: "",
-      mileage: "",
-      color: "",
+      year,
+      mileage,
+      color,
       inspection: "",
-      displacement: "",
-      bodyPrice: "",
-      totalPrice: "",
-      imageUrl: "",
+      displacement,
+      bodyPrice: prices.bodyPrice,
+      totalPrice: prices.totalPrice,
+      imageUrl,
       gooUrl: "",
       sourceStatus: "ä¸æä¿å­",
       sourcePageUrl: pageUrl,
@@ -1053,8 +1165,10 @@ function extractSavedVehicles(html, pageUrl) {
       detailUrl,
       types: [],
       typeKeys: [],
-    };
-  });
+    });
+  }
+
+  return uniqueByStockId(vehicles);
 }
 
 async function loginMotorgate() {
@@ -1108,7 +1222,7 @@ async function loginMotorgate() {
 
 function chooseDetailValue(vehicle, detailValue, currentValue, previousValue = "") {
   if (vehicle.sourceStatus === "ä¸æä¿å­") {
-    return detailValue || currentValue || previousValue || "";
+    return currentValue || detailValue || previousValue || "";
   }
 
   return currentValue || detailValue || previousValue || "";
