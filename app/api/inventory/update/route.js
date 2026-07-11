@@ -3,6 +3,8 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
 const BASE_URL = "https://motorgate.jp";
+const STATUS_PUBLIC = "\u63b2\u8f09\u5728\u5eab";
+const STATUS_SAVED = "\u4e00\u6642\u4fdd\u5b58";
 const PUBLIC_LIST_URL = `${BASE_URL}/stock/newsearch/stocklist/index/1/100`;
 const SAVED_LIST_URLS = Array.from({ length: 10 }, (_, index) =>
   index === 0
@@ -966,7 +968,7 @@ function parsePublicVehicleRow(row, baseUrl, qualityImageMap) {
     detailUrl: findFirstUrl(urls, "/stock/detail"),
     editUrl: findFirstUrl(urls, "/car/edit/new"),
     gooUrl: findFirstUrl(urls, "goo-net.com"),
-    sourceStatus: "Ã¦ÂÂ²Ã¨Â¼ÂÃ¥ÂÂ¨Ã¥ÂºÂ«",
+    sourceStatus: STATUS_PUBLIC,
     sourcePageUrl: "",
     types: [],
     typeKeys: [],
@@ -974,89 +976,242 @@ function parsePublicVehicleRow(row, baseUrl, qualityImageMap) {
 }
 
 
-function normalizeSavedListImageUrl(url) {
-  const value = String(url || "");
-  if (!value) return "";
 
-  return value
-    .replace(/\/S\//g, "/H/")
-    .replace(/\/M\//g, "/H/")
-    .replace(/([_-])(?:s|small|thumb)(?=\.(?:jpg|jpeg|png|webp)(?:\?|$))/i, "$1l")
-    .replace(/([?&](?:size|width|w)=)(?:80|100|120|150|160|200|240|300)(?=&|$)/gi, "$11200");
+function extractTableCells(rowHtml) {
+  return Array.from(
+    String(rowHtml || "").matchAll(/<(td|th)\b([^>]*)>([\s\S]*?)<\/\1>/gi)
+  ).map((match) => ({
+    tag: String(match[1] || "").toLowerCase(),
+    attrs: match[2] || "",
+    html: match[3] || "",
+    text: compactText(cleanHtmlToText(match[3] || "")),
+  }));
 }
 
-function extractSavedTableRows(html) {
-  return Array.from(String(html || "").matchAll(/<tr\b[^>]*>[\s\S]*?<\/tr>/gi))
+function normalizeSavedHeaderText(value) {
+  return compactText(value)
+    .replace(/\s+/g, "")
+    .replace(/[ï¼:]/g, "")
+    .toLowerCase();
+}
+
+function findSavedHeaderMap(html) {
+  const rows = Array.from(
+    String(html || "").matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)
+  ).map((match) => match[0]);
+
+  for (const rowHtml of rows) {
+    const cells = extractTableCells(rowHtml);
+    const labels = cells.map((cell) => normalizeSavedHeaderText(cell.text));
+    const joined = labels.join("|");
+
+    const hasYear = joined.includes("\u5e74\u5f0f");
+    const hasMileage =
+      joined.includes("\u8d70\u884c") ||
+      joined.includes("\u8d70\u884c\u8ddd\u96e2");
+    const hasColor =
+      joined.includes("\u8272") ||
+      joined.includes("\u8eca\u4f53\u8272");
+    const hasBodyPrice =
+      joined.includes("\u8eca\u4e21\u672c\u4f53\u4fa1\u683c") ||
+      joined.includes("\u672c\u4f53\u4fa1\u683c");
+
+    if (!hasYear || !hasMileage || !hasColor || !hasBodyPrice) continue;
+
+    const findIndex = (...keywords) =>
+      labels.findIndex((label) =>
+        keywords.some((keyword) => label.includes(keyword))
+      );
+
+    return {
+      selection: findIndex("\u9078\u629e"),
+      photo: findIndex("\u5199\u771f"),
+      carName: findIndex("\u8eca\u7a2e", "\u8eca\u540d"),
+      gradeName: findIndex("\u30b0\u30ec\u30fc\u30c9"),
+      managementNumber: findIndex("\u7ba1\u7406\u7528\u756a\u53f7"),
+      year: findIndex("\u5e74\u5f0f"),
+      displacement: findIndex("\u6392\u6c17\u91cf"),
+      color: findIndex("\u8eca\u4f53\u8272", "\u8272"),
+      mileage: findIndex("\u8d70\u884c\u8ddd\u96e2", "\u8d70\u884c"),
+      bodyPrice: findIndex(
+        "\u8eca\u4e21\u672c\u4f53\u4fa1\u683c",
+        "\u672c\u4f53\u4fa1\u683c"
+      ),
+      totalPrice: findIndex("\u652f\u6255\u7dcf\u984d", "\u7dcf\u984d"),
+      updatedAt: findIndex("\u66f4\u65b0\u65e5"),
+    };
+  }
+
+  // ç»é¢ä¸ã®åé ã«åãããäºåè¨­å®
+  return {
+    selection: 0,
+    photo: 1,
+    carName: 2,
+    gradeName: 3,
+    managementNumber: 4,
+    year: 5,
+    displacement: 6,
+    color: 7,
+    mileage: 8,
+    bodyPrice: 9,
+    totalPrice: 10,
+    updatedAt: 11,
+  };
+}
+
+function savedCellText(cells, index) {
+  if (!Number.isInteger(index) || index < 0 || index >= cells.length) return "";
+  return compactText(cells[index]?.text || "");
+}
+
+function normalizeSavedYear(value) {
+  const text = compactText(value);
+  const match = text.match(/((?:19|20)\d{2})/);
+  return match ? `${match[1]}\u5e74` : text;
+}
+
+function normalizeSavedDisplacement(value) {
+  const text = compactText(toHalfWidthAscii(value)).replace(/\s+/g, "");
+  if (!text) return "";
+  if (/cc$/i.test(text) || /l$/i.test(text)) return text;
+
+  const number = Number(text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0] || "");
+  if (!Number.isFinite(number)) return text;
+  return number >= 100 ? `${number}cc` : `${number}L`;
+}
+
+function normalizeSavedImageUrl(url) {
+  if (!url) return "";
+
+  let value = absoluteUrl(decodeHtmlEntities(url), BASE_URL);
+
+  // Goo-netç»åã¯ /S/ ãç¸®å°ç»åã/H/ ãé«è§£ååº¦ç»å
+  value = value.replace(
+    /(picture\d*\.goo-net\.com\/[^?#]+)\/S\//i,
+    "$1/H/"
+  );
+
+  // ä¸è¬çãªãµã ãã¤ã«è¡¨è¨ãåå¯¸å´ã¸å¯ãã
+  value = value
+    .replace(/\/thumbnail\//gi, "/")
+    .replace(/\/thumb\//gi, "/")
+    .replace(/([_-])thumb(?=\.)/gi, "")
+    .replace(/([_-])small(?=\.)/gi, "")
+    .replace(/([_-])s(?=\.(?:jpe?g|png|webp))/gi, "");
+
+  try {
+    const parsed = new URL(value);
+    for (const key of [
+      "w",
+      "width",
+      "h",
+      "height",
+      "size",
+      "resize",
+      "thumbnail",
+    ]) {
+      parsed.searchParams.delete(key);
+    }
+    value = parsed.toString();
+  } catch {
+    // URLã¨ãã¦è§£æã§ããªãå ´åã¯åã®æå­åãä½¿ã
+  }
+
+  return value;
+}
+
+function extractSavedImageCandidates(rowHtml, pageUrl) {
+  const values = [];
+  const source = String(rowHtml || "");
+
+  for (const match of source.matchAll(
+    /\b(?:src|data-src|data-original|data-lazy|data-image|href)=["']([^"']+\.(?:jpe?g|png|webp)(?:\?[^"']*)?)["']/gi
+  )) {
+    values.push(absoluteUrl(decodeHtmlEntities(match[1]), pageUrl));
+  }
+
+  for (const match of source.matchAll(
+    /https?:\/\/[^"'\\\s>]+?\.(?:jpe?g|png|webp)(?:\?[^"'\\\s>]*)?/gi
+  )) {
+    values.push(decodeHtmlEntities(match[0]));
+  }
+
+  const filtered = Array.from(new Set(values))
+    .filter(Boolean)
+    .filter((url) => !/logo|noimage|nophoto|loading/i.test(url))
+    .filter((url) => !url.includes("/common/"));
+
+  const scored = filtered.map((url) => {
+    let score = 0;
+    if (/picture\d*\.goo-net\.com/i.test(url)) score += 100;
+    if (/\/H\//i.test(url)) score += 80;
+    if (/original|large|full|quality/i.test(url)) score += 50;
+    if (/\/S\/|thumb|small|thumbnail/i.test(url)) score -= 40;
+    return { url: normalizeSavedImageUrl(url), score };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+  return Array.from(new Set(scored.map((item) => item.url))).filter(Boolean);
+}
+
+function extractSavedRows(html) {
+  return Array.from(
+    String(html || "").matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)
+  )
     .map((match) => match[0])
     .filter((rowHtml) => /StockId=[A-Za-z0-9]+/i.test(rowHtml));
 }
 
-function extractTableCellTexts(rowHtml) {
-  return Array.from(
-    String(rowHtml || "").matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gi)
-  ).map((match) => compactText(cleanHtmlToText(match[1])));
-}
 
-function extractSavedRowNames(cells, yearIndex) {
-  const candidates = cells
-    .slice(0, Math.max(0, yearIndex))
-    .map((value) => compactText(value))
-    .filter(Boolean)
-    .filter((value) => !/^(é¸æ|åç|è»ä¸¡æå ±ãç·¨é)$/u.test(value))
-    .filter((value) => !/^\d+$/.test(toHalfWidthAscii(value)))
-    .filter((value) => !/^[-ââ]+$/.test(value));
+function extractSavedVehicles(html, pageUrl) {
+  const headerMap = findSavedHeaderMap(html);
+  const rows = extractSavedRows(html);
+  const vehicles = [];
 
-  return {
-    carName: candidates[0] || "",
-    gradeName: candidates[1] || "",
-  };
-}
-
-function extractSavedVehicles(html, pageUrl, qualityImageMap = {}) {
-  const rows = extractSavedTableRows(html);
-
-  return rows.map((rowHtml) => {
+  for (const rowHtml of rows) {
     const stockId =
       rowHtml.match(/StockId=([A-Za-z0-9]+)/i)?.[1] ||
-      rowHtml.match(/id=["'][^"']*([A-Za-z0-9]{12,})[^"']*["']/i)?.[1] ||
+      rowHtml.match(
+        /<(?:input|button)\b[^>]*(?:name|id)=["'][^"']*StockId[^"']*["'][^>]*value=["']([A-Za-z0-9]+)["']/i
+      )?.[1] ||
       "";
 
+    if (!stockId) continue;
+
+    const cells = extractTableCells(rowHtml);
     const rawHrefs = extractRawHrefValues(rowHtml);
     const urls = rawHrefs
       .map((href) => absoluteUrl(href, pageUrl))
       .filter(Boolean);
-    const rowImages = extractImageValues(rowHtml, pageUrl)
-      .map(normalizeSavedListImageUrl)
-      .filter(Boolean)
-      .filter((url) => !/logo|noimage|nophoto|\/common\//i.test(url));
 
-    const cells = extractTableCellTexts(rowHtml);
-    const yearIndex = cells.findIndex((value) => /(?:19|20)\d{2}\s*å¹´/u.test(value));
-    const mileageIndex = cells.findIndex(
-      (value, index) =>
-        index > yearIndex &&
-        /(?:\d+(?:\.\d+)?\s*ä¸\s*[Kï¼«k]|\d[\d,]*\s*(?:km|ï¼«ï¼­))/iu.test(value)
+    const carName = savedCellText(cells, headerMap.carName);
+    const gradeName = savedCellText(cells, headerMap.gradeName);
+    const managementNumber = savedCellText(
+      cells,
+      headerMap.managementNumber
     );
-    const priceIndexes = cells
-      .map((value, index) => ({ value, index }))
-      .filter(({ value, index }) => index > mileageIndex && /\d+(?:\.\d+)?\s*ä¸å/u.test(value));
-
-    const { carName, gradeName } = extractSavedRowNames(cells, yearIndex);
-    const year = yearIndex >= 0 ? cells[yearIndex] : "";
-    const displacement = yearIndex >= 0 ? cells[yearIndex + 1] || "" : "";
-    const color =
-      yearIndex >= 0 && mileageIndex > yearIndex + 1
-        ? compactText(cells.slice(yearIndex + 2, mileageIndex).join(" "))
-        : "";
-    const mileage = mileageIndex >= 0 ? normalizeMileage(cells[mileageIndex]) : "";
-    const bodyPrice = priceIndexes[0]?.value || "";
-    const totalPrice = priceIndexes[1]?.value || "";
+    const year = normalizeSavedYear(savedCellText(cells, headerMap.year));
+    const displacement = normalizeSavedDisplacement(
+      savedCellText(cells, headerMap.displacement)
+    );
+    const color = savedCellText(cells, headerMap.color);
+    const mileage = normalizeMileage(
+      savedCellText(cells, headerMap.mileage)
+    );
+    const bodyPrice = normalizePrice(
+      savedCellText(cells, headerMap.bodyPrice)
+    );
+    const totalPrice = normalizePrice(
+      savedCellText(cells, headerMap.totalPrice)
+    );
+    const listUpdatedAt = savedCellText(cells, headerMap.updatedAt);
 
     const discoveredEditUrls = urls.filter(
       (url) =>
         url.includes("/car/newregist/register") ||
         url.includes("/car/edit/new")
     );
+
     const editUrls = Array.from(
       new Set([
         ...discoveredEditUrls,
@@ -1064,19 +1219,20 @@ function extractSavedVehicles(html, pageUrl, qualityImageMap = {}) {
         `${BASE_URL}/car/edit/new?kbn=1&ClientId=0902332&StockId=${stockId}&StockStatus=00180002&ScreenId=CB101GR`,
       ])
     );
+
     const detailUrl =
       urls.find(
         (url) =>
-          url.includes("/stock/detail") && url.includes(`StockId=${stockId}`)
+          url.includes("/stock/detail") &&
+          url.includes(`StockId=${stockId}`)
       ) ||
       `${BASE_URL}/stock/detail?ClientId=0902332&StockId=${stockId}`;
 
+    const imageCandidates = extractSavedImageCandidates(rowHtml, pageUrl);
+    const imageUrl = imageCandidates[0] || "";
     const title = [carName, gradeName].filter(Boolean).join(" ").trim();
-    const imageUrl = normalizeSavedListImageUrl(
-      qualityImageMap[stockId] || rowImages[0] || ""
-    );
 
-    return {
+    vehicles.push({
       stockId,
       title,
       description: title,
@@ -1092,8 +1248,11 @@ function extractSavedVehicles(html, pageUrl, qualityImageMap = {}) {
       bodyPrice,
       totalPrice,
       imageUrl,
+      imageCandidates,
       gooUrl: "",
-      sourceStatus: "Ã¤Â¸ÂÃ¦ÂÂÃ¤Â¿ÂÃ¥Â­Â",
+      managementNumber,
+      listUpdatedAt,
+      sourceStatus: STATUS_SAVED,
       sourcePageUrl: pageUrl,
       editUrl: editUrls[0] || "",
       editUrls,
@@ -1101,15 +1260,22 @@ function extractSavedVehicles(html, pageUrl, qualityImageMap = {}) {
       types: [],
       typeKeys: [],
       listResult: {
+        parsedFromSavedList: true,
+        carName: Boolean(carName),
+        gradeName: Boolean(gradeName),
         year: Boolean(year),
-        mileage: Boolean(mileage),
+        displacement: Boolean(displacement),
         color: Boolean(color),
+        mileage: Boolean(mileage),
         bodyPrice: Boolean(bodyPrice),
         totalPrice: Boolean(totalPrice),
         image: Boolean(imageUrl),
+        cellCount: cells.length,
       },
-    };
-  }).filter((vehicle) => vehicle.stockId);
+    });
+  }
+
+  return uniqueByStockId(vehicles);
 }
 
 async function loginMotorgate() {
@@ -1161,8 +1327,13 @@ async function loginMotorgate() {
 }
 
 
-function chooseDetailValue(vehicle, detailValue, currentValue, previousValue = "") {
-  if (vehicle.sourceStatus === "Ã¤Â¸ÂÃ¦ÂÂÃ¤Â¿ÂÃ¥Â­Â") {
+function chooseDetailValue(
+  vehicle,
+  detailValue,
+  currentValue,
+  previousValue = ""
+) {
+  if (vehicle.sourceStatus === STATUS_SAVED) {
     return currentValue || detailValue || previousValue || "";
   }
 
@@ -1284,7 +1455,7 @@ async function fetchVehicleDetailFromEditPage(
             headers: {
               Cookie: jarToCookie(jar),
               Referer:
-                vehicle.sourceStatus === "Ã¤Â¸ÂÃ¦ÂÂÃ¤Â¿ÂÃ¥Â­Â"
+                vehicle.sourceStatus === STATUS_SAVED
                   ? `${BASE_URL}/stock/savelist`
                   : `${BASE_URL}/top`,
               "User-Agent": USER_AGENT,
@@ -1528,7 +1699,7 @@ async function mapWithConcurrency(items, limit, mapper) {
 
 async function attachVehicleDetails(jar, vehicles, previousMap = new Map()) {
   const isSavedBatch = vehicles.some(
-    (vehicle) => vehicle.sourceStatus === "Ã¤Â¸ÂÃ¦ÂÂÃ¤Â¿ÂÃ¥Â­Â"
+    (vehicle) => vehicle.sourceStatus === STATUS_SAVED
   );
   const concurrency = isSavedBatch ? SAVED_DETAIL_CONCURRENCY : 10;
 
@@ -1564,12 +1735,15 @@ function toInventoryVehicle(vehicle) {
     sourcePageUrl: vehicle.sourcePageUrl || "",
     editUrl: vehicle.editUrl || "",
     editUrls: vehicle.editUrls || [],
+    imageCandidates: vehicle.imageCandidates || [],
+    managementNumber: vehicle.managementNumber || "",
+    listUpdatedAt: vehicle.listUpdatedAt || "",
+    listResult: vehicle.listResult || null,
     types: vehicle.types || [],
     typeKeys: vehicle.typeKeys || [],
     updatedAt: new Date().toISOString(),
     typeResult: vehicle.typeResult || null,
     detailResult: vehicle.detailResult || null,
-    listResult: vehicle.listResult || null,
   };
 }
 
@@ -1620,8 +1794,7 @@ async function fetchSavedPage(jar, pageUrl) {
   );
 
   const html = await readResponseText(response);
-  const qualityImageMap = extractQualityImageMap(html, pageUrl);
-  const vehicles = extractSavedVehicles(html, pageUrl, qualityImageMap);
+  const vehicles = extractSavedVehicles(html, pageUrl);
 
   return {
     pageUrl,
@@ -1801,16 +1974,24 @@ function summarizeGradeExtraInfo(vehicles) {
 
 function summarizeSavedDetailFields(vehicles) {
   const saved = vehicles.filter(
-    (vehicle) => vehicle.sourceStatus === "Ã¤Â¸ÂÃ¦ÂÂÃ¤Â¿ÂÃ¥Â­Â"
+    (vehicle) => vehicle.sourceStatus === STATUS_SAVED
   );
+
   return {
     total: saved.length,
+    parsedFromSavedList: saved.filter(
+      (vehicle) => vehicle.listResult?.parsedFromSavedList
+    ).length,
     yearFound: saved.filter((vehicle) => vehicle.year).length,
     yearMissing: saved.filter((vehicle) => !vehicle.year).length,
     colorFound: saved.filter((vehicle) => vehicle.color).length,
     colorMissing: saved.filter((vehicle) => !vehicle.color).length,
     mileageFound: saved.filter((vehicle) => vehicle.mileage).length,
     mileageMissing: saved.filter((vehicle) => !vehicle.mileage).length,
+    bodyPriceFound: saved.filter((vehicle) => vehicle.bodyPrice).length,
+    totalPriceFound: saved.filter((vehicle) => vehicle.totalPrice).length,
+    imageFound: saved.filter((vehicle) => vehicle.imageUrl).length,
+    imageMissing: saved.filter((vehicle) => !vehicle.imageUrl).length,
     detailFetchFailed: saved.filter(
       (vehicle) => vehicle.detailResult?.success === false
     ).length,
