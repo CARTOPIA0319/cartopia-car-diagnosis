@@ -2,16 +2,19 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
-const CODE_VERSION = "saved-list-direct-v4";
+const CODE_VERSION = "saved-list-direct-v5-sha-fix";
 const BASE_URL = "https://motorgate.jp";
 const PUBLIC_LIST_URL = `${BASE_URL}/stock/newsearch/stocklist/index/1/100`;
+
 const SAVED_LIST_URLS = Array.from({ length: 10 }, (_, index) =>
   index === 0
     ? `${BASE_URL}/stock/savelist`
     : `${BASE_URL}/stock/savelist/index/${index + 1}`
 );
+
 const USER_AGENT =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36";
+
 const DETAIL_CONCURRENCY = 8;
 const DETAIL_RETRIES = 1;
 
@@ -51,12 +54,17 @@ function addCookies(jar, setCookieText) {
   for (const piece of String(setCookieText).split(/,\s*(?=[^;,]+=)/)) {
     const first = piece.split(";")[0].trim();
     const eq = first.indexOf("=");
+
     if (eq <= 0) continue;
 
     const name = first.slice(0, eq);
     const value = first.slice(eq + 1);
-    if (value === "deleted") delete jar[name];
-    else jar[name] = value;
+
+    if (value === "deleted") {
+      delete jar[name];
+    } else {
+      jar[name] = value;
+    }
   }
 
   return jar;
@@ -68,7 +76,10 @@ function addResponseCookies(jar, response) {
       ? response.headers.getSetCookie()
       : [response?.headers?.get("set-cookie") || ""];
 
-  for (const value of values) addCookies(jar, value);
+  for (const value of values) {
+    addCookies(jar, value);
+  }
+
   return jar;
 }
 
@@ -80,10 +91,15 @@ function jarToCookie(jar) {
 
 function normalizeCharset(value) {
   const text = String(value || "").toLowerCase();
+
   if (/shift[_-]?jis|sjis|windows-31j|ms932|cp932/.test(text)) {
     return "shift_jis";
   }
-  if (text.includes("euc-jp")) return "euc-jp";
+
+  if (text.includes("euc-jp")) {
+    return "euc-jp";
+  }
+
   return "utf-8";
 }
 
@@ -91,19 +107,25 @@ async function readResponseText(response) {
   const buffer = await response.arrayBuffer();
   const bytes = new Uint8Array(buffer);
   const contentType = response.headers.get("content-type") || "";
-  let charset = contentType.match(/charset\s*=\s*([^;\s]+)/i)?.[1] || "";
+
+  let charset =
+    contentType.match(/charset\s*=\s*([^;\s]+)/i)?.[1] || "";
 
   if (!charset) {
     const head = Buffer.from(bytes.slice(0, 4096)).toString("latin1");
-    charset = head.match(/charset=["']?\s*([^\s"'/>]+)/i)?.[1] || "utf-8";
+
+    charset =
+      head.match(/charset=["']?\s*([^\s"'/>]+)/i)?.[1] || "utf-8";
   }
 
   try {
-    return new TextDecoder(normalizeCharset(charset), { fatal: false }).decode(
-      bytes
-    );
+    return new TextDecoder(normalizeCharset(charset), {
+      fatal: false,
+    }).decode(bytes);
   } catch {
-    return new TextDecoder("utf-8", { fatal: false }).decode(bytes);
+    return new TextDecoder("utf-8", {
+      fatal: false,
+    }).decode(bytes);
   }
 }
 
@@ -118,7 +140,9 @@ function decodeHtmlEntities(text) {
     .replace(/&#x([0-9a-f]+);/gi, (_, hex) =>
       String.fromCodePoint(parseInt(hex, 16))
     )
-    .replace(/&#(\d+);/g, (_, num) => String.fromCodePoint(parseInt(num, 10)));
+    .replace(/&#(\d+);/g, (_, num) =>
+      String.fromCodePoint(parseInt(num, 10))
+    );
 }
 
 function cleanHtmlToText(html) {
@@ -156,6 +180,7 @@ function toHalfWidthAscii(text) {
 
 function absoluteUrl(src, baseUrl = BASE_URL) {
   const value = decodeHtmlEntities(String(src || "").trim());
+
   if (!value) return "";
   if (/^https?:\/\//i.test(value)) return value;
   if (value.startsWith("//")) return `https:${value}`;
@@ -178,17 +203,26 @@ function extractAttribute(tagHtml, attributeName) {
       "i"
     )
   );
-  if (quoted) return decodeHtmlEntities(quoted[1]);
+
+  if (quoted) {
+    return decodeHtmlEntities(quoted[1]);
+  }
 
   const unquoted = String(tagHtml || "").match(
-    new RegExp(`${escapeRegExp(attributeName)}\\s*=\\s*([^\\s>]+)`, "i")
+    new RegExp(
+      `${escapeRegExp(attributeName)}\\s*=\\s*([^\\s>]+)`,
+      "i"
+    )
   );
+
   return decodeHtmlEntities(unquoted?.[1] || "");
 }
 
 function extractRawHrefValues(html) {
   return Array.from(
-    String(html || "").matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi)
+    String(html || "").matchAll(
+      /<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi
+    )
   )
     .map((match) => decodeHtmlEntities(match[1]))
     .filter(Boolean);
@@ -206,10 +240,12 @@ function extractCells(rowHtml, tagName = "td") {
     "gi"
   );
 
-  return Array.from(String(rowHtml || "").matchAll(regex)).map((match) => ({
-    html: match[1],
-    text: compactText(cleanHtmlToText(match[1])),
-  }));
+  return Array.from(String(rowHtml || "").matchAll(regex)).map(
+    (match) => ({
+      html: match[1],
+      text: compactText(cleanHtmlToText(match[1])),
+    })
+  );
 }
 
 function extractAllTableRows(html) {
@@ -258,7 +294,9 @@ function getQueryParamDecoded(urlText, name) {
   if (!match) return "";
 
   try {
-    return compactText(decodeURIComponent(match[1].replace(/\+/g, "%20")));
+    return compactText(
+      decodeURIComponent(match[1].replace(/\+/g, "%20"))
+    );
   } catch {
     return compactText(match[1]);
   }
@@ -280,6 +318,7 @@ function extractStockId(text) {
 function extractVehicleRows(html) {
   const rows = [];
   const source = String(html || "");
+
   const idRegex =
     /<tr\b[^>]*id=["']tr_([A-Za-z0-9]+)["'][^>]*>([\s\S]*?)(?=<tr\b[^>]*id=["']tr_[A-Za-z0-9]+["']|<\/tbody>|<\/table>)/gi;
 
@@ -292,10 +331,13 @@ function extractVehicleRows(html) {
     });
   }
 
-  if (rows.length > 0) return rows;
+  if (rows.length > 0) {
+    return rows;
+  }
 
   for (const rowHtml of extractAllTableRows(source)) {
     const stockId = extractStockId(rowHtml);
+
     if (stockId) {
       rows.push({
         stockId,
@@ -393,7 +435,7 @@ function upgradeImageUrl(url) {
   if (!value) return "";
 
   value = value
-    .replace(/\/(?:S|M|L|P|T)\//i, "/H/")
+    .replace(/\/(?:S|M|L|P|T|Q)\//i, "/H/")
     .replace(/([?&](?:w|width)=)\d+/i, "$11200")
     .replace(/([?&](?:h|height)=)\d+/i, "$1900")
     .replace(
@@ -477,11 +519,24 @@ function normalizeMileage(value) {
     }
   }
 
+  const plainNumber = text.match(/^\d+$/)?.[0];
+
+  if (plainNumber) {
+    const number = Number(plainNumber);
+
+    if (Number.isFinite(number) && number >= 1000) {
+      return `${(
+        Math.floor(number / 1000) / 10
+      ).toFixed(1)}万K`;
+    }
+  }
+
   return "";
 }
 
 function normalizeYear(value) {
   const text = compactText(toHalfWidthAscii(value));
+
   const western = text.match(/((?:19|20)\d{2})\s*年?/);
 
   if (western) {
@@ -494,7 +549,9 @@ function normalizeYear(value) {
 
   if (!era) return "";
 
-  const year = era[2] === "元" ? 1 : Number(era[2]);
+  const year =
+    era[2] === "元" ? 1 : Number(era[2]);
+
   const base =
     era[1] === "令和"
       ? 2018
@@ -590,6 +647,7 @@ function parsePublicVehicleRow(
   qualityImageMap
 ) {
   const { stockId, rowHtml } = row;
+
   const rawHrefs = extractRawHrefValues(rowHtml);
   const urls = extractHrefValues(rowHtml, baseUrl);
 
@@ -716,23 +774,22 @@ function parseSavedVehicleRow(
 
   const urls = extractHrefValues(rowHtml, pageUrl);
 
+  const clientId =
+    process.env.MOTORGATE_CLIENT_ID || "0902332";
+
   const editUrls = Array.from(
     new Set(
       [
         ...urls.filter(
           (url) =>
-            url.includes(
-              "/car/newregist/register"
-            ) ||
+            url.includes("/car/newregist/register") ||
             url.includes("/car/edit/new")
         ),
         `${BASE_URL}/car/newregist/register?kbn=1&client_id=${encodeURIComponent(
-          process.env.MOTORGATE_CLIENT_ID ||
-            "0902332"
+          clientId
         )}&StockStatus=00180002&StockId=${stockId}&ScreenId=SIH_001`,
         `${BASE_URL}/car/edit/new?kbn=1&ClientId=${encodeURIComponent(
-          process.env.MOTORGATE_CLIENT_ID ||
-            "0902332"
+          clientId
         )}&StockId=${stockId}&StockStatus=00180002&ScreenId=CB101GR`,
       ].filter(Boolean)
     )
@@ -854,9 +911,7 @@ function parseSavedVehicleRow(
       .filter(Boolean)
       .filter(
         (value) =>
-          !/車両情報を編集|選択|写真/.test(
-            value
-          )
+          !/車両情報を編集|選択|写真/.test(value)
       )
       .filter(
         (value) =>
@@ -893,8 +948,7 @@ function parseSavedVehicleRow(
         url.includes(`StockId=${stockId}`)
     ) ||
     `${BASE_URL}/stock/detail?ClientId=${encodeURIComponent(
-      process.env.MOTORGATE_CLIENT_ID ||
-        "0902332"
+      clientId
     )}&StockId=${stockId}`;
 
   const listResult = {
@@ -1069,6 +1123,7 @@ function extractControls(html) {
     /<input\b([^>]*)>/gi
   )) {
     const attrs = match[1] || "";
+
     const type = extractAttribute(
       attrs,
       "type"
@@ -2306,30 +2361,41 @@ async function fetchSavedVehicles(
   };
 }
 
-async function fetchCurrentInventoryFromGitHub() {
-  const token =
-    process.env.GITHUB_TOKEN;
+function getGitHubConfig() {
+  return {
+    token: process.env.GITHUB_TOKEN || "",
+    owner:
+      process.env.GITHUB_OWNER ||
+      "CARTOPIA0319",
+    repo:
+      process.env.GITHUB_REPO ||
+      "cartopia-car-diagnosis",
+    branch:
+      process.env.GITHUB_BRANCH ||
+      "main",
+    path: "data/inventory.json",
+  };
+}
 
-  const owner =
-    process.env.GITHUB_OWNER ||
-    "CARTOPIA0319";
-
-  const repo =
-    process.env.GITHUB_REPO ||
-    "cartopia-car-diagnosis";
-
-  const branch =
-    process.env.GITHUB_BRANCH ||
-    "main";
-
-  const path = "data/inventory.json";
+async function fetchGitHubInventoryFile() {
+  const {
+    token,
+    owner,
+    repo,
+    branch,
+    path,
+  } = getGitHubConfig();
 
   if (!token) {
     return {
+      success: false,
+      status: null,
       sha: null,
       inventory: {
         vehicles: [],
       },
+      error:
+        "GITHUB_TOKEN is not set",
     };
   }
 
@@ -2338,13 +2404,15 @@ async function fetchCurrentInventoryFromGitHub() {
 
   const response =
     await fetchWithTimeout(
-      `${apiUrl}?ref=${branch}&t=${Date.now()}`,
+      `${apiUrl}?ref=${encodeURIComponent(branch)}`,
       {
         headers: {
           Authorization:
             `Bearer ${token}`,
           Accept:
             "application/vnd.github+json",
+          "X-GitHub-Api-Version":
+            "2022-11-28",
           "User-Agent":
             "cartopia-inventory-updater",
           "Cache-Control": "no-store",
@@ -2353,25 +2421,104 @@ async function fetchCurrentInventoryFromGitHub() {
       30000
     );
 
+  const responseText =
+    await response.text();
+
+  let data = {};
+
+  try {
+    data = responseText
+      ? JSON.parse(responseText)
+      : {};
+  } catch {
+    data = {
+      raw: responseText,
+    };
+  }
+
   if (!response.ok) {
     return {
+      success: false,
+      status: response.status,
       sha: null,
       inventory: {
         vehicles: [],
       },
+      error: data,
     };
   }
 
-  const data = await response.json();
+  let inventory = {
+    vehicles: [],
+  };
+
+  if (data.content) {
+    try {
+      const decoded = Buffer.from(
+        String(data.content).replace(/\n/g, ""),
+        "base64"
+      ).toString("utf8");
+
+      inventory = JSON.parse(decoded);
+    } catch (error) {
+      inventory = {
+        vehicles: [],
+        readError:
+          error.message || String(error),
+      };
+    }
+  } else if (data.download_url) {
+    try {
+      const rawResponse =
+        await fetchWithTimeout(
+          data.download_url,
+          {
+            headers: {
+              Authorization:
+                `Bearer ${token}`,
+              "User-Agent":
+                "cartopia-inventory-updater",
+              "Cache-Control": "no-store",
+            },
+          },
+          30000
+        );
+
+      if (rawResponse.ok) {
+        inventory = JSON.parse(
+          await rawResponse.text()
+        );
+      }
+    } catch (error) {
+      inventory = {
+        vehicles: [],
+        readError:
+          error.message || String(error),
+      };
+    }
+  }
 
   return {
+    success: true,
+    status: response.status,
     sha: data.sha || null,
-    inventory: JSON.parse(
-      Buffer.from(
-        data.content || "",
-        "base64"
-      ).toString("utf8")
-    ),
+    inventory,
+    error: "",
+  };
+}
+
+async function fetchCurrentInventoryFromGitHub() {
+  const result =
+    await fetchGitHubInventoryFile();
+
+  return {
+    sha: result.sha,
+    inventory:
+      result.inventory || {
+        vehicles: [],
+      },
+    readStatus: result.status,
+    readError: result.error || "",
   };
 }
 
@@ -2381,22 +2528,13 @@ async function commitInventoryToGitHub(
   message =
     "refresh public and saved inventory data"
 ) {
-  const token =
-    process.env.GITHUB_TOKEN;
-
-  const owner =
-    process.env.GITHUB_OWNER ||
-    "CARTOPIA0319";
-
-  const repo =
-    process.env.GITHUB_REPO ||
-    "cartopia-car-diagnosis";
-
-  const branch =
-    process.env.GITHUB_BRANCH ||
-    "main";
-
-  const path = "data/inventory.json";
+  const {
+    token,
+    owner,
+    repo,
+    branch,
+    path,
+  } = getGitHubConfig();
 
   if (!token) {
     return {
@@ -2419,6 +2557,16 @@ async function commitInventoryToGitHub(
   ).toString("base64");
 
   async function put(sha) {
+    const requestBody = {
+      message,
+      content,
+      branch,
+    };
+
+    if (sha) {
+      requestBody.sha = sha;
+    }
+
     const response =
       await fetchWithTimeout(
         apiUrl,
@@ -2429,34 +2577,73 @@ async function commitInventoryToGitHub(
               `Bearer ${token}`,
             Accept:
               "application/vnd.github+json",
+            "X-GitHub-Api-Version":
+              "2022-11-28",
             "Content-Type":
               "application/json",
             "User-Agent":
               "cartopia-inventory-updater",
           },
-          body: JSON.stringify({
-            message,
-            content,
-            branch,
-            ...(sha ? { sha } : {}),
-          }),
+          body: JSON.stringify(
+            requestBody
+          ),
         },
         30000
       );
 
+    const responseText =
+      await response.text();
+
+    let data = {};
+
+    try {
+      data = responseText
+        ? JSON.parse(responseText)
+        : {};
+    } catch {
+      data = {
+        raw: responseText,
+      };
+    }
+
     return {
       response,
-      data: await response.json(),
+      data,
+      usedSha: sha || "",
     };
   }
 
-  let result = await put(existingSha);
+  const latestBeforeSave =
+    await fetchGitHubInventoryFile();
 
-  if (result.response.status === 409) {
-    const latest =
-      await fetchCurrentInventoryFromGitHub();
+  let sha =
+    latestBeforeSave.sha ||
+    existingSha ||
+    null;
 
-    result = await put(latest.sha);
+  let result = await put(sha);
+
+  const errorMessage = String(
+    result.data?.message || ""
+  ).toLowerCase();
+
+  const shouldRetry =
+    !result.response.ok &&
+    (
+      result.response.status === 409 ||
+      result.response.status === 422 ||
+      errorMessage.includes("sha") ||
+      errorMessage.includes("conflict")
+    );
+
+  if (shouldRetry) {
+    const refreshed =
+      await fetchGitHubInventoryFile();
+
+    if (refreshed.sha) {
+      sha = refreshed.sha;
+      result = await put(sha);
+    }
   }
 
   return {
@@ -2464,11 +2651,14 @@ async function commitInventoryToGitHub(
     status: result.response.status,
     path,
     branch,
+    usedSha: result.usedSha,
     commit:
       result.data.commit?.html_url ||
       "",
     commitSha:
       result.data.commit?.sha || "",
+    contentSha:
+      result.data.content?.sha || "",
     error: result.response.ok
       ? ""
       : result.data,
@@ -2612,8 +2802,7 @@ export async function GET(request) {
     url.searchParams.get("save") === "1";
 
   const summary =
-    url.searchParams.get("summary") ===
-    "1";
+    url.searchParams.get("summary") === "1";
 
   const trigger = getTriggerLabel(
     request,
@@ -2625,6 +2814,8 @@ export async function GET(request) {
     inventory: {
       vehicles: [],
     },
+    readStatus: null,
+    readError: "",
   };
 
   try {
@@ -2773,6 +2964,12 @@ export async function GET(request) {
           publicResult.imageMapCount,
       },
       checks: {
+        githubRead: {
+          status: current.readStatus,
+          shaFound: Boolean(current.sha),
+          sha: current.sha || "",
+          error: current.readError || "",
+        },
         loginStatus,
         publicListStatus:
           publicResult.status,
@@ -2795,7 +2992,7 @@ export async function GET(request) {
       ? await commitInventoryToGitHub(
           inventoryData,
           current.sha,
-          "refresh inventory with direct saved-list parsing"
+          "refresh inventory with direct saved-list parsing and SHA fix"
         )
       : {
           saved: false,
@@ -2835,6 +3032,8 @@ export async function GET(request) {
         mode:
           inventoryData.updateMode,
         github,
+        githubRead:
+          inventoryData.checks.githubRead,
         counts: inventoryData.counts,
         savedListFields,
         savedDetailFields,
