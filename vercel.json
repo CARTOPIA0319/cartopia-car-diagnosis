@@ -1,8 +1,7 @@
 {
-  "crons": [
-    {
-      "path": "/api/inventory/update?save=1",
-      "schedule": "0 * * * *"
+  "functions": {
+    "app/api/inventory/update/route.js": {
+      "maxDuration": 300
     }
-  ]
+  }
 }
