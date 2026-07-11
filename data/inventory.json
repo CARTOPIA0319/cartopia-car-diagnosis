@@ -1,7 +1,26 @@
 {
-  "updatedAt": "2026-07-11T12:39:22.129Z",
+  "codeVersion": "saved-list-direct-v7-background-lock",
+  "updatedAt": "2026-07-11T13:37:53.156Z",
   "source": "motorgate",
   "updateMode": "full-public-and-saved-refresh",
+  "lastUpdateStatus": {
+    "success": true,
+    "statusText": "正常更新",
+    "runId": "20260711133630660-7u1r0ko3",
+    "trigger": "URL手動更新",
+    "startedAt": "2026-07-11T13:36:31.544Z",
+    "finishedAt": "2026-07-11T13:37:53.156Z",
+    "durationSeconds": 82,
+    "error": "",
+    "timeout": false,
+    "typeFailed": 1,
+    "typeTimeout": 0,
+    "savedYearMissing": 0,
+    "savedColorMissing": 0,
+    "savedMileageMissing": 0,
+    "savedImageMissing": 0,
+    "savedDetailFetchFailed": 0
+  },
   "counts": {
     "publicVehicles": 48,
     "savedVehicles": 20,
@@ -10,6 +29,12 @@
     "publicImageMapCount": 48
   },
   "checks": {
+    "githubRead": {
+      "status": 200,
+      "shaFound": true,
+      "sha": "510906202fcb5d15120265863e66504b74ade56f",
+      "error": ""
+    },
     "loginStatus": 302,
     "publicListStatus": 200,
     "publicContainsLoginForm": false,
@@ -17,31 +42,86 @@
       {
         "pageUrl": "https://motorgate.jp/stock/savelist",
         "status": 200,
-        "count": 20
+        "containsLoginForm": false,
+        "count": 20,
+        "newCount": 20,
+        "listFields": {
+          "total": 20,
+          "carNameFound": 20,
+          "gradeNameFound": 0,
+          "yearFound": 20,
+          "displacementFound": 20,
+          "colorFound": 20,
+          "mileageFound": 20,
+          "bodyPriceFound": 20,
+          "totalPriceFound": 20,
+          "imageFound": 20
+        }
       },
       {
         "pageUrl": "https://motorgate.jp/stock/savelist/index/2",
         "status": 200,
-        "count": 20
+        "containsLoginForm": false,
+        "count": 20,
+        "newCount": 0,
+        "listFields": {
+          "total": 20,
+          "carNameFound": 20,
+          "gradeNameFound": 0,
+          "yearFound": 20,
+          "displacementFound": 20,
+          "colorFound": 20,
+          "mileageFound": 20,
+          "bodyPriceFound": 20,
+          "totalPriceFound": 20,
+          "imageFound": 20
+        }
       }
     ],
     "typeResults": {
       "success": 67,
-      "failed": 1
+      "failed": 1,
+      "timeout": 0
     },
     "gradeExtraInfo": {
-      "found": 50,
-      "missing": 18
+      "found": 68,
+      "missing": 0
+    },
+    "savedListFields": {
+      "total": 20,
+      "carNameFound": 20,
+      "gradeNameFound": 0,
+      "yearFound": 20,
+      "displacementFound": 20,
+      "colorFound": 20,
+      "mileageFound": 20,
+      "bodyPriceFound": 20,
+      "totalPriceFound": 20,
+      "imageFound": 20
+    },
+    "savedDetailFields": {
+      "total": 20,
+      "yearFound": 20,
+      "yearMissing": 0,
+      "colorFound": 20,
+      "colorMissing": 0,
+      "mileageFound": 20,
+      "mileageMissing": 0,
+      "imageFound": 20,
+      "imageMissing": 0,
+      "bodyPriceFound": 20,
+      "totalPriceFound": 20,
+      "detailFetchFailed": 0
     }
   },
   "vehicles": [
     {
       "stockId": "0902332A30260327W002",
-      "title": "ＬＳ ＬＳ６００ｈ　バージョンＣ　Ｉパッケージ",
-      "description": "ＬＳ ＬＳ６００ｈ　バージョンＣ　Ｉパッケージ ４ＷＤ　ハイブリッド　木目＋本革ステアリング　ハンドルヒーター　本革シート　アラカンターラルーフ　１２．３インチワイドディスプレイ　純正ナビ　パワーシート＆メモリー　クルコン　シートベンチレーション",
+      "title": "ＬＳ ＬＳ６００ｈ バージョンＣ Ｉパッケージ",
+      "description": "ＬＳ ＬＳ６００ｈ バージョンＣ Ｉパッケージ ４ＷＤ ハイブリッド 木目＋本革ステアリング ハンドルヒーター 本革シート アラカンターラルーフ １２．３インチワイドディスプレイ 純正ナビ パワーシート＆メモリー クルコン シートベンチレーション",
       "carName": "ＬＳ",
-      "gradeName": "ＬＳ６００ｈ　バージョンＣ　Ｉパッケージ",
-      "gradeExtraInfo": "４ＷＤ　ハイブリッド　木目＋本革ステアリング　ハンドルヒーター　本革シート　アラカンターラルーフ　１２．３インチワイドディスプレイ　純正ナビ　パワーシート＆メモリー　クルコン　シートベンチレーション",
+      "gradeName": "ＬＳ６００ｈ バージョンＣ Ｉパッケージ",
+      "gradeExtraInfo": "ＬＳ６００ｈ バージョンＣ Ｉパッケージ",
       "classificationName": "UVF45",
       "year": "2016年",
       "mileage": "10.5万K",
@@ -56,6 +136,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260327W002&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260327W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260327W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260327W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260327W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260327W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260327W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "セダン",
@@ -66,20 +154,32 @@
         "セダン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260327W002",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30251021W001",
       "title": "ＬＳ ＬＳ６００ｈＬ",
-      "description": "ＬＳ ＬＳ６００ｈＬ ４ＷＤ　ハイブリッド　ロングモデル　純正ナビ　バックカメラ　フリップダウンモニター　マークレビンソンスピーカー　ＥＴＣ　本革パワーシート　シートヒーター／クーラー　ステアリングヒーター　パワートランク",
+      "description": "ＬＳ ＬＳ６００ｈＬ ４ＷＤ ハイブリッド ロングモデル 純正ナビ バックカメラ フリップダウンモニター マークレビンソンスピーカー ＥＴＣ 本革パワーシート シートヒーター／クーラー ステアリングヒーター パワートランク",
       "carName": "ＬＳ",
       "gradeName": "ＬＳ６００ｈＬ",
-      "gradeExtraInfo": "４ＷＤ　ハイブリッド　ロングモデル　純正ナビ　バックカメラ　フリップダウンモニター　マークレビンソンスピーカー　ＥＴＣ　本革パワーシート　シートヒーター／クーラー　ステアリングヒーター　パワートランク",
+      "gradeExtraInfo": "ＬＳ６００ｈＬ",
       "classificationName": "UVF46",
       "year": "2014年",
       "mileage": "走不明",
@@ -94,6 +194,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251021W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251021W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251021W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251021W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251021W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251021W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251021W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "セダン",
@@ -104,20 +212,32 @@
         "セダン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30251021W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30250725W001",
       "title": "Ｎ－ＯＮＥ プレミアム",
-      "description": "Ｎ－ＯＮＥ プレミアム ４ＷＤ　ホンダセンシング　ツートンカラー　ハーフレザーシート　追従式クルーズコントロール　ＬＥＤヘッドライト／フォグ　純正ディスプレイオーディオ　バックカメラ　ＥＴＣ　シートヒーター　パーキングソナー",
+      "description": "Ｎ－ＯＮＥ プレミアム ４ＷＤ ホンダセンシング ツートンカラー ハーフレザーシート 追従式クルーズコントロール ＬＥＤヘッドライト／フォグ 純正ディスプレイオーディオ バックカメラ ＥＴＣ シートヒーター パーキングソナー",
       "carName": "Ｎ－ＯＮＥ",
       "gradeName": "プレミアム",
-      "gradeExtraInfo": "４ＷＤ　ホンダセンシング　ツートンカラー　ハーフレザーシート　追従式クルーズコントロール　ＬＥＤヘッドライト／フォグ　純正ディスプレイオーディオ　バックカメラ　ＥＴＣ　シートヒーター　パーキングソナー",
+      "gradeExtraInfo": "プレミアム",
       "classificationName": "JG4",
       "year": "2023年",
       "mileage": "1.2万K",
@@ -132,6 +252,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30250725W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30250725W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30250725W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30250725W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30250725W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30250725W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30250725W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スタンダード",
@@ -144,20 +272,32 @@
         "スポーティ",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30250725W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260313W003",
       "title": "Ｎ－ＶＡＮ＋スタイル ファン・ターボ",
-      "description": "Ｎ－ＶＡＮ＋スタイル ファン・ターボ ４ＷＤ　ターボ　オプションカラー　天井収納　アダプティブクルーズコントロール　純正ナビ　バックカメラ　Ｂｌｕｅｔｏｏｔｈ　フルセグ　パーキングソナー　ドラレコ　純正オプションペダルカバー　ＵＳＢポート",
+      "description": "Ｎ－ＶＡＮ＋スタイル ファン・ターボ ４ＷＤ ターボ オプションカラー 天井収納 アダプティブクルーズコントロール 純正ナビ バックカメラ Ｂｌｕｅｔｏｏｔｈ フルセグ パーキングソナー ドラレコ 純正オプションペダルカバー ＵＳＢポート",
       "carName": "Ｎ－ＶＡＮ＋スタイル",
       "gradeName": "ファン・ターボ",
-      "gradeExtraInfo": "４ＷＤ　ターボ　オプションカラー　天井収納　アダプティブクルーズコントロール　純正ナビ　バックカメラ　Ｂｌｕｅｔｏｏｔｈ　フルセグ　パーキングソナー　ドラレコ　純正オプションペダルカバー　ＵＳＢポート",
+      "gradeExtraInfo": "ファン・ターボ",
       "classificationName": "JJ2",
       "year": "2021年",
       "mileage": "13.5万K",
@@ -172,6 +312,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260313W003&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260313W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260313W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260313W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260313W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260313W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260313W003&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スライドドア",
@@ -182,20 +330,32 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260313W003",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260406W003",
       "title": "Ｎ－ＷＧＮカスタム Ｌ・ターボホンダセンシング",
-      "description": "Ｎ－ＷＧＮカスタム Ｌ・ターボホンダセンシング ４ＷＤ　フルセグＴＶ　Ｂｌｕｅｔｏｏｔｈ　Ｂカメラ　純正エンジンスターター　ＥＴＣ　追従式クルーズコントロール　ステリモ　前２席シートヒーター　Ｐソナー　ブレーキホールド　パドルシフト　ＵＳＢポート",
+      "description": "Ｎ－ＷＧＮカスタム Ｌ・ターボホンダセンシング ４ＷＤ フルセグＴＶ Ｂｌｕｅｔｏｏｔｈ Ｂカメラ 純正エンジンスターター ＥＴＣ 追従式クルーズコントロール ステリモ 前２席シートヒーター Ｐソナー ブレーキホールド パドルシフト ＵＳＢポート",
       "carName": "Ｎ－ＷＧＮカスタム",
       "gradeName": "Ｌ・ターボホンダセンシング",
-      "gradeExtraInfo": "４ＷＤ　フルセグＴＶ　Ｂｌｕｅｔｏｏｔｈ　Ｂカメラ　純正エンジンスターター　ＥＴＣ　追従式クルーズコントロール　ステリモ　前２席シートヒーター　Ｐソナー　ブレーキホールド　パドルシフト　ＵＳＢポート",
+      "gradeExtraInfo": "Ｌ・ターボホンダセンシング",
       "classificationName": "JH4",
       "year": "2020年",
       "mileage": "2.6万K",
@@ -210,6 +370,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260406W003&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260406W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260406W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260406W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260406W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260406W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260406W003&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スタンダード",
@@ -220,20 +388,32 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260406W003",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260628W001",
       "title": "ＮＴ１００クリッパートラック ＧＸ",
-      "description": "ＮＴ１００クリッパートラック ＧＸ ４ＷＤ（切替式）　純正ナビ　Ｂｌｕｅｔｏｏｔｈ　パワーウィンドウ　キーレスキー　エアコン　パワステ　フォグランプ　荷台マット　ゲートプロテクター　アオリチェーン　純正ドライブレコーダー　集中ドアロック",
+      "description": "ＮＴ１００クリッパートラック ＧＸ ４ＷＤ（切替式） 純正ナビ Ｂｌｕｅｔｏｏｔｈ パワーウィンドウ キーレスキー エアコン パワステ フォグランプ 荷台マット ゲートプロテクター アオリチェーン 純正ドライブレコーダー 集中ドアロック",
       "carName": "ＮＴ１００クリッパートラック",
       "gradeName": "ＧＸ",
-      "gradeExtraInfo": "４ＷＤ（切替式）　純正ナビ　Ｂｌｕｅｔｏｏｔｈ　パワーウィンドウ　キーレスキー　エアコン　パワステ　フォグランプ　荷台マット　ゲートプロテクター　アオリチェーン　純正ドライブレコーダー　集中ドアロック",
+      "gradeExtraInfo": "ＧＸ",
       "classificationName": "DR16T",
       "year": "2018年",
       "mileage": "3.6万K",
@@ -248,6 +428,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260628W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260628W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260628W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260628W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260628W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260628W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260628W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "トラック",
@@ -258,20 +446,32 @@
         "トラック",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260628W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260604W001",
-      "title": "ＲＸ ＲＸ２００ｔ　Ｆスポーツ",
-      "description": "ＲＸ ＲＸ２００ｔ　Ｆスポーツ ４ＷＤ　ターボ　サンルーフ　パワーバックドア　純正ＥＧスターター　純正１２．３インチワイドナビ　ＨＵＤ　サイド・バックカメラ　シートベンチレーション　ハンドルヒーター　パドルシフト　クリアランスソナー",
+      "title": "ＲＸ ＲＸ２００ｔ Ｆスポーツ",
+      "description": "ＲＸ ＲＸ２００ｔ Ｆスポーツ ４ＷＤ ターボ サンルーフ パワーバックドア 純正ＥＧスターター 純正１２．３インチワイドナビ ＨＵＤ サイド・バックカメラ シートベンチレーション ハンドルヒーター パドルシフト クリアランスソナー",
       "carName": "ＲＸ",
-      "gradeName": "ＲＸ２００ｔ　Ｆスポーツ",
-      "gradeExtraInfo": "４ＷＤ　ターボ　サンルーフ　パワーバックドア　純正ＥＧスターター　純正１２．３インチワイドナビ　ＨＵＤ　サイド・バックカメラ　シートベンチレーション　ハンドルヒーター　パドルシフト　クリアランスソナー",
+      "gradeName": "ＲＸ２００ｔ Ｆスポーツ",
+      "gradeExtraInfo": "ＲＸ２００ｔ Ｆスポーツ",
       "classificationName": "AGL25W",
       "year": "2015年",
       "mileage": "7.4万K",
@@ -286,6 +486,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260604W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260604W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260604W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260604W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260604W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260604W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260604W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "SUV",
@@ -298,20 +506,32 @@
         "ステーションワゴン",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260604W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260421W002",
       "title": "ｅＫクロス Ｔ",
-      "description": "ｅＫクロス Ｔ ４ＷＤ　ハイブリッド　ターボ　純正９インチナビ　デジタルインナーミラー　アラウンドビューモニター　前席シートヒーター　セーフティシールド　純正１５インチアルミ　フルセグ　Ｂｌｕｅｔｏｏｔｈ　フォグ",
+      "description": "ｅＫクロス Ｔ ４ＷＤ ハイブリッド ターボ 純正９インチナビ デジタルインナーミラー アラウンドビューモニター 前席シートヒーター セーフティシールド 純正１５インチアルミ フルセグ Ｂｌｕｅｔｏｏｔｈ フォグ",
       "carName": "ｅＫクロス",
       "gradeName": "Ｔ",
-      "gradeExtraInfo": "４ＷＤ　ハイブリッド　ターボ　純正９インチナビ　デジタルインナーミラー　アラウンドビューモニター　前席シートヒーター　セーフティシールド　純正１５インチアルミ　フルセグ　Ｂｌｕｅｔｏｏｔｈ　フォグ",
+      "gradeExtraInfo": "Ｔ",
       "classificationName": "B38W",
       "year": "2019年",
       "mileage": "5.2万K",
@@ -326,6 +546,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スタンダード",
@@ -338,23 +566,35 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W002",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260414W002",
       "title": "ｅＫクロス Ｔ",
-      "description": "ｅＫクロス Ｔ ４ＷＤ　ハイブリッド　ターボ　ツートーンカラー　ハーフレザーシート　新品サマータイヤ組替済み　純正１５インチ切削アルミホイール　前席シートヒーター　クリアランスソナー　ＬＥＤヘッドライト　フォグ",
+      "description": "ｅＫクロス Ｔ ４ＷＤ ハイブリッド ターボ ツートーンカラー ハーフレザーシート 新品サマータイヤ組替済み 純正１５インチ切削アルミホイール 前席シートヒーター クリアランスソナー ＬＥＤヘッドライト フォグ",
       "carName": "ｅＫクロス",
       "gradeName": "Ｔ",
-      "gradeExtraInfo": "４ＷＤ　ハイブリッド　ターボ　ツートーンカラー　ハーフレザーシート　新品サマータイヤ組替済み　純正１５インチ切削アルミホイール　前席シートヒーター　クリアランスソナー　ＬＥＤヘッドライト　フォグ",
+      "gradeExtraInfo": "Ｔ",
       "classificationName": "B38W",
       "year": "2019年",
-      "mileage": "6.0万K",
+      "mileage": "6万K",
       "color": "ナチュラルアイボリーメタリックＩＩ",
       "inspection": "検2026年11月",
       "displacement": "660cc",
@@ -366,6 +606,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スタンダード",
@@ -378,20 +626,32 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260414W002",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260422W002",
-      "title": "アルファードハイブリッド Ｓ　タイプゴールド",
-      "description": "アルファードハイブリッド Ｓ　タイプゴールド ４ＷＤ　ＯＰパノラミックビューモニター（ガッツミラーなし）　シーケンシャルウィンカー　ＪＢＬ　フリップダウンＭ　Ｐバックドア　パーキングアシスト　ＡＣ１００Ｖ１５００Ｗ　ＨＤＭＩ　ＥＴＣ　両側Ｐスラ",
+      "title": "アルファードハイブリッド Ｓ タイプゴールド",
+      "description": "アルファードハイブリッド Ｓ タイプゴールド ４ＷＤ ＯＰパノラミックビューモニター（ガッツミラーなし） シーケンシャルウィンカー ＪＢＬ フリップダウンＭ Ｐバックドア パーキングアシスト ＡＣ１００Ｖ１５００Ｗ ＨＤＭＩ ＥＴＣ 両側Ｐスラ",
       "carName": "アルファードハイブリッド",
-      "gradeName": "Ｓ　タイプゴールド",
-      "gradeExtraInfo": "４ＷＤ　ＯＰパノラミックビューモニター（ガッツミラーなし）　シーケンシャルウィンカー　ＪＢＬ　フリップダウンＭ　Ｐバックドア　パーキングアシスト　ＡＣ１００Ｖ１５００Ｗ　ＨＤＭＩ　ＥＴＣ　両側Ｐスラ",
+      "gradeName": "Ｓ タイプゴールド",
+      "gradeExtraInfo": "Ｓ タイプゴールド",
       "classificationName": "AYH30W",
       "year": "2021年",
       "mileage": "5.1万K",
@@ -406,6 +666,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W002&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "ミニバン",
@@ -416,20 +684,32 @@
         "ミニバン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260422W002",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260314W001",
       "title": "アルファードハイブリッド ＳＲ",
-      "description": "アルファードハイブリッド ＳＲ ４ＷＤ　ハイブリッド　ＴＡＸ非課税　フリップダウンモニター　純正８インチナビ　フルセグ　バックカメラ　クリアランスソナー　クルコン　パワーシート＆メモリー　オッドマン　両側パワースライドドア　ＥＴＣ",
+      "description": "アルファードハイブリッド ＳＲ ４ＷＤ ハイブリッド ＴＡＸ非課税 フリップダウンモニター 純正８インチナビ フルセグ バックカメラ クリアランスソナー クルコン パワーシート＆メモリー オッドマン 両側パワースライドドア ＥＴＣ",
       "carName": "アルファードハイブリッド",
       "gradeName": "ＳＲ",
-      "gradeExtraInfo": "４ＷＤ　ハイブリッド　ＴＡＸ非課税　フリップダウンモニター　純正８インチナビ　フルセグ　バックカメラ　クリアランスソナー　クルコン　パワーシート＆メモリー　オッドマン　両側パワースライドドア　ＥＴＣ",
+      "gradeExtraInfo": "ＳＲ",
       "classificationName": "ATH20W",
       "year": "2012年",
       "mileage": "7.3万K",
@@ -444,6 +724,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260314W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260314W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260314W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260314W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260314W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260314W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260314W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "ミニバン",
@@ -454,20 +742,32 @@
         "ミニバン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260314W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260605W001",
-      "title": "エクストレイル ２０Ｘ　ハイブリッド　エマージェンシーブレーキＰ",
-      "description": "エクストレイル ２０Ｘ　ハイブリッド　エマージェンシーブレーキＰ 切替式４ＷＤ　ハイブリッド　ワンオーナー　デジタルインナーミラー型ドライブレコーダー　パワーバックドア　クリアランスソナー　前席シートヒーター　スカッフプレート　純正１７インチアルミホイール　社外ナビ",
+      "title": "エクストレイル ２０Ｘ ハイブリッド エマージェンシーブレーキＰ",
+      "description": "エクストレイル ２０Ｘ ハイブリッド エマージェンシーブレーキＰ 切替式４ＷＤ ハイブリッド ワンオーナー デジタルインナーミラー型ドライブレコーダー パワーバックドア クリアランスソナー 前席シートヒーター スカッフプレート 純正１７インチアルミホイール 社外ナビ",
       "carName": "エクストレイル",
-      "gradeName": "２０Ｘ　ハイブリッド　エマージェンシーブレーキＰ",
-      "gradeExtraInfo": "切替式４ＷＤ　ハイブリッド　ワンオーナー　デジタルインナーミラー型ドライブレコーダー　パワーバックドア　クリアランスソナー　前席シートヒーター　スカッフプレート　純正１７インチアルミホイール　社外ナビ",
+      "gradeName": "２０Ｘ ハイブリッド エマージェンシーブレーキＰ",
+      "gradeExtraInfo": "２０Ｘ ハイブリッド エマージェンシーブレーキＰ",
       "classificationName": "HNT32",
       "year": "2016年",
       "mileage": "3.8万K",
@@ -482,6 +782,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260605W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260605W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260605W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260605W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260605W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260605W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260605W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "SUV",
@@ -492,20 +800,32 @@
         "SUV",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260605W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260609W001",
-      "title": "エスティマハイブリッド アエラス　プレミアム－Ｇ",
-      "description": "エスティマハイブリッド アエラス　プレミアム－Ｇ ４ＷＤ　オプションツートンカラー　電動格納サードシート　ハーフレザーシート　パワーシート　シートヒーター　両側電動スライドドア　パワーバックドア　純正ナビ　バックカメラ　ＥＴＣ　ＡＣ１００Ｖ　ソナー",
+      "title": "エスティマハイブリッド アエラス プレミアム－Ｇ",
+      "description": "エスティマハイブリッド アエラス プレミアム－Ｇ ４ＷＤ オプションツートンカラー 電動格納サードシート ハーフレザーシート パワーシート シートヒーター 両側電動スライドドア パワーバックドア 純正ナビ バックカメラ ＥＴＣ ＡＣ１００Ｖ ソナー",
       "carName": "エスティマハイブリッド",
-      "gradeName": "アエラス　プレミアム－Ｇ",
-      "gradeExtraInfo": "４ＷＤ　オプションツートンカラー　電動格納サードシート　ハーフレザーシート　パワーシート　シートヒーター　両側電動スライドドア　パワーバックドア　純正ナビ　バックカメラ　ＥＴＣ　ＡＣ１００Ｖ　ソナー",
+      "gradeName": "アエラス プレミアム－Ｇ",
+      "gradeExtraInfo": "アエラス プレミアム－Ｇ",
       "classificationName": "AHR20W",
       "year": "2016年",
       "mileage": "6.7万K",
@@ -520,6 +840,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260609W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260609W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260609W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260609W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260609W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260609W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260609W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "ミニバン",
@@ -530,20 +858,32 @@
         "ミニバン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260609W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260615W003",
       "title": "エルグランド ２５０ハイウェイスタープレミアム",
-      "description": "エルグランド ２５０ハイウェイスタープレミアム ４ＷＤ　スタットレスアルミ組付き　本革シート　パワーシート　両側電動スライドドア　パワーバックドア　アラウンドビューモニター　エマージェンシーブレーキ　前席シートヒーター　フルセグナビ　ＥＴＣ　ＢＳＭ",
+      "description": "エルグランド ２５０ハイウェイスタープレミアム ４ＷＤ スタットレスアルミ組付き 本革シート パワーシート 両側電動スライドドア パワーバックドア アラウンドビューモニター エマージェンシーブレーキ 前席シートヒーター フルセグナビ ＥＴＣ ＢＳＭ",
       "carName": "エルグランド",
       "gradeName": "２５０ハイウェイスタープレミアム",
-      "gradeExtraInfo": "４ＷＤ　スタットレスアルミ組付き　本革シート　パワーシート　両側電動スライドドア　パワーバックドア　アラウンドビューモニター　エマージェンシーブレーキ　前席シートヒーター　フルセグナビ　ＥＴＣ　ＢＳＭ",
+      "gradeExtraInfo": "２５０ハイウェイスタープレミアム",
       "classificationName": "TNE52",
       "year": "2020年",
       "mileage": "6.5万K",
@@ -558,6 +898,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260615W003&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260615W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260615W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260615W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260615W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260615W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260615W003&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "ミニバン"
@@ -566,20 +914,32 @@
         "普通車",
         "ミニバン"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260615W003",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30251028W003",
       "title": "キャスト スポーツＳＡＩＩ",
-      "description": "キャスト スポーツＳＡＩＩ ４ＷＤ　ターボ　パドルシフト　ＬＥＤヘッドライト／フォグ／アクセサリーライナー　ＭＯＭＯ製革ハンドル　ハーフレザーシート　純正フルセグナビ　Ｂｌｕｅｔｏｏｔｈ　バックカメラ　ＥＴＣ　前席シートヒーター",
+      "description": "キャスト スポーツＳＡＩＩ ４ＷＤ ターボ パドルシフト ＬＥＤヘッドライト／フォグ／アクセサリーライナー ＭＯＭＯ製革ハンドル ハーフレザーシート 純正フルセグナビ Ｂｌｕｅｔｏｏｔｈ バックカメラ ＥＴＣ 前席シートヒーター",
       "carName": "キャスト",
       "gradeName": "スポーツＳＡＩＩ",
-      "gradeExtraInfo": "４ＷＤ　ターボ　パドルシフト　ＬＥＤヘッドライト／フォグ／アクセサリーライナー　ＭＯＭＯ製革ハンドル　ハーフレザーシート　純正フルセグナビ　Ｂｌｕｅｔｏｏｔｈ　バックカメラ　ＥＴＣ　前席シートヒーター",
+      "gradeExtraInfo": "スポーツＳＡＩＩ",
       "classificationName": "LA260S",
       "year": "2017年",
       "mileage": "3.9万K",
@@ -594,6 +954,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251028W003&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251028W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251028W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251028W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251028W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251028W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251028W003&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スタンダード",
@@ -606,20 +974,32 @@
         "スポーティ",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30251028W003",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260323W001",
-      "title": "キャスト スタイルＧ　ターボ　プライムコレクション　ＳＡＩＩＩ",
-      "description": "キャスト スタイルＧ　ターボ　プライムコレクション　ＳＡＩＩＩ ４ＷＤ　ターボ　レザーシート　前列シートヒーター　パノラマモニター　純正８インチナビ　Ｂｌｕｅｔｏｏｔｈ　ナビ連動ドラレコ　オートハイビーム　革巻ステアリング　木目調パネル　ステリモ　ＥＴＣ",
+      "title": "キャスト スタイルＧ ターボ プライムコレクション ＳＡＩＩＩ",
+      "description": "キャスト スタイルＧ ターボ プライムコレクション ＳＡＩＩＩ ４ＷＤ ターボ レザーシート 前列シートヒーター パノラマモニター 純正８インチナビ Ｂｌｕｅｔｏｏｔｈ ナビ連動ドラレコ オートハイビーム 革巻ステアリング 木目調パネル ステリモ ＥＴＣ",
       "carName": "キャスト",
-      "gradeName": "スタイルＧ　ターボ　プライムコレクション　ＳＡＩＩＩ",
-      "gradeExtraInfo": "４ＷＤ　ターボ　レザーシート　前列シートヒーター　パノラマモニター　純正８インチナビ　Ｂｌｕｅｔｏｏｔｈ　ナビ連動ドラレコ　オートハイビーム　革巻ステアリング　木目調パネル　ステリモ　ＥＴＣ",
+      "gradeName": "スタイルＧ ターボ プライムコレクション ＳＡＩＩＩ",
+      "gradeExtraInfo": "スタイルＧ ターボ プライムコレクション ＳＡＩＩＩ",
       "classificationName": "LA260S",
       "year": "2017年",
       "mileage": "10.2万K",
@@ -634,6 +1014,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スタンダード",
@@ -644,20 +1032,32 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260323W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260623W001",
       "title": "キャンター ＤＸ",
-      "description": "キャンター ＤＸ 積載車　セーフティローダー　リンゴ農家買取　冬季車庫保管　元農作業機械運搬に使用　最大積載量３トン　５ＭＴ　エアコン　ＰＴＯ　ウィンチ搭載　排気量４．６Ｌ",
+      "description": "キャンター ＤＸ 積載車 セーフティローダー リンゴ農家買取 冬季車庫保管 元農作業機械運搬に使用 最大積載量３トン ５ＭＴ エアコン ＰＴＯ ウィンチ搭載 排気量４．６Ｌ",
       "carName": "キャンター",
       "gradeName": "ＤＸ",
-      "gradeExtraInfo": "積載車　セーフティローダー　リンゴ農家買取　冬季車庫保管　元農作業機械運搬に使用　最大積載量３トン　５ＭＴ　エアコン　ＰＴＯ　ウィンチ搭載　排気量４．６Ｌ",
+      "gradeExtraInfo": "1",
       "classificationName": "FE638F",
       "year": "1995年",
       "mileage": "14.3万K",
@@ -666,12 +1066,20 @@
       "displacement": "4.6L",
       "bodyPrice": "199.8万円",
       "totalPrice": "208.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260623/H/70009023323026062300100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260623/H/70009023323026062300100.jpg?1783777024",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260623W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260623001&area_cd=11",
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260623W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260623W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260623W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260623W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260623W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260623W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260623W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "バン・トラック"
@@ -680,20 +1088,32 @@
         "普通車",
         "バン・トラック"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260623W001&StockStatus=00180002&ScreenId=CB101GR",
+        "attempts": 2,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260422W004",
-      "title": "クラウン アスリートｉ－Ｆｏｕｒ　スペシャルパッケージ",
-      "description": "クラウン アスリートｉ－Ｆｏｕｒ　スペシャルパッケージ ４ＷＤ　スタットレスアルミ組積込み　オプションカラー　ＥＴＣ　クルーズコントロール　ステアリングスイッチ　純正１８インチアルミホイール　フォグランプ　ＨＩＤヘッドライト　プッシュスタート　スマートキー",
+      "title": "クラウン アスリートｉ－Ｆｏｕｒ スペシャルパッケージ",
+      "description": "クラウン アスリートｉ－Ｆｏｕｒ スペシャルパッケージ ４ＷＤ スタットレスアルミ組積込み オプションカラー ＥＴＣ クルーズコントロール ステアリングスイッチ 純正１８インチアルミホイール フォグランプ ＨＩＤヘッドライト プッシュスタート スマートキー",
       "carName": "クラウン",
-      "gradeName": "アスリートｉ－Ｆｏｕｒ　スペシャルパッケージ",
-      "gradeExtraInfo": "４ＷＤ　スタットレスアルミ組積込み　オプションカラー　ＥＴＣ　クルーズコントロール　ステアリングスイッチ　純正１８インチアルミホイール　フォグランプ　ＨＩＤヘッドライト　プッシュスタート　スマートキー",
+      "gradeName": "アスリートｉ－Ｆｏｕｒ スペシャルパッケージ",
+      "gradeExtraInfo": "アスリートｉ－Ｆｏｕｒ スペシャルパッケージ",
       "classificationName": "GRS201",
       "year": "2011年",
       "mileage": "4.2万K",
@@ -708,6 +1128,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W004&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W004&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W004&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W004&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W004&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W004&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W004&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "セダン",
@@ -718,20 +1146,32 @@
         "セダン",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260422W004",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260323W002",
       "title": "クラウンスポーツ Ｚ",
-      "description": "クラウンスポーツ Ｚ ４ＷＤ　ＨＶ　アップルカープレイ　置くだけ充電　パノラマモター　パワーバックドア　デジタルインナーミラー　シートヒーター　ベンチレーション　純正２１インチＡＷ　パーキングソナー　ＥＴＣ　ＯＰカラー",
+      "description": "クラウンスポーツ Ｚ ４ＷＤ ＨＶ アップルカープレイ 置くだけ充電 パノラマモター パワーバックドア デジタルインナーミラー シートヒーター ベンチレーション 純正２１インチＡＷ パーキングソナー ＥＴＣ ＯＰカラー",
       "carName": "クラウンスポーツ",
       "gradeName": "Ｚ",
-      "gradeExtraInfo": "４ＷＤ　ＨＶ　アップルカープレイ　置くだけ充電　パノラマモター　パワーバックドア　デジタルインナーミラー　シートヒーター　ベンチレーション　純正２１インチＡＷ　パーキングソナー　ＥＴＣ　ＯＰカラー",
+      "gradeExtraInfo": "Ｚ",
       "classificationName": "AZSH36W",
       "year": "2024年",
       "mileage": "2.3万K",
@@ -746,6 +1186,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W002&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "SUV",
@@ -758,20 +1206,32 @@
         "EV・HV",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260323W002",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260228W001",
-      "title": "クラウンハイブリッド ＲＳアドバンス　Ｆｏｕｒ",
-      "description": "クラウンハイブリッド ＲＳアドバンス　Ｆｏｕｒ ４ＷＤ　ハイブリッド　ワンオーナー　夏タイヤ新品組替済み　冬タイヤ＋アルミセット積込　純正エンジンスターター　ドラレコ　全方位モニター　ハンドルヒーター　クルコン　デジタルインナーミラー　純正ナビ",
+      "title": "クラウンハイブリッド ＲＳアドバンス Ｆｏｕｒ",
+      "description": "クラウンハイブリッド ＲＳアドバンス Ｆｏｕｒ ４ＷＤ ハイブリッド ワンオーナー 夏タイヤ新品組替済み 冬タイヤ＋アルミセット積込 純正エンジンスターター ドラレコ 全方位モニター ハンドルヒーター クルコン デジタルインナーミラー 純正ナビ",
       "carName": "クラウンハイブリッド",
-      "gradeName": "ＲＳアドバンス　Ｆｏｕｒ",
-      "gradeExtraInfo": "４ＷＤ　ハイブリッド　ワンオーナー　夏タイヤ新品組替済み　冬タイヤ＋アルミセット積込　純正エンジンスターター　ドラレコ　全方位モニター　ハンドルヒーター　クルコン　デジタルインナーミラー　純正ナビ",
+      "gradeName": "ＲＳアドバンス Ｆｏｕｒ",
+      "gradeExtraInfo": "ＲＳアドバンス Ｆｏｕｒ",
       "classificationName": "AZSH21",
       "year": "2019年",
       "mileage": "2.9万K",
@@ -786,6 +1246,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260228W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260228W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260228W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260228W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260228W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260228W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260228W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "セダン",
@@ -798,20 +1266,32 @@
         "EV・HV",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260228W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260413W001",
       "title": "クラウンマジェスタ Ｆｏｕｒ",
-      "description": "クラウンマジェスタ Ｆｏｕｒ ４ＷＤ　ハイブリッド　純正８インチワイドナビ　全方位モニター　走行モード　クルコン　ＥＴＣ２．０　シートベンチレーション　電動リアガラスシェード　パワーシート・メモリー　ＩＴＳコネクト　ブルーレイ",
+      "description": "クラウンマジェスタ Ｆｏｕｒ ４ＷＤ ハイブリッド 純正８インチワイドナビ 全方位モニター 走行モード クルコン ＥＴＣ２．０ シートベンチレーション 電動リアガラスシェード パワーシート・メモリー ＩＴＳコネクト ブルーレイ",
       "carName": "クラウンマジェスタ",
       "gradeName": "Ｆｏｕｒ",
-      "gradeExtraInfo": "４ＷＤ　ハイブリッド　純正８インチワイドナビ　全方位モニター　走行モード　クルコン　ＥＴＣ２．０　シートベンチレーション　電動リアガラスシェード　パワーシート・メモリー　ＩＴＳコネクト　ブルーレイ",
+      "gradeExtraInfo": "Ｆｏｕｒ",
       "classificationName": "AWS215",
       "year": "2016年",
       "mileage": "1.5万K",
@@ -826,6 +1306,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260413W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260413W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260413W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260413W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260413W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260413W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260413W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "セダン",
@@ -836,20 +1324,32 @@
         "セダン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260413W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260612W001",
       "title": "シエンタ ハイブリッドＺ",
-      "description": "シエンタ ハイブリッドＺ ４ＷＤ　ハイブリッド　フリップダウンモニター　アダプティブクルコン　純正１０．５インチナビ　フルセグ　バックカメラ　ワイパーデアイサー　両側パワースライドドア　背面テーブル　タイプＣポート",
+      "description": "シエンタ ハイブリッドＺ ４ＷＤ ハイブリッド フリップダウンモニター アダプティブクルコン 純正１０．５インチナビ フルセグ バックカメラ ワイパーデアイサー 両側パワースライドドア 背面テーブル タイプＣポート",
       "carName": "シエンタ",
       "gradeName": "ハイブリッドＺ",
-      "gradeExtraInfo": "４ＷＤ　ハイブリッド　フリップダウンモニター　アダプティブクルコン　純正１０．５インチナビ　フルセグ　バックカメラ　ワイパーデアイサー　両側パワースライドドア　背面テーブル　タイプＣポート",
+      "gradeExtraInfo": "ハイブリッドＺ",
       "classificationName": "MXPL15G",
       "year": "2024年",
       "mileage": "2.8万K",
@@ -864,6 +1364,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260612W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260612W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260612W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260612W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260612W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260612W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260612W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "コンパクトカー",
@@ -876,20 +1384,32 @@
         "ミニバン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260612W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260518W002",
       "title": "スペーシアカスタム ハイブリッドＧＳ",
-      "description": "スペーシアカスタム ハイブリッドＧＳ ４ＷＤ　ハイブリッド　レーダークルコン　前席シートヒーター　ＵＳＢポート　バックカメラ　電動パーキングブレーキ　オートブレーキホールド　社外ディスプレイオーディオ　パワスラ　ＬＥＤヘッドライト・フォグ",
+      "description": "スペーシアカスタム ハイブリッドＧＳ ４ＷＤ ハイブリッド レーダークルコン 前席シートヒーター ＵＳＢポート バックカメラ 電動パーキングブレーキ オートブレーキホールド 社外ディスプレイオーディオ パワスラ ＬＥＤヘッドライト・フォグ",
       "carName": "スペーシアカスタム",
       "gradeName": "ハイブリッドＧＳ",
-      "gradeExtraInfo": "４ＷＤ　ハイブリッド　レーダークルコン　前席シートヒーター　ＵＳＢポート　バックカメラ　電動パーキングブレーキ　オートブレーキホールド　社外ディスプレイオーディオ　パワスラ　ＬＥＤヘッドライト・フォグ",
+      "gradeExtraInfo": "ハイブリッドＧＳ",
       "classificationName": "MK94S",
       "year": "2024年",
       "mileage": "0.6万K",
@@ -904,6 +1424,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260518W002&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260518W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260518W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260518W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260518W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260518W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260518W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スライドドア",
@@ -914,20 +1442,32 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260518W002",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30251224W001",
       "title": "ソリオ Ｇ４",
-      "description": "ソリオ Ｇ４ ４ＷＤ　スタッドレスタイヤ＋社外アルミホイールセット積込　前列シートヒーター　電動スライドドア　ドアミラーヒーター　ドライブレコーダー　フォグ　純正アルミホイール　プッシュスタート　スペアキー",
+      "description": "ソリオ Ｇ４ ４ＷＤ スタッドレスタイヤ＋社外アルミホイールセット積込 前列シートヒーター 電動スライドドア ドアミラーヒーター ドライブレコーダー フォグ 純正アルミホイール プッシュスタート スペアキー",
       "carName": "ソリオ",
       "gradeName": "Ｇ４",
-      "gradeExtraInfo": "４ＷＤ　スタッドレスタイヤ＋社外アルミホイールセット積込　前列シートヒーター　電動スライドドア　ドアミラーヒーター　ドライブレコーダー　フォグ　純正アルミホイール　プッシュスタート　スペアキー",
+      "gradeExtraInfo": "Ｇ４",
       "classificationName": "MA15S",
       "year": "2014年",
       "mileage": "6.8万K",
@@ -942,6 +1482,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251224W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251224W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251224W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251224W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251224W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251224W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251224W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "コンパクトカー"
@@ -950,24 +1498,36 @@
         "普通車",
         "コンパクトカー"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30251224W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260403W001",
       "title": "タンク カスタムＧ",
-      "description": "タンク カスタムＧ ４ＷＤ　オプションツートンカラー　両側電動スライドドア　ＬＥＤヘッドライト／フォグ　純正フルセグナビ　Ｂｌｕｅｔｏｏｔｈ　パノラミックビューモニター　プリクラッシュセースティ　シートヒーター　ＥＴＣ",
+      "description": "タンク カスタムＧ ４ＷＤ オプションツートンカラー 両側電動スライドドア ＬＥＤヘッドライト／フォグ 純正フルセグナビ Ｂｌｕｅｔｏｏｔｈ パノラミックビューモニター プリクラッシュセースティ シートヒーター ＥＴＣ",
       "carName": "タンク",
       "gradeName": "カスタムＧ",
-      "gradeExtraInfo": "４ＷＤ　オプションツートンカラー　両側電動スライドドア　ＬＥＤヘッドライト／フォグ　純正フルセグナビ　Ｂｌｕｅｔｏｏｔｈ　パノラミックビューモニター　プリクラッシュセースティ　シートヒーター　ＥＴＣ",
+      "gradeExtraInfo": "カスタムＧ",
       "classificationName": "M910A",
       "year": "2020年",
       "mileage": "6.7万K",
-      "color": "パールホワイトＩＩＩ　／ブラックマイカメタリック",
+      "color": "パールホワイトＩＩＩ ／ブラックマイカメタリック",
       "inspection": "検2027年03月",
       "displacement": "1.0L",
       "bodyPrice": "156.6万円",
@@ -978,6 +1538,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260403W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260403W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260403W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260403W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260403W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260403W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260403W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "コンパクトカー"
@@ -986,20 +1554,32 @@
         "普通車",
         "コンパクトカー"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260403W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260421W003",
       "title": "デミオ ＸＤツーリング",
-      "description": "デミオ ＸＤツーリング ４ＷＤ　ディーゼルターボ　純正ナビ　フルセグ　Ｂｌｕｅｔｏｏｔｈ　純正１６インチＡＷ　アームレスト　パドルシフト　クルコン　ＨＵＤ　ＬＥＤヘッドライト　横滑り防止　ステアリングスイッチ　スマートキー",
+      "description": "デミオ ＸＤツーリング ４ＷＤ ディーゼルターボ 純正ナビ フルセグ Ｂｌｕｅｔｏｏｔｈ 純正１６インチＡＷ アームレスト パドルシフト クルコン ＨＵＤ ＬＥＤヘッドライト 横滑り防止 ステアリングスイッチ スマートキー",
       "carName": "デミオ",
       "gradeName": "ＸＤツーリング",
-      "gradeExtraInfo": "４ＷＤ　ディーゼルターボ　純正ナビ　フルセグ　Ｂｌｕｅｔｏｏｔｈ　純正１６インチＡＷ　アームレスト　パドルシフト　クルコン　ＨＵＤ　ＬＥＤヘッドライト　横滑り防止　ステアリングスイッチ　スマートキー",
+      "gradeExtraInfo": "ＸＤツーリング",
       "classificationName": "DJ5AS",
       "year": "2015年",
       "mileage": "1.2万K",
@@ -1014,6 +1594,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W003&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W003&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "コンパクトカー",
@@ -1026,20 +1614,32 @@
         "EV・HV",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W003",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260319W002",
-      "title": "デリカＤ：５ アーバンギア　Ｇ　パワーパッケージ",
-      "description": "デリカＤ：５ アーバンギア　Ｇ　パワーパッケージ 切替式４ＷＤ　ワンオーナー　７人乗り　冬タイヤ＋ＡＷセット　アルパイン製１１．５インチリアモニター　純正１０．１型ナビ　純正ＥＧスターター　前後ドラレコ　パワーバックドア　パドルシフト　両側パワスラ",
+      "title": "デリカＤ：５ アーバンギア Ｇ パワーパッケージ",
+      "description": "デリカＤ：５ アーバンギア Ｇ パワーパッケージ 切替式４ＷＤ ワンオーナー ７人乗り 冬タイヤ＋ＡＷセット アルパイン製１１．５インチリアモニター 純正１０．１型ナビ 純正ＥＧスターター 前後ドラレコ パワーバックドア パドルシフト 両側パワスラ",
       "carName": "デリカＤ：５",
-      "gradeName": "アーバンギア　Ｇ　パワーパッケージ",
-      "gradeExtraInfo": "切替式４ＷＤ　ワンオーナー　７人乗り　冬タイヤ＋ＡＷセット　アルパイン製１１．５インチリアモニター　純正１０．１型ナビ　純正ＥＧスターター　前後ドラレコ　パワーバックドア　パドルシフト　両側パワスラ",
+      "gradeName": "アーバンギア Ｇ パワーパッケージ",
+      "gradeExtraInfo": "アーバンギア Ｇ パワーパッケージ",
       "classificationName": "CV1W",
       "year": "2019年",
       "mileage": "1.1万K",
@@ -1054,6 +1654,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260319W002&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260319W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260319W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260319W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260319W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260319W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260319W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "ミニバン",
@@ -1064,20 +1672,32 @@
         "ミニバン",
         "SUV"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260319W002",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260625W001",
-      "title": "デリカミニ Ｔ　プレミアム",
-      "description": "デリカミニ Ｔ　プレミアム ４ＷＤ　ターボ　ハイブリッド　マイパイロット　純正９インチナビ　純正エンジンスターター　スカッフプレート　マッドガード　オールウェザーマット　天井収納　両側電動スライドドア　ドラレコ　背面テーブル",
+      "title": "デリカミニ Ｔ プレミアム",
+      "description": "デリカミニ Ｔ プレミアム ４ＷＤ ターボ ハイブリッド マイパイロット 純正９インチナビ 純正エンジンスターター スカッフプレート マッドガード オールウェザーマット 天井収納 両側電動スライドドア ドラレコ 背面テーブル",
       "carName": "デリカミニ",
-      "gradeName": "Ｔ　プレミアム",
-      "gradeExtraInfo": "４ＷＤ　ターボ　ハイブリッド　マイパイロット　純正９インチナビ　純正エンジンスターター　スカッフプレート　マッドガード　オールウェザーマット　天井収納　両側電動スライドドア　ドラレコ　背面テーブル",
+      "gradeName": "Ｔ プレミアム",
+      "gradeExtraInfo": "Ｔ プレミアム",
       "classificationName": "B38A",
       "year": "2023年",
       "mileage": "2.4万K",
@@ -1092,6 +1712,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260625W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260625W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260625W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260625W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260625W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260625W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260625W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スライドドア",
@@ -1104,20 +1732,32 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260625W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260323W003",
-      "title": "ハイエースバン スーパーＧＬ　ダークプライムＩＩ",
-      "description": "ハイエースバン スーパーＧＬ　ダークプライムＩＩ ４ＷＤ　ディーゼルターボ　社外１１型フローティングナビ　フルセグ　Ｂｌｕｅｔｏｏｔｈ　バックカメラ　プリクラッシュセーフティ　車線逸脱防止　シートカバー着用　ＥＴＣ　オートハイビーム　フォグ　スマキー",
+      "title": "ハイエースバン スーパーＧＬ ダークプライムＩＩ",
+      "description": "ハイエースバン スーパーＧＬ ダークプライムＩＩ ４ＷＤ ディーゼルターボ 社外１１型フローティングナビ フルセグ Ｂｌｕｅｔｏｏｔｈ バックカメラ プリクラッシュセーフティ 車線逸脱防止 シートカバー着用 ＥＴＣ オートハイビーム フォグ スマキー",
       "carName": "ハイエースバン",
-      "gradeName": "スーパーＧＬ　ダークプライムＩＩ",
-      "gradeExtraInfo": "４ＷＤ　ディーゼルターボ　社外１１型フローティングナビ　フルセグ　Ｂｌｕｅｔｏｏｔｈ　バックカメラ　プリクラッシュセーフティ　車線逸脱防止　シートカバー着用　ＥＴＣ　オートハイビーム　フォグ　スマキー",
+      "gradeName": "スーパーＧＬ ダークプライムＩＩ",
+      "gradeExtraInfo": "スーパーＧＬ ダークプライムＩＩ",
       "classificationName": "GDH206V",
       "year": "2019年",
       "mileage": "10.1万K",
@@ -1132,6 +1772,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W003&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260323W003&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "ミニバン",
@@ -1142,20 +1790,32 @@
         "ミニバン",
         "バン・トラック"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260323W003",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260520W002",
       "title": "ハスラー Ｊスタイル",
-      "description": "ハスラー Ｊスタイル ４ＷＤ　ハイブリッド　オプションツートンカラー　純正オプション９インチナビ　全方位モニター　前席シートヒーター　ルーフレール　ＵＳＢポート　スノーモード　パーキングソナー　シートバックテーブル　フォグ",
+      "description": "ハスラー Ｊスタイル ４ＷＤ ハイブリッド オプションツートンカラー 純正オプション９インチナビ 全方位モニター 前席シートヒーター ルーフレール ＵＳＢポート スノーモード パーキングソナー シートバックテーブル フォグ",
       "carName": "ハスラー",
       "gradeName": "Ｊスタイル",
-      "gradeExtraInfo": "４ＷＤ　ハイブリッド　オプションツートンカラー　純正オプション９インチナビ　全方位モニター　前席シートヒーター　ルーフレール　ＵＳＢポート　スノーモード　パーキングソナー　シートバックテーブル　フォグ",
+      "gradeExtraInfo": "Ｊスタイル",
       "classificationName": "MR92S",
       "year": "2022年",
       "mileage": "2.6万K",
@@ -1170,6 +1830,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260520W002&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260520W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260520W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260520W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260520W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260520W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260520W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スタンダード",
@@ -1182,20 +1850,32 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260520W002",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260610W001",
       "title": "ハスラー ハイブリッドＸ",
-      "description": "ハスラー ハイブリッドＸ ４ＷＤ　ＡＡ評価点［ＲＡ点］左センターピラー　純正９インチナビ　全方位カメラ　オプションツートンカラー　ＬＥＤヘッドライト／フォグ　デュアルカメラブレーキ　前席シートヒーター　ＥＴＣ　スノーモード",
+      "description": "ハスラー ハイブリッドＸ ４ＷＤ ＡＡ評価点［ＲＡ点］左センターピラー 純正９インチナビ 全方位カメラ オプションツートンカラー ＬＥＤヘッドライト／フォグ デュアルカメラブレーキ 前席シートヒーター ＥＴＣ スノーモード",
       "carName": "ハスラー",
       "gradeName": "ハイブリッドＸ",
-      "gradeExtraInfo": "４ＷＤ　ＡＡ評価点［ＲＡ点］左センターピラー　純正９インチナビ　全方位カメラ　オプションツートンカラー　ＬＥＤヘッドライト／フォグ　デュアルカメラブレーキ　前席シートヒーター　ＥＴＣ　スノーモード",
+      "gradeExtraInfo": "ハイブリッドＸ",
       "classificationName": "MR92S",
       "year": "2020年",
       "mileage": "3.3万K",
@@ -1210,6 +1890,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260610W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260610W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260610W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260610W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260610W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260610W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260610W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "SUV",
@@ -1220,20 +1908,32 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260610W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260609W002",
       "title": "ハスラー ハイブリッドＸ",
-      "description": "ハスラー ハイブリッドＸ ４ＷＤ　ハイブリッド　社外ナビ　Ｂｌｕｅｔｏｏｔｈ　バックカメラ　純正１５インチアルミホイール　前席シートヒーター　パーキングソナー　シートバックテーブル　スノーモード　ＬＥＤヘッドライト／フォグ",
+      "description": "ハスラー ハイブリッドＸ ４ＷＤ ハイブリッド 社外ナビ Ｂｌｕｅｔｏｏｔｈ バックカメラ 純正１５インチアルミホイール 前席シートヒーター パーキングソナー シートバックテーブル スノーモード ＬＥＤヘッドライト／フォグ",
       "carName": "ハスラー",
       "gradeName": "ハイブリッドＸ",
-      "gradeExtraInfo": "４ＷＤ　ハイブリッド　社外ナビ　Ｂｌｕｅｔｏｏｔｈ　バックカメラ　純正１５インチアルミホイール　前席シートヒーター　パーキングソナー　シートバックテーブル　スノーモード　ＬＥＤヘッドライト／フォグ",
+      "gradeExtraInfo": "ハイブリッドＸ",
       "classificationName": "MR92S",
       "year": "2021年",
       "mileage": "7.6万K",
@@ -1248,6 +1948,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260609W002&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260609W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260609W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260609W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260609W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260609W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260609W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スタンダード",
@@ -1260,23 +1968,35 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260609W002",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260624W002",
       "title": "フィット ｅ：ＨＥＶホーム",
-      "description": "フィット ｅ：ＨＥＶホーム ４ＷＤ　ワンオーナー　ホンダセンシング　純正ナビ　バックカメラ　エンジンスターター　ＥＴＣ　ハーフレザーシート　ＬＥＤヘッドライト　パーキングソナー　マルチインフォディスプレイ　クルーズコントロール",
+      "description": "フィット ｅ：ＨＥＶホーム ４ＷＤ ワンオーナー ホンダセンシング 純正ナビ バックカメラ エンジンスターター ＥＴＣ ハーフレザーシート ＬＥＤヘッドライト パーキングソナー マルチインフォディスプレイ クルーズコントロール",
       "carName": "フィット",
       "gradeName": "ｅ：ＨＥＶホーム",
-      "gradeExtraInfo": "４ＷＤ　ワンオーナー　ホンダセンシング　純正ナビ　バックカメラ　エンジンスターター　ＥＴＣ　ハーフレザーシート　ＬＥＤヘッドライト　パーキングソナー　マルチインフォディスプレイ　クルーズコントロール",
+      "gradeExtraInfo": "ｅ：ＨＥＶホーム",
       "classificationName": "GR4",
       "year": "2021年",
-      "mileage": "2.0万K",
+      "mileage": "2万K",
       "color": "クリスタルブラックパール",
       "inspection": "車検整備付",
       "displacement": "1.5L",
@@ -1288,6 +2008,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260624W002&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260624W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260624W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260624W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260624W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260624W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260624W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "コンパクトカー",
@@ -1300,20 +2028,32 @@
         "ステーションワゴン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260624W002",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30251222W002",
       "title": "ポルテ Ｇ",
-      "description": "ポルテ Ｇ 切替式４ＷＤ　大開口パワースライドドア　シートヒーター　フロントワイパーデアイサー　バックカメラ　フルセグ対応社外ナビ　社外エンジンスターター　ステアリングスイッチ　ＥＴＣ　フォグ　プッシュスタート",
+      "description": "ポルテ Ｇ 切替式４ＷＤ 大開口パワースライドドア シートヒーター フロントワイパーデアイサー バックカメラ フルセグ対応社外ナビ 社外エンジンスターター ステアリングスイッチ ＥＴＣ フォグ プッシュスタート",
       "carName": "ポルテ",
       "gradeName": "Ｇ",
-      "gradeExtraInfo": "切替式４ＷＤ　大開口パワースライドドア　シートヒーター　フロントワイパーデアイサー　バックカメラ　フルセグ対応社外ナビ　社外エンジンスターター　ステアリングスイッチ　ＥＴＣ　フォグ　プッシュスタート",
+      "gradeExtraInfo": "Ｇ",
       "classificationName": "NCP145",
       "year": "2013年",
       "mileage": "9.3万K",
@@ -1328,6 +2068,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251222W002&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251222W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251222W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251222W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251222W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251222W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30251222W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "コンパクトカー"
@@ -1336,20 +2084,32 @@
         "普通車",
         "コンパクトカー"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30251222W002",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260710W001",
       "title": "ミニキャブトラック Ｖタイプ",
-      "description": "ミニキャブトラック Ｖタイプ 切替式４ＷＤ　試乗ＯＫ　下取り車　タイミングベルトＲ２．５　５０，８３３ＫＭ時点で交換済み　２６年製夏タイヤ装着　５速マニュアル　ラバーフロアマット　荷台ゴムマット　車検Ｒ１０．５　パワーステアリング",
+      "description": "ミニキャブトラック Ｖタイプ 切替式４ＷＤ 試乗ＯＫ 下取り車 タイミングベルトＲ２．５ ５０，８３３ＫＭ時点で交換済み ２６年製夏タイヤ装着 ５速マニュアル ラバーフロアマット 荷台ゴムマット 車検Ｒ１０．５ パワーステアリング",
       "carName": "ミニキャブトラック",
       "gradeName": "Ｖタイプ",
-      "gradeExtraInfo": "切替式４ＷＤ　試乗ＯＫ　下取り車　タイミングベルトＲ２．５　５０，８３３ＫＭ時点で交換済み　２６年製夏タイヤ装着　５速マニュアル　ラバーフロアマット　荷台ゴムマット　車検Ｒ１０．５　パワーステアリング",
+      "gradeExtraInfo": "Ｖタイプ",
       "classificationName": "U62T",
       "year": "2010年",
       "mileage": "11.6万K",
@@ -1364,6 +2124,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260710W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260710W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260710W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260710W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260710W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260710W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260710W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "トラック",
@@ -1374,20 +2142,32 @@
         "トラック",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260710W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260624W001",
       "title": "ムーヴキャンバス ストライプスＧ",
-      "description": "ムーヴキャンバス ストライプスＧ ４ＷＤ　ハイブリッド　ツートーンカラー　保温機能付カップホルダー　予約機能付両側パワースライドドア　パワーモード　ブレーキホールド　前席シートヒーター　ＬＥＤヘッドライト／フォグ　パーキングソナー",
+      "description": "ムーヴキャンバス ストライプスＧ ４ＷＤ ハイブリッド ツートーンカラー 保温機能付カップホルダー 予約機能付両側パワースライドドア パワーモード ブレーキホールド 前席シートヒーター ＬＥＤヘッドライト／フォグ パーキングソナー",
       "carName": "ムーヴキャンバス",
       "gradeName": "ストライプスＧ",
-      "gradeExtraInfo": "４ＷＤ　ハイブリッド　ツートーンカラー　保温機能付カップホルダー　予約機能付両側パワースライドドア　パワーモード　ブレーキホールド　前席シートヒーター　ＬＥＤヘッドライト／フォグ　パーキングソナー",
+      "gradeExtraInfo": "ストライプスＧ",
       "classificationName": "LA860S",
       "year": "2025年",
       "mileage": "0.2万K",
@@ -1402,6 +2182,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260624W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260624W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260624W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260624W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260624W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260624W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260624W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スライドドア",
@@ -1412,20 +2200,32 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260624W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260628W002",
-      "title": "ヤリスクロス ハイブリッドＺ　ウルバーノ",
-      "description": "ヤリスクロス ハイブリッドＺ　ウルバーノ ４ＷＤ　ハイブリッド　全方位カメラ　ハンドルヒーター　パワーバックドア　ワイパーデアイサー　デジタルインナーミラー型ドラレコ　純正８インチナビ　ミラーキャスト　ＨＤＭＩ　パワーシート　デイライト",
+      "title": "ヤリスクロス ハイブリッドＺ ウルバーノ",
+      "description": "ヤリスクロス ハイブリッドＺ ウルバーノ ４ＷＤ ハイブリッド 全方位カメラ ハンドルヒーター パワーバックドア ワイパーデアイサー デジタルインナーミラー型ドラレコ 純正８インチナビ ミラーキャスト ＨＤＭＩ パワーシート デイライト",
       "carName": "ヤリスクロス",
-      "gradeName": "ハイブリッドＺ　ウルバーノ",
-      "gradeExtraInfo": "４ＷＤ　ハイブリッド　全方位カメラ　ハンドルヒーター　パワーバックドア　ワイパーデアイサー　デジタルインナーミラー型ドラレコ　純正８インチナビ　ミラーキャスト　ＨＤＭＩ　パワーシート　デイライト",
+      "gradeName": "ハイブリッドＺ ウルバーノ",
+      "gradeExtraInfo": "ハイブリッドＺ ウルバーノ",
       "classificationName": "MXPJ15",
       "year": "2025年",
       "mileage": "0.4万K",
@@ -1440,6 +2240,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260628W002&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260628W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260628W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260628W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260628W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260628W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260628W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "コンパクトカー",
@@ -1454,20 +2262,32 @@
         "ステーションワゴン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260628W002",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260416W001",
       "title": "ランドクルーザープラド ＴＸ",
-      "description": "ランドクルーザープラド ＴＸ ４ＷＤ　ディーゼルターボ　買取車　ワンオーナー　オプションＬＥＤヘッドライト装着（Ｌパッケージ標準装備品）　外ＡＷ＋夏タイヤ　純正ＡＷ＋冬タイヤセット　純正ナビ　Ｂカメラ　ＥＴＣ　センターデフロック",
+      "description": "ランドクルーザープラド ＴＸ ４ＷＤ ディーゼルターボ 買取車 ワンオーナー オプションＬＥＤヘッドライト装着（Ｌパッケージ標準装備品） 外ＡＷ＋夏タイヤ 純正ＡＷ＋冬タイヤセット 純正ナビ Ｂカメラ ＥＴＣ センターデフロック",
       "carName": "ランドクルーザープラド",
       "gradeName": "ＴＸ",
-      "gradeExtraInfo": "４ＷＤ　ディーゼルターボ　買取車　ワンオーナー　オプションＬＥＤヘッドライト装着（Ｌパッケージ標準装備品）　外ＡＷ＋夏タイヤ　純正ＡＷ＋冬タイヤセット　純正ナビ　Ｂカメラ　ＥＴＣ　センターデフロック",
+      "gradeExtraInfo": "ＴＸ",
       "classificationName": "GDJ150W",
       "year": "2015年",
       "mileage": "4.9万K",
@@ -1482,6 +2302,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260416W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260416W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260416W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260416W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260416W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260416W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260416W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "SUV"
@@ -1490,23 +2318,35 @@
         "普通車",
         "SUV"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260416W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260522W001",
       "title": "ルークス Ｘ",
-      "description": "ルークス Ｘ ４ＷＤ　ハイブリッド　ハンドルヒーター　前席シートヒーター　アラウンドビューモニター　社外ナビ　Ｂｌｕｅｔｏｏｔｈ　電動スライドドア　ソナー　エマージェンシーブレーキ　先行車発進おしらせ　ＥＴＣ",
+      "description": "ルークス Ｘ ４ＷＤ ハイブリッド ハンドルヒーター 前席シートヒーター アラウンドビューモニター 社外ナビ Ｂｌｕｅｔｏｏｔｈ 電動スライドドア ソナー エマージェンシーブレーキ 先行車発進おしらせ ＥＴＣ",
       "carName": "ルークス",
       "gradeName": "Ｘ",
-      "gradeExtraInfo": "４ＷＤ　ハイブリッド　ハンドルヒーター　前席シートヒーター　アラウンドビューモニター　社外ナビ　Ｂｌｕｅｔｏｏｔｈ　電動スライドドア　ソナー　エマージェンシーブレーキ　先行車発進おしらせ　ＥＴＣ",
+      "gradeExtraInfo": "Ｘ",
       "classificationName": "B47A",
       "year": "2024年",
-      "mileage": "1.0万K",
+      "mileage": "1万K",
       "color": "ブラック",
       "inspection": "車検整備付",
       "displacement": "660cc",
@@ -1518,6 +2358,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260522W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260522W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260522W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260522W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260522W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260522W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260522W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スライドドア",
@@ -1528,20 +2376,32 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260522W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260522W002",
-      "title": "ルークス ハイウェイスター　Ｘ　プロパイロットエディション",
-      "description": "ルークス ハイウェイスター　Ｘ　プロパイロットエディション ４ＷＤ　ハイブリッド　プロパイロット　デジタルインナーミラー　ハンドルヒーター　シートバックテーブル　前席シートヒーター　天井サーキュレーター　ＥＴＣ　ブレーキホールド　アラウンドビューモニター",
+      "title": "ルークス ハイウェイスター Ｘ プロパイロットエディション",
+      "description": "ルークス ハイウェイスター Ｘ プロパイロットエディション ４ＷＤ ハイブリッド プロパイロット デジタルインナーミラー ハンドルヒーター シートバックテーブル 前席シートヒーター 天井サーキュレーター ＥＴＣ ブレーキホールド アラウンドビューモニター",
       "carName": "ルークス",
-      "gradeName": "ハイウェイスター　Ｘ　プロパイロットエディション",
-      "gradeExtraInfo": "４ＷＤ　ハイブリッド　プロパイロット　デジタルインナーミラー　ハンドルヒーター　シートバックテーブル　前席シートヒーター　天井サーキュレーター　ＥＴＣ　ブレーキホールド　アラウンドビューモニター",
+      "gradeName": "ハイウェイスター Ｘ プロパイロットエディション",
+      "gradeExtraInfo": "ハイウェイスター Ｘ プロパイロットエディション",
       "classificationName": "B47A",
       "year": "2024年",
       "mileage": "4.6万K",
@@ -1556,6 +2416,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260522W002&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260522W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260522W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260522W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260522W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260522W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260522W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スライドドア",
@@ -1566,20 +2434,32 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260522W002",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260515W003",
-      "title": "ルークス ハイウェイスター　Ｘ",
-      "description": "ルークス ハイウェイスター　Ｘ ４ＷＤ　Ｓハイブリッド　純正９インチＯＰナビ　アラウンドビューモニター　Ｂｌｕｅｔｏｏｔｈ　フルセグＴＶ　ハンズフリー左パワースライドドア　アイドリングストップ　セーフティシールド　ＬＥＤヘッドライト",
+      "title": "ルークス ハイウェイスター Ｘ",
+      "description": "ルークス ハイウェイスター Ｘ ４ＷＤ Ｓハイブリッド 純正９インチＯＰナビ アラウンドビューモニター Ｂｌｕｅｔｏｏｔｈ フルセグＴＶ ハンズフリー左パワースライドドア アイドリングストップ セーフティシールド ＬＥＤヘッドライト",
       "carName": "ルークス",
-      "gradeName": "ハイウェイスター　Ｘ",
-      "gradeExtraInfo": "４ＷＤ　Ｓハイブリッド　純正９インチＯＰナビ　アラウンドビューモニター　Ｂｌｕｅｔｏｏｔｈ　フルセグＴＶ　ハンズフリー左パワースライドドア　アイドリングストップ　セーフティシールド　ＬＥＤヘッドライト",
+      "gradeName": "ハイウェイスター Ｘ",
+      "gradeExtraInfo": "ハイウェイスター Ｘ",
       "classificationName": "B47A",
       "year": "2021年",
       "mileage": "8.9万K",
@@ -1594,6 +2474,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260515W003&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260515W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260515W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260515W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260515W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260515W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260515W003&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スライドドア",
@@ -1604,20 +2492,32 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260515W003",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260327W001",
       "title": "レガシィアウトバック リミテッドＥＸ",
-      "description": "レガシィアウトバック リミテッドＥＸ ４ＷＤ　最上級Ｇ　ターボ　純正ナビ　フルセグＴＶ　Ｆ・Ｓ・Ｂカメラ　Ｂｌｕｅｔｏｏｔｈ　ヒルディセントコントロール　Ｘ－ＭＯＤＥ　Ｐバックドア　メモリー付きＰシート　シートヒーター　キャリアベース変形",
+      "description": "レガシィアウトバック リミテッドＥＸ ４ＷＤ 最上級Ｇ ターボ 純正ナビ フルセグＴＶ Ｆ・Ｓ・Ｂカメラ Ｂｌｕｅｔｏｏｔｈ ヒルディセントコントロール Ｘ－ＭＯＤＥ Ｐバックドア メモリー付きＰシート シートヒーター キャリアベース変形",
       "carName": "レガシィアウトバック",
       "gradeName": "リミテッドＥＸ",
-      "gradeExtraInfo": "４ＷＤ　最上級Ｇ　ターボ　純正ナビ　フルセグＴＶ　Ｆ・Ｓ・Ｂカメラ　Ｂｌｕｅｔｏｏｔｈ　ヒルディセントコントロール　Ｘ－ＭＯＤＥ　Ｐバックドア　メモリー付きＰシート　シートヒーター　キャリアベース変形",
+      "gradeExtraInfo": "リミテッドＥＸ",
       "classificationName": "BT5",
       "year": "2022年",
       "mileage": "5.7万K",
@@ -1632,6 +2532,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260327W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260327W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260327W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260327W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260327W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260327W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260327W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "SUV"
@@ -1640,20 +2548,32 @@
         "普通車",
         "SUV"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260327W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260511W002",
-      "title": "レジアスエースバン スーパーＧＬ　ダークプライム",
-      "description": "レジアスエースバン スーパーＧＬ　ダークプライム ４ＷＤ　ベッドキット　オプションカラー　フリップダウンモニター　両側電動スライドドア　バックモニター　バックカメラ　社外ナビ　社外モニター　Ｂｌｕｅｔｏｏｔｈ　社外ＡＷ　社外コンソールボックス　ＥＴＣ",
+      "title": "レジアスエースバン スーパーＧＬ ダークプライム",
+      "description": "レジアスエースバン スーパーＧＬ ダークプライム ４ＷＤ ベッドキット オプションカラー フリップダウンモニター 両側電動スライドドア バックモニター バックカメラ 社外ナビ 社外モニター Ｂｌｕｅｔｏｏｔｈ 社外ＡＷ 社外コンソールボックス ＥＴＣ",
       "carName": "レジアスエースバン",
-      "gradeName": "スーパーＧＬ　ダークプライム",
-      "gradeExtraInfo": "４ＷＤ　ベッドキット　オプションカラー　フリップダウンモニター　両側電動スライドドア　バックモニター　バックカメラ　社外ナビ　社外モニター　Ｂｌｕｅｔｏｏｔｈ　社外ＡＷ　社外コンソールボックス　ＥＴＣ",
+      "gradeName": "スーパーＧＬ ダークプライム",
+      "gradeExtraInfo": "スーパーＧＬ ダークプライム",
       "classificationName": "TRH216K",
       "year": "2017年",
       "mileage": "14.9万K",
@@ -1668,6 +2588,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260511W002&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260511W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260511W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260511W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260511W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260511W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260511W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "ミニバン",
@@ -1678,23 +2606,35 @@
         "ミニバン",
         "バン・トラック"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260511W002",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260408W001",
-      "title": "レヴォーグ ＳＴＩスポーツ　ＥＸ",
-      "description": "レヴォーグ ＳＴＩスポーツ　ＥＸ ４ＷＤ　ＳＴＩ限定デザイン本革シート　ＷＯＲＫ製１８インチＡＷ＋夏タイヤ　純正ＡＷ＋冬タイヤ　パワーバックドア　メモリー付パワーシート　ＢＳＭ　Ｆ＋Ｓ＋Ｂカメラ　スマホリンク４座シートヒーター",
+      "title": "レヴォーグ ＳＴＩスポーツ ＥＸ",
+      "description": "レヴォーグ ＳＴＩスポーツ ＥＸ ４ＷＤ ＳＴＩ限定デザイン本革シート ＷＯＲＫ製１８インチＡＷ＋夏タイヤ 純正ＡＷ＋冬タイヤ パワーバックドア メモリー付パワーシート ＢＳＭ Ｆ＋Ｓ＋Ｂカメラ スマホリンク４座シートヒーター",
       "carName": "レヴォーグ",
-      "gradeName": "ＳＴＩスポーツ　ＥＸ",
-      "gradeExtraInfo": "４ＷＤ　ＳＴＩ限定デザイン本革シート　ＷＯＲＫ製１８インチＡＷ＋夏タイヤ　純正ＡＷ＋冬タイヤ　パワーバックドア　メモリー付パワーシート　ＢＳＭ　Ｆ＋Ｓ＋Ｂカメラ　スマホリンク４座シートヒーター",
+      "gradeName": "ＳＴＩスポーツ ＥＸ",
+      "gradeExtraInfo": "ＳＴＩスポーツ ＥＸ",
       "classificationName": "VN5",
       "year": "2021年",
-      "mileage": "4.0万K",
+      "mileage": "4万K",
       "color": "クリスタルブラックシリカ",
       "inspection": "車検整備付",
       "displacement": "1.8L",
@@ -1706,6 +2646,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260408W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260408W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260408W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260408W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260408W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260408W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260408W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "ステーションワゴン",
@@ -1716,20 +2664,32 @@
         "ステーションワゴン",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260408W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260409W001",
       "title": "レヴォーグ １．６ＳＴＩスポーツアイサイト",
-      "description": "レヴォーグ １．６ＳＴＩスポーツアイサイト ４ＷＤ　ＳＴＩスポイラー　スカートリップ　本革シート　シートヒーター　純正ダイアトーンナビ　バックカメラ　ＥＴＣ　ＬＥＤヘッドライト／フォグ／デイライト　メモリーシート　追従式クルーズコントロール",
+      "description": "レヴォーグ １．６ＳＴＩスポーツアイサイト ４ＷＤ ＳＴＩスポイラー スカートリップ 本革シート シートヒーター 純正ダイアトーンナビ バックカメラ ＥＴＣ ＬＥＤヘッドライト／フォグ／デイライト メモリーシート 追従式クルーズコントロール",
       "carName": "レヴォーグ",
       "gradeName": "１．６ＳＴＩスポーツアイサイト",
-      "gradeExtraInfo": "４ＷＤ　ＳＴＩスポイラー　スカートリップ　本革シート　シートヒーター　純正ダイアトーンナビ　バックカメラ　ＥＴＣ　ＬＥＤヘッドライト／フォグ／デイライト　メモリーシート　追従式クルーズコントロール",
+      "gradeExtraInfo": "１．６ＳＴＩスポーツアイサイト",
       "classificationName": "VM4",
       "year": "2019年",
       "mileage": "1.8万K",
@@ -1744,6 +2704,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260409W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260409W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260409W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260409W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260409W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260409W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260409W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "ステーションワゴン",
@@ -1754,20 +2722,32 @@
         "ステーションワゴン",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260409W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260617W002",
       "title": "ワゴンＲ ＦＺ",
-      "description": "ワゴンＲ ＦＺ ４ＷＤ　Ｓエネチャージハイブリッド　前席シートヒーター　社外ナビ　ＥＴＣ　純正アルミホイール＋夏タイヤ積込　社外アルミホイール着用　ＬＥＤイルミ　レーダーブレーキサポート　ドアミラーヒーター　ステリモ",
+      "description": "ワゴンＲ ＦＺ ４ＷＤ Ｓエネチャージハイブリッド 前席シートヒーター 社外ナビ ＥＴＣ 純正アルミホイール＋夏タイヤ積込 社外アルミホイール着用 ＬＥＤイルミ レーダーブレーキサポート ドアミラーヒーター ステリモ",
       "carName": "ワゴンＲ",
       "gradeName": "ＦＺ",
-      "gradeExtraInfo": "４ＷＤ　Ｓエネチャージハイブリッド　前席シートヒーター　社外ナビ　ＥＴＣ　純正アルミホイール＋夏タイヤ積込　社外アルミホイール着用　ＬＥＤイルミ　レーダーブレーキサポート　ドアミラーヒーター　ステリモ",
+      "gradeExtraInfo": "ＦＺ",
       "classificationName": "MH44S",
       "year": "2015年",
       "mileage": "8.9万K",
@@ -1782,6 +2762,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260617W002&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260617W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260617W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260617W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260617W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260617W002&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260617W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スタンダード",
@@ -1792,20 +2780,32 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260617W002",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260526W003",
       "title": "ワゴンＲスマイル ハイブリッドＳ",
-      "description": "ワゴンＲスマイル ハイブリッドＳ ４ＷＤ　ハイブリッド　ツートーン　全方位モニター　純正ＯＰ９インチナビ　前席シートヒーター　ＵＳＢポート　ヘッドアップディスプレイ　アダプティブクルコン　電動スライドドア　フルセグ　Ｂｌｕｅｔｏｏｔｈ",
+      "description": "ワゴンＲスマイル ハイブリッドＳ ４ＷＤ ハイブリッド ツートーン 全方位モニター 純正ＯＰ９インチナビ 前席シートヒーター ＵＳＢポート ヘッドアップディスプレイ アダプティブクルコン 電動スライドドア フルセグ Ｂｌｕｅｔｏｏｔｈ",
       "carName": "ワゴンＲスマイル",
       "gradeName": "ハイブリッドＳ",
-      "gradeExtraInfo": "４ＷＤ　ハイブリッド　ツートーン　全方位モニター　純正ＯＰ９インチナビ　前席シートヒーター　ＵＳＢポート　ヘッドアップディスプレイ　アダプティブクルコン　電動スライドドア　フルセグ　Ｂｌｕｅｔｏｏｔｈ",
+      "gradeExtraInfo": "ハイブリッドＳ",
       "classificationName": "MX91S",
       "year": "2025年",
       "mileage": "0.3万K",
@@ -1820,6 +2820,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260526W003&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260526W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260526W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260526W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260526W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260526W003&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260526W003&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スライドドア",
@@ -1830,20 +2838,32 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260526W003",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260421W001",
-      "title": "ヴォクシー ＺＳ　煌ＩＩ",
-      "description": "ヴォクシー ＺＳ　煌ＩＩ ４ＷＤ　純正１０インチナビ　フリップダウンモニター　純正エンジンスターター　ＴＶキット　両側電動スライドドア　クルコン　フルセグ　Ｂｌｕｅｔｏｏｔｈ　ＵＳＢポート　シートバックテーブル　車線逸脱防止",
+      "title": "ヴォクシー ＺＳ 煌ＩＩ",
+      "description": "ヴォクシー ＺＳ 煌ＩＩ ４ＷＤ 純正１０インチナビ フリップダウンモニター 純正エンジンスターター ＴＶキット 両側電動スライドドア クルコン フルセグ Ｂｌｕｅｔｏｏｔｈ ＵＳＢポート シートバックテーブル 車線逸脱防止",
       "carName": "ヴォクシー",
-      "gradeName": "ＺＳ　煌ＩＩ",
-      "gradeExtraInfo": "４ＷＤ　純正１０インチナビ　フリップダウンモニター　純正エンジンスターター　ＴＶキット　両側電動スライドドア　クルコン　フルセグ　Ｂｌｕｅｔｏｏｔｈ　ＵＳＢポート　シートバックテーブル　車線逸脱防止",
+      "gradeName": "ＺＳ 煌ＩＩ",
+      "gradeExtraInfo": "ＺＳ 煌ＩＩ",
       "classificationName": "ZRR85W",
       "year": "2019年",
       "mileage": "9.5万K",
@@ -1858,6 +2878,14 @@
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "ミニバン"
@@ -1866,64 +2894,108 @@
         "普通車",
         "ミニバン"
       ],
-      "updatedAt": "2026-07-11T12:38:56.641Z",
+      "listResult": null,
+      "updatedAt": "2026-07-11T13:37:53.156Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W001",
+        "attempts": 2,
+        "year": true,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260711W001",
-      "title": "ＲＸ",
+      "title": "ＲＸ 1",
       "description": "ＲＸ",
       "carName": "ＲＸ",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "2022年",
-      "mileage": "96600万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "",
-      "totalPrice": "",
-      "imageUrl": "https://secure.goo-net.com/090/0902332/Q/0902332A30260711W00179.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260711W001",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2018年",
+      "mileage": "9.7万K",
+      "color": "カタログカラー ソニッククォーツ｜10 ホワイトノーヴァガラスフレーク｜10 レッドマイカクリスタルシャイン｜15 ディープブルーマイカ｜20 ヒートブルーコントラストレイヤリング｜20 グラファイト",
+      "inspection": "00330002",
+      "displacement": "2018cc",
+      "bodyPrice": "9.7万円",
+      "totalPrice": "9.7万円",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260711W00179.jpg?1783776998",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260711W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260711W001&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260711W001&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260711W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260711W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260711W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [],
       "typeKeys": [],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": false,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260711W001&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260709W001",
-      "title": "クラウンハイブリッド",
+      "title": "クラウンハイブリッド 1",
       "description": "クラウンハイブリッド",
       "carName": "クラウンハイブリッド",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "58100万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "310.5万円",
-      "totalPrice": "317.2万円",
-      "imageUrl": "https://secure.goo-net.com/7000902332/30260709/Q/70009023323026070900100.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260709W001",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2019年",
+      "mileage": "5.8万K",
+      "color": "ホワイトパールクリスタルシャイン",
+      "inspection": "2028",
+      "displacement": "2019cc",
+      "bodyPrice": "5.8万円",
+      "totalPrice": "5.8万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260709/H/70009023323026070900100.jpg?1783776998",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260709W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W001&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W001&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260709W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "セダン",
@@ -1936,34 +3008,61 @@
         "EV・HV",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W001&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260709W004",
-      "title": "ＮＶ１００クリッパーリオ",
+      "title": "ＮＶ１００クリッパーリオ 1",
       "description": "ＮＶ１００クリッパーリオ",
       "carName": "ＮＶ１００クリッパーリオ",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "62400万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "123.1万円",
-      "totalPrice": "126.3万円",
-      "imageUrl": "https://secure.goo-net.com/7000902332/30260709/Q/70009023323026070900400.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260709W004",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2019年",
+      "mileage": "6.2万K",
+      "color": "スノーパールホワイト",
+      "inspection": "2028",
+      "displacement": "2019cc",
+      "bodyPrice": "6.2万円",
+      "totalPrice": "6.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260709/H/70009023323026070900400.jpg?1783776998",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260709W004&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W004&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W004&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W004&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W004&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260709W004&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スライドドア",
@@ -1974,34 +3073,61 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W004&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260310W001",
-      "title": "ムーヴ",
+      "title": "ムーヴ 1",
       "description": "ムーヴ",
       "carName": "ムーヴ",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "197400万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "40.9万円",
-      "totalPrice": "44.3万円",
-      "imageUrl": "https://secure.goo-net.com/7000902332/30260310/Q/70009023323026031000100.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260310W001",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2015年",
+      "mileage": "19.7万K",
+      "color": "ナイトシャドーパープルクリスタルメタリック",
+      "inspection": "2028",
+      "displacement": "2015cc",
+      "bodyPrice": "19.7万円",
+      "totalPrice": "19.7万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260310/H/70009023323026031000100.jpg?1783776998",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260310W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260310W001&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260310W001&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260310W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260310W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260310W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スタンダード",
@@ -2014,34 +3140,61 @@
         "スポーティ",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260310W001&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260706W002",
-      "title": "デイズルークス",
+      "title": "デイズルークス 1",
       "description": "デイズルークス",
       "carName": "デイズルークス",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "73700万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "86.2万円",
-      "totalPrice": "88.8万円",
-      "imageUrl": "https://secure.goo-net.com/7000902332/30260706/Q/70009023323026070600200.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260706W002",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2017年",
+      "mileage": "7.4万K",
+      "color": "パールホワイト",
+      "inspection": "2027",
+      "displacement": "2017cc",
+      "bodyPrice": "7.4万円",
+      "totalPrice": "7.4万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260706/H/70009023323026070600200.jpg?1783776998",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260706W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260706W002&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260706W002&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260706W002&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260706W002&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260706W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スライドドア",
@@ -2052,34 +3205,61 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260706W002&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260709W003",
-      "title": "Ｎ－ＢＯＸカスタム",
+      "title": "Ｎ－ＢＯＸカスタム 1",
       "description": "Ｎ－ＢＯＸカスタム",
       "carName": "Ｎ－ＢＯＸカスタム",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "53400万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "151.8万円",
-      "totalPrice": "155.7万円",
-      "imageUrl": "https://secure.goo-net.com/090/0902332/Q/0902332A30260709W00379.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260709W003",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2022年",
+      "mileage": "5.3万K",
+      "color": "プレミアムベルベットパープルパール",
+      "inspection": "00330002",
+      "displacement": "2022cc",
+      "bodyPrice": "5.3万円",
+      "totalPrice": "5.3万円",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260709W00379.jpg?1783776998",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260709W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W003&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W003&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W003&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W003&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260709W003&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スライドドア",
@@ -2090,34 +3270,61 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W003&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260709W002",
-      "title": "ルーミー",
+      "title": "ルーミー 1",
       "description": "ルーミー",
       "carName": "ルーミー",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "28800万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "178.2万円",
-      "totalPrice": "186.2万円",
-      "imageUrl": "https://secure.goo-net.com/090/0902332/Q/0902332A30260709W00279.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260709W002",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2021年",
+      "mileage": "2.9万K",
+      "color": "ブリリアントカッパークリスタルマイカＩＩ",
+      "inspection": "00330002",
+      "displacement": "2021cc",
+      "bodyPrice": "2.9万円",
+      "totalPrice": "2.9万円",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260709W00279.jpg?1783777005",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260709W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W002&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W002&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W002&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W002&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260709W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "コンパクトカー",
@@ -2132,34 +3339,61 @@
         "ステーションワゴン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W002&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260526W002",
-      "title": "ノア",
+      "title": "ノア 1",
       "description": "ノア",
       "carName": "ノア",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "79900万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "241.7万円",
-      "totalPrice": "252.2万円",
-      "imageUrl": "https://secure.goo-net.com/7000902332/30260526/Q/70009023323026052600200.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260526W002",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2019年",
+      "mileage": "8万K",
+      "color": "パールホワイト",
+      "inspection": "00330002",
+      "displacement": "2019cc",
+      "bodyPrice": "8.0万円",
+      "totalPrice": "8.0万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260526/H/70009023323026052600200.jpg?1783777005",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260526W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260526W002&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260526W002&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260526W002&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260526W002&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260526W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "ミニバン"
@@ -2168,34 +3402,61 @@
         "普通車",
         "ミニバン"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260526W002&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260526W004",
-      "title": "ポルテ",
+      "title": "ポルテ 1",
       "description": "ポルテ",
       "carName": "ポルテ",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "83200万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "32.1万円",
-      "totalPrice": "38.3万円",
-      "imageUrl": "https://secure.goo-net.com/7000902332/30260526/Q/70009023323026052600400.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260526W004",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2012年",
+      "mileage": "8.3万K",
+      "color": "シルバーマイカメタリック",
+      "inspection": "2027",
+      "displacement": "2012cc",
+      "bodyPrice": "8.3万円",
+      "totalPrice": "8.3万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260526/H/70009023323026052600400.jpg?1783777005",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260526W004&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260526W004&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260526W004&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260526W004&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260526W004&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260526W004&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "コンパクトカー",
@@ -2206,34 +3467,61 @@
         "コンパクトカー",
         "ミニバン"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260526W004&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260422W003",
-      "title": "レガシィＢ４",
+      "title": "レガシィＢ４ 1",
       "description": "レガシィＢ４",
       "carName": "レガシィＢ４",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "81500万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "121.0万円",
-      "totalPrice": "132.3万円",
-      "imageUrl": "https://secure.goo-net.com/7000902332/30260422/Q/70009023323026042200300.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260422W003",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2017年",
+      "mileage": "8.2万K",
+      "color": "クリスタルブラックシリカ",
+      "inspection": "00330002",
+      "displacement": "2017cc",
+      "bodyPrice": "8.2万円",
+      "totalPrice": "8.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260422/H/70009023323026042200300.jpg?1783777005",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260422W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260422W003&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260422W003&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260422W003&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260422W003&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W003&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "セダン",
@@ -2244,34 +3532,61 @@
         "セダン",
         "スポーティ"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260422W003&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260626W001",
-      "title": "フィット",
+      "title": "フィット 1",
       "description": "フィット",
       "carName": "フィット",
-      "gradeName": "",
-      "gradeExtraInfo": "４ＷＤ　ワンオーナー　ナビ　ＴＶ　バックカメラ　ＥＴＣ　純正エンジンスターター",
-      "classificationName": "",
-      "year": "",
-      "mileage": "75400万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "99.8万円",
-      "totalPrice": "108.3万円",
-      "imageUrl": "https://secure.goo-net.com/7000902332/30260626/Q/70009023323026062600100.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260626W001",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2019年",
+      "mileage": "7.5万K",
+      "color": "ルナシルバーメタリック",
+      "inspection": "00330002",
+      "displacement": "2019cc",
+      "bodyPrice": "7.5万円",
+      "totalPrice": "7.5万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260626/H/70009023323026062600100.jpg?1783777005",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260626W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260626W001&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260626W001&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260626W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260626W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260626W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "コンパクトカー",
@@ -2282,34 +3597,61 @@
         "コンパクトカー",
         "ステーションワゴン"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260626W001&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260706W001",
-      "title": "ハイゼットトラック",
+      "title": "ハイゼットトラック 1",
       "description": "ハイゼットトラック",
       "carName": "ハイゼットトラック",
-      "gradeName": "",
-      "gradeExtraInfo": "４ＷＤ",
-      "classificationName": "",
-      "year": "",
-      "mileage": "19450万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "153.9万円",
-      "totalPrice": "157.7万円",
-      "imageUrl": "https://secure.goo-net.com/7000902332/30260706/Q/70009023323026070600100.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260706W001",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2022年",
+      "mileage": "1.9万K",
+      "color": "ブライトシルバーメタリック",
+      "inspection": "00330002",
+      "displacement": "2022cc",
+      "bodyPrice": "1.9万円",
+      "totalPrice": "1.9万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260706/H/70009023323026070600100.jpg?1783777007",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260706W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260706W001&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260706W001&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260706W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260706W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260706W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "トラック",
@@ -2320,34 +3662,61 @@
         "トラック",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260706W001&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260629W001",
-      "title": "スペーシア",
+      "title": "スペーシア 1",
       "description": "スペーシア",
       "carName": "スペーシア",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "100300万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "72.2万円",
-      "totalPrice": "76.2万円",
-      "imageUrl": "https://secure.goo-net.com/7000902332/30260629/Q/70009023323026062900100.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260629W001",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2019年",
+      "mileage": "10万K",
+      "color": "ブラウンＭ",
+      "inspection": "00330002",
+      "displacement": "2019cc",
+      "bodyPrice": "10.0万円",
+      "totalPrice": "10.0万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260629/H/70009023323026062900100.jpg?1783777013",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260629W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260629W001&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260629W001&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260629W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260629W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260629W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スライドドア",
@@ -2358,34 +3727,61 @@
         "スライドドア",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260629W001&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260702W001",
-      "title": "Ｎ－ＢＯＸスラッシュ",
+      "title": "Ｎ－ＢＯＸスラッシュ 1",
       "description": "Ｎ－ＢＯＸスラッシュ",
       "carName": "Ｎ－ＢＯＸスラッシュ",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "64200万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "102.5万円",
-      "totalPrice": "106.3万円",
-      "imageUrl": "https://secure.goo-net.com/7000902332/30260702/Q/70009023323026070200100.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260702W001",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2015年",
+      "mileage": "6.4万K",
+      "color": "スマートブラック",
+      "inspection": "00330002",
+      "displacement": "2015cc",
+      "bodyPrice": "6.4万円",
+      "totalPrice": "6.4万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260702/H/70009023323026070200100.jpg?1783777013",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260702W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260702W001&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260702W001&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260702W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260702W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260702W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スタンダード",
@@ -2398,34 +3794,61 @@
         "スポーティ",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260702W001&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260612W002",
-      "title": "ハスラー",
+      "title": "ハスラー 1",
       "description": "ハスラー",
       "carName": "ハスラー",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "66900万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "144万円",
-      "totalPrice": "147.8万円",
-      "imageUrl": "https://secure.goo-net.com/7000902332/30260612/Q/70009023323026061200200.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260612W002",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2021年",
+      "mileage": "6.7万K",
+      "color": "イエローＩＩ",
+      "inspection": "00330002",
+      "displacement": "2021cc",
+      "bodyPrice": "6.7万円",
+      "totalPrice": "6.7万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260612/H/70009023323026061200200.jpg?1783777013",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260612W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260612W002&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260612W002&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260612W002&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260612W002&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260612W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スタンダード",
@@ -2438,34 +3861,61 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260612W002&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260501W001",
-      "title": "ワゴンＲ",
+      "title": "ワゴンＲ 1",
       "description": "ワゴンＲ",
       "carName": "ワゴンＲ",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "81400万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "46.0万円",
-      "totalPrice": "50万円",
-      "imageUrl": "https://secure.goo-net.com/090/0902332/Q/0902332A30260501W00179.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260501W001",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2013年",
+      "mileage": "8.1万K",
+      "color": "パールホワイト",
+      "inspection": "00330002",
+      "displacement": "2013cc",
+      "bodyPrice": "8.1万円",
+      "totalPrice": "8.1万円",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260501W00179.jpg?1783777013",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260501W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260501W001&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260501W001&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260501W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260501W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260501W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スタンダード",
@@ -2476,34 +3926,61 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260501W001&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260616W001",
-      "title": "クライスラージープ ラングラーアンリミテッド",
+      "title": "ジープ・ラングラーアンリミテッド 1",
       "description": "クライスラージープ ラングラーアンリミテッド",
-      "carName": "クライスラージープ ラングラーアンリミテッド",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "74800万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "332.5万円",
-      "totalPrice": "343.2万円",
-      "imageUrl": "https://secure.goo-net.com/090/0902332/Q/0902332A30260616W00179.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260616W001",
+      "carName": "ジープ・ラングラーアンリミテッド",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2019年",
+      "mileage": "7.5万K",
+      "color": "グラナイトクリスタルメタリッククリアコート",
+      "inspection": "00330002",
+      "displacement": "2019cc",
+      "bodyPrice": "7.5万円",
+      "totalPrice": "7.5万円",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260616W00179.jpg?1783777013",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260616W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260616W001&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260616W001&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260616W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260616W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260616W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "SUV"
@@ -2512,34 +3989,61 @@
         "普通車",
         "SUV"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260616W001&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260520W001",
-      "title": "デイズ",
+      "title": "デイズ 1",
       "description": "デイズ",
       "carName": "デイズ",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "37600万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "131.4万円",
-      "totalPrice": "134.2万円",
-      "imageUrl": "https://secure.goo-net.com/090/0902332/Q/0902332A30260520W00179.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260520W001",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2022年",
+      "mileage": "3.8万K",
+      "color": "フローズンバニラパールＭＩＩ",
+      "inspection": "2027",
+      "displacement": "2022cc",
+      "bodyPrice": "3.8万円",
+      "totalPrice": "3.8万円",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260520W00179.jpg?1783777013",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260520W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260520W001&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260520W001&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260520W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260520W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260520W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スタンダード",
@@ -2550,34 +4054,61 @@
         "スタンダード",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260520W001&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260313W001",
-      "title": "ハスラー",
+      "title": "ハスラー 1",
       "description": "ハスラー",
       "carName": "ハスラー",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "102900万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "95.1万円",
-      "totalPrice": "98.3万円",
-      "imageUrl": "https://secure.goo-net.com/090/0902332/Q/0902332A30260313W00179.jpg",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260313W001",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2020年",
+      "mileage": "10.3万K",
+      "color": "デニムブルーメタリックＩＩ",
+      "inspection": "2028",
+      "displacement": "2020cc",
+      "bodyPrice": "10.3万円",
+      "totalPrice": "10.3万円",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260313W00179.jpg?1783777019",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260313W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260313W001&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260313W001&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260313W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260313W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260313W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "軽自動車",
         "スタンダード",
@@ -2590,34 +4121,61 @@
         "SUV",
         "特にこだわりはない"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260313W001&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     },
     {
       "stockId": "0902332A30260622W001",
-      "title": "アクア",
+      "title": "アクア 1",
       "description": "アクア",
       "carName": "アクア",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "year": "",
-      "mileage": "187000万K",
-      "color": "",
-      "inspection": "",
-      "displacement": "",
-      "bodyPrice": "42.5万円",
-      "totalPrice": "48.7万円",
-      "imageUrl": "common/img-set-02.png",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260622W001",
+      "gradeName": "1",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "year": "2013年",
+      "mileage": "18.7万K",
+      "color": "ライムホワイトパールクリスタルシャイン",
+      "inspection": "2028",
+      "displacement": "2013cc",
+      "bodyPrice": "18.7万円",
+      "totalPrice": "18.7万円",
+      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026062200100.jpg?1783776994",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260622W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-      "editUrl": "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260622W001&ScreenId=SIH_001",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260622W001&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260622W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260622W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260622W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
       "types": [
         "普通車",
         "コンパクトカー",
@@ -2630,11 +4188,33 @@
         "ステーションワゴン",
         "EV・HV"
       ],
-      "updatedAt": "2026-07-11T12:39:22.128Z",
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true
+      },
+      "updatedAt": "2026-07-11T13:37:03.773Z",
       "typeResult": {
         "status": 200,
         "success": true,
-        "containsFatalError": false
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260622W001&ScreenId=SIH_001",
+        "attempts": 1,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
       }
     }
   ]
