@@ -4,7 +4,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
-const CODE_VERSION = "saved-list-direct-v7-background-lock";
+const CODE_VERSION = "saved-list-direct-v8-price-fix";
 
 const BASE_URL = "https://motorgate.jp";
 const PUBLIC_LIST_URL =
@@ -65,9 +65,8 @@ function createRunId() {
 
 function isTimeoutError(error) {
   const text =
-    `${error?.name || ""} ${
-      error?.message || ""
-    }`.toLowerCase();
+    `${error?.name || ""} ${error?.message || ""}`
+      .toLowerCase();
 
   return (
     text.includes("timeout") ||
@@ -109,12 +108,16 @@ function addCookies(jar, setCookieText) {
     const first =
       piece.split(";")[0].trim();
 
-    const eq = first.indexOf("=");
+    const equalIndex =
+      first.indexOf("=");
 
-    if (eq <= 0) continue;
+    if (equalIndex <= 0) continue;
 
-    const name = first.slice(0, eq);
-    const value = first.slice(eq + 1);
+    const name =
+      first.slice(0, equalIndex);
+
+    const value =
+      first.slice(equalIndex + 1);
 
     if (value === "deleted") {
       delete jar[name];
@@ -154,9 +157,8 @@ function jarToCookie(jar) {
 }
 
 function normalizeCharset(value) {
-  const text = String(
-    value || ""
-  ).toLowerCase();
+  const text =
+    String(value || "").toLowerCase();
 
   if (
     /shift[_-]?jis|sjis|windows-31j|ms932|cp932/.test(
@@ -177,7 +179,8 @@ async function readResponseText(response) {
   const buffer =
     await response.arrayBuffer();
 
-  const bytes = new Uint8Array(buffer);
+  const bytes =
+    new Uint8Array(buffer);
 
   const contentType =
     response.headers.get(
@@ -298,9 +301,10 @@ function absoluteUrl(
   source,
   baseUrl = BASE_URL
 ) {
-  const value = decodeHtmlEntities(
-    String(source || "").trim()
-  );
+  const value =
+    decodeHtmlEntities(
+      String(source || "").trim()
+    );
 
   if (!value) return "";
 
@@ -333,16 +337,15 @@ function extractAttribute(
   tagHtml,
   attributeName
 ) {
-  const quoted = String(
-    tagHtml || ""
-  ).match(
-    new RegExp(
-      `${escapeRegExp(
-        attributeName
-      )}\\s*=\\s*["']([^"']*)["']`,
-      "i"
-    )
-  );
+  const quoted =
+    String(tagHtml || "").match(
+      new RegExp(
+        `${escapeRegExp(
+          attributeName
+        )}\\s*=\\s*["']([^"']*)["']`,
+        "i"
+      )
+    );
 
   if (quoted) {
     return decodeHtmlEntities(
@@ -350,16 +353,15 @@ function extractAttribute(
     );
   }
 
-  const unquoted = String(
-    tagHtml || ""
-  ).match(
-    new RegExp(
-      `${escapeRegExp(
-        attributeName
-      )}\\s*=\\s*([^\\s>]+)`,
-      "i"
-    )
-  );
+  const unquoted =
+    String(tagHtml || "").match(
+      new RegExp(
+        `${escapeRegExp(
+          attributeName
+        )}\\s*=\\s*([^\\s>]+)`,
+        "i"
+      )
+    );
 
   return decodeHtmlEntities(
     unquoted?.[1] || ""
@@ -474,16 +476,17 @@ function getQueryParamDecoded(
   urlText,
   name
 ) {
-  const match = decodeHtmlEntities(
-    String(urlText || "")
-  ).match(
-    new RegExp(
-      `[?&]${escapeRegExp(
-        name
-      )}=([^&#"']*)`,
-      "i"
-    )
-  );
+  const match =
+    decodeHtmlEntities(
+      String(urlText || "")
+    ).match(
+      new RegExp(
+        `[?&]${escapeRegExp(
+          name
+        )}=([^&#"']*)`,
+        "i"
+      )
+    );
 
   if (!match) return "";
 
@@ -610,11 +613,10 @@ function extractImageCandidates(
 ) {
   const urls = [];
 
-  const source = String(
-    html || ""
-  )
-    .replace(/\\\//g, "/")
-    .replace(/\\u002F/gi, "/");
+  const source =
+    String(html || "")
+      .replace(/\\\//g, "/")
+      .replace(/\\u002F/gi, "/");
 
   for (
     const match of source.matchAll(
@@ -737,7 +739,8 @@ function extractImageCandidates(
 }
 
 function upgradeImageUrl(url) {
-  let value = String(url || "");
+  let value =
+    String(url || "");
 
   if (!value) return "";
 
@@ -774,18 +777,15 @@ function upgradeImageUrl(url) {
 }
 
 function imageScore(url) {
-  const value = String(
-    url || ""
-  ).toLowerCase();
+  const value =
+    String(url || "").toLowerCase();
 
   if (!value) return -10000;
 
   let score = 0;
 
   if (
-    value.includes(
-      "goo-net.com"
-    )
+    value.includes("goo-net.com")
   ) {
     score += 100;
   }
@@ -851,7 +851,9 @@ function chooseBestImage(...groups) {
 function normalizePrice(value) {
   const text = compactText(
     toHalfWidthAscii(value)
-  );
+  )
+    .replace(/,/g, "")
+    .trim();
 
   if (!text) return "";
 
@@ -865,6 +867,269 @@ function normalizePrice(value) {
     : "";
 }
 
+function priceToNumber(value) {
+  const normalized =
+    normalizePrice(value);
+
+  if (!normalized) {
+    return NaN;
+  }
+
+  const number =
+    Number(
+      normalized.match(
+        /[0-9]+(?:\.[0-9]+)?/
+      )?.[0]
+    );
+
+  return Number.isFinite(number)
+    ? number
+    : NaN;
+}
+
+function formatPriceNumber(value) {
+  if (!Number.isFinite(value)) {
+    return "";
+  }
+
+  const rounded =
+    Math.round(value * 10) / 10;
+
+  return `${rounded.toFixed(1)}万円`;
+}
+
+function extractPriceCandidates(text) {
+  const normalized =
+    toHalfWidthAscii(
+      decodeHtmlEntities(
+        String(text || "")
+      )
+    )
+      .replace(/,/g, "")
+      .replace(/\s+/g, " ");
+
+  const numbers = Array.from(
+    normalized.matchAll(
+      /([0-9]+(?:\.[0-9]+)?)\s*万円/g
+    )
+  )
+    .map((match) =>
+      Number(match[1])
+    )
+    .filter(
+      (value) =>
+        Number.isFinite(value) &&
+        value >= 0
+    );
+
+  return Array.from(
+    new Set(
+      numbers.map(
+        (value) =>
+          Math.round(value * 10) /
+          10
+      )
+    )
+  ).sort(
+    (first, second) =>
+      second - first
+  );
+}
+
+function resolveSavedPricePair({
+  rowHtml,
+  explicitBodyPrice,
+  explicitTotalPrice,
+}) {
+  const candidates =
+    extractPriceCandidates(
+      cleanHtmlToText(rowHtml)
+    );
+
+  let bodyNumber =
+    priceToNumber(
+      explicitBodyPrice
+    );
+
+  let totalNumber =
+    priceToNumber(
+      explicitTotalPrice
+    );
+
+  const inferredTotal =
+    candidates[0];
+
+  const inferredBody =
+    candidates.find(
+      (value) =>
+        !Number.isFinite(
+          inferredTotal
+        ) ||
+        value <
+          inferredTotal - 0.05
+    );
+
+  const currentPairInvalid =
+    !Number.isFinite(bodyNumber) ||
+    !Number.isFinite(totalNumber) ||
+    totalNumber <
+      bodyNumber - 0.05;
+
+  const samePrice =
+    Number.isFinite(bodyNumber) &&
+    Number.isFinite(totalNumber) &&
+    Math.abs(
+      bodyNumber - totalNumber
+    ) < 0.05;
+
+  const bodyLooksLikeExpenses =
+    Number.isFinite(bodyNumber) &&
+    Number.isFinite(inferredBody) &&
+    bodyNumber <
+      inferredBody * 0.5;
+
+  const totalLooksTooSmall =
+    Number.isFinite(totalNumber) &&
+    Number.isFinite(inferredTotal) &&
+    totalNumber <
+      inferredTotal * 0.9;
+
+  if (
+    candidates.length >= 2 &&
+    (
+      currentPairInvalid ||
+      samePrice ||
+      bodyLooksLikeExpenses ||
+      totalLooksTooSmall
+    )
+  ) {
+    totalNumber =
+      inferredTotal;
+
+    bodyNumber =
+      inferredBody;
+  } else {
+    if (
+      !Number.isFinite(totalNumber) &&
+      Number.isFinite(inferredTotal)
+    ) {
+      totalNumber =
+        inferredTotal;
+    }
+
+    if (
+      !Number.isFinite(bodyNumber) &&
+      Number.isFinite(inferredBody)
+    ) {
+      bodyNumber =
+        inferredBody;
+    }
+  }
+
+  if (
+    !Number.isFinite(bodyNumber) &&
+    Number.isFinite(totalNumber)
+  ) {
+    bodyNumber =
+      totalNumber;
+  }
+
+  if (
+    !Number.isFinite(totalNumber) &&
+    Number.isFinite(bodyNumber)
+  ) {
+    totalNumber =
+      bodyNumber;
+  }
+
+  return {
+    bodyPrice:
+      formatPriceNumber(
+        bodyNumber
+      ),
+    totalPrice:
+      formatPriceNumber(
+        totalNumber
+      ),
+    candidates:
+      candidates.map(
+        formatPriceNumber
+      ),
+  };
+}
+
+function repairSavedPricePair(
+  bodyPrice,
+  totalPrice,
+  previousBodyPrice,
+  previousTotalPrice
+) {
+  const bodyNumber =
+    priceToNumber(bodyPrice);
+
+  const totalNumber =
+    priceToNumber(totalPrice);
+
+  const previousBodyNumber =
+    priceToNumber(
+      previousBodyPrice
+    );
+
+  const previousTotalNumber =
+    priceToNumber(
+      previousTotalPrice
+    );
+
+  const currentInvalid =
+    !Number.isFinite(bodyNumber) ||
+    !Number.isFinite(totalNumber) ||
+    totalNumber <
+      bodyNumber - 0.05;
+
+  const currentSame =
+    Number.isFinite(bodyNumber) &&
+    Number.isFinite(totalNumber) &&
+    Math.abs(
+      bodyNumber - totalNumber
+    ) < 0.05;
+
+  const previousValid =
+    Number.isFinite(
+      previousBodyNumber
+    ) &&
+    Number.isFinite(
+      previousTotalNumber
+    ) &&
+    previousTotalNumber >=
+      previousBodyNumber;
+
+  const currentLooksLikeExpense =
+    currentSame &&
+    previousValid &&
+    previousBodyNumber >
+      bodyNumber * 2;
+
+  if (
+    previousValid &&
+    (
+      currentInvalid ||
+      currentLooksLikeExpense
+    )
+  ) {
+    return {
+      bodyPrice:
+        previousBodyPrice,
+      totalPrice:
+        previousTotalPrice,
+    };
+  }
+
+  return {
+    bodyPrice,
+    totalPrice,
+  };
+}
+
 function normalizeMileage(value) {
   const text = compactText(
     toHalfWidthAscii(value)
@@ -874,9 +1139,7 @@ function normalizeMileage(value) {
 
   if (!text) return "";
 
-  if (
-    /走不明|不明/.test(text)
-  ) {
+  if (/走不明|不明/.test(text)) {
     return "走不明";
   }
 
@@ -890,14 +1153,14 @@ function normalizeMileage(value) {
     )}万K`;
   }
 
-  const kilometers = text.match(
-    /([0-9]+(?:\.[0-9]+)?)(?:km|ＫＭ|ｋｍ)/i
-  );
+  const kilometers =
+    text.match(
+      /([0-9]+(?:\.[0-9]+)?)(?:km|ＫＭ|ｋｍ)/i
+    );
 
   if (kilometers) {
-    const number = Number(
-      kilometers[1]
-    );
+    const number =
+      Number(kilometers[1]);
 
     if (
       Number.isFinite(number)
@@ -914,9 +1177,8 @@ function normalizeMileage(value) {
     text.match(/^\d+$/)?.[0];
 
   if (plainNumber) {
-    const number = Number(
-      plainNumber
-    );
+    const number =
+      Number(plainNumber);
 
     if (
       Number.isFinite(number) &&
@@ -938,9 +1200,10 @@ function normalizeYear(value) {
     toHalfWidthAscii(value)
   );
 
-  const western = text.match(
-    /((?:19|20)\d{2})\s*年?/
-  );
+  const western =
+    text.match(
+      /((?:19|20)\d{2})\s*年?/
+    );
 
   if (western) {
     return `${western[1]}年`;
@@ -967,9 +1230,7 @@ function normalizeYear(value) {
   return `${base + year}年`;
 }
 
-function normalizeDisplacement(
-  value
-) {
+function normalizeDisplacement(value) {
   const text = compactText(
     toHalfWidthAscii(value)
   );
@@ -998,15 +1259,14 @@ function normalizeDisplacement(
       : "";
   }
 
-  const number = Number(
-    text.match(
-      /[0-9]+(?:\.[0-9]+)?/
-    )?.[0] || NaN
-  );
+  const number =
+    Number(
+      text.match(
+        /[0-9]+(?:\.[0-9]+)?/
+      )?.[0] || NaN
+    );
 
-  if (
-    !Number.isFinite(number)
-  ) {
+  if (!Number.isFinite(number)) {
     return "";
   }
 
@@ -1043,31 +1303,34 @@ function findSavedHeaderMap(html) {
     const rowHtml of
     extractAllTableRows(html)
   ) {
-    let headers = extractCells(
-      rowHtml,
-      "th"
-    ).map(
-      (cell) => cell.text
-    );
-
-    if (!headers.length) {
-      headers = extractCells(
+    let headers =
+      extractCells(
         rowHtml,
-        "td"
+        "th"
       ).map(
         (cell) => cell.text
       );
+
+    if (!headers.length) {
+      headers =
+        extractCells(
+          rowHtml,
+          "td"
+        ).map(
+          (cell) => cell.text
+        );
     }
 
     if (!headers.length) {
       continue;
     }
 
-    const joined = headers
-      .map(
-        normalizeHeaderText
-      )
-      .join("");
+    const joined =
+      headers
+        .map(
+          normalizeHeaderText
+        )
+        .join("");
 
     if (
       joined.includes("車種") &&
@@ -1090,20 +1353,31 @@ function headerIndex(
       normalizeHeaderText
     );
 
+  const exactIndex =
+    headers.findIndex(
+      (header) =>
+        normalizedAliases.includes(
+          normalizeHeaderText(
+            header
+          )
+        )
+    );
+
+  if (exactIndex >= 0) {
+    return exactIndex;
+  }
+
   return headers.findIndex(
     (header) => {
       const normalizedHeader =
-        normalizeHeaderText(header);
+        normalizeHeaderText(
+          header
+        );
 
       return normalizedAliases.some(
         (alias) =>
-          normalizedHeader ===
-            alias ||
           normalizedHeader.includes(
             alias
-          ) ||
-          alias.includes(
-            normalizedHeader
           )
       );
     }
@@ -1115,10 +1389,11 @@ function cellTextByHeader(
   headers,
   aliases
 ) {
-  const index = headerIndex(
-    headers,
-    aliases
-  );
+  const index =
+    headerIndex(
+      headers,
+      aliases
+    );
 
   return index >= 0
     ? cells[index]?.text || ""
@@ -1130,10 +1405,11 @@ function cellHtmlByHeader(
   headers,
   aliases
 ) {
-  const index = headerIndex(
-    headers,
-    aliases
-  );
+  const index =
+    headerIndex(
+      headers,
+      aliases
+    );
 
   return index >= 0
     ? cells[index]?.html || ""
@@ -1197,7 +1473,8 @@ function parsePublicVehicleRow(
       cleanHtmlToText(
         nameCell.match(
           /<a\b[^>]*>([\s\S]*?)<\/a>/i
-        )?.[1] || nameCell
+        )?.[1] ||
+        nameCell
       )
     );
 
@@ -1239,7 +1516,9 @@ function parsePublicVehicleRow(
 
   const imageUrl =
     chooseBestImage(
-      qualityImageMap[stockId],
+      qualityImageMap[
+        stockId
+      ],
       extractImageCandidates(
         rowHtml,
         baseUrl
@@ -1250,9 +1529,11 @@ function parsePublicVehicleRow(
     stockId,
     title,
     description:
-      visibleTitle || title,
+      visibleTitle ||
+      title,
     carName:
-      carName || visibleTitle,
+      carName ||
+      visibleTitle,
     gradeName,
     gradeExtraInfo: "",
     classificationName,
@@ -1268,15 +1549,20 @@ function parsePublicVehicleRow(
       ) ||
       infoItems[1] ||
       "",
-    color: infoItems[2] || "",
+    color:
+      infoItems[2] || "",
     inspection:
       infoItems[3] || "",
     displacement:
       infoItems[4] || "",
     bodyPrice:
-      normalizePrice(bodyPrice),
+      normalizePrice(
+        bodyPrice
+      ),
     totalPrice:
-      normalizePrice(totalPrice),
+      normalizePrice(
+        totalPrice
+      ),
     imageUrl,
     detailUrl:
       urls.find((url) =>
@@ -1302,7 +1588,8 @@ function parsePublicVehicleRow(
           "goo-net.com"
         )
       ) || "",
-    sourceStatus: "掲載在庫",
+    sourceStatus:
+      "掲載在庫",
     sourcePageUrl: "",
     types: [],
     typeKeys: [],
@@ -1318,7 +1605,9 @@ function parseSavedVehicleRow(
   const stockId =
     extractStockId(rowHtml);
 
-  if (!stockId) return null;
+  if (!stockId) {
+    return null;
+  }
 
   const cells =
     extractCells(
@@ -1341,27 +1630,28 @@ function parseSavedVehicleRow(
       .MOTORGATE_CLIENT_ID ||
     "0902332";
 
-  const editUrls = Array.from(
-    new Set(
-      [
-        ...urls.filter(
-          (url) =>
-            url.includes(
-              "/car/newregist/register"
-            ) ||
-            url.includes(
-              "/car/edit/new"
-            )
-        ),
-        `${BASE_URL}/car/newregist/register?kbn=1&client_id=${encodeURIComponent(
-          clientId
-        )}&StockStatus=00180002&StockId=${stockId}&ScreenId=SIH_001`,
-        `${BASE_URL}/car/edit/new?kbn=1&ClientId=${encodeURIComponent(
-          clientId
-        )}&StockId=${stockId}&StockStatus=00180002&ScreenId=CB101GR`,
-      ].filter(Boolean)
-    )
-  );
+  const editUrls =
+    Array.from(
+      new Set(
+        [
+          ...urls.filter(
+            (url) =>
+              url.includes(
+                "/car/newregist/register"
+              ) ||
+              url.includes(
+                "/car/edit/new"
+              )
+          ),
+          `${BASE_URL}/car/newregist/register?kbn=1&client_id=${encodeURIComponent(
+            clientId
+          )}&StockStatus=00180002&StockId=${stockId}&ScreenId=SIH_001`,
+          `${BASE_URL}/car/edit/new?kbn=1&ClientId=${encodeURIComponent(
+            clientId
+          )}&StockId=${stockId}&StockStatus=00180002&ScreenId=CB101GR`,
+        ].filter(Boolean)
+      )
+    );
 
   let carName =
     cleanVehicleText(
@@ -1380,24 +1670,31 @@ function parseSavedVehicleRow(
       cellTextByHeader(
         cells,
         headers,
-        ["グレード"]
+        [
+          "グレード",
+        ]
       )
     );
 
-  let year = normalizeYear(
-    cellTextByHeader(
-      cells,
-      headers,
-      ["年式"]
-    )
-  );
+  let year =
+    normalizeYear(
+      cellTextByHeader(
+        cells,
+        headers,
+        [
+          "年式",
+        ]
+      )
+    );
 
   let displacement =
     normalizeDisplacement(
       cellTextByHeader(
         cells,
         headers,
-        ["排気量"]
+        [
+          "排気量",
+        ]
       )
     );
 
@@ -1407,8 +1704,8 @@ function parseSavedVehicleRow(
         cells,
         headers,
         [
-          "色",
           "車体色",
+          "色",
         ]
       )
     );
@@ -1418,27 +1715,44 @@ function parseSavedVehicleRow(
       cellTextByHeader(
         cells,
         headers,
-        ["走行"]
+        [
+          "走行距離",
+          "走行",
+        ]
       )
     );
+
+  const explicitBodyPrice =
+    cellTextByHeader(
+      cells,
+      headers,
+      [
+        "車両本体価格",
+        "本体価格",
+      ]
+    );
+
+  const explicitTotalPrice =
+    cellTextByHeader(
+      cells,
+      headers,
+      [
+        "支払総額",
+      ]
+    );
+
+  const resolvedPrices =
+    resolveSavedPricePair({
+      rowHtml,
+      explicitBodyPrice,
+      explicitTotalPrice,
+    });
 
   let bodyPrice =
-    normalizePrice(
-      cellTextByHeader(
-        cells,
-        headers,
-        ["車両本体価格"]
-      )
-    );
+    resolvedPrices.bodyPrice;
 
   let totalPrice =
-    normalizePrice(
-      cellTextByHeader(
-        cells,
-        headers,
-        ["支払総額"]
-      )
-    );
+    resolvedPrices.totalPrice;
 
   const cellTexts =
     cells.map((cell) =>
@@ -1463,26 +1777,16 @@ function parseSavedVehicleRow(
         )
     );
 
-  const priceValues =
-    cellTexts.flatMap(
-      (value) =>
-        Array.from(
-          value.matchAll(
-            /([0-9]+(?:\.[0-9]+)?)\s*万円/g
-          )
-        ).map(
-          (match) =>
-            `${match[1]}万円`
-        )
-    );
-
   if (
     !year &&
     yearIndex >= 0
   ) {
-    year = normalizeYear(
-      cellTexts[yearIndex]
-    );
+    year =
+      normalizeYear(
+        cellTexts[
+          yearIndex
+        ]
+      );
   }
 
   if (
@@ -1495,22 +1799,6 @@ function parseSavedVehicleRow(
           mileageIndex
         ]
       );
-  }
-
-  if (
-    !bodyPrice &&
-    priceValues.length >= 1
-  ) {
-    bodyPrice =
-      priceValues[0];
-  }
-
-  if (
-    !totalPrice &&
-    priceValues.length >= 2
-  ) {
-    totalPrice =
-      priceValues[1];
   }
 
   if (
@@ -1528,7 +1816,8 @@ function parseSavedVehicleRow(
   if (
     !color &&
     yearIndex >= 0 &&
-    mileageIndex > yearIndex
+    mileageIndex >
+      yearIndex
   ) {
     const possible =
       cellTexts
@@ -1543,7 +1832,8 @@ function parseSavedVehicleRow(
         ? possible[
             possible.length - 1
           ]
-        : possible[0] || "";
+        : possible[0] ||
+          "";
   }
 
   if (
@@ -1577,14 +1867,16 @@ function parseSavedVehicleRow(
 
     if (!carName) {
       carName =
-        candidates[0] || "";
+        candidates[0] ||
+        "";
     }
 
     if (!gradeName) {
       gradeName =
         candidates.find(
           (value) =>
-            value !== carName
+            value !==
+            carName
         ) || "";
     }
   }
@@ -1592,8 +1884,20 @@ function parseSavedVehicleRow(
   if (
     gradeName &&
     carName &&
-    compactText(gradeName) ===
-      compactText(carName)
+    compactText(
+      gradeName
+    ) ===
+      compactText(
+        carName
+      )
+  ) {
+    gradeName = "";
+  }
+
+  if (
+    /^[0-9０-９]+$/.test(
+      gradeName
+    )
   ) {
     gradeName = "";
   }
@@ -1602,8 +1906,11 @@ function parseSavedVehicleRow(
     cellHtmlByHeader(
       cells,
       headers,
-      ["写真"]
-    ) || rowHtml;
+      [
+        "写真",
+      ]
+    ) ||
+    rowHtml;
 
   const imageUrl =
     chooseBestImage(
@@ -1645,10 +1952,14 @@ function parseSavedVehicleRow(
       Boolean(carName),
     gradeName:
       Boolean(gradeName),
-    year: Boolean(year),
+    year:
+      Boolean(year),
     displacement:
-      Boolean(displacement),
-    color: Boolean(color),
+      Boolean(
+        displacement
+      ),
+    color:
+      Boolean(color),
     mileage:
       Boolean(mileage),
     bodyPrice:
@@ -1657,12 +1968,15 @@ function parseSavedVehicleRow(
       Boolean(totalPrice),
     imageUrl:
       Boolean(imageUrl),
+    priceCandidates:
+      resolvedPrices.candidates,
   };
 
   return {
     stockId,
     title,
-    description: title,
+    description:
+      title,
     carName,
     gradeName,
     gradeExtraInfo: "",
@@ -1677,7 +1991,8 @@ function parseSavedVehicleRow(
     imageUrl,
     detailUrl,
     editUrl:
-      editUrls[0] || "",
+      editUrls[0] ||
+      "",
     editUrls,
     gooUrl:
       urls.find((url) =>
@@ -1685,8 +2000,10 @@ function parseSavedVehicleRow(
           "goo-net.com"
         )
       ) || "",
-    sourceStatus: "一時保存",
-    sourcePageUrl: pageUrl,
+    sourceStatus:
+      "一時保存",
+    sourcePageUrl:
+      pageUrl,
     types: [],
     typeKeys: [],
     listResult,
@@ -1698,7 +2015,9 @@ function extractSavedVehicles(
   pageUrl
 ) {
   const headers =
-    findSavedHeaderMap(html);
+    findSavedHeaderMap(
+      html
+    );
 
   const vehicles = [];
 
@@ -1736,13 +2055,16 @@ function extractSavedVehicles(
 function uniqueByStockId(
   vehicles
 ) {
-  const map = new Map();
+  const map =
+    new Map();
 
   for (
     const vehicle of
     vehicles || []
   ) {
-    if (vehicle?.stockId) {
+    if (
+      vehicle?.stockId
+    ) {
       map.set(
         vehicle.stockId,
         vehicle
@@ -1756,9 +2078,12 @@ function uniqueByStockId(
 }
 
 function normalizeTypeKey(type) {
-  const value = compactText(
-    toHalfWidthAscii(type)
-  );
+  const value =
+    compactText(
+      toHalfWidthAscii(
+        type
+      )
+    );
 
   if (/^suv$/i.test(value)) {
     return "SUV";
@@ -1801,8 +2126,12 @@ function extractTypesFromText(
 
     if (
       value &&
-      !/[._…]/.test(value) &&
-      !types.includes(value)
+      !/[._…]/.test(
+        value
+      ) &&
+      !types.includes(
+        value
+      )
     ) {
       types.push(value);
     }
@@ -1815,7 +2144,9 @@ function buildTypeKeys(types) {
   return Array.from(
     new Set(
       (types || [])
-        .map(normalizeTypeKey)
+        .map(
+          normalizeTypeKey
+        )
         .filter(Boolean)
     )
   );
@@ -1824,19 +2155,21 @@ function buildTypeKeys(types) {
 function extractSelectedOption(
   selectHtml
 ) {
-  const options = Array.from(
-    String(
-      selectHtml || ""
-    ).matchAll(
-      /<option\b([^>]*)>([\s\S]*?)<\/option>/gi
-    )
-  );
+  const options =
+    Array.from(
+      String(
+        selectHtml || ""
+      ).matchAll(
+        /<option\b([^>]*)>([\s\S]*?)<\/option>/gi
+      )
+    );
 
   const selected =
-    options.find((option) =>
-      /\bselected\b/i.test(
-        option[1] || ""
-      )
+    options.find(
+      (option) =>
+        /\bselected\b/i.test(
+          option[1] || ""
+        )
     );
 
   if (!selected) {
@@ -1852,19 +2185,19 @@ function extractSelectedOption(
         selected[1],
         "value"
       ),
-    text: compactText(
-      cleanHtmlToText(
-        selected[2]
-      )
-    ),
+    text:
+      compactText(
+        cleanHtmlToText(
+          selected[2]
+        )
+      ),
   };
 }
 
 function extractControls(html) {
   const controls = [];
-  const source = String(
-    html || ""
-  );
+  const source =
+    String(html || "");
 
   for (
     const match of
@@ -1909,12 +2242,13 @@ function extractControls(html) {
           attributes,
           "class"
         ),
-      value: compactText(
-        extractAttribute(
-          attributes,
-          "value"
-        )
-      ),
+      value:
+        compactText(
+          extractAttribute(
+            attributes,
+            "value"
+          )
+        ),
       text: "",
     });
   }
@@ -1944,11 +2278,12 @@ function extractControls(html) {
           attributes,
           "class"
         ),
-      value: compactText(
-        cleanHtmlToText(
-          match[2]
-        )
-      ),
+      value:
+        compactText(
+          cleanHtmlToText(
+            match[2]
+          )
+        ),
       text: "",
     });
   }
@@ -2006,54 +2341,6 @@ function normalizeControlKey(
     );
 }
 
-function findControlValue(
-  html,
-  names
-) {
-  const targets = names
-    .map(normalizeControlKey)
-    .filter(Boolean);
-
-  const controls =
-    extractControls(html);
-
-  for (
-    const control of controls
-  ) {
-    const key =
-      normalizeControlKey(
-        `${control.name} ${control.id} ${control.className}`
-      );
-
-    if (
-      !targets.some(
-        (target) =>
-          key === target ||
-          key.includes(target)
-      )
-    ) {
-      continue;
-    }
-
-    const value =
-      compactText(
-        control.text ||
-        control.value
-      );
-
-    if (
-      value &&
-      !/^(選択|選択してください|未選択|なし|--|---|0)$/.test(
-        value
-      )
-    ) {
-      return value;
-    }
-  }
-
-  return "";
-}
-
 function isMeaningfulValue(
   value
 ) {
@@ -2068,15 +2355,73 @@ function isMeaningfulValue(
   );
 }
 
+function findControlValue(
+  html,
+  names
+) {
+  const targets =
+    names
+      .map(
+        normalizeControlKey
+      )
+      .filter(Boolean);
+
+  const controls =
+    extractControls(
+      html
+    );
+
+  for (
+    const control of
+    controls
+  ) {
+    const key =
+      normalizeControlKey(
+        `${control.name} ${control.id} ${control.className}`
+      );
+
+    if (
+      !targets.some(
+        (target) =>
+          key === target ||
+          key.includes(
+            target
+          )
+      )
+    ) {
+      continue;
+    }
+
+    const value =
+      compactText(
+        control.text ||
+        control.value
+      );
+
+    if (
+      isMeaningfulValue(
+        value
+      )
+    ) {
+      return value;
+    }
+  }
+
+  return "";
+}
+
 function findControlValueByPatterns(
   html,
   patterns
 ) {
   const controls =
-    extractControls(html);
+    extractControls(
+      html
+    );
 
   for (
-    const control of controls
+    const control of
+    controls
   ) {
     const key =
       normalizeControlKey(
@@ -2099,7 +2444,9 @@ function findControlValueByPatterns(
       );
 
     if (
-      isMeaningfulValue(value)
+      isMeaningfulValue(
+        value
+      )
     ) {
       return value;
     }
@@ -2108,18 +2455,16 @@ function findControlValueByPatterns(
   return "";
 }
 
-function extractLabelValuePairs(
-  html
-) {
+function extractLabelValuePairs(html) {
   const pairs = [];
-
-  const source = String(
-    html || ""
-  );
+  const source =
+    String(html || "");
 
   for (
     const rowHtml of
-    extractAllTableRows(source)
+    extractAllTableRows(
+      source
+    )
   ) {
     const headers =
       extractCells(
@@ -2149,11 +2494,15 @@ function extractLabelValuePairs(
         pairs.push({
           label:
             compactText(
-              headers[index].text
+              headers[
+                index
+              ].text
             ),
           value:
             compactText(
-              cells[index].text
+              cells[
+                index
+              ].text
             ),
         });
       }
@@ -2169,7 +2518,9 @@ function extractLabelValuePairs(
         pairs.push({
           label:
             compactText(
-              cells[index].text
+              cells[
+                index
+              ].text
             ),
           value:
             compactText(
@@ -2189,16 +2540,18 @@ function extractLabelValuePairs(
     )
   ) {
     pairs.push({
-      label: compactText(
-        cleanHtmlToText(
-          match[1]
-        )
-      ),
-      value: compactText(
-        cleanHtmlToText(
-          match[2]
-        )
-      ),
+      label:
+        compactText(
+          cleanHtmlToText(
+            match[1]
+          )
+        ),
+      value:
+        compactText(
+          cleanHtmlToText(
+            match[2]
+          )
+        ),
     });
   }
 
@@ -2251,9 +2604,8 @@ function findRegionNearLabel(
   html,
   labels
 ) {
-  const source = String(
-    html || ""
-  );
+  const source =
+    String(html || "");
 
   for (const label of labels) {
     const index =
@@ -2268,14 +2620,26 @@ function findRegionNearLabel(
         startTag,
         endTag,
       ] of [
-        ["<tr", "</tr>"],
-        ["<li", "</li>"],
-        ["<dl", "</dl>"],
+        [
+          "<tr",
+          "</tr>",
+        ],
+        [
+          "<li",
+          "</li>",
+        ],
+        [
+          "<dl",
+          "</dl>",
+        ],
         [
           "<fieldset",
           "</fieldset>",
         ],
-        ["<div", "</div>"],
+        [
+          "<div",
+          "</div>",
+        ],
       ]
     ) {
       const start =
@@ -2293,7 +2657,8 @@ function findRegionNearLabel(
       if (
         start >= 0 &&
         end >= 0 &&
-        end - start <= 20000
+        end - start <=
+          20000
       ) {
         return source.slice(
           start,
@@ -2327,13 +2692,18 @@ function findValueNearLabel(
       labels
     );
 
-  if (!region) return "";
+  if (!region) {
+    return "";
+  }
 
   const controls =
-    extractControls(region);
+    extractControls(
+      region
+    );
 
   for (
-    const control of controls
+    const control of
+    controls
   ) {
     const value =
       compactText(
@@ -2342,15 +2712,20 @@ function findValueNearLabel(
       );
 
     if (
-      isMeaningfulValue(value)
+      isMeaningfulValue(
+        value
+      )
     ) {
       return value;
     }
   }
 
-  let text = compactText(
-    cleanHtmlToText(region)
-  );
+  let text =
+    compactText(
+      cleanHtmlToText(
+        region
+      )
+    );
 
   for (const label of labels) {
     text = text.replace(
@@ -2413,17 +2788,22 @@ function extractRegistrationYear(
     );
 
   const normalized =
-    normalizeYear(direct);
+    normalizeYear(
+      direct
+    );
 
   if (normalized) {
     return normalized;
   }
 
   const controls =
-    extractControls(html);
+    extractControls(
+      html
+    );
 
   for (
-    const control of controls
+    const control of
+    controls
   ) {
     const key =
       normalizeControlKey(
@@ -2445,7 +2825,9 @@ function extractRegistrationYear(
       );
 
     const year =
-      normalizeYear(value);
+      normalizeYear(
+        value
+      );
 
     if (year) {
       return year;
@@ -2493,7 +2875,9 @@ function extractBodyColor(html) {
       ]
     );
 
-  return compactText(value)
+  return compactText(
+    value
+  )
     .replace(
       /^(車体色|ボディカラー|外装色|カラー|色)\s*[：:]?\s*/,
       ""
@@ -2511,7 +2895,9 @@ function extractCommonVehicleDetails(
   pageUrl
 ) {
   const text =
-    cleanHtmlToText(html);
+    cleanHtmlToText(
+      html
+    );
 
   const carName =
     findControlValue(
@@ -2564,7 +2950,9 @@ function extractCommonVehicleDetails(
     ) ||
     findValueNearLabel(
       html,
-      ["グレード"]
+      [
+        "グレード",
+      ]
     );
 
   const classificationName =
@@ -2589,7 +2977,9 @@ function extractCommonVehicleDetails(
     ) ||
     findValueNearLabel(
       html,
-      ["型式"]
+      [
+        "型式",
+      ]
     );
 
   const mileage =
@@ -2606,28 +2996,28 @@ function extractCommonVehicleDetails(
           "run_distance",
         ]
       ) ||
-        findControlValueByPatterns(
-          html,
-          [
-            /soukou/,
-            /mileage/,
-            /rundistance/,
-          ]
-        ) ||
-        findValueNearLabel(
-          html,
-          [
-            "走行距離",
-            "走行",
-          ]
-        ) ||
-        text.match(
-          /\d+(?:\.\d+)?万[ＫKk]/
-        )?.[0] ||
-        text.match(
-          /\d{1,7}(?:,\d{3})*\s*(?:km|ＫＭ|ｋｍ)/i
-        )?.[0] ||
-        ""
+      findControlValueByPatterns(
+        html,
+        [
+          /soukou/,
+          /mileage/,
+          /rundistance/,
+        ]
+      ) ||
+      findValueNearLabel(
+        html,
+        [
+          "走行距離",
+          "走行",
+        ]
+      ) ||
+      text.match(
+        /\d+(?:\.\d+)?万[ＫKk]/
+      )?.[0] ||
+      text.match(
+        /\d{1,7}(?:,\d{3})*\s*(?:km|ＫＭ|ｋｍ)/i
+      )?.[0] ||
+      ""
     ) || "";
 
   const inspection =
@@ -2670,17 +3060,19 @@ function extractCommonVehicleDetails(
           "engine_displacement",
         ]
       ) ||
-        findControlValueByPatterns(
-          html,
-          [
-            /haikiryo/,
-            /displacement/,
-          ]
-        ) ||
-        findValueNearLabel(
-          html,
-          ["排気量"]
-        )
+      findControlValueByPatterns(
+        html,
+        [
+          /haikiryo/,
+          /displacement/,
+        ]
+      ) ||
+      findValueNearLabel(
+        html,
+        [
+          "排気量",
+        ]
+      )
     ) || "";
 
   const bodyPrice =
@@ -2697,22 +3089,22 @@ function extractCommonVehicleDetails(
           "car_price",
         ]
       ) ||
-        findControlValueByPatterns(
-          html,
-          [
-            /bodyprice/,
-            /vehicleprice/,
-            /carprice/,
-            /kakaku/,
-          ]
-        ) ||
-        findValueNearLabel(
-          html,
-          [
-            "車両本体価格",
-            "本体価格",
-          ]
-        )
+      findControlValueByPatterns(
+        html,
+        [
+          /bodyprice/,
+          /vehicleprice/,
+          /carprice/,
+          /kakaku/,
+        ]
+      ) ||
+      findValueNearLabel(
+        html,
+        [
+          "車両本体価格",
+          "本体価格",
+        ]
+      )
     );
 
   const totalPrice =
@@ -2728,22 +3120,22 @@ function extractCommonVehicleDetails(
           "payment_total",
         ]
       ) ||
-        findControlValueByPatterns(
-          html,
-          [
-            /totalprice/,
-            /paymenttotal/,
-            /siharaitotal/,
-            /shiharaitotal/,
-          ]
-        ) ||
-        findValueNearLabel(
-          html,
-          [
-            "支払総額",
-            "総額",
-          ]
-        )
+      findControlValueByPatterns(
+        html,
+        [
+          /totalprice/,
+          /paymenttotal/,
+          /siharaitotal/,
+          /shiharaitotal/,
+        ]
+      ) ||
+      findValueNearLabel(
+        html,
+        [
+          "支払総額",
+          "総額",
+        ]
+      )
     );
 
   const gradeExtraInfo =
@@ -2773,7 +3165,9 @@ function extractCommonVehicleDetails(
 
   return {
     carName:
-      cleanVehicleText(carName),
+      cleanVehicleText(
+        carName
+      ),
     gradeName:
       cleanVehicleText(
         gradeName
@@ -2788,9 +3182,13 @@ function extractCommonVehicleDetails(
       ),
     mileage,
     color:
-      extractBodyColor(html),
+      extractBodyColor(
+        html
+      ),
     inspection:
-      compactText(inspection),
+      compactText(
+        inspection
+      ),
     displacement,
     bodyPrice,
     totalPrice,
@@ -2858,29 +3256,33 @@ async function loginMotorgate() {
           "Content-Type":
             "application/x-www-form-urlencoded",
           Origin: BASE_URL,
-          Referer: loginUrl,
+          Referer:
+            loginUrl,
           Cookie:
-            jarToCookie(jar),
+            jarToCookie(
+              jar
+            ),
           "User-Agent":
             USER_AGENT,
           "Accept-Language":
             "ja,en-US;q=0.9,en;q=0.8",
         },
-        body: new URLSearchParams({
-          fuel_csrf_token:
-            csrf || "",
-          session_id:
-            sessionId || "",
-          client_id:
-            process.env
-              .MOTORGATE_CLIENT_ID ||
-            "",
-          user_id: "",
-          client_pw:
-            process.env
-              .MOTORGATE_PASSWORD ||
-            "",
-        }),
+        body:
+          new URLSearchParams({
+            fuel_csrf_token:
+              csrf || "",
+            session_id:
+              sessionId || "",
+            client_id:
+              process.env
+                .MOTORGATE_CLIENT_ID ||
+              "",
+            user_id: "",
+            client_pw:
+              process.env
+                .MOTORGATE_PASSWORD ||
+              "",
+          }),
       },
       30000
     );
@@ -2939,7 +3341,8 @@ function mergePreviousVehicle(
   if (
     (
       !result.types ||
-      result.types.length === 0
+      result.types.length ===
+        0
     ) &&
     previousVehicle.types
   ) {
@@ -2950,7 +3353,8 @@ function mergePreviousVehicle(
   if (
     (
       !result.typeKeys ||
-      result.typeKeys.length === 0
+      result.typeKeys.length ===
+        0
     ) &&
     previousVehicle.typeKeys
   ) {
@@ -2967,8 +3371,10 @@ function buildDetailUrlCandidates(
   return Array.from(
     new Set(
       [
-        ...(vehicle.editUrls ||
-          []),
+        ...(
+          vehicle.editUrls ||
+          []
+        ),
         vehicle.editUrl,
         vehicle.detailUrl,
       ].filter(Boolean)
@@ -3009,10 +3415,12 @@ function chooseMergedValue(
     vehicle[key] || "";
 
   const previousValue =
-    previous?.[key] || "";
+    previous?.[key] ||
+    "";
 
   const detailValue =
-    details?.[key] || "";
+    details?.[key] ||
+    "";
 
   if (key === "imageUrl") {
     return chooseBestImage(
@@ -3039,7 +3447,9 @@ function chooseMergedValue(
       ]);
 
     if (
-      detailPriority.has(key)
+      detailPriority.has(
+        key
+      )
     ) {
       return (
         detailValue ||
@@ -3056,7 +3466,9 @@ function chooseMergedValue(
       ]);
 
     if (
-      listPriority.has(key)
+      listPriority.has(
+        key
+      )
     ) {
       return (
         currentValue ||
@@ -3100,9 +3512,11 @@ async function fetchVehicleDetail(
       ...fallback,
       typeResult: {
         status: null,
-        success: Boolean(
-          fallback.types?.length
-        ),
+        success:
+          Boolean(
+            fallback.types
+              ?.length
+          ),
         timeout: false,
         error:
           "detail URL not found",
@@ -3111,18 +3525,22 @@ async function fetchVehicleDetail(
         success: false,
         url: "",
         attempts: 0,
-        year: Boolean(
-          fallback.year
-        ),
-        mileage: Boolean(
-          fallback.mileage
-        ),
-        color: Boolean(
-          fallback.color
-        ),
-        imageUrl: Boolean(
-          fallback.imageUrl
-        ),
+        year:
+          Boolean(
+            fallback.year
+          ),
+        mileage:
+          Boolean(
+            fallback.mileage
+          ),
+        color:
+          Boolean(
+            fallback.color
+          ),
+        imageUrl:
+          Boolean(
+            fallback.imageUrl
+          ),
       },
     };
   }
@@ -3138,7 +3556,8 @@ async function fetchVehicleDetail(
   ) {
     for (
       let retry = 0;
-      retry <= DETAIL_RETRIES;
+      retry <=
+        DETAIL_RETRIES;
       retry += 1
     ) {
       attempts += 1;
@@ -3150,9 +3569,12 @@ async function fetchVehicleDetail(
             {
               headers: {
                 Cookie:
-                  jarToCookie(jar),
+                  jarToCookie(
+                    jar
+                  ),
                 Referer:
-                  vehicle.sourceStatus ===
+                  vehicle
+                    .sourceStatus ===
                   "一時保存"
                     ? `${BASE_URL}/stock/savelist`
                     : `${BASE_URL}/top`,
@@ -3228,7 +3650,8 @@ async function fetchVehicleDetail(
           score > best.score
         ) {
           best = {
-            url: candidateUrl,
+            url:
+              candidateUrl,
             status:
               response.status,
             html,
@@ -3239,7 +3662,8 @@ async function fetchVehicleDetail(
         }
 
         const savedEnough =
-          vehicle.sourceStatus ===
+          vehicle
+            .sourceStatus ===
             "一時保存" &&
           Boolean(
             (
@@ -3261,7 +3685,8 @@ async function fetchVehicleDetail(
           );
 
         const publicEnough =
-          vehicle.sourceStatus ===
+          vehicle
+            .sourceStatus ===
             "掲載在庫" &&
           Boolean(
             types.length &&
@@ -3299,40 +3724,50 @@ async function fetchVehicleDetail(
       ...fallback,
       typeResult: {
         status: null,
-        success: Boolean(
-          fallback.types?.length
-        ),
+        success:
+          Boolean(
+            fallback.types
+              ?.length
+          ),
         timeout:
-          errors.some((value) =>
-            /timeout|abort/i.test(
-              value
-            )
+          errors.some(
+            (value) =>
+              /timeout|abort/i.test(
+                value
+              )
           ),
         error:
-          errors.join(" / "),
+          errors.join(
+            " / "
+          ),
       },
       detailResult: {
         success: false,
         url: "",
         attempts,
-        year: Boolean(
-          fallback.year
-        ),
-        mileage: Boolean(
-          fallback.mileage
-        ),
-        color: Boolean(
-          fallback.color
-        ),
-        imageUrl: Boolean(
-          fallback.imageUrl
-        ),
+        year:
+          Boolean(
+            fallback.year
+          ),
+        mileage:
+          Boolean(
+            fallback.mileage
+          ),
+        color:
+          Boolean(
+            fallback.color
+          ),
+        imageUrl:
+          Boolean(
+            fallback.imageUrl
+          ),
       },
     };
   }
 
   const previous =
-    previousVehicle || {};
+    previousVehicle ||
+    {};
 
   const details =
     best.details;
@@ -3342,14 +3777,19 @@ async function fetchVehicleDetail(
       ? best.types
       : vehicle.types?.length
         ? vehicle.types
-        : previous.types || [];
+        : previous.types ||
+          [];
 
   const typeKeys =
     types.length > 0
-      ? buildTypeKeys(types)
-      : vehicle.typeKeys?.length
+      ? buildTypeKeys(
+          types
+        )
+      : vehicle
+          .typeKeys?.length
         ? vehicle.typeKeys
-        : previous.typeKeys || [];
+        : previous.typeKeys ||
+          [];
 
   const carName =
     chooseMergedValue(
@@ -3359,13 +3799,23 @@ async function fetchVehicleDetail(
       "carName"
     );
 
-  const gradeName =
+  let gradeName =
     chooseMergedValue(
       vehicle,
       previous,
       details,
       "gradeName"
     );
+
+  if (
+    /^[0-9０-９]+$/.test(
+      gradeName
+    )
+  ) {
+    gradeName =
+      previous.gradeName ||
+      "";
+  }
 
   const title =
     [
@@ -3378,6 +3828,41 @@ async function fetchVehicleDetail(
     vehicle.title ||
     previous.title ||
     "";
+
+  let bodyPrice =
+    chooseMergedValue(
+      vehicle,
+      previous,
+      details,
+      "bodyPrice"
+    );
+
+  let totalPrice =
+    chooseMergedValue(
+      vehicle,
+      previous,
+      details,
+      "totalPrice"
+    );
+
+  if (
+    vehicle.sourceStatus ===
+    "一時保存"
+  ) {
+    const repaired =
+      repairSavedPricePair(
+        bodyPrice,
+        totalPrice,
+        previous.bodyPrice,
+        previous.totalPrice
+      );
+
+    bodyPrice =
+      repaired.bodyPrice;
+
+    totalPrice =
+      repaired.totalPrice;
+  }
 
   return mergePreviousVehicle(
     {
@@ -3438,20 +3923,8 @@ async function fetchVehicleDetail(
           details,
           "displacement"
         ),
-      bodyPrice:
-        chooseMergedValue(
-          vehicle,
-          previous,
-          details,
-          "bodyPrice"
-        ),
-      totalPrice:
-        chooseMergedValue(
-          vehicle,
-          previous,
-          details,
-          "totalPrice"
-        ),
+      bodyPrice,
+      totalPrice,
       imageUrl:
         chooseMergedValue(
           vehicle,
@@ -3471,31 +3944,39 @@ async function fetchVehicleDetail(
         status:
           best.status,
         success:
-          types.length > 0,
+          types.length >
+          0,
         containsFatalError:
           best.html.includes(
             "FatalError"
           ),
         timeout: false,
         error:
-          errors.join(" / "),
+          errors.join(
+            " / "
+          ),
       },
       detailResult: {
         success: true,
-        url: best.url,
+        url:
+          best.url,
         attempts,
-        year: Boolean(
-          details.year
-        ),
-        mileage: Boolean(
-          details.mileage
-        ),
-        color: Boolean(
-          details.color
-        ),
-        imageUrl: Boolean(
-          details.imageUrl
-        ),
+        year:
+          Boolean(
+            details.year
+          ),
+        mileage:
+          Boolean(
+            details.mileage
+          ),
+        color:
+          Boolean(
+            details.color
+          ),
+        imageUrl:
+          Boolean(
+            details.imageUrl
+          ),
       },
     },
     previousVehicle
@@ -3508,7 +3989,9 @@ async function mapWithConcurrency(
   mapper
 ) {
   const results =
-    new Array(items.length);
+    new Array(
+      items.length
+    );
 
   let nextIndex = 0;
 
@@ -3518,7 +4001,8 @@ async function mapWithConcurrency(
         nextIndex++;
 
       if (
-        index >= items.length
+        index >=
+        items.length
       ) {
         return;
       }
@@ -3534,13 +4018,14 @@ async function mapWithConcurrency(
   await Promise.all(
     Array.from(
       {
-        length: Math.min(
-          limit,
-          Math.max(
-            1,
-            items.length
-          )
-        ),
+        length:
+          Math.min(
+            limit,
+            Math.max(
+              1,
+              items.length
+            )
+          ),
       },
       () => worker()
     )
@@ -3583,10 +4068,12 @@ function toInventoryVehicle(
     gradeName:
       vehicle.gradeName,
     gradeExtraInfo:
-      vehicle.gradeExtraInfo ||
+      vehicle
+        .gradeExtraInfo ||
       "",
     classificationName:
-      vehicle.classificationName,
+      vehicle
+        .classificationName,
     year:
       vehicle.year,
     mileage:
@@ -3613,13 +4100,17 @@ function toInventoryVehicle(
       vehicle.sourcePageUrl ||
       "",
     editUrl:
-      vehicle.editUrl || "",
+      vehicle.editUrl ||
+      "",
     editUrls:
-      vehicle.editUrls || [],
+      vehicle.editUrls ||
+      [],
     types:
-      vehicle.types || [],
+      vehicle.types ||
+      [],
     typeKeys:
-      vehicle.typeKeys || [],
+      vehicle.typeKeys ||
+      [],
     listResult:
       vehicle.listResult ||
       null,
@@ -3645,7 +4136,9 @@ async function fetchPublicVehicles(
       {
         headers: {
           Cookie:
-            jarToCookie(jar),
+            jarToCookie(
+              jar
+            ),
           Referer:
             `${BASE_URL}/top`,
           "User-Agent":
@@ -3677,7 +4170,9 @@ async function fetchPublicVehicles(
     );
 
   const rows =
-    extractVehicleRows(html);
+    extractVehicleRows(
+      html
+    );
 
   const vehicles =
     rows.map((row) =>
@@ -3718,39 +4213,56 @@ function summarizeSavedListFields(
   const saved =
     (vehicles || []).filter(
       (vehicle) =>
-        vehicle.sourceStatus ===
+        vehicle
+          .sourceStatus ===
         "一時保存"
     );
 
-  const count = (key) =>
-    saved.filter(
-      (vehicle) =>
-        vehicle.listResult?.[
-          key
-        ]
-    ).length;
+  const count =
+    (key) =>
+      saved.filter(
+        (vehicle) =>
+          vehicle
+            .listResult?.[
+            key
+          ]
+      ).length;
 
   return {
     total:
       saved.length,
     carNameFound:
-      count("carName"),
+      count(
+        "carName"
+      ),
     gradeNameFound:
-      count("gradeName"),
+      count(
+        "gradeName"
+      ),
     yearFound:
       count("year"),
     displacementFound:
-      count("displacement"),
+      count(
+        "displacement"
+      ),
     colorFound:
       count("color"),
     mileageFound:
-      count("mileage"),
+      count(
+        "mileage"
+      ),
     bodyPriceFound:
-      count("bodyPrice"),
+      count(
+        "bodyPrice"
+      ),
     totalPriceFound:
-      count("totalPrice"),
+      count(
+        "totalPrice"
+      ),
     imageFound:
-      count("imageUrl"),
+      count(
+        "imageUrl"
+      ),
   };
 }
 
@@ -3764,7 +4276,9 @@ async function fetchSavedPage(
       {
         headers: {
           Cookie:
-            jarToCookie(jar),
+            jarToCookie(
+              jar
+            ),
           Referer:
             `${BASE_URL}/top`,
           "User-Agent":
@@ -3816,6 +4330,7 @@ async function fetchSavedVehicles(
 ) {
   const pages = [];
   const allVehicles = [];
+
   const seenStockIds =
     new Set();
 
@@ -3867,7 +4382,8 @@ async function fetchSavedVehicles(
 
     if (
       page.count === 0 ||
-      newVehicles.length === 0
+      newVehicles.length ===
+        0
     ) {
       break;
     }
@@ -3898,7 +4414,8 @@ function getGitHubConfig() {
   return {
     token:
       process.env
-        .GITHUB_TOKEN || "",
+        .GITHUB_TOKEN ||
+      "",
     owner:
       process.env
         .GITHUB_OWNER ||
@@ -3934,12 +4451,14 @@ function getGitHubHeaders(
       "cartopia-inventory-updater",
     "Cache-Control":
       "no-store",
-    ...(includeJson
-      ? {
-          "Content-Type":
-            "application/json",
-        }
-      : {}),
+    ...(
+      includeJson
+        ? {
+            "Content-Type":
+              "application/json",
+          }
+        : {}
+    ),
   };
 }
 
@@ -3958,8 +4477,10 @@ async function githubApi(
               options.body
             )
           ),
-          ...(options.headers ||
-            {}),
+          ...(
+            options.headers ||
+            {}
+          ),
         },
       },
       30000
@@ -3971,9 +4492,10 @@ async function githubApi(
   let data = {};
 
   try {
-    data = text
-      ? JSON.parse(text)
-      : {};
+    data =
+      text
+        ? JSON.parse(text)
+        : {};
   } catch {
     data = {
       raw: text,
@@ -4048,10 +4570,14 @@ async function fetchGitHubInventoryFile() {
             ""
           ),
           "base64"
-        ).toString("utf8");
+        ).toString(
+          "utf8"
+        );
 
       inventory =
-        JSON.parse(decoded);
+        JSON.parse(
+          decoded
+        );
     } catch (error) {
       inventory = {
         vehicles: [],
@@ -4067,7 +4593,8 @@ async function fetchGitHubInventoryFile() {
     status:
       response.status,
     sha:
-      data.sha || null,
+      data.sha ||
+      null,
     inventory,
     error: "",
   };
@@ -4081,13 +4608,15 @@ async function fetchCurrentInventoryFromGitHub() {
     sha:
       result.sha,
     inventory:
-      result.inventory || {
+      result.inventory ||
+      {
         vehicles: [],
       },
     readStatus:
       result.status,
     readError:
-      result.error || "",
+      result.error ||
+      "",
   };
 }
 
@@ -4124,7 +4653,9 @@ async function commitInventoryToGitHub(
         2
       ),
       "utf8"
-    ).toString("base64");
+    ).toString(
+      "base64"
+    );
 
   async function put(sha) {
     const requestBody = {
@@ -4134,7 +4665,8 @@ async function commitInventoryToGitHub(
     };
 
     if (sha) {
-      requestBody.sha = sha;
+      requestBody.sha =
+        sha;
     }
 
     const {
@@ -4143,7 +4675,8 @@ async function commitInventoryToGitHub(
     } = await githubApi(
       apiUrl,
       {
-        method: "PUT",
+        method:
+          "PUT",
         body:
           JSON.stringify(
             requestBody
@@ -4159,9 +4692,12 @@ async function commitInventoryToGitHub(
     };
   }
 
-  let lastResult = null;
+  let lastResult =
+    null;
+
   let lastSha =
-    existingSha || null;
+    existingSha ||
+    null;
 
   for (
     let attempt = 1;
@@ -4178,10 +4714,13 @@ async function commitInventoryToGitHub(
       null;
 
     lastResult =
-      await put(lastSha);
+      await put(
+        lastSha
+      );
 
     if (
-      lastResult.response.ok
+      lastResult
+        .response.ok
     ) {
       return {
         saved: true,
@@ -4192,18 +4731,22 @@ async function commitInventoryToGitHub(
         branch,
         attempt,
         usedSha:
-          lastResult.usedSha,
+          lastResult
+            .usedSha,
         commit:
-          lastResult.data
-            .commit
-            ?.html_url || "",
+          lastResult
+            .data.commit
+            ?.html_url ||
+          "",
         commitSha:
-          lastResult.data
-            .commit?.sha ||
+          lastResult
+            .data.commit
+            ?.sha ||
           "",
         contentSha:
-          lastResult.data
-            .content?.sha ||
+          lastResult
+            .data.content
+            ?.sha ||
           "",
         error: "",
       };
@@ -4211,8 +4754,9 @@ async function commitInventoryToGitHub(
 
     const errorMessage =
       String(
-        lastResult.data
-          ?.message || ""
+        lastResult
+          .data?.message ||
+        ""
       ).toLowerCase();
 
     const conflict =
@@ -4237,27 +4781,33 @@ async function commitInventoryToGitHub(
     }
 
     await sleep(
-      500 * attempt
+      500 *
+      attempt
     );
   }
 
   return {
     saved: false,
     status:
-      lastResult?.response
-        ?.status || null,
+      lastResult
+        ?.response
+        ?.status ||
+      null,
     path,
     branch,
     attempt:
       GITHUB_SAVE_RETRIES,
     usedSha:
-      lastResult?.usedSha ||
+      lastResult
+        ?.usedSha ||
       "",
     commit: "",
     commitSha: "",
     contentSha: "",
     error:
-      lastResult?.data || {
+      lastResult
+        ?.data ||
+      {
         message:
           "GitHub save failed",
       },
@@ -4290,7 +4840,10 @@ async function readUpdateLock() {
     refUrl
   );
 
-  if (response.status === 404) {
+  if (
+    response.status ===
+    404
+  ) {
     return {
       locked: false,
       available: true,
@@ -4307,7 +4860,8 @@ async function readUpdateLock() {
   }
 
   const refSha =
-    data.object?.sha || "";
+    data.object?.sha ||
+    "";
 
   let createdAt = "";
   let runId = "";
@@ -4322,28 +4876,35 @@ async function readUpdateLock() {
       `https://api.github.com/repos/${owner}/${repo}/git/tags/${refSha}`;
 
     const tagResult =
-      await githubApi(tagUrl);
+      await githubApi(
+        tagUrl
+      );
 
     if (
-      tagResult.response.ok
+      tagResult
+        .response.ok
     ) {
       createdAt =
-        tagResult.data
-          .tagger?.date ||
+        tagResult
+          .data.tagger
+          ?.date ||
         "";
 
       try {
         const parsed =
           JSON.parse(
-            tagResult.data
-              .message || "{}"
+            tagResult
+              .data.message ||
+            "{}"
           );
 
         runId =
-          parsed.runId || "";
+          parsed.runId ||
+          "";
 
         trigger =
-          parsed.trigger || "";
+          parsed.trigger ||
+          "";
       } catch {
         runId = "";
       }
@@ -4372,7 +4933,8 @@ async function readUpdateLock() {
     stale:
       Boolean(
         createdTime &&
-        ageMs > LOCK_TTL_MS
+        ageMs >
+          LOCK_TTL_MS
       ),
     runId,
     trigger,
@@ -4420,14 +4982,16 @@ async function deleteUpdateLock(
   } = await githubApi(
     deleteUrl,
     {
-      method: "DELETE",
+      method:
+        "DELETE",
     }
   );
 
   return {
     deleted:
       response.ok ||
-      response.status === 404,
+      response.status ===
+        404,
     status:
       response.status,
     error:
@@ -4491,19 +5055,22 @@ async function acquireUpdateLock(
     );
 
   if (
-    !branchResult.response.ok
+    !branchResult
+      .response.ok
   ) {
     return {
       acquired: false,
       running: false,
       error:
-        branchResult.data,
+        branchResult
+          .data,
     };
   }
 
   const commitSha =
-    branchResult.data
-      .object?.sha;
+    branchResult
+      .data.object
+      ?.sha;
 
   if (!commitSha) {
     return {
@@ -4525,7 +5092,8 @@ async function acquireUpdateLock(
     await githubApi(
       tagObjectUrl,
       {
-        method: "POST",
+        method:
+          "POST",
         body:
           JSON.stringify({
             tag:
@@ -4538,7 +5106,8 @@ async function acquireUpdateLock(
               }),
             object:
               commitSha,
-            type: "commit",
+            type:
+              "commit",
             tagger: {
               name:
                 "CARTOPIA Inventory Updater",
@@ -4552,7 +5121,8 @@ async function acquireUpdateLock(
     );
 
   if (
-    !tagResult.response.ok
+    !tagResult
+      .response.ok
   ) {
     return {
       acquired: false,
@@ -4572,7 +5142,8 @@ async function acquireUpdateLock(
     await githubApi(
       createRefUrl,
       {
-        method: "POST",
+        method:
+          "POST",
         body:
           JSON.stringify({
             ref:
@@ -4584,7 +5155,8 @@ async function acquireUpdateLock(
     );
 
   if (
-    refResult.response.ok
+    refResult
+      .response.ok
   ) {
     return {
       acquired: true,
@@ -4599,9 +5171,11 @@ async function acquireUpdateLock(
   }
 
   if (
-    refResult.response.status ===
+    refResult
+      .response.status ===
       409 ||
-    refResult.response.status ===
+    refResult
+      .response.status ===
       422
   ) {
     const existing =
@@ -4629,8 +5203,14 @@ function mergeVehicles(
   savedVehicles
 ) {
   return uniqueByStockId([
-    ...(publicVehicles || []),
-    ...(savedVehicles || []),
+    ...(
+      publicVehicles ||
+      []
+    ),
+    ...(
+      savedVehicles ||
+      []
+    ),
   ]);
 }
 
@@ -4641,19 +5221,22 @@ function summarizeTypeResults(
     success:
       vehicles.filter(
         (vehicle) =>
-          vehicle.typeResult
+          vehicle
+            .typeResult
             ?.success
       ).length,
     failed:
       vehicles.filter(
         (vehicle) =>
-          !vehicle.typeResult
+          !vehicle
+            .typeResult
             ?.success
       ).length,
     timeout:
       vehicles.filter(
         (vehicle) =>
-          vehicle.typeResult
+          vehicle
+            .typeResult
             ?.timeout
       ).length,
   };
@@ -4666,12 +5249,14 @@ function summarizeGradeExtraInfo(
     found:
       vehicles.filter(
         (vehicle) =>
-          vehicle.gradeExtraInfo
+          vehicle
+            .gradeExtraInfo
       ).length,
     missing:
       vehicles.filter(
         (vehicle) =>
-          !vehicle.gradeExtraInfo
+          !vehicle
+            .gradeExtraInfo
       ).length,
   };
 }
@@ -4682,7 +5267,8 @@ function summarizeSavedDetailFields(
   const saved =
     vehicles.filter(
       (vehicle) =>
-        vehicle.sourceStatus ===
+        vehicle
+          .sourceStatus ===
         "一時保存"
     );
 
@@ -4742,8 +5328,10 @@ function summarizeSavedDetailFields(
     detailFetchFailed:
       saved.filter(
         (vehicle) =>
-          vehicle.detailResult
-            ?.success === false
+          vehicle
+            .detailResult
+            ?.success ===
+          false
       ).length,
   };
 }
@@ -4752,7 +5340,9 @@ function getTriggerLabel(
   request
 ) {
   const url =
-    new URL(request.url);
+    new URL(
+      request.url
+    );
 
   const source =
     url.searchParams.get(
@@ -4795,8 +5385,10 @@ function buildFailureInventoryData(
   status
 ) {
   return {
-    ...(currentInventory ||
-      {}),
+    ...(
+      currentInventory ||
+      {}
+    ),
     lastFailedAt:
       status.finishedAt,
     lastUpdateStatus:
@@ -4827,17 +5419,22 @@ async function runInventoryUpdate({
     const previousMap =
       new Map(
         (
-          current.inventory
-            ?.vehicles || []
+          current
+            .inventory
+            ?.vehicles ||
+          []
         )
           .filter(
             (vehicle) =>
-              vehicle?.stockId
+              vehicle
+                ?.stockId
           )
-          .map((vehicle) => [
-            vehicle.stockId,
-            vehicle,
-          ])
+          .map(
+            (vehicle) => [
+              vehicle.stockId,
+              vehicle,
+            ]
+          )
       );
 
     const {
@@ -4849,21 +5446,24 @@ async function runInventoryUpdate({
     const [
       publicResult,
       savedResult,
-    ] = await Promise.all([
-      fetchPublicVehicles(
-        jar,
-        previousMap
-      ),
-      fetchSavedVehicles(
-        jar,
-        previousMap
-      ),
-    ]);
+    ] =
+      await Promise.all([
+        fetchPublicVehicles(
+          jar,
+          previousMap
+        ),
+        fetchSavedVehicles(
+          jar,
+          previousMap
+        ),
+      ]);
 
     const vehicles =
       mergeVehicles(
-        publicResult.vehicles,
-        savedResult.vehicles
+        publicResult
+          .vehicles,
+        savedResult
+          .vehicles
       );
 
     const finishedAt =
@@ -4872,9 +5472,12 @@ async function runInventoryUpdate({
     const durationSeconds =
       Math.round(
         (
-          finishedAt.getTime() -
-          startedAt.getTime()
-        ) / 1000
+          finishedAt
+            .getTime() -
+          startedAt
+            .getTime()
+        ) /
+        1000
       );
 
     const typeResults =
@@ -4894,43 +5497,51 @@ async function runInventoryUpdate({
 
     const success =
       loginStatus === 302 &&
-      publicResult.status ===
-        200 &&
+      publicResult
+        .status === 200 &&
       !publicResult
         .containsLoginForm &&
-      savedResult.pages.every(
-        (page) =>
-          page.status ===
-            200 &&
-          !page.containsLoginForm
-      ) &&
-      vehicles.length > 0;
+      savedResult
+        .pages.every(
+          (page) =>
+            page.status ===
+              200 &&
+            !page
+              .containsLoginForm
+        ) &&
+      vehicles.length >
+        0;
 
     const errors = [
       loginStatus !== 302
         ? `ログイン異常: ${loginStatus}`
         : "",
-      publicResult.status !==
-      200
+      publicResult
+        .status !== 200
         ? `掲載在庫取得異常: ${publicResult.status}`
         : "",
       publicResult
         .containsLoginForm
         ? "掲載在庫取得時にログインフォームが表示されました"
         : "",
-      savedResult.pages.some(
-        (page) =>
-          page.status !== 200
-      )
+      savedResult
+        .pages.some(
+          (page) =>
+            page.status !==
+            200
+        )
         ? "一時保存一覧ページの取得に失敗しました"
         : "",
-      savedResult.pages.some(
-        (page) =>
-          page.containsLoginForm
-      )
+      savedResult
+        .pages.some(
+          (page) =>
+            page
+              .containsLoginForm
+        )
         ? "一時保存一覧取得時にログインフォームが表示されました"
         : "",
-      vehicles.length === 0
+      vehicles.length ===
+        0
         ? "在庫取得件数が0件です"
         : "",
     ].filter(Boolean);
@@ -4944,12 +5555,16 @@ async function runInventoryUpdate({
       runId,
       trigger,
       startedAt:
-        startedAt.toISOString(),
+        startedAt
+          .toISOString(),
       finishedAt:
-        finishedAt.toISOString(),
+        finishedAt
+          .toISOString(),
       durationSeconds,
       error:
-        errors.join(" / "),
+        errors.join(
+          " / "
+        ),
       timeout: false,
       typeFailed:
         typeResults.failed,
@@ -4976,18 +5591,22 @@ async function runInventoryUpdate({
       codeVersion:
         CODE_VERSION,
       updatedAt:
-        finishedAt.toISOString(),
-      source: "motorgate",
+        finishedAt
+          .toISOString(),
+      source:
+        "motorgate",
       updateMode:
         "full-public-and-saved-refresh",
       lastUpdateStatus,
       counts: {
         publicVehicles:
           publicResult
-            .vehicles.length,
+            .vehicles
+            .length,
         savedVehicles:
           savedResult
-            .vehicles.length,
+            .vehicles
+            .length,
         vehicles:
           vehicles.length,
         publicFoundRows:
@@ -5000,20 +5619,24 @@ async function runInventoryUpdate({
       checks: {
         githubRead: {
           status:
-            current.readStatus,
+            current
+              .readStatus,
           shaFound:
             Boolean(
               current.sha
             ),
           sha:
-            current.sha || "",
+            current.sha ||
+            "",
           error:
-            current.readError ||
+            current
+              .readError ||
             "",
         },
         loginStatus,
         publicListStatus:
-          publicResult.status,
+          publicResult
+            .status,
         publicContainsLoginForm:
           publicResult
             .containsLoginForm,
@@ -5034,7 +5657,7 @@ async function runInventoryUpdate({
       await commitInventoryToGitHub(
         inventoryData,
         current.sha,
-        `refresh inventory ${runId}`
+        `fix saved inventory prices ${runId}`
       );
 
     console.log(
@@ -5047,7 +5670,8 @@ async function runInventoryUpdate({
         githubSaved:
           github.saved,
         counts:
-          inventoryData.counts,
+          inventoryData
+            .counts,
         durationSeconds,
       })
     );
@@ -5064,7 +5688,8 @@ async function runInventoryUpdate({
       trigger,
       github,
       counts:
-        inventoryData.counts,
+        inventoryData
+          .counts,
       savedListFields,
       savedDetailFields,
       lastUpdateStatus,
@@ -5080,27 +5705,38 @@ async function runInventoryUpdate({
       runId,
       trigger,
       startedAt:
-        startedAt.toISOString(),
+        startedAt
+          .toISOString(),
       finishedAt:
-        finishedAt.toISOString(),
+        finishedAt
+          .toISOString(),
       durationSeconds:
         Math.round(
           (
-            finishedAt.getTime() -
-            startedAt.getTime()
-          ) / 1000
+            finishedAt
+              .getTime() -
+            startedAt
+              .getTime()
+          ) /
+          1000
         ),
       error:
         error.message ||
         String(error),
       timeout:
-        isTimeoutError(error),
+        isTimeoutError(
+          error
+        ),
       typeFailed: null,
       typeTimeout: null,
-      savedYearMissing: null,
-      savedColorMissing: null,
-      savedMileageMissing: null,
-      savedImageMissing: null,
+      savedYearMissing:
+        null,
+      savedColorMissing:
+        null,
+      savedMileageMissing:
+        null,
+      savedImageMissing:
+        null,
       savedDetailFetchFailed:
         null,
     };
@@ -5115,7 +5751,8 @@ async function runInventoryUpdate({
       github =
         await commitInventoryToGitHub(
           buildFailureInventoryData(
-            current.inventory,
+            current
+              .inventory,
             failureStatus
           ),
           current.sha,
@@ -5129,8 +5766,11 @@ async function runInventoryUpdate({
         reason:
           "failed to save failure status",
         error:
-          commitError.message ||
-          String(commitError),
+          commitError
+            .message ||
+          String(
+            commitError
+          ),
       };
     }
 
@@ -5169,6 +5809,38 @@ async function buildStatusResponse() {
   const lock =
     await readUpdateLock();
 
+  const savedPriceSamples =
+    (
+      current
+        .inventory
+        ?.vehicles ||
+      []
+    )
+      .filter(
+        (vehicle) =>
+          vehicle
+            .sourceStatus ===
+          "一時保存"
+      )
+      .slice(
+        0,
+        5
+      )
+      .map(
+        (vehicle) => ({
+          stockId:
+            vehicle.stockId,
+          carName:
+            vehicle.carName,
+          gradeName:
+            vehicle.gradeName,
+          bodyPrice:
+            vehicle.bodyPrice,
+          totalPrice:
+            vehicle.totalPrice,
+        })
+      );
+
   return {
     success: true,
     codeVersion:
@@ -5188,42 +5860,58 @@ async function buildStatusResponse() {
           lock.stale
         ),
       runId:
-        lock.runId || "",
+        lock.runId ||
+        "",
       trigger:
-        lock.trigger || "",
+        lock.trigger ||
+        "",
       createdAt:
-        lock.createdAt || "",
+        lock.createdAt ||
+        "",
       ageSeconds:
         lock.ageMs
           ? Math.round(
-              lock.ageMs / 1000
+              lock.ageMs /
+              1000
             )
           : 0,
     },
     inventory: {
       codeVersion:
-        current.inventory
-          ?.codeVersion || "",
+        current
+          .inventory
+          ?.codeVersion ||
+        "",
       updatedAt:
-        current.inventory
-          ?.updatedAt || "",
+        current
+          .inventory
+          ?.updatedAt ||
+        "",
       counts:
-        current.inventory
-          ?.counts || {},
+        current
+          .inventory
+          ?.counts ||
+        {},
       lastUpdateStatus:
-        current.inventory
+        current
+          .inventory
           ?.lastUpdateStatus ||
         null,
       checks:
-        current.inventory
-          ?.checks || {},
+        current
+          .inventory
+          ?.checks ||
+        {},
+      savedPriceSamples,
     },
   };
 }
 
 export async function GET(request) {
   const url =
-    new URL(request.url);
+    new URL(
+      request.url
+    );
 
   const statusOnly =
     url.searchParams.get(
@@ -5264,7 +5952,9 @@ export async function GET(request) {
     createRunId();
 
   const trigger =
-    getTriggerLabel(request);
+    getTriggerLabel(
+      request
+    );
 
   const lock =
     await acquireUpdateLock(
@@ -5287,13 +5977,16 @@ export async function GET(request) {
           "すでに在庫更新が実行中です。二重実行は停止しました。",
         currentRunId:
           lock.current
-            ?.runId || "",
+            ?.runId ||
+          "",
         currentTrigger:
           lock.current
-            ?.trigger || "",
+            ?.trigger ||
+          "",
         currentStartedAt:
           lock.current
-            ?.createdAt || "",
+            ?.createdAt ||
+          "",
         statusPath:
           "/api/inventory/update?status=1",
       },
@@ -5312,24 +6005,26 @@ export async function GET(request) {
         message:
           "更新ロックの取得に失敗しました。",
         error:
-          lock.error || "",
+          lock.error ||
+          "",
       },
       500
     );
   }
 
-  const execute = async () => {
-    try {
-      return await runInventoryUpdate({
-        runId,
-        trigger,
-      });
-    } finally {
-      await deleteUpdateLock(
-        lock.refSha
-      );
-    }
-  };
+  const execute =
+    async () => {
+      try {
+        return await runInventoryUpdate({
+          runId,
+          trigger,
+        });
+      } finally {
+        await deleteUpdateLock(
+          lock.refSha
+        );
+      }
+    };
 
   if (wait) {
     const result =
@@ -5343,9 +6038,11 @@ export async function GET(request) {
     );
   }
 
-  after(async () => {
-    await execute();
-  });
+  after(
+    async () => {
+      await execute();
+    }
+  );
 
   return json(
     {
