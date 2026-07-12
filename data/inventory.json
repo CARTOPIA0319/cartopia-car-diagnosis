@@ -1,16 +1,16 @@
 {
-  "codeVersion": "saved-list-direct-v7-background-lock",
-  "updatedAt": "2026-07-11T23:06:53.276Z",
+  "codeVersion": "saved-list-direct-v8-price-fix",
+  "updatedAt": "2026-07-12T00:04:27.213Z",
   "source": "motorgate",
   "updateMode": "full-public-and-saved-refresh",
   "lastUpdateStatus": {
     "success": true,
     "statusText": "正常更新",
-    "runId": "20260711230508736-2qfqk6nv",
-    "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-07-11T23:05:09.752Z",
-    "finishedAt": "2026-07-11T23:06:53.276Z",
-    "durationSeconds": 104,
+    "runId": "20260712000252954-936mxrye",
+    "trigger": "URL手動更新",
+    "startedAt": "2026-07-12T00:02:53.887Z",
+    "finishedAt": "2026-07-12T00:04:27.213Z",
+    "durationSeconds": 93,
     "error": "",
     "timeout": false,
     "typeFailed": 68,
@@ -32,7 +32,7 @@
     "githubRead": {
       "status": 200,
       "shaFound": true,
-      "sha": "14f44b85830da8e54a5aad7b309d77c50ccbbd4a",
+      "sha": "8091cf30c8c7f5dfed1293417e4dcff53e3e0d1b",
       "error": ""
     },
     "loginStatus": 302,
@@ -147,7 +147,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -197,7 +197,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -247,7 +247,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -297,7 +297,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -347,7 +347,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -397,7 +397,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -447,7 +447,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -497,7 +497,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -547,7 +547,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -597,7 +597,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -647,7 +647,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -697,7 +697,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -747,7 +747,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -797,7 +797,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -847,7 +847,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -897,7 +897,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -930,7 +930,7 @@
       "displacement": "4.6L",
       "bodyPrice": "199.8万円",
       "totalPrice": "208.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260623/H/70009023323026062300100.jpg?1783811153",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260623/H/70009023323026062300100.jpg?1783814616",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260623W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260623001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -947,7 +947,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -997,7 +997,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1047,7 +1047,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1097,7 +1097,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1147,7 +1147,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1197,7 +1197,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1247,7 +1247,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1297,7 +1297,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1347,7 +1347,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1397,7 +1397,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1447,7 +1447,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1497,7 +1497,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1547,7 +1547,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1597,7 +1597,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1647,7 +1647,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1697,7 +1697,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1747,7 +1747,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1797,7 +1797,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1847,7 +1847,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1897,7 +1897,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1947,7 +1947,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -1997,7 +1997,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2047,7 +2047,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2097,7 +2097,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2147,7 +2147,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2197,7 +2197,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2247,7 +2247,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2297,7 +2297,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2347,7 +2347,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2397,7 +2397,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2447,7 +2447,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2497,7 +2497,7 @@
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": "2026-07-11T23:06:53.276Z",
+      "updatedAt": "2026-07-12T00:04:27.213Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2530,7 +2530,7 @@
       "displacement": "2018cc",
       "bodyPrice": "9.7万円",
       "totalPrice": "9.7万円",
-      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260711W00179.jpg?1783811116",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260711W00179.jpg?1783814585",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260711W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2552,9 +2552,10 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": []
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2585,9 +2586,9 @@
       "color": "ホワイトパールクリスタルシャイン",
       "inspection": "2028",
       "displacement": "2019cc",
-      "bodyPrice": "5.8万円",
-      "totalPrice": "5.8万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260709/H/70009023323026070900100.jpg?1783811116",
+      "bodyPrice": "310.5万円",
+      "totalPrice": "317.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260709/H/70009023323026070900100.jpg?1783814585",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260709W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2609,9 +2610,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "317.2万円",
+          "310.5万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2642,9 +2647,9 @@
       "color": "スノーパールホワイト",
       "inspection": "2028",
       "displacement": "2019cc",
-      "bodyPrice": "6.2万円",
-      "totalPrice": "6.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260709/H/70009023323026070900400.jpg?1783811116",
+      "bodyPrice": "123.1万円",
+      "totalPrice": "126.3万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260709/H/70009023323026070900400.jpg?1783814585",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260709W004&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2666,9 +2671,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "126.3万円",
+          "123.1万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2699,9 +2708,9 @@
       "color": "ナイトシャドーパープルクリスタルメタリック",
       "inspection": "2028",
       "displacement": "2015cc",
-      "bodyPrice": "19.7万円",
-      "totalPrice": "19.7万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260310/H/70009023323026031000100.jpg?1783811116",
+      "bodyPrice": "40.9万円",
+      "totalPrice": "44.3万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260310/H/70009023323026031000100.jpg?1783814585",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260310W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2723,9 +2732,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "44.3万円",
+          "40.9万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2756,9 +2769,9 @@
       "color": "パールホワイト",
       "inspection": "2027",
       "displacement": "2017cc",
-      "bodyPrice": "7.4万円",
-      "totalPrice": "7.4万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260706/H/70009023323026070600200.jpg?1783811116",
+      "bodyPrice": "86.2万円",
+      "totalPrice": "88.8万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260706/H/70009023323026070600200.jpg?1783814585",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260706W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2780,9 +2793,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "88.8万円",
+          "86.2万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2813,9 +2830,9 @@
       "color": "プレミアムベルベットパープルパール",
       "inspection": "00330002",
       "displacement": "2022cc",
-      "bodyPrice": "5.3万円",
-      "totalPrice": "5.3万円",
-      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260709W00379.jpg?1783811116",
+      "bodyPrice": "151.8万円",
+      "totalPrice": "155.7万円",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260709W00379.jpg?1783814585",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260709W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2837,9 +2854,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "155.7万円",
+          "151.8万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2870,9 +2891,9 @@
       "color": "ブリリアントカッパークリスタルマイカＩＩ",
       "inspection": "00330002",
       "displacement": "2021cc",
-      "bodyPrice": "2.9万円",
-      "totalPrice": "2.9万円",
-      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260709W00279.jpg?1783811123",
+      "bodyPrice": "178.2万円",
+      "totalPrice": "186.2万円",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260709W00279.jpg?1783814591",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260709W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2894,9 +2915,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "186.2万円",
+          "178.2万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2927,9 +2952,9 @@
       "color": "パールホワイト",
       "inspection": "00330002",
       "displacement": "2019cc",
-      "bodyPrice": "8.0万円",
-      "totalPrice": "8.0万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260526/H/70009023323026052600200.jpg?1783811123",
+      "bodyPrice": "241.7万円",
+      "totalPrice": "252.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260526/H/70009023323026052600200.jpg?1783814592",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260526W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2951,9 +2976,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "252.2万円",
+          "241.7万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2984,9 +3013,9 @@
       "color": "シルバーマイカメタリック",
       "inspection": "2027",
       "displacement": "2012cc",
-      "bodyPrice": "8.3万円",
-      "totalPrice": "8.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260526/H/70009023323026052600400.jpg?1783811123",
+      "bodyPrice": "32.1万円",
+      "totalPrice": "38.3万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260526/H/70009023323026052600400.jpg?1783814591",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260526W004&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3008,9 +3037,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "38.3万円",
+          "32.1万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -3041,9 +3074,9 @@
       "color": "クリスタルブラックシリカ",
       "inspection": "00330002",
       "displacement": "2017cc",
-      "bodyPrice": "8.2万円",
-      "totalPrice": "8.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260422/H/70009023323026042200300.jpg?1783811123",
+      "bodyPrice": "121.0万円",
+      "totalPrice": "132.3万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260422/H/70009023323026042200300.jpg?1783814591",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260422W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3065,9 +3098,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "132.3万円",
+          "121.0万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -3098,9 +3135,9 @@
       "color": "ルナシルバーメタリック",
       "inspection": "00330002",
       "displacement": "2019cc",
-      "bodyPrice": "7.5万円",
-      "totalPrice": "7.5万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260626/H/70009023323026062600100.jpg?1783811123",
+      "bodyPrice": "99.8万円",
+      "totalPrice": "108.3万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260626/H/70009023323026062600100.jpg?1783814591",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260626W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3122,9 +3159,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "108.3万円",
+          "99.8万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -3155,9 +3196,9 @@
       "color": "ブライトシルバーメタリック",
       "inspection": "00330002",
       "displacement": "2022cc",
-      "bodyPrice": "1.9万円",
-      "totalPrice": "1.9万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260706/H/70009023323026070600100.jpg?1783811123",
+      "bodyPrice": "153.9万円",
+      "totalPrice": "157.7万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260706/H/70009023323026070600100.jpg?1783814595",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260706W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3179,9 +3220,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "157.7万円",
+          "153.9万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -3212,9 +3257,9 @@
       "color": "ブラウンＭ",
       "inspection": "00330002",
       "displacement": "2019cc",
-      "bodyPrice": "10.0万円",
-      "totalPrice": "10.0万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260629/H/70009023323026062900100.jpg?1783811130",
+      "bodyPrice": "72.2万円",
+      "totalPrice": "76.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260629/H/70009023323026062900100.jpg?1783814598",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260629W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3236,9 +3281,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "76.2万円",
+          "72.2万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -3269,9 +3318,9 @@
       "color": "スマートブラック",
       "inspection": "00330002",
       "displacement": "2015cc",
-      "bodyPrice": "6.4万円",
-      "totalPrice": "6.4万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260702/H/70009023323026070200100.jpg?1783811130",
+      "bodyPrice": "102.5万円",
+      "totalPrice": "106.3万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260702/H/70009023323026070200100.jpg?1783814598",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260702W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3293,9 +3342,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "106.3万円",
+          "102.5万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -3326,9 +3379,9 @@
       "color": "イエローＩＩ",
       "inspection": "00330002",
       "displacement": "2021cc",
-      "bodyPrice": "6.7万円",
-      "totalPrice": "6.7万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260612/H/70009023323026061200200.jpg?1783811130",
+      "bodyPrice": "144.0万円",
+      "totalPrice": "147.8万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260612/H/70009023323026061200200.jpg?1783814598",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260612W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3350,9 +3403,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "147.8万円",
+          "144.0万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -3383,9 +3440,9 @@
       "color": "パールホワイト",
       "inspection": "00330002",
       "displacement": "2013cc",
-      "bodyPrice": "8.1万円",
-      "totalPrice": "8.1万円",
-      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260501W00179.jpg?1783811130",
+      "bodyPrice": "46.0万円",
+      "totalPrice": "50.0万円",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260501W00179.jpg?1783814598",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260501W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3407,9 +3464,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "50.0万円",
+          "46.0万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -3440,9 +3501,9 @@
       "color": "グラナイトクリスタルメタリッククリアコート",
       "inspection": "00330002",
       "displacement": "2019cc",
-      "bodyPrice": "7.5万円",
-      "totalPrice": "7.5万円",
-      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260616W00179.jpg?1783811130",
+      "bodyPrice": "332.5万円",
+      "totalPrice": "343.2万円",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260616W00179.jpg?1783814601",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260616W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3464,9 +3525,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "343.2万円",
+          "332.5万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -3497,9 +3562,9 @@
       "color": "フローズンバニラパールＭＩＩ",
       "inspection": "2027",
       "displacement": "2022cc",
-      "bodyPrice": "3.8万円",
-      "totalPrice": "3.8万円",
-      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260520W00179.jpg?1783811130",
+      "bodyPrice": "131.4万円",
+      "totalPrice": "134.2万円",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260520W00179.jpg?1783814602",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260520W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3521,9 +3586,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "134.2万円",
+          "131.4万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -3554,9 +3623,9 @@
       "color": "デニムブルーメタリックＩＩ",
       "inspection": "2028",
       "displacement": "2020cc",
-      "bodyPrice": "10.3万円",
-      "totalPrice": "10.3万円",
-      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260313W00179.jpg?1783811137",
+      "bodyPrice": "95.1万円",
+      "totalPrice": "98.3万円",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260313W00179.jpg?1783814605",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260313W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3578,9 +3647,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "98.3万円",
+          "95.1万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -3611,9 +3684,9 @@
       "color": "ライムホワイトパールクリスタルシャイン",
       "inspection": "2028",
       "displacement": "2013cc",
-      "bodyPrice": "18.7万円",
-      "totalPrice": "18.7万円",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026062200100.jpg?1783811112",
+      "bodyPrice": "42.5万円",
+      "totalPrice": "48.7万円",
+      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026062200100.jpg?1783814580",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260622W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3635,9 +3708,13 @@
         "mileage": true,
         "bodyPrice": true,
         "totalPrice": true,
-        "imageUrl": true
+        "imageUrl": true,
+        "priceCandidates": [
+          "48.7万円",
+          "42.5万円"
+        ]
       },
-      "updatedAt": "2026-07-11T23:05:46.592Z",
+      "updatedAt": "2026-07-12T00:03:32.789Z",
       "typeResult": {
         "status": 200,
         "success": false,
