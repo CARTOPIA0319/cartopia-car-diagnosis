@@ -4,7 +4,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
-const CODE_VERSION = "saved-list-direct-v8-price-fix";
+const CODE_VERSION = "saved-list-direct-v10-type-comment-fix";
 
 const BASE_URL = "https://motorgate.jp";
 const PUBLIC_LIST_URL =
@@ -2104,31 +2104,45 @@ function extractTypesFromText(
   text
 ) {
   const source =
-    decodeHtmlEntities(
-      String(text || "")
-    );
+    toHalfWidthAscii(
+      decodeHtmlEntities(
+        String(text || "")
+      )
+    )
+      .replace(/\\r\\n/g, "\n")
+      .replace(/\\n/g, "\n")
+      .replace(/\\r/g, "\n")
+      .replace(/<br\s*\/?>/gi, "\n")
+      .replace(
+        /<\/(?:textarea|div|p|li|td|th|tr|dt|dd)>/gi,
+        "\n"
+      )
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\r/g, "\n");
 
   const types = [];
 
   for (
     const match of
     source.matchAll(
-      /TYPE\s*:\s*([^\s<>"'&]+)/gi
+      /TYPE\s*:\s*([\s\S]*?)(?=TYPE\s*:|\n|$)/gi
     )
   ) {
     const value =
       compactText(
         match[1]
-      ).replace(
-        /[、,。]/g,
-        ""
-      );
+      )
+        .replace(
+          /^[\s、,。;；:_＿・･|｜/\\-]+/,
+          ""
+        )
+        .replace(
+          /[\s、,。;；:_＿|｜/\\-]+$/,
+          ""
+        );
 
     if (
       value &&
-      !/[._…]/.test(
-        value
-      ) &&
       !types.includes(
         value
       )
@@ -3546,6 +3560,7 @@ async function fetchVehicleDetail(
   }
 
   let best = null;
+  let collectedTypes = [];
   const errors = [];
   let attempts = 0;
 
@@ -3619,7 +3634,7 @@ async function fetchVehicleDetail(
           continue;
         }
 
-        const types =
+        const pageTypes =
           Array.from(
             new Set([
               ...extractTypesFromText(
@@ -3633,6 +3648,14 @@ async function fetchVehicleDetail(
             ])
           );
 
+        collectedTypes =
+          Array.from(
+            new Set([
+              ...collectedTypes,
+              ...pageTypes,
+            ])
+          );
+
         const details =
           extractCommonVehicleDetails(
             html,
@@ -3642,7 +3665,7 @@ async function fetchVehicleDetail(
         const score =
           detailScore(
             details,
-            types
+            pageTypes
           );
 
         if (
@@ -3656,7 +3679,8 @@ async function fetchVehicleDetail(
               response.status,
             html,
             details,
-            types,
+            types:
+              pageTypes,
             score,
           };
         }
@@ -3666,6 +3690,7 @@ async function fetchVehicleDetail(
             .sourceStatus ===
             "一時保存" &&
           Boolean(
+            collectedTypes.length &&
             (
               details.year ||
               vehicle.year
@@ -3689,7 +3714,7 @@ async function fetchVehicleDetail(
             .sourceStatus ===
             "掲載在庫" &&
           Boolean(
-            types.length &&
+            collectedTypes.length &&
             (
               details.imageUrl ||
               vehicle.imageUrl
@@ -3773,12 +3798,14 @@ async function fetchVehicleDetail(
     best.details;
 
   const types =
-    best.types.length > 0
-      ? best.types
-      : vehicle.types?.length
-        ? vehicle.types
-        : previous.types ||
-          [];
+    collectedTypes.length > 0
+      ? collectedTypes
+      : best.types.length > 0
+        ? best.types
+        : vehicle.types?.length
+          ? vehicle.types
+          : previous.types ||
+            [];
 
   const typeKeys =
     types.length > 0
