@@ -1,7 +1,7 @@
 const INVENTORY_URL =
   "https://raw.githubusercontent.com/CARTOPIA0319/cartopia-car-diagnosis/main/data/inventory.json";
 
-const BUY_MENU_ID = "richmenu-45b4781911f21f5d5632ec63e211b449";
+const BUY_MENU_ID = "richmenu-5ff00d0af494b2b9c7316da7ae91f4ec";
 const TOP_MENU_ID = "richmenu-19859bd6bf80b802dfc2171536ac089e";
 const VEHICLES_PER_PAGE = 9;
 const PREVIEW_HEIGHT = "86px";
