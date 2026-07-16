@@ -4,7 +4,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
-const CODE_VERSION = "saved-list-direct-v10-type-comment-fix";
+const CODE_VERSION = "saved-list-direct-v11-maker-seat-capacity";
 
 const BASE_URL = "https://motorgate.jp";
 const PUBLIC_LIST_URL =
@@ -1537,6 +1537,8 @@ function parsePublicVehicleRow(
     gradeName,
     gradeExtraInfo: "",
     classificationName,
+    makerName: "",
+    seatCapacity: null,
     year:
       normalizeYear(
         infoItems[0] || ""
@@ -1981,6 +1983,8 @@ function parseSavedVehicleRow(
     gradeName,
     gradeExtraInfo: "",
     classificationName: "",
+    makerName: "",
+    seatCapacity: null,
     year,
     mileage,
     color,
@@ -2128,7 +2132,7 @@ function extractTypesFromText(
       /TYPE\s*:\s*([\s\S]*?)(?=TYPE\s*:|\n|$)/gi
     )
   ) {
-    const value =
+        const value =
       compactText(
         match[1]
       )
@@ -2904,6 +2908,254 @@ function extractBodyColor(html) {
     .trim();
 }
 
+function normalizeMakerSearchText(value) {
+  return String(value || "")
+    .normalize("NFKC")
+    .toUpperCase()
+    .replace(
+      /[\s　・･ー―‐\-_/／,，.。()（）\[\]「」『』:：]/g,
+      ""
+    );
+}
+
+const MODEL_MAKER_RULES = [
+  ["レクサス", /^(LS|ES|IS|GS|LC|RC|RX|NX|UX|LX|GX|LBX)/],
+  ["トヨタ", /^(アクア|アルファード|ヴェルファイア|ヴォクシー|エスティマ|カムリ|カローラ|クラウン|シエンタ|タンク|ノア|ハイエース|ハリアー|プリウス|プロボックス|ポルテ|ヤリス|ライズ|ランドクルーザー|ルーミー|レジアスエース)/],
+  ["日産", /^(NT100クリッパートラック|NV100クリッパーリオ|エクストレイル|エルグランド|オーラ|キックス|キャラバン|クリッパー|サクラ|セレナ|デイズ|ノート|フーガ|リーフ|ルークス)/],
+  ["ホンダ", /^(NBOX|NONE|NVAN|NWGN|オデッセイ|シビック|ステップワゴン|フィット|フリード|ヴェゼル)/],
+  ["マツダ", /^(CX3|CX30|CX5|CX60|CX8|CX80|MAZDA2|MAZDA3|MAZDA6|アテンザ|デミオ|ロードスター)/],
+  ["スバル", /^(BRZ|WRX|XV|インプレッサ|クロストレック|ステラ|フォレスター|レガシィ|レヴォーグ)/],
+  ["三菱", /^(EKクロス|アウトランダー|エクリプスクロス|デリカ|パジェロ|ミニキャブ)/],
+  ["スズキ", /^(アルト|エブリイ|キャリイ|クロスビー|ジムニー|スイフト|スペーシア|ソリオ|ハスラー|ラパン|ワゴンR)/],
+  ["ダイハツ", /^(アトレー|ウェイク|キャスト|コペン|タフト|タント|トール|ハイゼット|ミライース|ムーヴ|ロッキー)/],
+  ["三菱ふそう", /^キャンター/],
+  ["いすゞ", /^(エルフ|フォワード)/],
+  ["日野", /^(デュトロ|レンジャー|プロフィア)/],
+];
+
+function normalizeMakerName(value) {
+  const text =
+    normalizeMakerSearchText(
+      value
+    );
+
+  if (!text) return "";
+
+  const aliases = [
+    ["トヨタ", ["トヨタ", "TOYOTA"]],
+    ["レクサス", ["レクサス", "LEXUS"]],
+    ["日産", ["日産", "ニッサン", "NISSAN"]],
+    ["ホンダ", ["ホンダ", "HONDA"]],
+    ["マツダ", ["マツダ", "MAZDA"]],
+    ["スバル", ["スバル", "SUBARU"]],
+    ["三菱ふそう", ["三菱ふそう", "ふそう", "FUSO"]],
+    ["三菱", ["三菱", "ミツビシ", "MITSUBISHI"]],
+    ["スズキ", ["スズキ", "SUZUKI"]],
+    ["ダイハツ", ["ダイハツ", "DAIHATSU"]],
+    ["いすゞ", ["いすゞ", "イスズ", "ISUZU"]],
+    ["日野", ["日野", "HINO"]],
+    ["UDトラックス", ["UDトラックス", "UDTRUCKS"]],
+    ["BMW", ["BMW"]],
+    ["メルセデス・ベンツ", ["メルセデスベンツ", "メルセデス", "ベンツ", "MERCEDESBENZ", "MERCEDES", "BENZ"]],
+    ["アウディ", ["アウディ", "AUDI"]],
+    ["フォルクスワーゲン", ["フォルクスワーゲン", "VOLKSWAGEN"]],
+    ["ボルボ", ["ボルボ", "VOLVO"]],
+    ["MINI", ["MINI"]],
+    ["ジープ", ["ジープ", "JEEP"]],
+    ["プジョー", ["プジョー", "PEUGEOT"]],
+    ["シトロエン", ["シトロエン", "CITROEN"]],
+    ["ルノー", ["ルノー", "RENAULT"]],
+    ["フィアット", ["フィアット", "FIAT"]],
+    ["アバルト", ["アバルト", "ABARTH"]],
+    ["ポルシェ", ["ポルシェ", "PORSCHE"]],
+    ["ジャガー", ["ジャガー", "JAGUAR"]],
+    ["ランドローバー", ["ランドローバー", "LANDROVER", "レンジローバー", "RANGEROVER"]],
+    ["テスラ", ["テスラ", "TESLA"]],
+  ];
+
+  for (const [makerName, values] of aliases) {
+    if (
+      values.some((alias) =>
+        text.includes(
+          normalizeMakerSearchText(
+            alias
+          )
+        )
+      )
+    ) {
+      return makerName;
+    }
+  }
+
+  return "";
+}
+
+function inferMakerName(carName) {
+  const text =
+    normalizeMakerSearchText(
+      carName
+    );
+
+  if (!text) return "";
+
+  for (const [makerName, pattern] of MODEL_MAKER_RULES) {
+    if (pattern.test(text)) {
+      return makerName;
+    }
+  }
+
+  return "";
+}
+
+function extractMakerName(
+  html,
+  carName
+) {
+  const value =
+    findControlValue(
+      html,
+      [
+        "MakerName",
+        "Maker",
+        "Manufacturer",
+        "BrandName",
+        "maker_name",
+        "manufacturer_name",
+        "brand_name",
+        "car_maker",
+        "vehicle_maker",
+      ]
+    ) ||
+    findControlValueByPatterns(
+      html,
+      [
+        /maker/,
+        /manufacturer/,
+        /brandname/,
+      ]
+    ) ||
+    findValueNearLabel(
+      html,
+      [
+        "メーカー名",
+        "メーカー",
+        "自動車メーカー",
+        "ブランド",
+      ]
+    );
+
+  return (
+    normalizeMakerName(
+      value
+    ) ||
+    inferMakerName(
+      carName
+    )
+  );
+}
+
+function normalizeSeatCapacity(value) {
+  const text =
+    toHalfWidthAscii(
+      decodeHtmlEntities(
+        String(value || "")
+      )
+    )
+      .normalize("NFKC")
+      .replace(/,/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  if (!text) return null;
+
+  const matched =
+    text.match(
+      /(?:乗車定員|乗員定員|乗車人数|定員|seatingcapacity|seatcapacity|passengercapacity)\s*[：:=]?\s*(\d{1,2})\s*(?:人|名)?/i
+    ) ||
+    text.match(
+      /(\d{1,2})\s*(?:人|名)(?:乗り|乗車)?/
+    ) ||
+    text.match(
+      /^(\d{1,2})$/
+    );
+
+  const number =
+    Number(
+      matched?.[1] ||
+      NaN
+    );
+
+  return Number.isInteger(number) &&
+    number >= 1 &&
+    number <= 20
+    ? number
+    : null;
+}
+
+function extractSeatCapacity(html) {
+  const value =
+    findControlValue(
+      html,
+      [
+        "Teiin",
+        "JoushaTeiin",
+        "JyosyaTeiin",
+        "PassengerCapacity",
+        "SeatingCapacity",
+        "SeatCapacity",
+        "teiin",
+        "jousha_teiin",
+        "jyosya_teiin",
+        "passenger_capacity",
+        "seating_capacity",
+        "seat_capacity",
+      ]
+    ) ||
+    findControlValueByPatterns(
+      html,
+      [
+        /(?:jousha|jyosya|josha).*teiin/,
+        /teiin/,
+        /passengercapacity/,
+        /seatingcapacity/,
+        /seatcapacity/,
+      ]
+    ) ||
+    findValueNearLabel(
+      html,
+      [
+        "乗車定員",
+        "乗員定員",
+        "乗車人数",
+        "定員",
+      ]
+    );
+
+  const direct =
+    normalizeSeatCapacity(
+      value
+    );
+
+  if (direct) {
+    return direct;
+  }
+
+  const text =
+    cleanHtmlToText(
+      html
+    );
+
+  return normalizeSeatCapacity(
+    text.match(
+      /(?:乗車定員|乗員定員|乗車人数|定員)\s*[：:]?\s*\d{1,2}\s*(?:人|名)?/
+    )?.[0] ||
+    text.match(
+      /\d{1,2}\s*人乗り/
+    )?.[0] ||
+    ""
+  );
+}
+
 function extractCommonVehicleDetails(
   html,
   pageUrl
@@ -3182,6 +3434,15 @@ function extractCommonVehicleDetails(
       cleanVehicleText(
         carName
       ),
+    makerName:
+      extractMakerName(
+        html,
+        carName
+      ),
+    seatCapacity:
+      extractSeatCapacity(
+        html
+      ),
     gradeName:
       cleanVehicleText(
         gradeName
@@ -3332,6 +3593,8 @@ function mergePreviousVehicle(
     "gradeName",
     "gradeExtraInfo",
     "classificationName",
+    "makerName",
+    "seatCapacity",
     "year",
     "mileage",
     "color",
@@ -3405,6 +3668,8 @@ function detailScore(
       details.carName,
       details.gradeName,
       details.classificationName,
+      details.makerName,
+      details.seatCapacity,
       details.year,
       details.mileage,
       details.color,
@@ -3454,6 +3719,8 @@ function chooseMergedValue(
         "gradeName",
         "gradeExtraInfo",
         "classificationName",
+        "makerName",
+        "seatCapacity",
         "year",
         "color",
         "inspection",
@@ -3826,6 +4093,29 @@ async function fetchVehicleDetail(
       "carName"
     );
 
+  const makerName =
+    normalizeMakerName(
+      chooseMergedValue(
+        vehicle,
+        previous,
+        details,
+        "makerName"
+      )
+    ) ||
+    inferMakerName(
+      carName
+    );
+
+  const seatCapacity =
+    normalizeSeatCapacity(
+      chooseMergedValue(
+        vehicle,
+        previous,
+        details,
+        "seatCapacity"
+      )
+    );
+
   let gradeName =
     chooseMergedValue(
       vehicle,
@@ -3900,6 +4190,8 @@ async function fetchVehicleDetail(
         previous.description ||
         title,
       carName,
+      makerName,
+      seatCapacity,
       gradeName,
       gradeExtraInfo:
         chooseMergedValue(
@@ -3973,7 +4265,7 @@ async function fetchVehicleDetail(
         success:
           types.length >
           0,
-        containsFatalError:
+                containsFatalError:
           best.html.includes(
             "FatalError"
           ),
@@ -3988,6 +4280,14 @@ async function fetchVehicleDetail(
         url:
           best.url,
         attempts,
+        makerName:
+          Boolean(
+            details.makerName
+          ),
+        seatCapacity:
+          Boolean(
+            details.seatCapacity
+          ),
         year:
           Boolean(
             details.year
@@ -4101,6 +4401,18 @@ function toInventoryVehicle(
     classificationName:
       vehicle
         .classificationName,
+    makerName:
+      normalizeMakerName(
+        vehicle.makerName
+      ) ||
+      inferMakerName(
+        vehicle.carName ||
+        vehicle.title
+      ),
+    seatCapacity:
+      normalizeSeatCapacity(
+        vehicle.seatCapacity
+      ),
     year:
       vehicle.year,
     mileage:
@@ -5684,7 +5996,7 @@ async function runInventoryUpdate({
       await commitInventoryToGitHub(
         inventoryData,
         current.sha,
-        `fix saved inventory prices ${runId}`
+        `add maker and seat capacity ${runId}`
       );
 
     console.log(
