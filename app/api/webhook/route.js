@@ -1,410 +1,163 @@
-import inventory from "../../../data/inventory.json";
+const INVENTORY_URL =
+  "https://raw.githubusercontent.com/CARTOPIA0319/cartopia-car-diagnosis/main/data/inventory.json";
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
-
-const BUY_MENU_ID = "richmenu-45b4781911f21f5d5632ec63e211b449";
+const BUY_MENU_ID = "richmenu-56fd19decbbef45a951a3bfa4e57b10d";
 const TOP_MENU_ID = "richmenu-19859bd6bf80b802dfc2171536ac089e";
 const VEHICLES_PER_PAGE = 9;
-const PERFECT_CAROUSEL_SIZE = 10;
-const PERFECT_MAX_VEHICLES = 40;
-const PERFECT_INVENTORY_REQUEST_PREFIX = "【ぴったり診断・在庫検索】";
+const PREVIEW_HEIGHT = "86px";
 
-const MAKER_ALIASES = {
-  トヨタ: ["TOYOTA", "トヨタ"],
-  レクサス: ["LEXUS", "レクサス"],
-  ホンダ: ["HONDA", "ホンダ"],
-  日産: ["NISSAN", "ニッサン", "日産"],
-  マツダ: ["MAZDA", "マツダ"],
-  スバル: ["SUBARU", "スバル"],
-  三菱: ["MITSUBISHI", "ミツビシ", "三菱"],
-  スズキ: ["SUZUKI", "スズキ"],
-  ダイハツ: ["DAIHATSU", "ダイハツ"],
-  BMW: ["BMW"],
-  メルセデスベンツ: [
-    "MERCEDESBENZ",
-    "MERCEDES",
-    "BENZ",
-    "メルセデスベンツ",
-    "ベンツ",
-  ],
-  アウディ: ["AUDI", "アウディ"],
-  フォルクスワーゲン: [
-    "VOLKSWAGEN",
-    "VW",
-    "フォルクスワーゲン",
-  ],
-  ボルボ: ["VOLVO", "ボルボ"],
-  ミニ: ["MINI", "ミニ"],
-  ジープ: ["JEEP", "ジープ"],
-  プジョー: ["PEUGEOT", "プジョー"],
-  シトロエン: ["CITROEN", "シトロエン"],
-  ルノー: ["RENAULT", "ルノー"],
-  フィアット: ["FIAT", "フィアット"],
-  ポルシェ: ["PORSCHE", "ポルシェ"],
-  ジャガー: ["JAGUAR", "ジャガー"],
-  ランドローバー: ["LANDROVER", "ランドローバー"],
-};
+const FALLBACK_EXTRA_INFO =
+  "詳細装備はスタッフまでお問い合わせください";
 
-const IMPORT_MAKERS = new Set([
-  "BMW",
-  "メルセデスベンツ",
-  "アウディ",
-  "フォルクスワーゲン",
-  "ボルボ",
-  "ミニ",
-  "ジープ",
-  "プジョー",
-  "シトロエン",
-  "ルノー",
-  "フィアット",
-  "ポルシェ",
-  "ジャガー",
-  "ランドローバー",
-]);
-
-const MODEL_TO_MAKER = {
-  アクア: "トヨタ",
-  プリウス: "トヨタ",
-  ヤリス: "トヨタ",
-  ヴィッツ: "トヨタ",
-  パッソ: "トヨタ",
-  ルーミー: "トヨタ",
-  タンク: "トヨタ",
-  シエンタ: "トヨタ",
-  ノア: "トヨタ",
-  ヴォクシー: "トヨタ",
-  エスクァイア: "トヨタ",
-  アルファード: "トヨタ",
-  ヴェルファイア: "トヨタ",
-  ハリアー: "トヨタ",
-  ライズ: "トヨタ",
-  RAV4: "トヨタ",
-  ランドクルーザー: "トヨタ",
-  クラウン: "トヨタ",
-  カローラ: "トヨタ",
-  プロボックス: "トヨタ",
-  ハイエース: "トヨタ",
-
-  NBOX: "ホンダ",
-  NWGN: "ホンダ",
-  NONE: "ホンダ",
-  NVAN: "ホンダ",
-  フィット: "ホンダ",
-  フリード: "ホンダ",
-  ヴェゼル: "ホンダ",
-  ステップワゴン: "ホンダ",
-  オデッセイ: "ホンダ",
-  シビック: "ホンダ",
-  シャトル: "ホンダ",
-
-  デイズ: "日産",
-  ルークス: "日産",
-  モコ: "日産",
-  サクラ: "日産",
-  ノート: "日産",
-  セレナ: "日産",
-  エクストレイル: "日産",
-  キックス: "日産",
-  エルグランド: "日産",
-  スカイライン: "日産",
-  リーフ: "日産",
-  NV100: "日産",
-  キャラバン: "日産",
-
-  デミオ: "マツダ",
-  MAZDA2: "マツダ",
-  MAZDA3: "マツダ",
-  MAZDA6: "マツダ",
-  CX3: "マツダ",
-  CX5: "マツダ",
-  CX8: "マツダ",
-  CX30: "マツダ",
-  ロードスター: "マツダ",
-  フレア: "マツダ",
-
-  ステラ: "スバル",
-  プレオ: "スバル",
-  シフォン: "スバル",
-  インプレッサ: "スバル",
-  レヴォーグ: "スバル",
-  フォレスター: "スバル",
-  アウトバック: "スバル",
-  クロストレック: "スバル",
-  BRZ: "スバル",
-
-  EK: "三菱",
-  デリカ: "三菱",
-  アウトランダー: "三菱",
-  エクリプスクロス: "三菱",
-  RVR: "三菱",
-  パジェロ: "三菱",
-  ミニキャブ: "三菱",
-
-  スペーシア: "スズキ",
-  ワゴンR: "スズキ",
-  ハスラー: "スズキ",
-  アルト: "スズキ",
-  ラパン: "スズキ",
-  ジムニー: "スズキ",
-  ソリオ: "スズキ",
-  スイフト: "スズキ",
-  エブリイ: "スズキ",
-  キャリイ: "スズキ",
-  クロスビー: "スズキ",
-
-  タント: "ダイハツ",
-  ムーヴ: "ダイハツ",
-  ムーブ: "ダイハツ",
-  ミライース: "ダイハツ",
-  タフト: "ダイハツ",
-  ロッキー: "ダイハツ",
-  トール: "ダイハツ",
-  アトレー: "ダイハツ",
-  ハイゼット: "ダイハツ",
-  ウェイク: "ダイハツ",
-  コペン: "ダイハツ",
-  キャスト: "ダイハツ",
-};
-
-const LEXUS_MODEL_CODES = [
-  "LS",
-  "ES",
-  "IS",
-  "GS",
-  "LC",
-  "RC",
-  "RX",
-  "NX",
-  "UX",
-  "LX",
-  "GX",
-  "LBX",
-];
+function makeMessageAction(label, text = label) {
+  return {
+    type: "action",
+    action: {
+      type: "message",
+      label,
+      text,
+    },
+  };
+}
 
 const topQuickReply = {
   items: [
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "「買う」でできること",
-        text: "「買う」でできること",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "「売る」でできること",
-        text: "「売る」でできること",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "「予約」でできること",
-        text: "「予約」でできること",
-      },
-    },
+    makeMessageAction("「買う」でできること"),
+    makeMessageAction("「売る」でできること"),
+    makeMessageAction("「予約」でできること"),
   ],
 };
 
 const buyQuickReply = {
   items: [
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "ざっくり診断とは？",
-        text: "ざっくり診断とは？",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "ぴったり診断とは？",
-        text: "ぴったり診断とは？",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "車種が決まっている人は？",
-        text: "車種が決まっている人は？",
-      },
-    },
+    makeMessageAction("ざっくり診断とは？"),
+    makeMessageAction("ぴったり診断とは？"),
+    makeMessageAction("車種が決まっている人は？"),
   ],
 };
 
 const roughSizeQuickReply = {
   items: [
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "軽自動車",
-        text: "軽自動車",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "普通車",
-        text: "普通車",
-      },
-    },
+    makeMessageAction("軽自動車"),
+    makeMessageAction("普通車"),
   ],
 };
 
 const lightTypeQuickReply = {
   items: [
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "スライドドア",
-        text: "軽自動車 スライドドア",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "スタンダード",
-        text: "軽自動車 スタンダード",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "SUV",
-        text: "軽自動車 SUV",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "トラック",
-        text: "軽自動車 トラック",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "スポーティ",
-        text: "軽自動車 スポーティ",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "こだわりなし",
-        text: "軽自動車 こだわりなし",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "ひとつ戻る",
-        text: "ざっくり診断",
-      },
-    },
+    makeMessageAction(
+      "スライドドア",
+      "軽自動車 スライドドア"
+    ),
+    makeMessageAction(
+      "スタンダード",
+      "軽自動車 スタンダード"
+    ),
+    makeMessageAction(
+      "SUV",
+      "軽自動車 SUV"
+    ),
+    makeMessageAction(
+      "トラック",
+      "軽自動車 トラック"
+    ),
+    makeMessageAction(
+      "スポーティ",
+      "軽自動車 スポーティ"
+    ),
+    makeMessageAction(
+      "こだわりなし",
+      "軽自動車 こだわりなし"
+    ),
+    makeMessageAction(
+      "ひとつ戻る",
+      "ざっくり診断"
+    ),
   ],
 };
 
 const normalTypeQuickReply = {
   items: [
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "コンパクトカー",
-        text: "普通車 コンパクトカー",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "ミニバン",
-        text: "普通車 ミニバン",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "SUV",
-        text: "普通車 SUV",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "セダン",
-        text: "普通車 セダン",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "ステーションワゴン",
-        text: "普通車 ステーションワゴン",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "低燃費・HV",
-        text: "普通車 低燃費・ハイブリッド",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "スポーティ",
-        text: "普通車 スポーティ",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "バン・トラック",
-        text: "普通車 バン・トラック",
-      },
-    },
-    {
-      type: "action",
-      action: {
-        type: "message",
-        label: "ひとつ戻る",
-        text: "ざっくり診断",
-      },
-    },
+    makeMessageAction(
+      "コンパクトカー",
+      "普通車 コンパクトカー"
+    ),
+    makeMessageAction(
+      "ミニバン",
+      "普通車 ミニバン"
+    ),
+    makeMessageAction(
+      "SUV",
+      "普通車 SUV"
+    ),
+    makeMessageAction(
+      "セダン",
+      "普通車 セダン"
+    ),
+    makeMessageAction(
+      "ステーションワゴン",
+      "普通車 ステーションワゴン"
+    ),
+    makeMessageAction(
+      "低燃費・HV",
+      "普通車 低燃費・ハイブリッド"
+    ),
+    makeMessageAction(
+      "スポーティ",
+      "普通車 スポーティ"
+    ),
+    makeMessageAction(
+      "バン・トラック",
+      "普通車 バン・トラック"
+    ),
+    makeMessageAction(
+      "ひとつ戻る",
+      "ざっくり診断"
+    ),
   ],
 };
+
+async function loadInventory() {
+  const response = await fetch(
+    `${INVENTORY_URL}?t=${Date.now()}`,
+    {
+      cache: "no-store",
+      headers: {
+        "Cache-Control":
+          "no-store, no-cache, must-revalidate",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `最新在庫データの取得に失敗しました: ${response.status}`
+    );
+  }
+
+  const inventory = await response.json();
+
+  if (
+    !inventory ||
+    !Array.isArray(inventory.vehicles)
+  ) {
+    throw new Error(
+      "最新在庫データの形式が正しくありません"
+    );
+  }
+
+  return inventory;
+}
 
 export async function GET() {
   return Response.json({
     status: "ok",
     name: "CARTOPIA main webhook",
+    inventoryMode: "dynamic-github-json",
+    displayVersion: "vehicle-card-v2",
   });
 }
+
 export async function POST(request) {
   const body = await request.json();
   const events = body.events || [];
@@ -412,84 +165,131 @@ export async function POST(request) {
   for (const event of events) {
     if (!event.replyToken) continue;
 
-    const text =
-      event.type === "message" &&
-      event.message?.type === "text"
-        ? event.message.text
-        : "";
+    try {
+      await handleEvent(event);
+    } catch (error) {
+      console.error(
+        "WEBHOOK_EVENT_ERROR:",
+        error
+      );
 
-    const postbackData =
-      event.type === "postback"
-        ? event.postback?.data || ""
-        : "";
+      await replyMessage(
+        event.replyToken,
+        [
+          {
+            type: "text",
+            text:
+              "在庫情報の読み込みに失敗しました。" +
+              "少し時間を置いて、もう一度お試しください🙇‍♀️",
+          },
+        ]
+      );
+    }
+  }
 
-    if (postbackData.startsWith("more|")) {
-      const [, size, rawType, offsetText] =
-        postbackData.split("|");
+  return Response.json({
+    ok: true,
+  });
+}
 
-      const offset = Number(offsetText || "0");
-      const type = normalizeType(rawType);
-      const results = findVehicles(size, type);
+async function handleEvent(event) {
+  const text =
+    event.type === "message" &&
+    event.message?.type === "text"
+      ? event.message.text
+      : "";
 
-      await replyMessage(event.replyToken, [
+  const postbackData =
+    event.type === "postback"
+      ? event.postback?.data || ""
+      : "";
+
+  if (postbackData.startsWith("more|")) {
+    const [
+      ,
+      size,
+      rawType,
+      offsetText,
+    ] = postbackData.split("|");
+
+    const offset = Number(
+      offsetText || "0"
+    );
+
+    const results =
+      await findVehicles(
+        size,
+        normalizeType(rawType)
+      );
+
+    if (
+      !results.length ||
+      offset >= results.length
+    ) {
+      await replyMessage(
+        event.replyToken,
+        [
+          {
+            type: "text",
+            text:
+              "表示できる在庫はここまでです😊",
+          },
+        ]
+      );
+
+      return;
+    }
+
+    await replyMessage(
+      event.replyToken,
+      [
         makeVehiclePageCarouselMessage(
           results,
           size,
           rawType,
           offset
         ),
-      ]);
+      ]
+    );
 
-      continue;
-    }
+    return;
+  }
 
-    const perfectCriteria =
-      parsePerfectInventoryRequest(text);
+  const isBuy =
+    text === "くるまを買う" ||
+    postbackData ===
+      "switch-to-car-search-menu";
 
-    if (perfectCriteria) {
-      const results =
-        findPerfectVehicles(perfectCriteria);
+  if (isBuy) {
+    await linkRichMenu(
+      event.source.userId,
+      BUY_MENU_ID
+    );
 
-      await replyMessage(
-        event.replyToken,
-        makePerfectInventoryMessages(
-          results,
-          perfectCriteria
-        )
-      );
-
-      continue;
-    }
-
-    const isBuy =
-      text === "くるまを買う" ||
-      postbackData ===
-        "switch-to-car-search-menu";
-
-    if (isBuy) {
-      await linkRichMenu(
-        event.source.userId,
-        BUY_MENU_ID
-      );
-
-      await replyMessage(event.replyToken, [
+    await replyMessage(
+      event.replyToken,
+      [
         {
           type: "text",
-          text: "気になる項目を選んでください😊",
+          text:
+            "気になる項目を選んでください😊",
           quickReply: buyQuickReply,
         },
-      ]);
+      ]
+    );
 
-      continue;
-    }
+    return;
+  }
 
-    if (text === "トップへ戻る") {
-      await linkRichMenu(
-        event.source.userId,
-        TOP_MENU_ID
-      );
+  if (text === "トップへ戻る") {
+    await linkRichMenu(
+      event.source.userId,
+      TOP_MENU_ID
+    );
 
-      await replyMessage(event.replyToken, [
+    await replyMessage(
+      event.replyToken,
+      [
         {
           type: "text",
           text:
@@ -497,82 +297,104 @@ export async function POST(request) {
             "気になるメニューを選んでね🚗",
           quickReply: topQuickReply,
         },
-      ]);
+      ]
+    );
 
-      continue;
-    }
+    return;
+  }
 
-    if (text === "ざっくり診断") {
-      await replyMessage(event.replyToken, [
+  if (text === "ざっくり診断") {
+    await replyMessage(
+      event.replyToken,
+      [
         {
           type: "text",
           text:
             "⚡ ざっくり診断を開始😊\n\n" +
             "まずは車のサイズは軽？普通車？🚗",
-          quickReply: roughSizeQuickReply,
+          quickReply:
+            roughSizeQuickReply,
         },
-      ]);
+      ]
+    );
 
-      continue;
-    }
+    return;
+  }
 
-    if (text === "軽自動車") {
-      await replyMessage(event.replyToken, [
+  if (text === "軽自動車") {
+    await replyMessage(
+      event.replyToken,
+      [
         {
           type: "text",
           text:
             "軽自動車ね😊\n\n" +
             "どんなタイプの軽を探してるの？🔍😊",
-          quickReply: lightTypeQuickReply,
+          quickReply:
+            lightTypeQuickReply,
         },
-      ]);
+      ]
+    );
 
-      continue;
-    }
+    return;
+  }
 
-    if (text === "普通車") {
-      await replyMessage(event.replyToken, [
+  if (text === "普通車") {
+    await replyMessage(
+      event.replyToken,
+      [
         {
           type: "text",
           text:
             "普通車ね😊\n\n" +
             "次はどんなタイプか選んでね🚗",
-          quickReply: normalTypeQuickReply,
+          quickReply:
+            normalTypeQuickReply,
         },
-      ]);
+      ]
+    );
 
-      continue;
-    }
+    return;
+  }
 
-    if (isRoughSearchText(text)) {
-      const [size, rawType] =
-        text.split(" ");
+  if (isRoughSearchText(text)) {
+    const [
+      size,
+      rawType,
+    ] = text.split(" ");
 
-      const type =
-        normalizeType(rawType);
+    const results =
+      await findVehicles(
+        size,
+        normalizeType(rawType)
+      );
 
-      const results =
-        findVehicles(size, type);
-
-      if (results.length === 0) {
-        await replyMessage(event.replyToken, [
+    if (results.length === 0) {
+      await replyMessage(
+        event.replyToken,
+        [
           {
             type: "text",
             text:
-              `${size}・${rawType}で探してみたけど、今の在庫には近い車がありませんでした🙇‍♀️\n\n` +
+              `${size}・${rawType}で探してみたけど、` +
+              "今の在庫には近い車がありませんでした🙇‍♀️\n\n" +
               "在庫にない場合も、全国からご希望に合う一台をお探しできます😊",
           },
-        ]);
+        ]
+      );
 
-        continue;
-      }
+      return;
+    }
 
-      await replyMessage(event.replyToken, [
+    await replyMessage(
+      event.replyToken,
+      [
         {
           type: "text",
           text:
             `${size}・${rawType}のおすすめ在庫です😊\n\n` +
-            `展示販売中の車から先に、支払総額が高い順で${results.length}台あります🚗`,
+            "展示販売中の車から先に、" +
+            `支払総額が高い順で${results.length}台あります🚗`,
         },
         makeVehiclePageCarouselMessage(
           results,
@@ -580,16 +402,19 @@ export async function POST(request) {
           rawType,
           0
         ),
-      ]);
+      ]
+    );
 
-      continue;
-    }
+    return;
+  }
 
-    if (
-      text ===
-      "「買う」でできること"
-    ) {
-      await replyMessage(event.replyToken, [
+  if (
+    text ===
+    "「買う」でできること"
+  ) {
+    await replyMessage(
+      event.replyToken,
+      [
         {
           type: "text",
           text:
@@ -606,54 +431,66 @@ export async function POST(request) {
             "カーとぴあの在庫から近いお車をご紹介します🚗\n\n" +
             "在庫にない場合も、\n" +
             "全国からご希望に合う一台をお探しできます😊",
-          quickReply: topQuickReply,
+          quickReply:
+            topQuickReply,
         },
-      ]);
+      ]
+    );
 
-      continue;
-    }
+    return;
+  }
 
-    if (
-      text ===
-      "「売る」でできること"
-    ) {
-      await replyMessage(event.replyToken, [
+  if (
+    text ===
+    "「売る」でできること"
+  ) {
+    await replyMessage(
+      event.replyToken,
+      [
         {
           type: "text",
           text:
             "💰 「くるまを売る」では、\n" +
             "大切にしてきた愛車を、納得のいく形で手放せるようにサポートします😊\n\n" +
             "査定の流れや必要なものも、わかりやすくご案内します🚗",
-          quickReply: topQuickReply,
+          quickReply:
+            topQuickReply,
         },
-      ]);
+      ]
+    );
 
-      continue;
-    }
+    return;
+  }
 
-    if (
-      text ===
-      "「予約」でできること"
-    ) {
-      await replyMessage(event.replyToken, [
+  if (
+    text ===
+    "「予約」でできること"
+  ) {
+    await replyMessage(
+      event.replyToken,
+      [
         {
           type: "text",
           text:
             "🔧 「予約」では、\n" +
             "車検・点検・オイル交換・修理などのご相談ができます😊\n\n" +
             "気になることがあれば、LINEからお気軽にご相談ください🚗",
-          quickReply: topQuickReply,
+          quickReply:
+            topQuickReply,
         },
-      ]);
+      ]
+    );
 
-      continue;
-    }
+    return;
+  }
 
-    if (
-      text ===
-      "車種が決まっている人は？"
-    ) {
-      await replyMessage(event.replyToken, [
+  if (
+    text ===
+    "車種が決まっている人は？"
+  ) {
+    await replyMessage(
+      event.replyToken,
+      [
         {
           type: "text",
           text:
@@ -665,18 +502,22 @@ export async function POST(request) {
             "・シエンタ\n" +
             "・ヴェゼル\n\n" +
             "など、何でもお気軽にどうぞ😊",
-          quickReply: buyQuickReply,
+          quickReply:
+            buyQuickReply,
         },
-      ]);
+      ]
+    );
 
-      continue;
-    }
+    return;
+  }
 
-    if (
-      text ===
-      "ざっくり診断とは？"
-    ) {
-      await replyMessage(event.replyToken, [
+  if (
+    text ===
+    "ざっくり診断とは？"
+  ) {
+    await replyMessage(
+      event.replyToken,
+      [
         {
           type: "text",
           text:
@@ -684,18 +525,22 @@ export async function POST(request) {
             "どんな車が自分に合うのか知りたい方へ😊\n\n" +
             "いくつかの質問に答えるだけで\n" +
             "あなたに合いそうな車のタイプをご提案します✨",
-          quickReply: buyQuickReply,
+          quickReply:
+            buyQuickReply,
         },
-      ]);
+      ]
+    );
 
-      continue;
-    }
+    return;
+  }
 
-    if (
-      text ===
-      "ぴったり診断とは？"
-    ) {
-      await replyMessage(event.replyToken, [
+  if (
+    text ===
+    "ぴったり診断とは？"
+  ) {
+    await replyMessage(
+      event.replyToken,
+      [
         {
           type: "text",
           text:
@@ -708,1387 +553,59 @@ export async function POST(request) {
             "あなたにぴったりな車種をご提案します😊\n\n" +
             "ご家族やライフスタイルまで考えて、\n" +
             "本当に合う一台を見つけたい方へ🚗",
-          quickReply: buyQuickReply,
+          quickReply:
+            buyQuickReply,
         },
-      ]);
-
-      continue;
-    }
-  }
-
-  return Response.json({
-    ok: true,
-  });
-}
-function parsePerfectInventoryRequest(
-  text
-) {
-  if (
-    !String(text || "").startsWith(
-      PERFECT_INVENTORY_REQUEST_PREFIX
-    )
-  ) {
-    return null;
-  }
-
-  const values = {};
-
-  for (
-    const line of String(text)
-      .split("\n")
-      .slice(1)
-  ) {
-    const separatorIndex =
-      line.search(/[：:]/);
-
-    if (separatorIndex < 0) {
-      continue;
-    }
-
-    const key = line
-      .slice(0, separatorIndex)
-      .trim();
-
-    const value = line
-      .slice(separatorIndex + 1)
-      .trim();
-
-    values[key] = value;
-  }
-
-  return {
-    requiredSeats: Math.max(
-      0,
-      Number(
-        values["必要人数"] || 0
-      )
-    ),
-
-    desiredTypes:
-      splitPipeValues(
-        values["希望TYPE"]
-      ).map(
-        normalizeCompositeType
-      ),
-
-    desiredMakers:
-      splitPipeValues(
-        values["希望メーカー"]
-      ),
-
-    desiredConditions:
-      splitPipeValues(
-        values["希望条件"]
-      ),
-
-    avoidMakers:
-      splitPipeValues(
-        values["避けたいメーカー"]
-      ),
-
-    avoidModels:
-      splitPipeValues(
-        values["避けたい車種"]
-      ),
-
-    avoidTypes:
-      splitPipeValues(
-        values["避けたいTYPE"]
-      ).map(
-        normalizeCompositeType
-      ),
-
-    avoidConditions:
-      splitPipeValues(
-        values["避けたい条件"]
-      ),
-
-    retainedTypes:
-      splitPipeValues(
-        values["世帯に残るTYPE"]
-      ).map(
-        normalizeCompositeType
-      ),
-  };
-}
-
-function splitPipeValues(value) {
-  return String(value || "")
-    .split(/[｜|]/)
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
-
-function normalizeCompositeType(
-  value
-) {
-  const text =
-    String(value || "").trim();
-
-  if (!text) return "";
-
-  if (
-    text ===
-      "特にこだわらない" ||
-    text ===
-      "特にこだわりはない"
-  ) {
-    return "特にこだわりはない";
-  }
-
-  const [size, ...typeParts] =
-    text.split(/\s+/);
-
-  const type =
-    normalizeType(
-      typeParts.join(" ")
-    );
-
-  return type
-    ? `${size} ${type}`
-    : size;
-}
-
-function findPerfectVehicles(
-  criteria
-) {
-  const vehicles =
-    uniqueByStockId(
-      inventory.vehicles || []
-    );
-
-  return vehicles
-    .map((vehicle) =>
-      decorateVehicleForPerfectSearch(
-        vehicle,
-        criteria
-      )
-    )
-    .filter((vehicle) =>
-      vehicleMatchesRequiredSeats(
-        vehicle,
-        criteria.requiredSeats
-      )
-    )
-    .filter((vehicle) =>
-      vehicleMatchesAnyDesiredType(
-        vehicle,
-        criteria.desiredTypes
-      )
-    )
-    .filter(
-      (vehicle) =>
-        !vehicleMatchesAnyMaker(
-          vehicle,
-          criteria.avoidMakers
-        )
-    )
-    .filter(
-      (vehicle) =>
-        !vehicleMatchesAnyModel(
-          vehicle,
-          criteria.avoidModels
-        )
-    )
-    .filter(
-      (vehicle) =>
-        !vehicleMatchesAnyType(
-          vehicle,
-          criteria.avoidTypes
-        )
-    )
-    .filter(
-      (vehicle) =>
-        !vehicleMatchesAnyType(
-          vehicle,
-          criteria.retainedTypes
-        )
-    )
-    .filter(
-      (vehicle) =>
-        !vehicleMatchesAnyAvoidCondition(
-          vehicle,
-          criteria.avoidConditions
-        )
-    )
-    .sort((a, b) => {
-      if (
-        b.inventoryMatchScore !==
-        a.inventoryMatchScore
-      ) {
-        return (
-          b.inventoryMatchScore -
-          a.inventoryMatchScore
-        );
-      }
-
-      const statusDifference =
-        statusPriority(a) -
-        statusPriority(b);
-
-      if (statusDifference !== 0) {
-        return statusDifference;
-      }
-
-      return (
-        priceNumber(b.totalPrice) -
-        priceNumber(a.totalPrice)
-      );
-    });
-}
-
-function decorateVehicleForPerfectSearch(
-  vehicle,
-  criteria
-) {
-  const maker =
-    detectMaker(vehicle);
-
-  const keys =
-    vehicleTypeKeys(vehicle);
-
-  const seats =
-    inferSeatCapacity(
-      vehicle,
-      keys
-    );
-
-  const searchText =
-    vehicleSearchText(vehicle);
-
-  const matchReasons = [];
-  let score = 0;
-
-  if (
-    criteria.desiredMakers.length >
-      0 &&
-    vehicleMatchesAnyMaker(
-      {
-        ...vehicle,
-        maker,
-        searchText,
-      },
-      criteria.desiredMakers
-    )
-  ) {
-    score += 30;
-
-    matchReasons.push(
-      "希望メーカー"
+      ]
     );
   }
-
-  for (
-    const condition of
-    criteria.desiredConditions
-  ) {
-    if (
-      vehicleMatchesCondition(
-        {
-          ...vehicle,
-          maker,
-          keys,
-          searchText,
-        },
-        condition
-      )
-    ) {
-      score +=
-        desiredConditionScore(
-          condition
-        );
-
-      matchReasons.push(
-        condition
-      );
-    }
-  }
-
-  if (
-    vehicle.sourceStatus ===
-    "掲載在庫"
-  ) {
-    score += 5;
-  }
-
-  return {
-    ...vehicle,
-    maker,
-    keys,
-    inferredSeatCapacity: seats,
-    searchText,
-
-    inventoryMatchScore:
-      Math.min(99, score),
-
-    inventoryMatchReasons:
-      unique(matchReasons).slice(
-        0,
-        3
-      ),
-  };
 }
 
-function vehicleMatchesRequiredSeats(
-  vehicle,
-  requiredSeats
-) {
-  if (!requiredSeats) {
-    return true;
-  }
-
-  if (
-    requiredSeats >= 5 &&
-    vehicle.keys.includes(
-      "軽自動車"
-    )
-  ) {
-    return false;
-  }
-
+function isRoughSearchText(text) {
   return (
-    Number(
-      vehicle.inferredSeatCapacity ||
-        0
-    ) >= requiredSeats
-  );
-}
-
-function vehicleMatchesAnyDesiredType(
-  vehicle,
-  desiredTypes
-) {
-  const meaningfulTypes =
-    (desiredTypes || [])
-      .filter(Boolean);
-
-  if (
-    meaningfulTypes.length === 0
-  ) {
-    return true;
-  }
-
-  if (
-    meaningfulTypes.includes(
-      "特にこだわりはない"
-    )
-  ) {
-    return true;
-  }
-
-  return meaningfulTypes.some(
-    (type) =>
-      vehicleMatchesCompositeType(
-        vehicle,
-        type
-      )
-  );
-}
-
-function vehicleMatchesAnyType(
-  vehicle,
-  types
-) {
-  return (types || [])
-    .filter(Boolean)
-    .some((type) =>
-      vehicleMatchesCompositeType(
-        vehicle,
-        type
-      )
-    );
-}
-
-function vehicleMatchesCompositeType(
-  vehicle,
-  compositeType
-) {
-  if (
-    !compositeType ||
-    compositeType ===
-      "特にこだわりはない"
-  ) {
-    return false;
-  }
-
-  const [size, ...typeParts] =
-    String(compositeType)
-      .split(/\s+/);
-
-  const type =
-    normalizeType(
-      typeParts.join(" ")
-    );
-
-  const keys =
-    vehicle.keys ||
-    vehicleTypeKeys(vehicle);
-
-  if (!type) {
-    return keys.includes(
-      normalizeType(size)
-    );
-  }
-
-  return (
-    keys.includes(
-      normalizeType(size)
-    ) &&
-    keys.includes(type)
-  );
-}
-
-function vehicleMatchesAnyMaker(
-  vehicle,
-  makers
-) {
-  const maker =
-    vehicle.maker ||
-    detectMaker(vehicle);
-
-  const searchText =
-    vehicle.searchText ||
-    vehicleSearchText(vehicle);
-
-  return (makers || []).some(
-    (wantedMaker) => {
-      const expanded =
-        expandMakerTokens([
-          wantedMaker,
-        ]);
-
-      if (maker) {
-        return expanded.some(
-          (token) =>
-            includesNormalized(
-              maker,
-              token
-            )
-        );
-      }
-
-      return expanded.some(
-        (token) =>
-          includesNormalized(
-            searchText,
-            token
-          )
-      );
-    }
-  );
-}
-
-function vehicleMatchesAnyModel(
-  vehicle,
-  models
-) {
-  const searchText =
-    vehicle.searchText ||
-    vehicleSearchText(vehicle);
-
-  return (models || []).some(
-    (model) =>
-      includesNormalized(
-        searchText,
-        model
-      )
-  );
-}
-
-function vehicleMatchesAnyAvoidCondition(
-  vehicle,
-  conditions
-) {
-  return (conditions || []).some(
-    (condition) =>
-      vehicleMatchesAvoidCondition(
-        vehicle,
-        condition
-      )
-  );
-}
-
-function vehicleMatchesAvoidCondition(
-  vehicle,
-  condition
-) {
-  const keys =
-    vehicle.keys ||
-    vehicleTypeKeys(vehicle);
-
-  const searchText =
-    vehicle.searchText ||
-    vehicleSearchText(vehicle);
-
-  const maker =
-    vehicle.maker ||
-    detectMaker(vehicle);
-
-  switch (condition) {
-    case "スライドドア":
-      return keys.includes(
-        "スライドドア"
-      );
-
-    case "大きい車":
-      return (
-        keys.includes(
-          "ミニバン"
-        ) ||
-        keys.includes(
-          "バン・トラック"
-        ) ||
-        isLargeVehicleText(
-          searchText
-        )
-      );
-
-    case "小さい車":
-      return (
-        keys.includes(
-          "軽自動車"
-        ) ||
-        keys.includes(
-          "コンパクトカー"
-        )
-      );
-
-    case "車高が高い車":
-      return (
-        keys.includes("SUV") ||
-        keys.includes(
-          "ミニバン"
-        ) ||
-        keys.includes(
-          "バン・トラック"
-        )
-      );
-
-    case "車高が低い車":
-      return (
-        keys.includes(
-          "セダン"
-        ) ||
-        keys.includes(
-          "ステーションワゴン"
-        ) ||
-        keys.includes(
-          "スポーティ"
-        )
-      );
-
-    case "商用車っぽい車":
-      return (
-        keys.includes(
-          "バン・トラック"
-        ) ||
-        /バン|トラック|ハイエース|キャラバン|プロボックス|サクシード|エブリイ|ハイゼット/.test(
-          searchText
-        )
-      );
-
-    case "カスタム系":
-      return includesNormalized(
-        searchText,
-        "カスタム"
-      );
-
-    case "輸入車":
-      return IMPORT_MAKERS.has(
-        maker
-      );
-
-    case "ハイブリッド・EV":
-      return (
-        keys.includes(
-          "EV・HV"
-        ) ||
-        /ハイブリッド|HYBRID|EV|PHEV|PHV|EPOWER/.test(
-          searchText
-        )
-      );
-
-    default:
-      return false;
-  }
-}
-function vehicleMatchesCondition(
-  vehicle,
-  condition
-) {
-  const keys =
-    vehicle.keys ||
-    vehicleTypeKeys(vehicle);
-
-  const searchText =
-    vehicle.searchText ||
-    vehicleSearchText(vehicle);
-
-  const maker =
-    vehicle.maker ||
-    detectMaker(vehicle);
-
-  switch (condition) {
-    case "スライドドア":
-      return keys.includes(
-        "スライドドア"
-      );
-
-    case "運転しやすい":
-      return (
-        keys.includes(
-          "軽自動車"
-        ) ||
-        keys.includes(
-          "コンパクトカー"
-        )
-      );
-
-    case "乗り心地が良い":
-      return (
-        keys.includes(
-          "セダン"
-        ) ||
-        keys.includes(
-          "ミニバン"
-        ) ||
-        isLuxuryVehicle(
-          maker,
-          searchText
-        )
-      );
-
-    case "室内が広い":
-      return (
-        keys.includes(
-          "ミニバン"
-        ) ||
-        keys.includes(
-          "スライドドア"
-        ) ||
-        keys.includes(
-          "バン・トラック"
-        )
-      );
-
-    case "静粛性が高い":
-      return (
-        keys.includes(
-          "EV・HV"
-        ) ||
-        isLuxuryVehicle(
-          maker,
-          searchText
-        )
-      );
-
-    case "安全性能":
-      return /セーフティ|SAFETY|スマートアシスト|プロパイロット|ホンダセンシング|アイサイト/.test(
-        searchText
-      );
-
-    case "4WD":
-      return /4WD|AWD|四駆/.test(
-        searchText
-      );
-
-    case "荷室が広い":
-      return (
-        keys.includes(
-          "ミニバン"
-        ) ||
-        keys.includes(
-          "ステーションワゴン"
-        ) ||
-        keys.includes(
-          "SUV"
-        ) ||
-        keys.includes(
-          "バン・トラック"
-        )
-      );
-
-    case "加速・走り":
-      return (
-        keys.includes(
-          "スポーティ"
-        ) ||
-        keys.includes(
-          "EV・HV"
-        ) ||
-        /ターボ|TURBO|GT|GR|タイプR|TYPER/.test(
-          searchText
-        )
-      );
-
-    case "燃費が良い":
-      return (
-        keys.includes(
-          "EV・HV"
-        ) ||
-        keys.includes(
-          "軽自動車"
-        ) ||
-        keys.includes(
-          "コンパクトカー"
-        )
-      );
-
-    case "高級感":
-      return isLuxuryVehicle(
-        maker,
-        searchText
-      );
-
-    case "かっこいい":
-      return (
-        keys.includes("SUV") ||
-        keys.includes(
-          "スポーティ"
-        ) ||
-        isLuxuryVehicle(
-          maker,
-          searchText
-        )
-      );
-
-    case "スポーティ":
-      return (
-        keys.includes(
-          "スポーティ"
-        ) ||
-        /ターボ|TURBO|GT|GR|タイプR|TYPER|ロードスター|BRZ/.test(
-          searchText
-        )
-      );
-
-    case "かわいい":
-      return /ラパン|キャスト|NONE|ミラココア|ムーヴキャンバス|フィアット500/.test(
-        searchText
-      );
-
-    case "アウトドア系":
-      return (
-        keys.includes("SUV") ||
-        keys.includes(
-          "バン・トラック"
-        ) ||
-        /4WD|AWD|四駆|ジムニー|デリカ/.test(
-          searchText
-        )
-      );
-
-    case "カスタム系":
-      return includesNormalized(
-        searchText,
-        "カスタム"
-      );
-
-    case "ノーマル系":
-      return !includesNormalized(
-        searchText,
-        "カスタム"
-      );
-
-    case "シンプル":
-      return (
-        !includesNormalized(
-          searchText,
-          "カスタム"
-        ) &&
-        !keys.includes(
-          "スポーティ"
-        )
-      );
-
-    default:
-      return false;
-  }
-}
-
-function desiredConditionScore(
-  condition
-) {
-  if (
-    [
-      "スライドドア",
-      "運転しやすい",
-      "乗り心地が良い",
-    ].includes(condition)
-  ) {
-    return 16;
-  }
-
-  if (
-    [
-      "室内が広い",
-      "静粛性が高い",
-    ].includes(condition)
-  ) {
-    return 14;
-  }
-
-  if (
-    [
-      "安全性能",
-      "4WD",
-      "荷室が広い",
-      "加速・走り",
-    ].includes(condition)
-  ) {
-    return 12;
-  }
-
-  return 10;
-}
-
-function vehicleTypeKeys(
-  vehicle
-) {
-  return unique(
-    [
-      ...(vehicle.types || []),
-      ...(vehicle.typeKeys || []),
-    ].map(normalizeType)
-  );
-}
-
-function vehicleSearchText(
-  vehicle
-) {
-  return normalizeText(
-    [
-      vehicle.maker,
-      vehicle.brand,
-      vehicle.title,
-      vehicle.description,
-      vehicle.carName,
-      vehicle.gradeName,
-      vehicle.gradeExtraInfo,
-      vehicle.classificationName,
-      vehicle.displacement,
-    ]
-      .filter(Boolean)
-      .join(" ")
-  );
-}
-
-function inferSeatCapacity(
-  vehicle,
-  keys = vehicleTypeKeys(vehicle)
-) {
-  const explicitValues = [
-    vehicle.seatCapacity,
-    vehicle.capacity,
-    vehicle.ridingCapacity,
-    vehicle.passengerCapacity,
-    vehicle.maxSeats,
-    vehicle.seats,
-  ];
-
-  for (
-    const value of explicitValues
-  ) {
-    const number = Number(
-      String(value || "")
-        .match(/\d+/)?.[0] || 0
-    );
-
-    if (
-      number >= 1 &&
-      number <= 30
-    ) {
-      return number;
-    }
-  }
-
-  const rawText = [
-    vehicle.title,
-    vehicle.description,
-    vehicle.carName,
-    vehicle.gradeName,
-    vehicle.gradeExtraInfo,
-    vehicle.classificationName,
-  ]
-    .filter(Boolean)
-    .join(" ");
-
-  const explicitMatch =
-    rawText.match(
-      /(\d{1,2})\s*(?:人乗り|名乗り|乗車定員)/
-    );
-
-  if (explicitMatch) {
-    return Number(
-      explicitMatch[1]
-    );
-  }
-
-  const text =
-    normalizeText(rawText);
-
-  if (
-    keys.includes(
-      "軽自動車"
-    ) &&
-    keys.includes(
-      "トラック"
-    )
-  ) {
-    return 2;
-  }
-
-  if (
-    /コペン|ロードスター|BRZ|GR86|S660/.test(
-      text
-    )
-  ) {
-    return 2;
-  }
-
-  if (
-    keys.includes(
-      "軽自動車"
-    )
-  ) {
-    return 4;
-  }
-
-  if (
-    /シエンタ|フリード/.test(
-      text
-    )
-  ) {
-    return 6;
-  }
-
-  if (
-    keys.includes(
-      "ミニバン"
-    )
-  ) {
-    return 7;
-  }
-
-  if (
-    keys.includes(
-      "バン・トラック"
-    )
-  ) {
-    return 2;
-  }
-
-  if (
-    keys.includes(
-      "普通車"
-    )
-  ) {
-    return 5;
-  }
-
-  return 0;
-}
-
-function detectMaker(vehicle) {
-  const directMaker =
-    String(
-      vehicle.maker ||
-        vehicle.brand ||
-        ""
-    ).trim();
-
-  if (directMaker) {
-    return canonicalMaker(
-      directMaker
-    );
-  }
-
-  const carName =
-    normalizeText(
-      vehicle.carName ||
-        vehicle.title ||
-        ""
-    );
-
-  const searchText =
-    vehicleSearchText(vehicle);
-
-  if (
-    LEXUS_MODEL_CODES.some(
-      (code) =>
-        carName === code ||
-        carName.startsWith(code)
-    )
-  ) {
-    return "レクサス";
-  }
-
-  for (
-    const [model, maker] of
-    Object.entries(
-      MODEL_TO_MAKER
-    )
-  ) {
-    if (
-      searchText.includes(
-        normalizeText(model)
-      )
-    ) {
-      return maker;
-    }
-  }
-
-  for (
-    const [maker, aliases] of
-    Object.entries(
-      MAKER_ALIASES
-    )
-  ) {
-    if (
-      aliases.some((alias) =>
-        searchText.includes(
-          normalizeText(alias)
-        )
-      )
-    ) {
-      return maker;
-    }
-  }
-
-  return "";
-}
-
-function canonicalMaker(value) {
-  for (
-    const [maker, aliases] of
-    Object.entries(
-      MAKER_ALIASES
-    )
-  ) {
-    if (
-      includesNormalized(
-        maker,
-        value
-      ) ||
-      aliases.some((alias) =>
-        includesNormalized(
-          alias,
-          value
-        )
-      )
-    ) {
-      return maker;
-    }
-  }
-
-  return value;
-}
-
-function expandMakerTokens(
-  tokens
-) {
-  const expanded = [];
-
-  for (
-    const token of tokens || []
-  ) {
-    expanded.push(token);
-
-    for (
-      const [maker, aliases] of
-      Object.entries(
-        MAKER_ALIASES
-      )
-    ) {
-      const matched =
-        includesNormalized(
-          maker,
-          token
-        ) ||
-        aliases.some((alias) =>
-          includesNormalized(
-            alias,
-            token
-          )
-        );
-
-      if (matched) {
-        expanded.push(
-          maker,
-          ...aliases
-        );
-      }
-    }
-  }
-
-  return unique(expanded);
-}
-
-function isLuxuryVehicle(
-  maker,
-  searchText
-) {
-  return (
-    maker === "レクサス" ||
-    maker ===
-      "メルセデスベンツ" ||
-    maker === "BMW" ||
-    maker === "アウディ" ||
-    maker === "ボルボ" ||
-    /クラウン|アルファード|ヴェルファイア|エルグランド/.test(
-      searchText
-    )
-  );
-}
-
-function isLargeVehicleText(
-  searchText
-) {
-  return /アルファード|ヴェルファイア|ランドクルーザー|ハイエース|キャラバン|エルグランド|デリカD5|CX8/.test(
-    searchText
-  );
-}
-
-function normalizeText(value) {
-  return String(value || "")
-    .normalize("NFKC")
-    .toUpperCase()
-    .replace(
-      /[\s　・･―‐\-_/／,，.。()（）【】\[\]「」『』]/g,
-      ""
-    );
-}
-
-function includesNormalized(
-  source,
-  target
-) {
-  const normalizedSource =
-    normalizeText(source);
-
-  const normalizedTarget =
-    normalizeText(target);
-
-  if (
-    !normalizedSource ||
-    !normalizedTarget
-  ) {
-    return false;
-  }
-
-  return (
-    normalizedSource.includes(
-      normalizedTarget
-    ) ||
-    normalizedTarget.includes(
-      normalizedSource
-    )
-  );
-}
-
-function unique(values) {
-  return [
-    ...new Set(
-      (values || [])
-        .filter(Boolean)
-    ),
-  ];
-}
-
-function uniqueByStockId(
-  vehicles
-) {
-  const seen = new Set();
-  const result = [];
-
-  for (
-    const vehicle of
-    vehicles || []
-  ) {
-    const key =
-      vehicle.stockId ||
-      `${
-        vehicle.carName ||
-        vehicle.title
-      }|${
-        vehicle.totalPrice
-      }|${
-        vehicle.imageUrl
-      }`;
-
-    if (seen.has(key)) {
-      continue;
-    }
-
-    seen.add(key);
-    result.push(vehicle);
-  }
-
-  return result;
-}
-
-function makePerfectInventoryMessages(
-  results,
-  criteria
-) {
-  if (results.length === 0) {
-    return [
-      {
-        type: "text",
-        text:
-          "診断条件に合う在庫を探しましたが、現在の在庫には該当車がありませんでした🙇‍♀️\n\n" +
-          "在庫にない場合も、全国から条件に合う一台をお探しできます。スタッフへそのままご相談ください😊",
-      },
-    ];
-  }
-
-  const visibleVehicles =
-    results.slice(
-      0,
-      PERFECT_MAX_VEHICLES
-    );
-
-  const chunks =
-    chunkArray(
-      visibleVehicles,
-      PERFECT_CAROUSEL_SIZE
-    ).slice(0, 4);
-
-  const typeText =
-    criteria.desiredTypes.includes(
-      "特にこだわりはない"
-    )
-      ? "タイプ指定なし"
-      : criteria.desiredTypes
-          .map((type) =>
-            type.replace(
-              " ",
-              "・"
-            )
-          )
-          .join("、");
-
-  const introText =
-    `診断条件に近い在庫が${results.length}台見つかりました😊\n\n` +
-    `必要人数：${
-      criteria.requiredSeats ||
-      "指定なし"
-    }\n` +
-    `希望タイプ：${
-      typeText ||
-      "指定なし"
-    }\n\n` +
-    (
-      results.length >
-      PERFECT_MAX_VEHICLES
-        ? `条件との一致度が高い順に、上位${PERFECT_MAX_VEHICLES}台を表示します🚗`
-        : "条件との一致度が高い順に表示します🚗"
-    );
-
-  return [
-    {
-      type: "text",
-      text: introText,
-    },
-
-    ...chunks.map(
-      (vehicles, index) => ({
-        type: "flex",
-
-        altText:
-          `ぴったり診断のおすすめ在庫 ${
-            index + 1
-          }`,
-
-        contents: {
-          type: "carousel",
-
-          contents:
-            vehicles.map(
-              makeVehicleBubble
-            ),
-        },
-      })
-    ),
-  ];
-}
-
-function chunkArray(
-  values,
-  size
-) {
-  const chunks = [];
-
-  for (
-    let index = 0;
-    index < values.length;
-    index += size
-  ) {
-    chunks.push(
-      values.slice(
-        index,
-        index + size
-      )
-    );
-  }
-
-  return chunks;
-}
-function isRoughSearchText(
-  text
-) {
-  return (
-    text.startsWith(
-      "軽自動車 "
-    ) ||
-    text.startsWith(
-      "普通車 "
-    )
+    text.startsWith("軽自動車 ") ||
+    text.startsWith("普通車 ")
   );
 }
 
 function normalizeType(type) {
-  const value =
-    String(type || "").trim();
-
   if (
-    value ===
-      "こだわりなし" ||
-    value ===
-      "特にこだわらない"
+    type ===
+    "こだわりなし"
   ) {
     return "特にこだわりはない";
   }
 
   if (
-    value ===
-      "低燃費・ハイブリッド" ||
-    value ===
-      "低燃費・HV" ||
-    value ===
-      "ハイブリッド・EV"
+    type ===
+    "低燃費・ハイブリッド"
   ) {
     return "EV・HV";
   }
 
-  return value;
+  return type;
 }
 
-function findVehicles(
+async function findVehicles(
   size,
   type
 ) {
+  const inventory =
+    await loadInventory();
+
   const vehicles =
     inventory.vehicles || [];
 
-  return uniqueByStockId(
-    vehicles
-  )
+  return vehicles
     .filter((vehicle) => {
-      const keys =
-        vehicleTypeKeys(
-          vehicle
-        );
+      if (!vehicle) {
+        return false;
+      }
+
+      const keys = [
+        ...(vehicle.types || []),
+        ...(vehicle.typeKeys || []),
+      ];
 
       const hasSize =
         keys.includes(size);
@@ -2096,11 +613,8 @@ function findVehicles(
       const hasType =
         type ===
         "特にこだわりはない"
-          ? (
-              keys.includes(
-                "特にこだわりはない"
-              ) ||
-              hasSize
+          ? keys.includes(
+              "特にこだわりはない"
             )
           : keys.includes(type);
 
@@ -2109,37 +623,463 @@ function findVehicles(
         hasType
       );
     })
-    .sort((a, b) => {
-      const statusA =
-        statusPriority(a);
+    .map(
+      normalizeVehicleForDisplay
+    )
+    .sort((first, second) => {
+      const firstStatus =
+        statusPriority(first);
 
-      const statusB =
-        statusPriority(b);
+      const secondStatus =
+        statusPriority(second);
 
       if (
-        statusA !== statusB
+        firstStatus !==
+        secondStatus
       ) {
         return (
-          statusA - statusB
+          firstStatus -
+          secondStatus
         );
       }
 
       return (
         priceNumber(
-          b.totalPrice
+          second.totalPrice
         ) -
         priceNumber(
-          a.totalPrice
+          first.totalPrice
         )
       );
     });
+}
+
+function normalizeVehicleForDisplay(
+  vehicle
+) {
+  const carName =
+    cleanDisplayText(
+      vehicle?.carName ||
+        deriveCarNameFromTitle(
+          vehicle?.title
+        ) ||
+        vehicle?.title
+    );
+
+  const gradeName =
+    chooseGradeName(
+      vehicle,
+      carName
+    );
+
+  const gradeExtraInfo =
+    chooseGradeExtraInfo(
+      vehicle,
+      carName,
+      gradeName
+    );
+
+  return {
+    ...vehicle,
+    carName:
+      carName ||
+      "車両情報",
+    gradeName,
+    gradeExtraInfo,
+  };
+}
+
+function cleanDisplayText(value) {
+  return String(value || "")
+    .replace(
+      /\u3000/g,
+      " "
+    )
+    .replace(
+      /\s+/g,
+      " "
+    )
+    .trim();
+}
+
+function normalizeComparable(
+  value
+) {
+  return cleanDisplayText(value)
+    .replace(
+      /[・･：:／/\-ー＿_()（）[\]【】\s]/g,
+      ""
+    )
+    .toLowerCase();
+}
+
+function isInvalidShortValue(
+  value
+) {
+  const text =
+    cleanDisplayText(value);
+
+  if (!text) {
+    return true;
+  }
+
+  if (
+    /^(?:-|―|ー|なし|無し|null|undefined|未設定|不明)$/i.test(
+      text
+    )
+  ) {
+    return true;
+  }
+
+  if (
+    /^[0-9０-９]+(?:\.[0-9０-９]+)?$/.test(
+      text
+    )
+  ) {
+    return true;
+  }
+
+  if (
+    /^(?:true|false|on|off)$/i.test(
+      text
+    )
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+function deriveCarNameFromTitle(
+  title
+) {
+  const text =
+    cleanDisplayText(title);
+
+  if (!text) {
+    return "";
+  }
+
+  return (
+    text.split(" ")[0] ||
+    ""
+  );
+}
+
+function chooseGradeName(
+  vehicle,
+  carName
+) {
+  const candidates = [
+    vehicle?.gradeName,
+    deriveGradeFromSource(
+      vehicle?.title,
+      carName
+    ),
+    deriveGradeFromSource(
+      vehicle?.description,
+      carName
+    ),
+  ];
+
+  for (
+    const candidate of
+    candidates
+  ) {
+    const grade =
+      cleanDisplayText(
+        candidate
+      );
+
+    if (
+      !isUsefulGradeName(
+        grade,
+        carName
+      )
+    ) {
+      continue;
+    }
+
+    return grade;
+  }
+
+  return "";
+}
+
+function isUsefulGradeName(
+  value,
+  carName
+) {
+  const text =
+    cleanDisplayText(value);
+
+  if (
+    isInvalidShortValue(text)
+  ) {
+    return false;
+  }
+
+  if (
+    normalizeComparable(text) ===
+    normalizeComparable(carName)
+  ) {
+    return false;
+  }
+
+  if (
+    text.length > 80
+  ) {
+    return false;
+  }
+
+  if (
+    looksLikeEquipmentText(text)
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+function deriveGradeFromSource(
+  source,
+  carName
+) {
+  let text =
+    cleanDisplayText(source);
+
+  const normalizedCarName =
+    cleanDisplayText(carName);
+
+  if (!text) {
+    return "";
+  }
+
+  if (
+    normalizedCarName &&
+    text.startsWith(
+      normalizedCarName
+    )
+  ) {
+    text =
+      cleanDisplayText(
+        text.slice(
+          normalizedCarName.length
+        )
+      );
+  }
+
+  text = text.replace(
+    /^[・･：:／/\-ー＿_\s]+/,
+    ""
+  );
+
+  const equipmentStart =
+    text.search(
+      /\s(?:2WD|4WD|４ＷＤ|二駆|四駆|ハイブリッド|ターボ|ワンオーナー|禁煙車|純正|社外|両側|片側|電動|衝突|フルセグ|ナビ|バックカメラ|Ｂカメラ|ETC|ＥＴＣ|サンルーフ|本革|レザー|シート|クルコン|アラウンド|パワー|LED|ＬＥＤ|ドラレコ|寒冷地|オプション|新品|車検|切替式)(?:\s|$)/i
+    );
+
+  if (
+    equipmentStart >= 0
+  ) {
+    text =
+      cleanDisplayText(
+        text.slice(
+          0,
+          equipmentStart
+        )
+      );
+  }
+
+  return text;
+}
+
+function looksLikeEquipmentText(
+  value
+) {
+  const text =
+    cleanDisplayText(value);
+
+  const equipmentWords =
+    text.match(
+      /(4WD|４ＷＤ|ハイブリッド|ターボ|ナビ|カメラ|ETC|ＥＴＣ|シート|クルーズ|ドラレコ|パワースライド|サンルーフ|ワンオーナー|純正|社外)/gi
+    );
+
+  return Boolean(
+    equipmentWords &&
+    equipmentWords.length >= 2
+  );
+}
+
+function chooseGradeExtraInfo(
+  vehicle,
+  carName,
+  gradeName
+) {
+  const direct =
+    cleanDisplayText(
+      vehicle?.gradeExtraInfo
+    );
+
+  if (
+    isUsefulExtraInfo(
+      direct,
+      carName,
+      gradeName
+    )
+  ) {
+    return direct;
+  }
+
+  const derived =
+    deriveExtraInfoFromDescription(
+      vehicle?.description,
+      vehicle?.title,
+      carName,
+      gradeName
+    );
+
+  if (
+    isUsefulExtraInfo(
+      derived,
+      carName,
+      gradeName
+    )
+  ) {
+    return derived;
+  }
+
+  return FALLBACK_EXTRA_INFO;
+}
+
+function isUsefulExtraInfo(
+  value,
+  carName,
+  gradeName
+) {
+  const text =
+    cleanDisplayText(value);
+
+  if (
+    isInvalidShortValue(text)
+  ) {
+    return false;
+  }
+
+  if (
+    text.length < 4
+  ) {
+    return false;
+  }
+
+  const comparable =
+    normalizeComparable(text);
+
+  if (
+    comparable ===
+    normalizeComparable(
+      carName
+    )
+  ) {
+    return false;
+  }
+
+  if (
+    comparable ===
+    normalizeComparable(
+      gradeName
+    )
+  ) {
+    return false;
+  }
+
+  if (
+    comparable ===
+    normalizeComparable(
+      `${carName} ${gradeName}`
+    )
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+function deriveExtraInfoFromDescription(
+  description,
+  title,
+  carName,
+  gradeName
+) {
+  let text =
+    cleanDisplayText(
+      description
+    );
+
+  if (!text) {
+    return "";
+  }
+
+  const prefixes = [
+    cleanDisplayText(title),
+    cleanDisplayText(
+      `${carName} ${gradeName}`
+    ),
+    cleanDisplayText(carName),
+    cleanDisplayText(gradeName),
+  ]
+    .filter(Boolean)
+    .sort(
+      (first, second) =>
+        second.length -
+        first.length
+    );
+
+  for (
+    const prefix of
+    prefixes
+  ) {
+    if (
+      text.startsWith(prefix)
+    ) {
+      text =
+        cleanDisplayText(
+          text.slice(
+            prefix.length
+          )
+        );
+
+      break;
+    }
+  }
+
+  text = text.replace(
+    /^[・･：:／/\-ー＿_\s]+/,
+    ""
+  );
+
+  if (
+    gradeName &&
+    text.startsWith(
+      gradeName
+    )
+  ) {
+    text =
+      cleanDisplayText(
+        text.slice(
+          gradeName.length
+        )
+      );
+  }
+
+  return text;
 }
 
 function statusPriority(
   vehicle
 ) {
   return (
-    vehicle.sourceStatus ===
+    vehicle?.sourceStatus ===
     "掲載在庫"
       ? 0
       : 1
@@ -2154,9 +1094,9 @@ function priceNumber(
   }
 
   const match =
-    String(priceText)
-      .replace(/,/g, "")
-      .match(/([\d.]+)/);
+    String(priceText).match(
+      /([\d.]+)/
+    );
 
   return match
     ? Number(match[1])
@@ -2202,10 +1142,8 @@ function makeVehiclePageCarouselMessage(
 
   return {
     type: "flex",
-
     altText:
       `${size}・${rawType}のおすすめ在庫`,
-
     contents: {
       type: "carousel",
       contents,
@@ -2236,14 +1174,13 @@ function makeMoreBubble(
   return {
     type: "bubble",
     size: "mega",
-
     body: {
       type: "box",
       layout: "vertical",
-      spacing: "md",
+      spacing: "sm",
       backgroundColor:
         "#F8F5EF",
-
+      paddingAll: "14px",
       contents: [
         {
           type: "box",
@@ -2251,29 +1188,29 @@ function makeMoreBubble(
           backgroundColor:
             "#0B1F3A",
           cornerRadius: "lg",
-          paddingAll: "14px",
-
+          paddingAll: "12px",
           contents: [
             {
               type: "text",
-
               text:
-                `他に該当車両が${remaining}台あります😊`,
-
+                `他に該当車が${remaining}台あるよ😊`,
               weight: "bold",
-              size: "lg",
-              color: "#FFFFFF",
+              size:
+                remaining >= 10
+                  ? "md"
+                  : "lg",
+              color:
+                "#FFFFFF",
               align: "center",
               wrap: true,
             },
             {
               type: "text",
-
               text:
-                "次に表示される車はこちらです🚗",
-
+                "次に表示される車はこちら💁",
               size: "sm",
-              color: "#E5D08A",
+              color:
+                "#E5D08A",
               align: "center",
               wrap: true,
               margin: "xs",
@@ -2284,7 +1221,6 @@ function makeMoreBubble(
           type: "box",
           layout: "vertical",
           spacing: "sm",
-
           contents:
             makePreviewRows(
               previewVehicles,
@@ -2306,48 +1242,50 @@ function makePreviewRows(
   nextOffset,
   nextCount
 ) {
+  const previewItems =
+    vehicles.map(
+      makePreviewImageBox
+    );
+
+  previewItems.push(
+    makePreviewButtonBox(
+      size,
+      rawType,
+      nextOffset,
+      nextCount
+    )
+  );
+
   const rows = [];
 
   for (
     let index = 0;
-    index < 8;
+    index <
+    previewItems.length;
     index += 2
   ) {
+    const rowItems =
+      previewItems.slice(
+        index,
+        index + 2
+      );
+
+    if (
+      rowItems.length === 1
+    ) {
+      rowItems.push(
+        makePreviewSpacerBox()
+      );
+    }
+
     rows.push({
       type: "box",
-      layout: "horizontal",
+      layout:
+        "horizontal",
       spacing: "sm",
-
-      contents: [
-        makePreviewImageBox(
-          vehicles[index]
-        ),
-
-        makePreviewImageBox(
-          vehicles[index + 1]
-        ),
-      ],
+      contents: rowItems,
     });
   }
-
-  rows.push({
-    type: "box",
-    layout: "horizontal",
-    spacing: "sm",
-
-    contents: [
-      makePreviewImageBox(
-        vehicles[8]
-      ),
-
-      makePreviewButtonBox(
-        size,
-        rawType,
-        nextOffset,
-        nextCount
-      ),
-    ],
-  });
 
   return rows;
 }
@@ -2365,21 +1303,14 @@ function makePreviewImageBox(
       type: "box",
       layout: "vertical",
       flex: 1,
-      height: "86px",
+      height:
+        PREVIEW_HEIGHT,
       backgroundColor:
-        "#E5E7EB",
+        "#F8F5EF",
       cornerRadius: "md",
-      justifyContent:
-        "center",
-      alignItems: "center",
-
       contents: [
         {
-          type: "text",
-          text: "画像準備中",
-          size: "xs",
-          color: "#999999",
-          align: "center",
+          type: "filler",
         },
       ],
     };
@@ -2389,15 +1320,35 @@ function makePreviewImageBox(
     type: "box",
     layout: "vertical",
     flex: 1,
+    height:
+      PREVIEW_HEIGHT,
     cornerRadius: "md",
-
     contents: [
       {
         type: "image",
         url: imageUrl,
         size: "full",
-        aspectRatio: "16:9",
-        aspectMode: "cover",
+        aspectRatio:
+          "16:9",
+        aspectMode:
+          "cover",
+      },
+    ],
+  };
+}
+
+function makePreviewSpacerBox() {
+  return {
+    type: "box",
+    layout: "vertical",
+    flex: 1,
+    height:
+      PREVIEW_HEIGHT,
+    backgroundColor:
+      "#F8F5EF",
+    contents: [
+      {
+        type: "filler",
       },
     ],
   };
@@ -2413,32 +1364,29 @@ function makePreviewButtonBox(
     type: "box",
     layout: "vertical",
     flex: 1,
-    height: "86px",
+    height:
+      PREVIEW_HEIGHT,
     backgroundColor:
       "#0B1F3A",
     cornerRadius: "md",
     justifyContent:
       "center",
-    alignItems: "center",
-
+    alignItems:
+      "center",
     action: {
       type: "postback",
-
       data:
         `more|${size}|${rawType}|${nextOffset}`,
-
       displayText:
         `次の${nextCount}台を見る`,
     },
-
     contents: [
       {
         type: "text",
-
         text:
           `次の${nextCount}台`,
-
-        color: "#FFFFFF",
+        color:
+          "#FFFFFF",
         weight: "bold",
         size: "md",
         align: "center",
@@ -2446,10 +1394,12 @@ function makePreviewButtonBox(
       {
         type: "text",
         text: "を見る",
-        color: "#E5D08A",
+        color:
+          "#E5D08A",
         weight: "bold",
         size: "md",
         align: "center",
+        margin: "none",
       },
     ],
   };
@@ -2458,309 +1408,946 @@ function makePreviewButtonBox(
 function displayStatus(
   vehicle
 ) {
+  const status =
+    safeText(
+      vehicle?.sourceStatus,
+      "-"
+    );
+
   if (
-    vehicle.sourceStatus ===
+    status ===
     "掲載在庫"
   ) {
     return "展示販売中";
   }
 
   if (
-    vehicle.sourceStatus ===
+    status ===
     "一時保存"
   ) {
     return "販売可・未仕上げ";
   }
 
-  return (
-    vehicle.sourceStatus ||
-    "-"
-  );
+  return status;
 }
+
 function makeVehicleBubble(
   vehicle
 ) {
   const imageUrl =
     validImageUrl(
-      vehicle.imageUrl
+      vehicle?.imageUrl
     );
 
   const isPublicVehicle =
-    vehicle.sourceStatus ===
+    vehicle?.sourceStatus ===
     "掲載在庫";
 
   const gooUrl =
     isPublicVehicle
       ? validUrl(
-          vehicle.gooUrl
+          vehicle?.gooUrl
         )
       : "";
 
-  const detailContents = [
-    {
-      type: "text",
-
-      text:
-        `年式：${
-          vehicle.year ||
-          "-"
-        }`,
-
-      size: "sm",
-      color: "#555555",
-    },
-    {
-      type: "text",
-
-      text:
-        `走行距離：${
-          vehicle.mileage ||
-          "-"
-        }`,
-
-      size: "sm",
-      color: "#555555",
-    },
-    {
-      type: "text",
-
-      text:
-        `色：${
-          vehicle.color ||
-          "-"
-        }`,
-
-      size: "sm",
-      color: "#555555",
-      wrap: true,
-    },
-    {
-      type: "text",
-
-      text:
-        `状態：${displayStatus(
-          vehicle
-        )}`,
-
-      size: "sm",
-      color: "#555555",
-    },
-  ];
-
-  if (
-    vehicle.inferredSeatCapacity
-  ) {
-    detailContents.push({
-      type: "text",
-
-      text:
-        `乗車人数目安：${vehicle.inferredSeatCapacity}人`,
-
-      size: "sm",
-      color: "#555555",
-    });
-  }
-
-  if (!isPublicVehicle) {
-    detailContents.push({
-      type: "text",
-
-      text:
-        "✨ 仕上げ・掲載準備中",
-
-      size: "sm",
-      color: "#D97706",
-      wrap: true,
-    });
-  }
+  const gradeExtraInfo =
+    safeText(
+      vehicle?.gradeExtraInfo,
+      FALLBACK_EXTRA_INFO
+    );
 
   const bodyContents = [
     {
       type: "text",
-
       text:
-        vehicle.carName ||
-        vehicle.title ||
-        "車両情報",
-
+        `支払総額 ${safeText(
+          vehicle?.totalPrice,
+          "お問い合わせ"
+        )}`,
       weight: "bold",
       size: "xl",
+      color: "#D97706",
       wrap: true,
     },
     {
       type: "text",
-
       text:
-        vehicle.gradeName ||
-        vehicle.description ||
-        "",
-
-      size: "sm",
-      color: "#555555",
+        `車両本体価格 ${safeText(
+          vehicle?.bodyPrice,
+          "お問い合わせ"
+        )}`,
+      size: "xs",
+      color: "#666666",
       wrap: true,
+      margin: "none",
     },
+    makeGradeExtraBox(
+      gradeExtraInfo
+    ),
+    makeInfoRow(vehicle),
   ];
 
-  if (
-    vehicle
-      .inventoryMatchReasons
-      ?.length
-  ) {
+  if (gooUrl) {
     bodyContents.push({
       type: "text",
-
       text:
-        `条件一致：${vehicle.inventoryMatchReasons.join(
-          "・"
-        )}`,
-
-      size: "sm",
-      color: "#0B1F3A",
-      weight: "bold",
-      wrap: true,
-    });
-  }
-
-  if (
-    vehicle.gradeExtraInfo
-  ) {
-    bodyContents.push({
-      type: "text",
-
-      text:
-        vehicle.gradeExtraInfo,
-
-      size: "sm",
-      color: "#333333",
-      wrap: true,
+        "タップで詳細を見る ↗",
+      size: "xs",
+      color: "#888888",
+      align: "center",
+      margin: "xs",
     });
   }
 
   bodyContents.push(
-    {
-      type: "box",
-      layout: "vertical",
-      spacing: "xs",
-
-      contents: [
-        {
-          type: "text",
-
-          text:
-            `車両本体価格 ${
-              vehicle.bodyPrice ||
-              "お問い合わせ"
-            }`,
-
-          size: "sm",
-          color: "#555555",
-          wrap: true,
-        },
-        {
-          type: "text",
-
-          text:
-            `支払総額 ${
-              vehicle.totalPrice ||
-              "お問い合わせ"
-            }`,
-
-          weight: "bold",
-          size: "lg",
-          color: "#D97706",
-          wrap: true,
-        },
-      ],
-    },
-    {
-      type: "box",
-      layout: "vertical",
-      spacing: "xs",
-      contents:
-        detailContents,
-    }
+    makeConsultButton(
+      vehicle
+    )
   );
 
-  const bubble = {
+  return {
     type: "bubble",
     size: "mega",
-
     body: {
       type: "box",
       layout: "vertical",
-      spacing: "md",
-      contents: bodyContents,
-    },
-
-    footer: {
-      type: "box",
-      layout: "vertical",
-      spacing: "sm",
-
+      spacing: "none",
+      paddingAll: "0px",
       contents: [
+        ...(
+          imageUrl
+            ? [
+                makeHeroImage(
+                  imageUrl,
+                  vehicle,
+                  gooUrl
+                ),
+              ]
+            : []
+        ),
+        makeVehicleTitleBox(
+          vehicle
+        ),
         {
-          type: "button",
-          style: "primary",
-          color: "#0B1F3A",
-
-          action: {
-            type: "message",
-
-            label:
-              "この車について相談する",
-
-            text:
-              `この車について相談したい：${
-                vehicle.carName ||
-                vehicle.title
-              }`,
-          },
+          type: "box",
+          layout: "vertical",
+          paddingStart:
+            "14px",
+          paddingEnd:
+            "14px",
+          paddingTop:
+            "10px",
+          paddingBottom:
+            "10px",
+          spacing: "xs",
+          contents:
+            bodyContents,
         },
       ],
     },
   };
+}
 
-  if (imageUrl) {
-    bubble.hero = {
-      type: "image",
-      url: imageUrl,
-      size: "full",
-      aspectRatio: "16:9",
-      aspectMode: "cover",
-    };
-  }
-
-  if (gooUrl) {
-    bubble.footer.contents.unshift({
-      type: "button",
-      style: "secondary",
-
-      action: {
-        type: "uri",
-        label: "詳細を見る",
-        uri: gooUrl,
+function makeHeroImage(
+  imageUrl,
+  vehicle,
+  gooUrl
+) {
+  return {
+    type: "box",
+    layout: "vertical",
+    height: "176px",
+    ...(
+      gooUrl
+        ? {
+            action: {
+              type: "uri",
+              uri: gooUrl,
+            },
+          }
+        : {}
+    ),
+    contents: [
+      {
+        type: "image",
+        url: imageUrl,
+        size: "full",
+        aspectRatio:
+          "16:9",
+        aspectMode:
+          "cover",
       },
+      makeStatusRibbon(
+        vehicle
+      ),
+    ],
+  };
+}
+
+function makeStatusRibbon(
+  vehicle
+) {
+  const status =
+    displayStatus(vehicle);
+
+  const isLong =
+    status.length >= 7;
+
+  return {
+    type: "box",
+    layout: "horizontal",
+    position: "absolute",
+    offsetTop: "0px",
+    offsetStart: "0px",
+    width:
+      isLong
+        ? "138px"
+        : "104px",
+    height: "32px",
+    backgroundColor:
+      "#0B1F3A",
+    paddingStart: "8px",
+    paddingEnd: "8px",
+    justifyContent:
+      "center",
+    alignItems:
+      "center",
+    contents: [
+      {
+        type: "text",
+        text: status,
+        size:
+          isLong
+            ? "xxs"
+            : "xs",
+        color:
+          "#E5D08A",
+        weight: "bold",
+        align: "center",
+        wrap: false,
+      },
+    ],
+  };
+}
+
+function makeVehicleTitleBox(
+  vehicle
+) {
+  const title =
+    safeText(
+      vehicle?.carName ||
+        vehicle?.title,
+      "車両情報"
+    );
+
+  const subTitle =
+    optionalText(
+      vehicle?.gradeName
+    );
+
+  const contents = [
+    {
+      type: "text",
+      text: title,
+      weight: "bold",
+      size: "lg",
+      color:
+        "#E5D08A",
+      wrap: true,
+    },
+  ];
+
+  if (subTitle) {
+    contents.push({
+      type: "text",
+      text: subTitle,
+      size: "sm",
+      color:
+        "#FFFFFF",
+      wrap: true,
+      margin: "xs",
     });
   }
 
-  return bubble;
+  return {
+    type: "box",
+    layout: "vertical",
+    backgroundColor:
+      "#0B1F3A",
+    paddingStart:
+      "14px",
+    paddingEnd:
+      "14px",
+    paddingTop:
+      "10px",
+    paddingBottom:
+      "10px",
+    contents,
+  };
 }
 
-function validImageUrl(url) {
-  if (!url) return "";
+function makeGradeExtraBox(
+  gradeExtraInfo
+) {
+  return {
+    type: "box",
+    layout: "vertical",
+    margin: "sm",
+    contents: [
+      {
+        type: "text",
+        text:
+          gradeExtraInfo,
+        size: "xxs",
+        color:
+          "#333333",
+        wrap: true,
+        maxLines: 4,
+      },
+    ],
+  };
+}
+
+function makeInfoRow(
+  vehicle
+) {
+  return {
+    type: "box",
+    layout: "horizontal",
+    spacing: "xs",
+    margin: "sm",
+    contents: [
+      makeInfoBox(
+        "初度登録",
+        formatRegistrationYear(
+          vehicle?.year
+        ),
+        "normal"
+      ),
+      makeInfoBox(
+        "走行距離",
+        formatMileage(
+          vehicle?.mileage
+        ),
+        "normal"
+      ),
+      makeInfoBox(
+        "車体色",
+        formatColorName(
+          vehicle?.color
+        ),
+        "color"
+      ),
+    ],
+  };
+}
+
+function makeInfoBox(
+  label,
+  value,
+  kind
+) {
+  const valueText =
+    safeText(
+      value,
+      "-"
+    );
+
+  const isColor =
+    kind === "color";
+
+  const valueSize =
+    getInfoValueSize(
+      valueText,
+      kind
+    );
+
+  return {
+    type: "box",
+    layout: "vertical",
+    flex: 1,
+    height: "64px",
+    backgroundColor:
+      "#F3F4F6",
+    cornerRadius: "md",
+    paddingAll: "6px",
+    contents: [
+      {
+        type: "text",
+        text: label,
+        size: "xxs",
+        color:
+          "#777777",
+        align: "center",
+        wrap: false,
+      },
+      {
+        type: "box",
+        layout: "vertical",
+        flex: 1,
+        justifyContent:
+          "center",
+        alignItems:
+          "center",
+        contents: [
+          {
+            type: "text",
+            text:
+              valueText,
+            size:
+              valueSize,
+            color:
+              "#222222",
+            weight: "bold",
+            align: "center",
+            wrap: true,
+            maxLines:
+              isColor
+                ? 3
+                : 3,
+          },
+        ],
+      },
+    ],
+  };
+}
+
+function getInfoValueSize(
+  valueText,
+  kind
+) {
+  if (
+    kind !== "color"
+  ) {
+    return "xs";
+  }
+
+  const plain =
+    String(
+      valueText || ""
+    ).replace(
+      /\n/g,
+      ""
+    );
+
+  return (
+    plain.length <= 6
+      ? "xs"
+      : "xxs"
+  );
+}
+
+function formatColorName(
+  colorText
+) {
+  const text =
+    String(
+      colorText || ""
+    )
+      .replace(
+        /\s+/g,
+        ""
+      )
+      .trim();
+
+  if (!text) {
+    return "-";
+  }
+
+  const maxLines = 3;
+  const maxCharsPerLine = 7;
+
+  const tokens =
+    splitColorIntoTokens(
+      text
+    );
+
+  const lines =
+    packTokensIntoLines(
+      tokens,
+      maxCharsPerLine
+    );
+
+  if (
+    lines.length <=
+    maxLines
+  ) {
+    return lines.join("\n");
+  }
+
+  const visibleLines =
+    lines.slice(
+      0,
+      maxLines
+    );
+
+  const hiddenText =
+    lines
+      .slice(maxLines)
+      .join("");
+
+  const lastLine =
+    visibleLines[
+      maxLines - 1
+    ] +
+    hiddenText;
+
+  visibleLines[
+    maxLines - 1
+  ] =
+    truncateText(
+      lastLine,
+      maxCharsPerLine
+    );
+
+  return visibleLines.join(
+    "\n"
+  );
+}
+
+function splitColorIntoTokens(
+  text
+) {
+  const colorWords = [
+    "クリスタルシャイン",
+    "ホワイトパール",
+    "スーパーブラック",
+    "プレシャス",
+    "ラグジュアリー",
+    "クリスタル",
+    "メタリック",
+    "ブラック",
+    "ホワイト",
+    "シルバー",
+    "グリーン",
+    "ブルー",
+    "ブラウン",
+    "パープル",
+    "レッド",
+    "オレンジ",
+    "イエロー",
+    "ベージュ",
+    "グレー",
+    "グレイ",
+    "パール",
+    "マイカ",
+    "ガラス",
+    "フレーク",
+    "シャイン",
+    "アッシュ",
+    "ダーク",
+    "ライト",
+    "クール",
+    "スター",
+    "チタン",
+    "カッパー",
+    "ブロンズ",
+    "カーキ",
+    "アイボリー",
+    "クリーム",
+    "ワイン",
+    "ピンク",
+    "ゴールド",
+    "ネイビー",
+    "ターコイズ",
+  ].sort(
+    (
+      first,
+      second
+    ) =>
+      second.length -
+      first.length
+  );
+
+  const tokens = [];
+  let remaining = text;
+
+  while (
+    remaining.length > 0
+  ) {
+    const matched =
+      colorWords.find(
+        (word) =>
+          remaining.startsWith(
+            word
+          )
+      );
+
+    if (matched) {
+      tokens.push(matched);
+
+      remaining =
+        remaining.slice(
+          matched.length
+        );
+
+      continue;
+    }
+
+    tokens.push(
+      remaining[0]
+    );
+
+    remaining =
+      remaining.slice(1);
+  }
+
+  return mergeSingleCharTokens(
+    tokens
+  );
+}
+
+function mergeSingleCharTokens(
+  tokens
+) {
+  const result = [];
+
+  for (
+    const token of
+    tokens
+  ) {
+    const lastIndex =
+      result.length - 1;
+
+    if (
+      token.length === 1 &&
+      lastIndex >= 0 &&
+      result[lastIndex]
+        .length < 4
+    ) {
+      result[lastIndex] +=
+        token;
+    } else {
+      result.push(token);
+    }
+  }
+
+  return result;
+}
+
+function packTokensIntoLines(
+  tokens,
+  maxCharsPerLine
+) {
+  const lines = [];
+  let current = "";
+
+  for (
+    const token of
+    tokens
+  ) {
+    if (
+      token.length >
+      maxCharsPerLine
+    ) {
+      if (current) {
+        lines.push(current);
+        current = "";
+      }
+
+      lines.push(
+        ...splitTextByLength(
+          token,
+          maxCharsPerLine
+        )
+      );
+
+      continue;
+    }
+
+    if (!current) {
+      current = token;
+      continue;
+    }
+
+    if (
+      (
+        current +
+        token
+      ).length <=
+      maxCharsPerLine
+    ) {
+      current += token;
+    } else {
+      lines.push(current);
+      current = token;
+    }
+  }
+
+  if (current) {
+    lines.push(current);
+  }
+
+  return lines;
+}
+
+function truncateText(
+  text,
+  maxChars
+) {
+  if (
+    text.length <=
+    maxChars
+  ) {
+    return text;
+  }
+
+  return (
+    `${text.slice(
+      0,
+      Math.max(
+        1,
+        maxChars - 1
+      )
+    )}…`
+  );
+}
+
+function splitTextByLength(
+  text,
+  length
+) {
+  const result = [];
+
+  for (
+    let index = 0;
+    index < text.length;
+    index += length
+  ) {
+    result.push(
+      text.slice(
+        index,
+        index + length
+      )
+    );
+  }
+
+  return result;
+}
+
+function makeConsultButton(
+  vehicle
+) {
+  return {
+    type: "button",
+    style: "primary",
+    height: "sm",
+    color: "#0B1F3A",
+    margin: "sm",
+    action: {
+      type: "message",
+      label:
+        "💬 この車を相談",
+      text:
+        `この車について相談したい：${safeText(
+          vehicle?.carName ||
+            vehicle?.title,
+          "車両情報"
+        )}`,
+    },
+  };
+}
+
+function formatRegistrationYear(
+  yearText
+) {
+  if (!yearText) {
+    return "-";
+  }
+
+  const match =
+    String(
+      yearText
+    ).match(
+      /(19|20)\d{2}/
+    );
+
+  if (!match) {
+    return safeText(
+      yearText,
+      "-"
+    );
+  }
+
+  const year =
+    Number(match[0]);
+
+  if (year >= 2019) {
+    const reiwa =
+      year - 2018;
+
+    return (
+      `令和${reiwa === 1 ? "元" : reiwa}年` +
+      `（${year}年）`
+    );
+  }
+
+  if (year >= 1989) {
+    const heisei =
+      year - 1988;
+
+    return (
+      `平成${heisei === 1 ? "元" : heisei}年` +
+      `（${year}年）`
+    );
+  }
+
+  if (year >= 1926) {
+    const showa =
+      year - 1925;
+
+    return (
+      `昭和${showa === 1 ? "元" : showa}年` +
+      `（${year}年）`
+    );
+  }
+
+  return `${year}年`;
+}
+
+function formatMileage(
+  mileageText
+) {
+  if (!mileageText) {
+    return "-";
+  }
+
+  const text =
+    String(mileageText)
+      .replace(
+        /Ｋ/g,
+        "K"
+      )
+      .replace(
+        /ｋ/g,
+        "k"
+      )
+      .replace(
+        /,/g,
+        ""
+      )
+      .trim();
+
+  if (
+    text.includes(
+      "走不明"
+    )
+  ) {
+    return "走不明";
+  }
+
+  const numberText =
+    text.match(
+      /[0-9]+(?:\.[0-9]+)?/
+    )?.[0];
+
+  if (!numberText) {
+    return safeText(
+      mileageText,
+      "-"
+    );
+  }
+
+  const value =
+    Number(numberText);
+
+  if (
+    !Number.isFinite(value)
+  ) {
+    return safeText(
+      mileageText,
+      "-"
+    );
+  }
+
+  let kilometers;
+
+  if (
+    text.includes("万K") ||
+    text.includes("万k") ||
+    text.includes("万km")
+  ) {
+    kilometers =
+      value >= 1000
+        ? value
+        : value * 10000;
+  } else {
+    kilometers = value;
+  }
+
+  return (
+    `${Math.round(
+      kilometers
+    ).toLocaleString(
+      "ja-JP"
+    )}km`
+  );
+}
+
+function safeText(
+  value,
+  fallback = "-"
+) {
+  if (
+    value === undefined ||
+    value === null
+  ) {
+    return fallback;
+  }
+
+  const text =
+    String(value);
+
+  return (
+    text.trim() === ""
+      ? fallback
+      : text
+  );
+}
+
+function optionalText(
+  value
+) {
+  if (
+    value === undefined ||
+    value === null
+  ) {
+    return "";
+  }
+
+  const text =
+    String(value);
+
+  return (
+    text.trim() === ""
+      ? ""
+      : text
+  );
+}
+
+function validImageUrl(
+  url
+) {
+  if (!url) {
+    return "";
+  }
 
   const text =
     String(url);
 
-  return text.startsWith(
-    "https://"
-  )
-    ? text
-    : "";
+  return (
+    text.startsWith(
+      "https://"
+    )
+      ? text
+      : ""
+  );
 }
 
 function validUrl(url) {
-  if (!url) return "";
+  if (!url) {
+    return "";
+  }
 
   const text =
     String(url);
@@ -2772,41 +2359,40 @@ function validUrl(url) {
     text.startsWith(
       "http://"
     )
-  )
-    ? text
-    : "";
+      ? text
+      : ""
+  );
 }
 
 async function replyMessage(
   replyToken,
   messages
 ) {
-  const res = await fetch(
-    "https://api.line.me/v2/bot/message/reply",
-    {
-      method: "POST",
-
-      headers: {
-        "Content-Type":
-          "application/json",
-
-        Authorization:
-          `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
-      },
-
-      body: JSON.stringify({
-        replyToken,
-        messages,
-      }),
-    }
-  );
+  const response =
+    await fetch(
+      "https://api.line.me/v2/bot/message/reply",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json",
+          Authorization:
+            `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
+        },
+        body:
+          JSON.stringify({
+            replyToken,
+            messages,
+          }),
+      }
+    );
 
   const result =
-    await res.text();
+    await response.text();
 
   console.log(
     "REPLY_STATUS:",
-    res.status
+    response.status
   );
 
   console.log(
@@ -2819,26 +2405,24 @@ async function linkRichMenu(
   userId,
   richMenuId
 ) {
-  if (!userId) return;
-
-  const res = await fetch(
-    `https://api.line.me/v2/bot/user/${userId}/richmenu/${richMenuId}`,
-    {
-      method: "POST",
-
-      headers: {
-        Authorization:
-          `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
-      },
-    }
-  );
+  const response =
+    await fetch(
+      `https://api.line.me/v2/bot/user/${userId}/richmenu/${richMenuId}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization:
+            `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
+        },
+      }
+    );
 
   const result =
-    await res.text();
+    await response.text();
 
   console.log(
     "LINK_RICH_MENU_STATUS:",
-    res.status
+    response.status
   );
 
   console.log(
