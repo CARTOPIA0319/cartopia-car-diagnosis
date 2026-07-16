@@ -1,9 +1,13 @@
 "use client";
 
+import Script from "next/script";
 import { useMemo, useState } from "react";
 
-const INVENTORY_URL =
-  "https://raw.githubusercontent.com/CARTOPIA0319/cartopia-car-diagnosis/main/data/inventory.json";
+const LIFF_ID =
+  process.env.NEXT_PUBLIC_LIFF_ID || "";
+
+const PERFECT_INVENTORY_REQUEST_PREFIX =
+  "【ぴったり診断・在庫検索】";
 
 const MAX_PASSENGER_OPTIONS = [
   { label: "1〜2人", seats: 2 },
@@ -112,6 +116,14 @@ const TYPE_GROUPS = [
   },
 ];
 
+const LIGHT_TYPE_KEYS =
+  TYPE_GROUPS.find(
+    (group) =>
+      group.title === "軽自動車"
+  )?.options.map(
+    (option) => option.value
+  ) || [];
+
 const ALL_TYPE_OPTIONS = TYPE_GROUPS.flatMap(
   (group) => group.options
 );
@@ -174,210 +186,11 @@ const WANTED_CONDITION_GROUPS = [
   },
 ];
 
-const MAKER_ALIASES = {
-  トヨタ: ["トヨタ", "TOYOTA"],
-  レクサス: ["レクサス", "LEXUS"],
-  日産: ["日産", "ニッサン", "NISSAN"],
-  ホンダ: ["ホンダ", "HONDA"],
-  マツダ: ["マツダ", "MAZDA"],
-  スバル: ["スバル", "SUBARU"],
-  三菱: ["三菱", "ミツビシ", "MITSUBISHI"],
-  スズキ: ["スズキ", "SUZUKI"],
-  ダイハツ: ["ダイハツ", "DAIHATSU"],
-  BMW: ["BMW"],
-  メルセデスベンツ: [
-    "メルセデス",
-    "ベンツ",
-    "MERCEDES",
-    "BENZ",
-  ],
-  アウディ: ["アウディ", "AUDI"],
-  フォルクスワーゲン: [
-    "フォルクスワーゲン",
-    "VOLKSWAGEN",
-    "VW",
-  ],
-  ボルボ: ["ボルボ", "VOLVO"],
-};
-
-const MODEL_TO_MAKER = {
-  アルファード: "トヨタ",
-  ヴェルファイア: "トヨタ",
-  ノア: "トヨタ",
-  ヴォクシー: "トヨタ",
-  シエンタ: "トヨタ",
-  ハリアー: "トヨタ",
-  RAV4: "トヨタ",
-  ライズ: "トヨタ",
-  ヤリス: "トヨタ",
-  アクア: "トヨタ",
-  プリウス: "トヨタ",
-  クラウン: "トヨタ",
-  ランドクルーザー: "トヨタ",
-  プラド: "トヨタ",
-  ルーミー: "トヨタ",
-  ハイエース: "トヨタ",
-  プロボックス: "トヨタ",
-
-  エルグランド: "日産",
-  セレナ: "日産",
-  エクストレイル: "日産",
-  キックス: "日産",
-  ノート: "日産",
-  オーラ: "日産",
-  リーフ: "日産",
-  サクラ: "日産",
-  ルークス: "日産",
-  デイズ: "日産",
-  スカイライン: "日産",
-  フーガ: "日産",
-  フェアレディ: "日産",
-  キャラバン: "日産",
-  クリッパー: "日産",
-
-  ステップワゴン: "ホンダ",
-  フリード: "ホンダ",
-  オデッセイ: "ホンダ",
-  ヴェゼル: "ホンダ",
-  ZRV: "ホンダ",
-  CRV: "ホンダ",
-  フィット: "ホンダ",
-  シビック: "ホンダ",
-  NBOX: "ホンダ",
-  NWGN: "ホンダ",
-  NONE: "ホンダ",
-  NVAN: "ホンダ",
-
-  CX3: "マツダ",
-  CX30: "マツダ",
-  CX5: "マツダ",
-  CX60: "マツダ",
-  CX8: "マツダ",
-  CX80: "マツダ",
-  MAZDA2: "マツダ",
-  MAZDA3: "マツダ",
-  MAZDA6: "マツダ",
-  デミオ: "マツダ",
-  アテンザ: "マツダ",
-  ロードスター: "マツダ",
-
-  フォレスター: "スバル",
-  レヴォーグ: "スバル",
-  クロストレック: "スバル",
-  インプレッサ: "スバル",
-  レガシィ: "スバル",
-  アウトバック: "スバル",
-  WRX: "スバル",
-  BRZ: "スバル",
-  XV: "スバル",
-  ステラ: "スバル",
-  シフォン: "スバル",
-  サンバー: "スバル",
-
-  デリカ: "三菱",
-  アウトランダー: "三菱",
-  エクリプスクロス: "三菱",
-  RVR: "三菱",
-  パジェロ: "三菱",
-
-  スペーシア: "スズキ",
-  ワゴンR: "スズキ",
-  ハスラー: "スズキ",
-  アルト: "スズキ",
-  ラパン: "スズキ",
-  ジムニー: "スズキ",
-  ソリオ: "スズキ",
-  スイフト: "スズキ",
-  エブリイ: "スズキ",
-  キャリイ: "スズキ",
-  クロスビー: "スズキ",
-
-  タント: "ダイハツ",
-  ムーヴ: "ダイハツ",
-  ミライース: "ダイハツ",
-  タフト: "ダイハツ",
-  ロッキー: "ダイハツ",
-  トール: "ダイハツ",
-  アトレー: "ダイハツ",
-  ハイゼット: "ダイハツ",
-  ウェイク: "ダイハツ",
-  コペン: "ダイハツ",
-  キャスト: "ダイハツ",
-};
-
-const LEXUS_MODEL_CODES = [
-  "LS",
-  "ES",
-  "IS",
-  "GS",
-  "LC",
-  "RC",
-  "RX",
-  "NX",
-  "UX",
-  "LX",
-  "GX",
-  "LBX",
-];
-
-const IMPORT_MAKERS = [
-  "BMW",
-  "メルセデスベンツ",
-  "アウディ",
-  "フォルクスワーゲン",
-  "ボルボ",
-  "ミニ",
-  "ジープ",
-  "プジョー",
-  "シトロエン",
-  "ルノー",
-  "フィアット",
-  "ポルシェ",
-  "ジャガー",
-  "ランドローバー",
-];
-
-function normalizeText(value) {
-  return String(value || "")
-    .normalize("NFKC")
-    .toUpperCase()
-    .replace(
-      /[\s　・･ー―‐\-_/／,，.。()（）【】\[\]「」『』]/g,
-      ""
-    );
-}
-
-function includesNormalized(source, target) {
-  const normalizedSource = normalizeText(source);
-  const normalizedTarget = normalizeText(target);
-
-  if (!normalizedSource || !normalizedTarget) {
-    return false;
-  }
-
-  return (
-    normalizedSource.includes(normalizedTarget) ||
-    normalizedTarget.includes(normalizedSource)
-  );
-}
-
 function splitTokens(value) {
   return String(value || "")
     .split(/[\n,，、/／・]+/)
     .map((item) => item.trim())
     .filter(Boolean);
-}
-
-function unique(values) {
-  return [...new Set(values.filter(Boolean))];
-}
-
-function priceNumber(value) {
-  const match = String(value || "")
-    .replace(/,/g, "")
-    .match(/\d+(?:\.\d+)?/);
-
-  return match ? Number(match[0]) : 0;
 }
 
 function makeOwnedCar(id = "car-1") {
@@ -417,475 +230,12 @@ function makeInitialForm() {
   };
 }
 
-function detectMaker(vehicle) {
-  if (vehicle?.maker || vehicle?.brand) {
-    return String(
-      vehicle.maker ||
-        vehicle.brand
-    );
-  }
-
-  const carName = normalizeText(
-    vehicle?.carName
-  );
-
-  const text = normalizeText(
-    [
-      vehicle?.title,
-      vehicle?.carName,
-      vehicle?.gradeName,
-      vehicle?.description,
-      vehicle?.classificationName,
-    ].join(" ")
-  );
-
-  if (
-    LEXUS_MODEL_CODES.some(
-      (model) =>
-        carName === normalizeText(model) ||
-        carName.startsWith(
-          normalizeText(model)
-        )
-    )
-  ) {
-    return "レクサス";
-  }
-
-  for (const [model, maker] of Object.entries(
-    MODEL_TO_MAKER
-  )) {
-    if (
-      text.includes(
-        normalizeText(model)
-      )
-    ) {
-      return maker;
-    }
-  }
-
-  for (const [maker, aliases] of Object.entries(
-    MAKER_ALIASES
-  )) {
-    if (
-      aliases.some((alias) =>
-        text.includes(
-          normalizeText(alias)
-        )
-      )
-    ) {
-      return maker;
-    }
-  }
-
-  return "";
-}
-
-function getVehicleTypeKeys(vehicle) {
-  const sourceKeys = unique([
-    ...(Array.isArray(vehicle?.types)
-      ? vehicle.types
-      : []),
-    ...(Array.isArray(vehicle?.typeKeys)
-      ? vehicle.typeKeys
-      : []),
-  ]);
-
-  const hasExactKey = (target) =>
-    sourceKeys.some(
-      (key) =>
-        normalizeText(key) ===
-        normalizeText(target)
-    );
-
-  const result = [];
-
-  if (hasExactKey("軽自動車")) {
-    for (const type of [
-      "スライドドア",
-      "スタンダード",
-      "SUV",
-      "トラック",
-      "スポーティ",
-    ]) {
-      if (hasExactKey(type)) {
-        result.push(
-          `軽自動車 ${type}`
-        );
-      }
-    }
-  }
-
-  if (hasExactKey("普通車")) {
-    for (const type of [
-      "コンパクトカー",
-      "ミニバン",
-      "SUV",
-      "セダン",
-      "ステーションワゴン",
-      "EV・HV",
-      "スポーティ",
-      "バン・トラック",
-    ]) {
-      if (hasExactKey(type)) {
-        result.push(
-          `普通車 ${type}`
-        );
-      }
-    }
-  }
-
-  return unique(result);
-}
-
-function getVehicleSearchText(vehicle) {
-  return [
-    detectMaker(vehicle),
-    vehicle?.title,
-    vehicle?.carName,
-    vehicle?.gradeName,
-    vehicle?.gradeExtraInfo,
-    vehicle?.description,
-    vehicle?.classificationName,
-    ...(vehicle?.types || []),
-    ...(vehicle?.typeKeys || []),
-  ].join(" ");
-}
-
-function isAvoidedInventoryVehicle(
-  vehicle,
-  form
-) {
-  if (form.avoidNone) {
-    return false;
-  }
-
-  const maker = detectMaker(vehicle);
-  const searchText =
-    getVehicleSearchText(vehicle);
-  const typeKeys =
-    getVehicleTypeKeys(vehicle);
-
-  const avoidedMakerTokens =
-    splitTokens(
-      form.avoidManufacturers
-    );
-
-  const avoidedModelTokens =
-    splitTokens(
-      form.avoidModels
-    );
-
-  if (
-    avoidedMakerTokens.some(
-      (token) =>
-        includesNormalized(
-          maker,
-          token
-        ) ||
-        includesNormalized(
-          searchText,
-          token
-        )
-    )
-  ) {
-    return true;
-  }
-
-  if (
-    avoidedModelTokens.some(
-      (token) =>
-        includesNormalized(
-          searchText,
-          token
-        )
-    )
-  ) {
-    return true;
-  }
-
-  if (
-    form.avoidBodyTypes.some(
-      (typeKey) =>
-        typeKeys.includes(typeKey)
-    )
-  ) {
-    return true;
-  }
-
-  if (
-    form.avoidConditions.includes(
-      "スライドドア"
-    ) &&
-    typeKeys.some((typeKey) =>
-      typeKey.includes(
-        "スライドドア"
-      )
-    )
-  ) {
-    return true;
-  }
-
-  if (
-    form.avoidConditions.includes(
-      "商用車っぽい車"
-    ) &&
-    typeKeys.some(
-      (typeKey) =>
-        typeKey.includes(
-          "トラック"
-        ) ||
-        typeKey.includes(
-          "バン・トラック"
-        )
-    )
-  ) {
-    return true;
-  }
-
-  if (
-    form.avoidConditions.includes(
-      "カスタム系"
-    ) &&
-    normalizeText(
-      searchText
-    ).includes(
-      normalizeText("カスタム")
-    )
-  ) {
-    return true;
-  }
-
-  if (
-    form.avoidConditions.includes(
-      "ハイブリッド・EV"
-    ) &&
-    typeKeys.some((typeKey) =>
-      typeKey.includes("EV・HV")
-    )
-  ) {
-    return true;
-  }
-
-  if (
-    form.avoidConditions.includes(
-      "輸入車"
-    ) &&
-    IMPORT_MAKERS.some(
-      (importMaker) =>
-        includesNormalized(
-          maker,
-          importMaker
-        )
-    )
-  ) {
-    return true;
-  }
-
-  return false;
-}
-
-function scoreInventoryVehicle(
-  vehicle,
-  form,
-  recommendations
-) {
-  const typeKeys =
-    getVehicleTypeKeys(vehicle);
-
-  const searchText =
-    getVehicleSearchText(vehicle);
-
-  const normalizedSearchText =
-    normalizeText(searchText);
-
-  const maker =
-    detectMaker(vehicle);
-
-  const desiredTypes =
-    form.desiredBodyTypes.filter(
-      (typeKey) =>
-        typeKey !==
-        "特にこだわらない"
-    );
-
-  let score = 0;
-  const reasons = [];
-
-  const matchedType =
-    desiredTypes.find(
-      (typeKey) =>
-        typeKeys.includes(typeKey)
-    );
-
-  if (matchedType) {
-    score += 55;
-
-    reasons.push(
-      matchedType
-        .replace("普通車 ", "")
-        .replace("軽自動車 ", "")
-    );
-  } else if (
-    form.desiredBodyTypes.includes(
-      "特にこだわらない"
-    )
-  ) {
-    score += 18;
-  } else {
-    return null;
-  }
-
-  const desiredMakerTokens =
-    splitTokens(
-      form.desiredManufacturers
-    );
-
-  if (
-    desiredMakerTokens.some(
-      (token) =>
-        includesNormalized(
-          maker,
-          token
-        ) ||
-        includesNormalized(
-          searchText,
-          token
-        )
-    )
-  ) {
-    score += 18;
-    reasons.push(
-      "希望メーカー"
-    );
-  }
-
-  const matchedRecommendation =
-    (recommendations || []).find(
-      (recommendation) =>
-        includesNormalized(
-          searchText,
-          recommendation.model
-        ) ||
-        includesNormalized(
-          searchText,
-          `${recommendation.maker}${recommendation.model}`
-        )
-    );
-
-  if (matchedRecommendation) {
-    score += Math.max(
-      20,
-      48 -
-        (Number(
-          matchedRecommendation.rank ||
-            1
-        ) -
-          1) *
-          3
-    );
-
-    reasons.push(
-      `診断${
-        matchedRecommendation.rank ||
-        "上位"
-      }位に近い`
-    );
-  }
-
-  for (const condition of form.desiredConditions) {
-    if (
-      condition === "スライドドア" &&
-      typeKeys.some((typeKey) =>
-        typeKey.includes(
-          "スライドドア"
-        )
-      )
-    ) {
-      score += 13;
-      reasons.push(
-        "スライドドア"
-      );
-    }
-
-    if (
-      condition === "4WD" &&
-      (
-        normalizedSearchText.includes(
-          "4WD"
-        ) ||
-        normalizedSearchText.includes(
-          normalizeText("四駆")
-        )
-      )
-    ) {
-      score += 13;
-      reasons.push("4WD");
-    }
-
-    if (
-      condition === "燃費が良い" &&
-      typeKeys.some((typeKey) =>
-        typeKey.includes("EV・HV")
-      )
-    ) {
-      score += 10;
-      reasons.push(
-        "低燃費・HV"
-      );
-    }
-
-    if (
-      condition === "スポーティ" &&
-      typeKeys.some((typeKey) =>
-        typeKey.includes(
-          "スポーティ"
-        )
-      )
-    ) {
-      score += 10;
-      reasons.push(
-        "スポーティ"
-      );
-    }
-
-    if (
-      condition === "カスタム系" &&
-      normalizedSearchText.includes(
-        normalizeText("カスタム")
-      )
-    ) {
-      score += 8;
-      reasons.push(
-        "カスタム系"
-      );
-    }
-  }
-
-  if (
-    vehicle?.sourceStatus ===
-    "掲載在庫"
-  ) {
-    score += 3;
-  }
-
-  return {
-    ...vehicle,
-    maker,
-    inventoryMatchScore:
-      Math.min(99, score),
-    inventoryMatchReasons:
-      unique(reasons).slice(
-        0,
-        3
-      ),
-  };
-}
-
 function ChoiceGrid({
   options,
   selected,
   onToggle,
   single = false,
+  disabledValues = [],
 }) {
   return (
     <div className="choice-grid">
@@ -905,16 +255,24 @@ function ChoiceGrid({
           ? selected === value
           : selected.includes(value);
 
+        const disabled =
+          disabledValues.includes(value);
+
         return (
           <button
             key={value}
             type="button"
             className={`choice-button ${
               active ? "active" : ""
+            } ${
+              disabled ? "disabled" : ""
             }`}
-            onClick={() =>
-              onToggle(value)
-            }
+            disabled={disabled}
+            onClick={() => {
+              if (!disabled) {
+                onToggle(value);
+              }
+            }}
           >
             <span className="check-box">
               {active ? "✓" : ""}
@@ -932,26 +290,47 @@ function TypeChoiceGrid({
   selected,
   onToggle,
   showNoPreference = false,
+  disabledValues = [],
+  disabledMessage = "",
 }) {
   return (
     <div className="type-groups">
       {TYPE_GROUPS.map(
-        (group) => (
-          <div
-            className="type-group"
-            key={group.title}
-          >
-            <p className="type-group-title">
-              {group.title}
-            </p>
+        (group) => {
+          const groupDisabledValues =
+            group.title ===
+            "軽自動車"
+              ? disabledValues
+              : [];
 
-            <ChoiceGrid
-              options={group.options}
-              selected={selected}
-              onToggle={onToggle}
-            />
-          </div>
-        )
+          return (
+            <div
+              className="type-group"
+              key={group.title}
+            >
+              <p className="type-group-title">
+                {group.title}
+              </p>
+
+              <ChoiceGrid
+                options={group.options}
+                selected={selected}
+                onToggle={onToggle}
+                disabledValues={
+                  groupDisabledValues
+                }
+              />
+
+              {groupDisabledValues.length >
+                0 &&
+              disabledMessage ? (
+                <p className="disabled-note">
+                  {disabledMessage}
+                </p>
+              ) : null}
+            </div>
+          );
+        }
       )}
 
       {showNoPreference ? (
@@ -1063,123 +442,6 @@ function RecommendationCard({
   );
 }
 
-function InventoryCard({
-  vehicle,
-}) {
-  const title = [
-    vehicle?.carName,
-    vehicle?.gradeName,
-  ]
-    .filter(Boolean)
-    .join(" ");
-
-  const detailUrl = String(
-    vehicle?.gooUrl || ""
-  ).replace(
-    /^http:/,
-    "https:"
-  );
-
-  return (
-    <article className="inventory-card">
-      <div className="inventory-photo">
-        {vehicle?.imageUrl ? (
-          <img
-            src={vehicle.imageUrl}
-            alt={
-              title ||
-              vehicle?.title ||
-              "在庫車"
-            }
-          />
-        ) : (
-          <span>
-            NO IMAGE
-          </span>
-        )}
-
-        <span className="status-badge">
-          {vehicle?.sourceStatus ===
-          "掲載在庫"
-            ? "展示販売中"
-            : "未公開在庫"}
-        </span>
-
-        <span className="inventory-score">
-          近さ{" "}
-          {vehicle.inventoryMatchScore}
-          点
-        </span>
-      </div>
-
-      <div className="inventory-body">
-        <p className="inventory-maker">
-          {vehicle.maker}
-        </p>
-
-        <h3>
-          {title || vehicle?.title}
-        </h3>
-
-        <div className="inventory-specs">
-          <span>
-            {vehicle?.year ||
-              "年式不明"}
-          </span>
-
-          <span>
-            {vehicle?.mileage ||
-              "走行不明"}
-          </span>
-
-          <span>
-            {vehicle?.color ||
-              "色不明"}
-          </span>
-
-          <span>
-            {vehicle?.displacement ||
-              "排気量不明"}
-          </span>
-        </div>
-
-        <div className="inventory-price">
-          <span>
-            支払総額
-          </span>
-
-          <strong>
-            {vehicle?.totalPrice ||
-              "お問い合わせ"}
-          </strong>
-        </div>
-
-        <div className="small-tag-list">
-          {(vehicle.inventoryMatchReasons ||
-            []).map((reason) => (
-            <span key={reason}>
-              {reason}
-            </span>
-          ))}
-        </div>
-
-        {detailUrl ? (
-          <a
-            href={detailUrl}
-            target="_blank"
-            rel="noreferrer"
-          >
-            この車の詳細を見る
-          </a>
-        ) : (
-          <p className="private-stock-note">
-            未公開在庫のため、詳しくはカーとぴあへお問い合わせください。
-          </p>
-        )}
-      </div>
-    </article>
-  );
-}
 export default function Home() {
   const [page, setPage] = useState(1);
   const [form, setForm] = useState(makeInitialForm);
@@ -1188,11 +450,10 @@ export default function Home() {
   const [error, setError] = useState("");
   const [validationError, setValidationError] = useState("");
   const [showAnswers, setShowAnswers] = useState(false);
-  const [showInventory, setShowInventory] = useState(false);
   const [inventoryLoading, setInventoryLoading] = useState(false);
   const [inventoryError, setInventoryError] = useState("");
-  const [inventoryVehicles, setInventoryVehicles] = useState([]);
-  const [copied, setCopied] = useState(false);
+  const [liffReady, setLiffReady] = useState(false);
+  const [liffError, setLiffError] = useState("");
 
   const requiredSeats =
     MAX_PASSENGER_OPTIONS.find(
@@ -1352,6 +613,135 @@ export default function Home() {
       ...current,
       [key]: value,
     }));
+  }
+
+  function setMaxPassengers(value) {
+    const seats =
+      MAX_PASSENGER_OPTIONS.find(
+        (item) =>
+          item.label === value
+      )?.seats || 0;
+
+    setForm((current) => ({
+      ...current,
+      maxPassengers: value,
+      desiredBodyTypes:
+        seats >= 5
+          ? current.desiredBodyTypes.filter(
+              (typeKey) =>
+                !LIGHT_TYPE_KEYS.includes(
+                  typeKey
+                )
+            )
+          : current.desiredBodyTypes,
+    }));
+  }
+
+  async function initializeLiff() {
+    if (
+      typeof window ===
+        "undefined" ||
+      !window.liff
+    ) {
+      return;
+    }
+
+    if (!LIFF_ID) {
+      return;
+    }
+
+    try {
+      await window.liff.init({
+        liffId: LIFF_ID,
+      });
+
+      setLiffReady(true);
+      setLiffError("");
+    } catch (caughtError) {
+      setLiffReady(false);
+      setLiffError(
+        caughtError.message ||
+          "LINE連携の初期化に失敗しました。"
+      );
+    }
+  }
+
+  function buildInventoryLineMessage() {
+    const desiredTypeKeys =
+      requiredSeats >= 5
+        ? form.desiredBodyTypes.filter(
+            (typeKey) =>
+              !LIGHT_TYPE_KEYS.includes(
+                typeKey
+              )
+          )
+        : form.desiredBodyTypes;
+
+    const retainedTypeKeys =
+      retainedCars
+        .map(
+          (car) =>
+            car.bodyType
+        )
+        .filter(
+          (typeKey) =>
+            typeKey &&
+            typeKey !==
+              "その他・分からない"
+        );
+
+    const avoidManufacturers =
+      form.avoidNone
+        ? []
+        : splitTokens(
+            form.avoidManufacturers
+          );
+
+    const avoidModels =
+      form.avoidNone
+        ? []
+        : splitTokens(
+            form.avoidModels
+          );
+
+    const avoidTypeKeys =
+      form.avoidNone
+        ? []
+        : form.avoidBodyTypes;
+
+    const avoidConditions =
+      form.avoidNone
+        ? []
+        : form.avoidConditions;
+
+    return [
+      PERFECT_INVENTORY_REQUEST_PREFIX,
+      `必要人数：${requiredSeats}`,
+      `希望TYPE：${desiredTypeKeys.join(
+        "｜"
+      )}`,
+      `希望メーカー：${splitTokens(
+        form.desiredManufacturers
+      ).join("｜")}`,
+      `希望条件：${form.desiredConditions.join(
+        "｜"
+      )}`,
+      `避けたいメーカー：${avoidManufacturers.join(
+        "｜"
+      )}`,
+      `避けたい車種：${avoidModels.join(
+        "｜"
+      )}`,
+      `避けたいTYPE：${avoidTypeKeys.join(
+        "｜"
+      )}`,
+      `避けたい条件：${avoidConditions.join(
+        "｜"
+      )}`,
+      `世帯に残るTYPE：${retainedTypeKeys.join(
+        "｜"
+      )}`,
+    ].join("\n");
   }
 
   function toggleArrayField(
@@ -1526,8 +916,7 @@ export default function Home() {
       };
     });
   }
-
-  function validatePage(
+    function validatePage(
     targetPage
   ) {
     if (targetPage === 1) {
@@ -1744,7 +1133,14 @@ export default function Home() {
           ),
 
         typeKeys:
-          form.desiredBodyTypes,
+          requiredSeats >= 5
+            ? form.desiredBodyTypes.filter(
+                (typeKey) =>
+                  !LIGHT_TYPE_KEYS.includes(
+                    typeKey
+                  )
+              )
+            : form.desiredBodyTypes,
 
         weightedPreferences:
           makeWeightedPreferences(),
@@ -1782,10 +1178,7 @@ export default function Home() {
     setDiagnosis(null);
     setValidationError("");
     setShowAnswers(false);
-    setShowInventory(false);
-    setInventoryVehicles([]);
     setInventoryError("");
-    setCopied(false);
     scrollTop();
 
     try {
@@ -1844,181 +1237,59 @@ export default function Home() {
     }
   }
 
-  async function loadMatchedInventory() {
-    if (showInventory) {
-      setShowInventory(false);
-      return;
-    }
-
-    if (
-      inventoryVehicles.length >
-        0 ||
-      inventoryError
-    ) {
-      setShowInventory(true);
-      return;
-    }
-
+  async function sendMatchedInventoryToLine() {
     setInventoryLoading(true);
     setInventoryError("");
 
     try {
-      const response =
-        await fetch(
-          `${INVENTORY_URL}?t=${Date.now()}`,
-          {
-            cache: "no-store",
-          }
-        );
-
-      if (!response.ok) {
+      if (
+        typeof window ===
+          "undefined" ||
+        !window.liff
+      ) {
         throw new Error(
-          `在庫情報を取得できませんでした: ${response.status}`
+          "LINE連携の準備ができていません。少し待ってからもう一度押してください。"
         );
       }
 
-      const inventory =
-        await response.json();
-
-      const retainedTypeKeys =
-        retainedCars
-          .map(
-            (car) =>
-              car.bodyType
-          )
-          .filter(
-            (typeKey) =>
-              typeKey &&
-              typeKey !==
-                "その他・分からない"
+      if (!liffReady) {
+        if (!LIFF_ID) {
+          throw new Error(
+            "NEXT_PUBLIC_LIFF_IDが設定されていません。"
           );
+        }
 
-      const matchedVehicles =
-        (
-          inventory?.vehicles ||
-          []
-        )
-          .filter(
-            (vehicle) =>
-              !isAvoidedInventoryVehicle(
-                vehicle,
-                form
-              )
-          )
-          .filter(
-            (vehicle) =>
-              !retainedTypeKeys.some(
-                (typeKey) =>
-                  getVehicleTypeKeys(
-                    vehicle
-                  ).includes(
-                    typeKey
-                  )
-              )
-          )
-          .map(
-            (vehicle) =>
-              scoreInventoryVehicle(
-                vehicle,
-                form,
-                diagnosis
-                  ?.recommendations ||
-                  []
-              )
-          )
-          .filter(Boolean)
-          .filter(
-            (vehicle) =>
-              vehicle.inventoryMatchScore >=
-              45
-          )
-          .sort(
-            (
-              first,
-              second
-            ) => {
-              const firstStatus =
-                first.sourceStatus ===
-                "掲載在庫"
-                  ? 0
-                  : 1;
+        await window.liff.init({
+          liffId: LIFF_ID,
+        });
 
-              const secondStatus =
-                second.sourceStatus ===
-                "掲載在庫"
-                  ? 0
-                  : 1;
+        setLiffReady(true);
+      }
 
-              if (
-                firstStatus !==
-                secondStatus
-              ) {
-                return (
-                  firstStatus -
-                  secondStatus
-                );
-              }
+      if (
+        !window.liff.isInClient()
+      ) {
+        throw new Error(
+          "LINE内のぴったり診断から開いてください。"
+        );
+      }
 
-              if (
-                first.inventoryMatchScore !==
-                second.inventoryMatchScore
-              ) {
-                return (
-                  second.inventoryMatchScore -
-                  first.inventoryMatchScore
-                );
-              }
+      await window.liff.sendMessages([
+        {
+          type: "text",
+          text:
+            buildInventoryLineMessage(),
+        },
+      ]);
 
-              return (
-                priceNumber(
-                  second.totalPrice
-                ) -
-                priceNumber(
-                  first.totalPrice
-                )
-              );
-            }
-          )
-          .slice(0, 12);
-
-      setInventoryVehicles(
-        matchedVehicles
-      );
-
-      setShowInventory(true);
+      window.liff.closeWindow();
     } catch (caughtError) {
       setInventoryError(
         caughtError.message ||
-          "在庫情報の読み込みに失敗しました。"
+          "LINEへの在庫検索依頼送信に失敗しました。"
       );
-
-      setShowInventory(true);
     } finally {
       setInventoryLoading(false);
-    }
-  }
-
-  async function copyConsultationText() {
-    const fallbackText =
-      `ぴったり診断の結果をもとに、注文車を相談したいです。\n${
-        answerSummary
-          .map(
-            ([label, value]) =>
-              `${label}：${value}`
-          )
-          .join("\n")
-      }`;
-
-    try {
-      await navigator.clipboard.writeText(
-        diagnosis
-          ?.consultationText ||
-          fallbackText
-      );
-
-      setCopied(true);
-    } catch {
-      setCopied(false);
     }
   }
 
@@ -2029,10 +1300,7 @@ export default function Home() {
     setError("");
     setValidationError("");
     setShowAnswers(false);
-    setShowInventory(false);
-    setInventoryVehicles([]);
     setInventoryError("");
-    setCopied(false);
     setPage(targetPage);
     scrollTop();
   }
@@ -2045,16 +1313,27 @@ export default function Home() {
     setError("");
     setValidationError("");
     setShowAnswers(false);
-    setShowInventory(false);
     setInventoryLoading(false);
     setInventoryError("");
-    setInventoryVehicles([]);
-    setCopied(false);
     scrollTop();
   }
 
   return (
     <main>
+      <Script
+        src="https://static.line-scdn.net/liff/edge/2/sdk.js"
+        strategy="afterInteractive"
+        onLoad={
+          initializeLiff
+        }
+        onError={() => {
+          setLiffReady(false);
+          setLiffError(
+            "LINE連携用SDKの読み込みに失敗しました。"
+          );
+        }}
+      />
+
       <section className="shell">
         <img
           className="logo"
@@ -2104,11 +1383,8 @@ export default function Home() {
                 form.maxPassengers
               }
               single
-              onToggle={(value) =>
-                updateField(
-                  "maxPassengers",
-                  value
-                )
+              onToggle={
+                setMaxPassengers
               }
             />
 
@@ -2468,7 +1744,6 @@ export default function Home() {
             </nav>
           </>
         ) : null}
-
         {!diagnosis &&
         !loading &&
         !error &&
@@ -2648,6 +1923,16 @@ export default function Home() {
                     value,
                     "特にこだわらない"
                   )
+                }
+                disabledValues={
+                  requiredSeats >= 5
+                    ? LIGHT_TYPE_KEYS
+                    : []
+                }
+                disabledMessage={
+                  requiredSeats >= 5
+                    ? "5人以上を選択しているため、軽自動車は選べません。"
+                    : ""
                 }
                 showNoPreference
               />
@@ -2937,75 +2222,22 @@ export default function Home() {
                 type="button"
                 className="primary-button"
                 onClick={
-                  loadMatchedInventory
+                  sendMatchedInventoryToLine
                 }
                 disabled={
                   inventoryLoading
                 }
               >
                 {inventoryLoading
-                  ? "在庫を探しています…"
-                  : showInventory
-                    ? "カーとぴあ在庫を閉じる"
-                    : "条件に近いカーとぴあの在庫を見る"}
+                  ? "LINEへ戻る準備中…"
+                  : "LINEで条件に近い在庫を見る"}
               </button>
 
-              {showInventory ? (
-                <div className="inventory-result">
-                  {inventoryError ? (
-                    <div className="empty-box">
-                      {
-                        inventoryError
-                      }
-                    </div>
-                  ) : inventoryVehicles.length >
-                    0 ? (
-                    <>
-                      <p className="inventory-result-note">
-                        現在の在庫から、回答したTYPE分類と希望条件が近い車を表示しています。
-                      </p>
-
-                      <div className="inventory-carousel">
-                        {inventoryVehicles.map(
-                          (
-                            vehicle
-                          ) => (
-                            <InventoryCard
-                              key={
-                                vehicle.stockId ||
-                                vehicle.detailUrl
-                              }
-                              vehicle={
-                                vehicle
-                              }
-                            />
-                          )
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    <div className="empty-box">
-                      <h3>
-                        現在の在庫には、条件に近い車がありませんでした。
-                      </h3>
-
-                      <p>
-                        在庫に合わせて診断結果を曲げず、全国から条件に合う注文車をお探しします。
-                      </p>
-
-                      <button
-                        type="button"
-                        className="primary-button"
-                        onClick={
-                          copyConsultationText
-                        }
-                      >
-                        {copied
-                          ? "相談内容をコピーしました"
-                          : "注文販売の相談内容をコピー"}
-                      </button>
-                    </div>
-                  )}
+              {inventoryError ||
+              liffError ? (
+                <div className="empty-box inventory-line-error">
+                  {inventoryError ||
+                    liffError}
                 </div>
               ) : null}
             </section>
@@ -3057,7 +2289,6 @@ export default function Home() {
           ※これはAIによる車種診断です。実際の仕様・乗車定員・在庫状況は、最終的にスタッフが確認してご案内します。
         </p>
       </section>
-
       <style jsx>{`
         * {
           box-sizing: border-box;
@@ -3194,9 +2425,41 @@ export default function Home() {
         }
 
         .choice-button.active {
-          background: #d6b55b;
-          border-color: #d6b55b;
+          background: linear-gradient(
+            135deg,
+            #f0d27d,
+            #d6b55b
+          );
+          border: 2px solid #f6dc91;
           color: #07111f;
+          box-shadow:
+            0 0 0 2px rgba(214, 181, 91, 0.18),
+            0 8px 18px rgba(0, 0, 0, 0.22);
+          transform: translateY(-1px);
+        }
+
+        .choice-button.active .check-box {
+          background: #07111f;
+          border-color: #07111f;
+          color: #ffffff;
+        }
+
+        .choice-button.disabled,
+        .choice-button:disabled {
+          background: #c9ced6;
+          border-color: #a9b0bb;
+          color: #6b7280;
+          opacity: 0.62;
+          cursor: not-allowed;
+          box-shadow: none;
+          transform: none;
+        }
+
+        .choice-button.disabled .check-box,
+        .choice-button:disabled .check-box {
+          background: transparent;
+          border-color: #7b8491;
+          color: transparent;
         }
 
         .check-box {
@@ -3313,6 +2576,14 @@ export default function Home() {
           font-weight: 900;
         }
 
+        .disabled-note {
+          margin: 10px 0 0;
+          color: #ffd276;
+          font-size: 12px;
+          line-height: 1.6;
+          font-weight: 800;
+        }
+
         .none-row {
           display: flex;
           align-items: center;
@@ -3386,8 +2657,7 @@ export default function Home() {
         .full-button {
           margin-top: 12px;
         }
-
-        .loading-box,
+                .loading-box,
         .error-box,
         .result-intro,
         .advice-box,
@@ -3472,8 +2742,7 @@ export default function Home() {
           font-size: 23px;
         }
 
-        .tag-list,
-        .small-tag-list {
+        .tag-list {
           display: flex;
           flex-wrap: wrap;
           gap: 6px;
@@ -3552,134 +2821,11 @@ export default function Home() {
           line-height: 1.65;
         }
 
-        .inventory-result {
-          margin-top: 16px;
-        }
-
-        .inventory-result-note {
-          margin-bottom: 12px;
-        }
-
-        .inventory-carousel {
-          display: flex;
-          gap: 13px;
-          overflow-x: auto;
-          padding-bottom: 8px;
-          scroll-snap-type: x mandatory;
-        }
-
-        .inventory-card {
-          flex: 0 0 290px;
-          scroll-snap-align: start;
-          border-radius: 17px;
-          overflow: hidden;
-          background: #ffffff;
-          color: #111827;
-        }
-
-        .inventory-photo {
-          height: 178px;
-          background: #d8dde5;
-          position: relative;
-          display: grid;
-          place-items: center;
-        }
-
-        .inventory-photo img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        .status-badge,
-        .inventory-score {
-          position: absolute;
-          top: 9px;
-          border-radius: 999px;
-          padding: 5px 8px;
-          font-size: 10px;
-          font-weight: 900;
-        }
-
-        .status-badge {
-          left: 9px;
-          background: rgba(7, 17, 31, 0.9);
-          color: #ffffff;
-        }
-
-        .inventory-score {
-          right: 9px;
-          background: #d6b55b;
-          color: #07111f;
-        }
-
-        .inventory-body {
-          padding: 14px;
-        }
-
-        .inventory-maker {
-          margin: 0;
-          color: #6b7280;
-          font-size: 11px;
-        }
-
-        .inventory-body h3 {
-          min-height: 48px;
-          margin: 3px 0 11px;
-          font-size: 17px;
-          line-height: 1.45;
-        }
-
-        .inventory-specs {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 7px;
-          color: #4b5563;
-          font-size: 11px;
-        }
-
-        .inventory-price {
-          border-top: 1px solid #e5e7eb;
-          border-bottom: 1px solid #e5e7eb;
-          padding: 10px 0;
-          margin: 12px 0 10px;
-          display: flex;
-          justify-content: space-between;
-          align-items: baseline;
-        }
-
-        .inventory-price strong {
-          color: #9a7720;
-          font-size: 20px;
-        }
-
-        .small-tag-list span {
-          border-radius: 999px;
-          background: #f4ead0;
-          color: #5e4611;
-          padding: 4px 7px;
-          font-size: 10px;
-        }
-
-        .inventory-body a {
-          display: block;
-          margin-top: 11px;
-          border-radius: 11px;
-          padding: 11px;
-          background: #07111f;
-          color: #ffffff;
-          text-align: center;
-          text-decoration: none;
-          font-weight: 900;
-        }
-
-        .private-stock-note {
-          margin-top: 11px !important;
-          border-radius: 11px;
-          padding: 11px;
-          background: #f3f4f6;
-          color: #4b5563 !important;
-          font-size: 11px !important;
+        .inventory-line-error {
+          margin-top: 14px;
+          color: #ffd1d1;
+          border-color: rgba(255, 116, 116, 0.55);
+          background: rgba(255, 80, 80, 0.1);
         }
 
         .empty-box {
