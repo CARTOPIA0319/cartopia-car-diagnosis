@@ -1532,7 +1532,6 @@ export default function Home() {
                     form.hasOwnedCars === "yes"
                       ? "所有している"
                       : form.hasOwnedCars === "no"
-                      : form.hasOwnedCars === "no"
                         ? "所有していない"
                         : ""
                   }
