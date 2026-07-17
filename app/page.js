@@ -370,7 +370,6 @@ function RecommendationCard({ recommendation }) {
 }
 
 export default function Home() {
-  const [page, setPage] = useState(1);
   const [form, setForm] = useState(makeInitialForm);
   const [diagnosis, setDiagnosis] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -382,6 +381,8 @@ export default function Home() {
   const [liffReady, setLiffReady] = useState(false);
   const [liffError, setLiffError] = useState("");
   const [loadingStep, setLoadingStep] = useState(0);
+  const [remainingDiagnoses, setRemainingDiagnoses] = useState(null);
+  const [rateLimitError, setRateLimitError] = useState("");
 
   const requiredSeats =
     MAX_PASSENGER_OPTIONS.find(
@@ -508,9 +509,9 @@ export default function Home() {
         );
         return;
       }
-            setForm(saved.form);
+
+      setForm(saved.form);
       setDiagnosis(saved.diagnosis);
-      setPage(3);
     } catch {
       window.localStorage.removeItem(
         LAST_DIAGNOSIS_STORAGE_KEY
@@ -532,7 +533,7 @@ export default function Home() {
                 car.mainDriver ? `主に${car.mainDriver}` : "",
                 car.bodyType,
               ]
-                .filter(Boolean)
+                                 .filter(Boolean)
                 .join("／")
             )
             .join("、") || "所有あり";
@@ -883,115 +884,196 @@ export default function Home() {
     });
   }
 
-  function validatePage(targetPage) {
-    if (targetPage === 1) {
-      if (!form.maxPassengers) {
-        return "最大で乗る人数を選んでください。";
-      }
-
-      if (
-        form.driverAges.length === 0
-      ) {
-        return "運転する人の年齢を選んでください。";
-      }
-
-      if (!form.hasOwnedCars) {
-        return "現在、ご家庭で車を所有しているか選んでください。";
-      }
-
-      if (!form.purchasePlan) {
-        return "増車・新規購入か、乗り換えかを選んでください。";
-      }
-
-      if (
-        form.purchasePlan === "乗り換え" &&
-        (
-          form.ownedCars.length === 0 ||
-          form.ownedCars.some(
-            (car) =>
-              !car.model.trim() ||
-              !car.bodyType
-          )
-        )
-      ) {
-        return "乗り換えの場合は、現在の車種名とタイプを入力してください。";
-      }
-
-      if (
-        form.purchasePlan === "乗り換え" &&
-        !form.replacementTargetId
-      ) {
-        return "乗り換える予定の車を選んでください。";
-      }
-    }
-
-    if (targetPage === 2) {
-      const hasAvoidInput =
-        form.avoidManufacturers.trim() ||
-        form.avoidModels.trim() ||
-        form.avoidBodyTypes.length > 0 ||
-        form.avoidConditions.length > 0 ||
-        form.avoidManufacturerReason.trim() ||
-        form.avoidModelReason.trim();
-
-      if (
-        !form.avoidNone &&
-        !hasAvoidInput
-      ) {
-        return "避けたい車がなければ「特になし」を選んでください。";
-      }
-
-      if (
-        form.desiredBodyTypes.length === 0
-      ) {
-        return "気になる車のタイプを選んでください。";
-      }
-
-      if (
-        form.desiredConditions.length === 0
-      ) {
-        return "気になる条件を1つ以上選んでください。";
-      }
-    }
-
-    return "";
+  function scrollToQuestion(questionNumber) {
+    window.setTimeout(() => {
+      document
+        .getElementById(`question-${questionNumber}`)
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+    }, 50);
   }
 
-  function goToPage(nextPage) {
-    const message =
-      validatePage(page);
-
-    if (message) {
-      setValidationError(message);
-      scrollTop();
-      return;
+  function validateAllQuestions() {
+    if (!form.maxPassengers) {
+      return {
+        message: "最大で乗る人数を選んでください。",
+        question: 1,
+      };
     }
 
-    setValidationError("");
-    setError("");
-    setPage(nextPage);
-    scrollTop();
-  }
+    if (form.driverAges.length === 0) {
+      return {
+        message: "運転する人の年齢を選んでください。",
+        question: 1,
+      };
+    }
 
-  function goBack() {
-    setValidationError("");
-    setError("");
+    if (!form.hasOwnedCars) {
+      return {
+        message: "現在、ご家庭で車を所有しているか選んでください。",
+        question: 2,
+      };
+    }
 
-    if (page > 1) {
-      setPage(
-        (current) =>
-          current - 1
-      );
-
-      scrollTop();
-      return;
+    if (!form.purchasePlan) {
+      return {
+        message: "増車・新規購入か、乗り換えかを選んでください。",
+        question: 2,
+      };
     }
 
     if (
-      window.history.length > 1
+      form.purchasePlan === "乗り換え" &&
+      (
+        form.ownedCars.length === 0 ||
+        form.ownedCars.some(
+          (car) =>
+            !car.model.trim() ||
+            !car.bodyType
+        )
+      )
     ) {
-      window.history.back();
+      return {
+        message: "乗り換えの場合は、現在の車種名とタイプを入力してください。",
+        question: 2,
+      };
     }
+
+    if (
+      form.purchasePlan === "乗り換え" &&
+      !form.replacementTargetId
+    ) {
+      return {
+        message: "乗り換える予定の車を選んでください。",
+        question: 2,
+      };
+    }
+
+    if (form.desiredBodyTypes.length === 0) {
+      return {
+        message: "気になる車のタイプを選んでください。",
+        question: 3,
+      };
+    }
+
+    if (form.desiredConditions.length === 0) {
+      return {
+        message: "気になる条件を1つ以上選んでください。",
+        question: 3,
+      };
+    }
+
+    const hasAvoidInput =
+      form.avoidManufacturers.trim() ||
+      form.avoidModels.trim() ||
+      form.avoidBodyTypes.length > 0 ||
+      form.avoidConditions.length > 0 ||
+      form.avoidManufacturerReason.trim() ||
+      form.avoidModelReason.trim();
+
+    if (
+      !form.avoidNone &&
+      !hasAvoidInput
+    ) {
+      return {
+        message: "避けたい車がなければ「特になし」を選んでください。",
+        question: 4,
+      };
+    }
+
+    return null;
+  }
+
+  async function getLiffAuthentication() {
+    if (
+      typeof window === "undefined" ||
+      !window.liff
+    ) {
+      throw new Error(
+        "LINE連携の準備ができていません。少し待ってからもう一度お試しください。"
+      );
+    }
+
+    if (!liffReady) {
+      if (!LIFF_ID) {
+        throw new Error(
+          "NEXT_PUBLIC_LIFF_IDが設定されていません。"
+        );
+      }
+
+      await window.liff.init({
+        liffId: LIFF_ID,
+      });
+
+      setLiffReady(true);
+    }
+
+    if (!window.liff.isInClient()) {
+      throw new Error(
+        "LINE内のぴったり診断から開いてください。"
+      );
+    }
+
+    const accessToken =
+      window.liff.getAccessToken?.() || "";
+    const idToken =
+      window.liff.getIDToken?.() || "";
+
+    if (!accessToken && !idToken) {
+      throw new Error(
+        "LINEユーザー情報を確認できませんでした。診断画面を開き直してください。"
+      );
+    }
+
+    return {
+      accessToken,
+      idToken,
+    };
+  }
+
+  async function updateDiagnosisLimit(
+    action,
+    authentication
+  ) {
+    const response = await fetch(
+      "/api/diagnosis-limit",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+        body: JSON.stringify({
+          action,
+          ...authentication,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      const limitError = new Error(
+        data.error ||
+          "診断回数を確認できませんでした。"
+      );
+
+      limitError.status = response.status;
+      limitError.remaining = data.remaining;
+      throw limitError;
+    }
+
+    if (
+      typeof data.remaining === "number"
+          ) {
+      setRemainingDiagnoses(
+        data.remaining
+      );
+    }
+
+    return data;
   }
 
   function makeWeightedPreferences() {
@@ -1020,7 +1102,6 @@ export default function Home() {
   function buildDiagnosisInput() {
     const ownedCarsForDiagnosis =
       form.purchasePlan === "乗り換え"
-          form.purchasePlan === "乗り換え"
         ? validOwnedCars
         : [];
 
@@ -1112,23 +1193,82 @@ export default function Home() {
   }
 
   async function runAiDiagnosis() {
-    const message =
-      validatePage(2);
+    const validation =
+      validateAllQuestions();
 
-    if (message) {
-      setValidationError(message);
-      setPage(2);
-      scrollTop();
+    if (validation) {
+      setValidationError(
+        validation.message
+      );
+      setRateLimitError("");
+      scrollToQuestion(
+        validation.question
+      );
       return;
     }
 
-    setLoading(true);
+    let authentication = null;
+    let diagnosisSlotConsumed = false;
+
     setError("");
-    setDiagnosis(null);
+    setRateLimitError("");
     setValidationError("");
-    setShowAnswers(false);
     setInventoryError("");
+    setLoading(true);
     scrollTop();
+
+    try {
+      authentication =
+        await getLiffAuthentication();
+
+      const limitResult =
+        await updateDiagnosisLimit(
+          "consume",
+          authentication
+        );
+
+      diagnosisSlotConsumed = true;
+
+      if (
+        typeof limitResult.remaining ===
+        "number"
+      ) {
+        setRemainingDiagnoses(
+          limitResult.remaining
+        );
+      }
+    } catch (caughtError) {
+      setRateLimitError(
+        caughtError.message ||
+          "本日の診断回数を確認できませんでした。"
+      );
+
+      if (
+        typeof caughtError.remaining ===
+        "number"
+      ) {
+        setRemainingDiagnoses(
+          caughtError.remaining
+        );
+      }
+
+      setLoading(false);
+
+      window.setTimeout(() => {
+        document
+          .getElementById(
+            "diagnosis-submit"
+          )
+          ?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+      }, 50);
+      return;
+    }
+
+    setDiagnosis(null);
+    setShowAnswers(false);
 
     try {
       const response =
@@ -1170,8 +1310,11 @@ export default function Home() {
       }
 
       setDiagnosis(data.result);
+      diagnosisSlotConsumed = false;
 
-      if (typeof window !== "undefined") {
+      if (
+        typeof window !== "undefined"
+      ) {
         window.localStorage.setItem(
           LAST_DIAGNOSIS_STORAGE_KEY,
           JSON.stringify({
@@ -1182,6 +1325,20 @@ export default function Home() {
         );
       }
     } catch (caughtError) {
+      if (
+        diagnosisSlotConsumed &&
+        authentication
+      ) {
+        try {
+          await updateDiagnosisLimit(
+            "refund",
+            authentication
+          );
+        } catch {
+          // 返却処理に失敗しても元のエラーを優先する。
+        }
+      }
+
       setError(
         caughtError.message ||
           "エラーが発生しました。"
@@ -1320,18 +1477,17 @@ export default function Home() {
     }
   }
 
-  function openEditPage(targetPage) {
+  function editAnswers() {
     setDiagnosis(null);
     setError("");
     setValidationError("");
+    setRateLimitError("");
     setShowAnswers(false);
     setInventoryError("");
-    setPage(targetPage);
     scrollTop();
   }
 
   function restart() {
-    setPage(1);
     setForm(makeInitialForm());
     setDiagnosis(null);
     setLoading(false);
@@ -1340,6 +1496,7 @@ export default function Home() {
     setShowAnswers(false);
     setInventoryLoading(false);
     setInventoryError("");
+    setRateLimitError("");
 
     if (typeof window !== "undefined") {
       window.localStorage.removeItem(
@@ -1384,7 +1541,7 @@ export default function Home() {
           !loading &&
           !error ? (
             <div className="page-badge">
-              {page} / 3
+              質問1〜5
             </div>
           ) : null}
         </div>
@@ -1397,10 +1554,9 @@ export default function Home() {
 
         {!diagnosis &&
         !loading &&
-        !error &&
-        page === 1 ? (
+        !error ? (
           <div className="page-stack">
-            <section className="question-card">
+            <section id="question-1" className="question-card question-anchor">
               <QuestionHeader
                 number="1"
                 titleLines={[
@@ -1445,7 +1601,7 @@ export default function Home() {
 
               <div className="field-block">
                 <div className="field-heading">
-                  <p>
+                                    <p>
                     運転する人の年齢
                   </p>
 
@@ -1506,7 +1662,7 @@ export default function Home() {
               </div>
             </section>
 
-            <section className="question-card">
+            <section id="question-2" className="question-card question-anchor">
               <QuestionHeader
                 number="2"
                 titleLines={[
@@ -1840,34 +1996,7 @@ export default function Home() {
               ) : null}
             </section>
 
-            <nav>
-              <button
-                type="button"
-                className="back-button"
-                onClick={goBack}
-              >
-                前の画面に戻る
-              </button>
-
-              <button
-                type="button"
-                className="primary-button"
-                onClick={() =>
-                  goToPage(2)
-                }
-              >
-                次へ
-              </button>
-            </nav>
-          </div>
-        ) : null}
-
-        {!diagnosis &&
-        !loading &&
-        !error &&
-        page === 2 ? (
-          <div className="page-stack">
-            <section className="question-card">
+            <section id="question-3" className="question-card question-anchor">
               <QuestionHeader
                 number="3"
                 titleLines={[
@@ -1972,7 +2101,7 @@ export default function Home() {
               )}
             </section>
 
-            <section className="question-card">
+            <section id="question-4" className="question-card question-anchor">
               <QuestionHeader
                 number="4"
                 titleLines={[
@@ -2006,8 +2135,7 @@ export default function Home() {
                     <span>
                       避けたいメーカー
                     </span>
-
-                    <input
+                                      <input
                       value={
                         form.avoidManufacturers
                       }
@@ -2043,6 +2171,7 @@ export default function Home() {
                       placeholder="理由があれば入力してください"
                     />
                   </label>
+
                   <label>
                     <span>
                       避けたい車種
@@ -2141,34 +2270,7 @@ export default function Home() {
               ) : null}
             </section>
 
-            <nav>
-              <button
-                type="button"
-                className="back-button"
-                onClick={goBack}
-              >
-                1ページ目に戻る
-              </button>
-
-              <button
-                type="button"
-                className="primary-button"
-                onClick={() =>
-                  goToPage(3)
-                }
-              >
-                次へ
-              </button>
-            </nav>
-          </div>
-        ) : null}
-
-        {!diagnosis &&
-        !loading &&
-        !error &&
-        page === 3 ? (
-          <div className="page-stack">
-            <section className="question-card">
+            <section id="question-5" className="question-card question-anchor">
               <QuestionHeader
                 number="5"
                 titleLines={[
@@ -2213,25 +2315,39 @@ export default function Home() {
               </label>
             </section>
 
-            <nav>
-              <button
-                type="button"
-                className="back-button"
-                onClick={goBack}
-              >
-                2ページ目に戻る
-              </button>
+            <section
+              id="diagnosis-submit"
+              className="diagnosis-submit-card"
+            >
+              <strong>
+                回答内容をもとに、候補車を選定します
+              </strong>
+
+              <p>
+                AI診断は、お一人につき1日3回までご利用いただけます。
+              </p>
+
+              {remainingDiagnoses !== null ? (
+                <div className="remaining-count">
+                  本日の残り診断回数：
+                  <strong>{remainingDiagnoses}回</strong>
+                </div>
+              ) : null}
+
+              {rateLimitError ? (
+                <div className="rate-limit-error">
+                  {rateLimitError}
+                </div>
+              ) : null}
 
               <button
                 type="button"
-                className="primary-button"
-                onClick={
-                  runAiDiagnosis
-                }
+                className="primary-button diagnosis-button"
+                onClick={runAiDiagnosis}
               >
                 AIで診断する
               </button>
-            </nav>
+            </section>
           </div>
         ) : null}
 
@@ -2305,11 +2421,9 @@ export default function Home() {
             <button
               type="button"
               className="back-button full-button"
-              onClick={() =>
-                openEditPage(3)
-              }
+              onClick={editAnswers}
             >
-              3ページ目に戻る
+              回答内容を確認する
             </button>
           </div>
         ) : null}
@@ -2448,29 +2562,9 @@ export default function Home() {
 
               <button
                 type="button"
-                onClick={() =>
-                  openEditPage(1)
-                }
+                onClick={editAnswers}
               >
-                1ページ目に戻る
-              </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  openEditPage(2)
-                }
-              >
-                2ページ目に戻る
-              </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  openEditPage(3)
-                }
-              >
-                3ページ目に戻る
+                質問1〜5の回答を確認・修正する
               </button>
 
               <button
@@ -2553,7 +2647,7 @@ export default function Home() {
           max-width: 78%;
           height: auto;
           margin: 0 auto 13px;
-                    border-radius: 12px;
+          border-radius: 12px;
         }
 
         .title-area {
@@ -2575,7 +2669,7 @@ export default function Home() {
         .page-badge {
           flex: none;
           border: 1px solid rgba(214, 181, 91, 0.58);
-          border-radius: 999px;
+                    border-radius: 999px;
           padding: 5px 9px;
           color: #efd477;
           background: rgba(214, 181, 91, 0.08);
@@ -3059,12 +3153,78 @@ export default function Home() {
           margin-top: 11px;
         }
 
+        .question-anchor {
+          scroll-margin-top: 24px;
+        }
+
+        .diagnosis-submit-card {
+          border: 1px solid rgba(214, 181, 91, 0.52);
+          border-radius: 20px;
+          padding: 22px 18px;
+          background:
+            radial-gradient(
+              circle at 50% 0%,
+              rgba(214, 181, 91, 0.14),
+              transparent 60%
+            ),
+            rgba(214, 181, 91, 0.055);
+          text-align: center;
+        }
+
+        .diagnosis-submit-card > strong {
+          display: block;
+          color: #f0d372;
+          font-size: 18px;
+          line-height: 1.55;
+        }
+
+        .diagnosis-submit-card > p {
+          margin: 10px 0 0;
+          color: rgba(255, 255, 255, 0.66);
+          font-size: 12px;
+          line-height: 1.7;
+        }
+
+        .remaining-count {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 5px;
+          margin-top: 15px;
+          color: rgba(255, 255, 255, 0.78);
+          font-size: 13px;
+        }
+
+        .remaining-count strong {
+          color: #f2d676;
+          font-size: 16px;
+        }
+
+        .rate-limit-error {
+          margin-top: 15px;
+          border: 1px solid rgba(255, 116, 116, 0.64);
+                    border-radius: 13px;
+          padding: 12px 13px;
+          background: rgba(255, 80, 80, 0.1);
+          color: #ffd4d4;
+          font-size: 13px;
+          line-height: 1.65;
+          font-weight: 800;
+          text-align: left;
+        }
+
+        .diagnosis-button {
+          margin-top: 18px;
+          min-height: 62px;
+          font-size: 17px;
+        }
+
         .loading-box,
         .error-box,
         .result-intro,
         .advice-box,
         .inventory-section {
-                  border: 1px solid rgba(214, 181, 91, 0.4);
+          border: 1px solid rgba(214, 181, 91, 0.4);
           border-radius: 18px;
           padding: 18px;
           background: rgba(214, 181, 91, 0.06);
