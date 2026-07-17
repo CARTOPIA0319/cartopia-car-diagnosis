@@ -1,9 +1,19 @@
 "use client";
 
 import Script from "next/script";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const LIFF_ID = process.env.NEXT_PUBLIC_LIFF_ID || "";
+
+const LAST_DIAGNOSIS_STORAGE_KEY =
+  "cartopia-perfect-diagnosis-result-v1";
+
+const LOADING_STEPS = [
+  "ご家族の人数と、日常の使い方を整理しています。",
+  "希望条件に合う車種を、一台ずつ比較しています。",
+  "数年後の暮らしまで見据えて候補を見直しています。",
+  "マッチ度を確認し、最終候補を5台に絞っています。",
+];
 
 const MAX_PASSENGER_OPTIONS = [
   { label: "1〜2人", seats: 2 },
@@ -172,7 +182,8 @@ function makeInitialForm() {
     avoidModels: "",
     avoidBodyTypes: [],
     avoidConditions: [],
-    avoidReason: "",
+    avoidManufacturerReason: "",
+    avoidModelReason: "",
 
     desiredManufacturers: "",
     desiredBodyTypes: [],
@@ -291,11 +302,27 @@ function TypeChoiceGrid({
   );
 }
 
-function QuestionHeader({ number, title, note }) {
+function QuestionHeader({ number, title, titleLines = [], note }) {
+  const lines =
+    titleLines.length > 0
+      ? titleLines
+      : [title];
+
   return (
     <header className="question-header">
       <span className="question-number">質問 {number}</span>
-      <h2>{title}</h2>
+
+      <h2>
+        {lines.map((line, index) => (
+          <span
+            className="question-title-line"
+            key={`${line}-${index}`}
+          >
+            {line}
+          </span>
+        ))}
+      </h2>
+
       {note ? <p>{note}</p> : null}
     </header>
   );
@@ -354,6 +381,7 @@ export default function Home() {
   const [inventoryError, setInventoryError] = useState("");
   const [liffReady, setLiffReady] = useState(false);
   const [liffError, setLiffError] = useState("");
+  const [loadingStep, setLoadingStep] = useState(0);
 
   const requiredSeats =
     MAX_PASSENGER_OPTIONS.find(
@@ -379,6 +407,117 @@ export default function Home() {
         )
       : [];
 
+  const rankedRecommendations = useMemo(() => {
+    const recommendations = Array.isArray(
+      diagnosis?.recommendations
+    )
+      ? diagnosis.recommendations
+      : [];
+
+    return recommendations
+      .map((recommendation, originalIndex) => ({
+        ...recommendation,
+        originalIndex,
+        numericScore:
+          Number.parseFloat(
+            String(recommendation.score ?? 0)
+          ) || 0,
+      }))
+      .sort(
+        (first, second) =>
+          second.numericScore -
+            first.numericScore ||
+          first.originalIndex -
+            second.originalIndex
+      )
+      .slice(0, 5)
+      .map(
+        (
+          {
+            originalIndex,
+            numericScore,
+            ...recommendation
+          },
+          index
+        ) => ({
+          ...recommendation,
+          rank: index + 1,
+          score: numericScore,
+        })
+      );
+  }, [diagnosis]);
+
+  useEffect(() => {
+    if (!loading) {
+      setLoadingStep(0);
+      return undefined;
+    }
+
+    const timer = window.setInterval(() => {
+      setLoadingStep(
+        (current) =>
+          (current + 1) %
+          LOADING_STEPS.length
+      );
+    }, 2400);
+
+    return () => {
+      window.clearInterval(timer);
+    };
+  }, [loading]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+    if (params.get("restore") !== "1") {
+      return;
+    }
+
+    try {
+      const savedValue =
+        window.localStorage.getItem(
+          LAST_DIAGNOSIS_STORAGE_KEY
+        );
+
+      if (!savedValue) {
+        return;
+      }
+
+      const saved =
+        JSON.parse(savedValue);
+
+      const isRecent =
+        Date.now() -
+          Number(saved.savedAt || 0) <
+        24 * 60 * 60 * 1000;
+
+      if (
+        !isRecent ||
+        !saved.form ||
+        !saved.diagnosis
+      ) {
+        window.localStorage.removeItem(
+          LAST_DIAGNOSIS_STORAGE_KEY
+        );
+        return;
+      }
+            setForm(saved.form);
+      setDiagnosis(saved.diagnosis);
+      setPage(3);
+    } catch {
+      window.localStorage.removeItem(
+        LAST_DIAGNOSIS_STORAGE_KEY
+      );
+    }
+  }, []);
+
   const answerSummary = useMemo(() => {
     let ownedCarsText = "所有なし";
 
@@ -401,7 +540,8 @@ export default function Home() {
         ownedCarsText = "所有あり（車種情報は省略）";
       }
     }
-        const purchaseText =
+
+    const purchaseText =
       form.purchasePlan === "乗り換え"
         ? [
             replacementTarget?.model || "対象車未指定",
@@ -418,17 +558,20 @@ export default function Home() {
           form.avoidManufacturers
             ? `メーカー：${form.avoidManufacturers}`
             : "",
+          form.avoidManufacturerReason
+            ? `メーカーを避けたい理由：${form.avoidManufacturerReason}`
+            : "",
           form.avoidModels
             ? `車種：${form.avoidModels}`
+            : "",
+          form.avoidModelReason
+            ? `車種を避けたい理由：${form.avoidModelReason}`
             : "",
           form.avoidBodyTypes.length
             ? `タイプ：${form.avoidBodyTypes.join("、")}`
             : "",
           form.avoidConditions.length
             ? `条件：${form.avoidConditions.join("、")}`
-            : "",
-          form.avoidReason
-            ? `理由：${form.avoidReason}`
             : "",
         ]
           .filter(Boolean)
@@ -454,8 +597,8 @@ export default function Home() {
       ["一緒に乗る人", form.passengerAges.join("、") || "未選択"],
       ["世帯の所有車", ownedCarsText],
       ["今回の購入", purchaseText],
-      ["避けたい車", avoidText || "未回答"],
       ["気になる車", desiredText || "未回答"],
+      ["避けたい車", avoidText || "未回答"],
       ["その他", form.otherRequest.trim() || "特になし"],
     ];
   }, [form, replacementTarget]);
@@ -520,8 +663,8 @@ export default function Home() {
 
   function buildInventoryLineMessages() {
     const diagnosisTypeKeys =
-      diagnosis?.recommendations
-        ?.slice(0, 2)
+      rankedRecommendations
+        .slice(0, 2)
         .map(
           (recommendation) =>
             recommendation?.typeKey || ""
@@ -734,7 +877,8 @@ export default function Home() {
         avoidModels: "",
         avoidBodyTypes: [],
         avoidConditions: [],
-        avoidReason: "",
+        avoidManufacturerReason: "",
+        avoidModelReason: "",
       };
     });
   }
@@ -787,7 +931,8 @@ export default function Home() {
         form.avoidModels.trim() ||
         form.avoidBodyTypes.length > 0 ||
         form.avoidConditions.length > 0 ||
-        form.avoidReason.trim();
+        form.avoidManufacturerReason.trim() ||
+        form.avoidModelReason.trim();
 
       if (
         !form.avoidNone &&
@@ -799,7 +944,7 @@ export default function Home() {
       if (
         form.desiredBodyTypes.length === 0
       ) {
-        return "候補に入れてよい車のタイプを選んでください。";
+        return "気になる車のタイプを選んでください。";
       }
 
       if (
@@ -875,6 +1020,7 @@ export default function Home() {
   function buildDiagnosisInput() {
     const ownedCarsForDiagnosis =
       form.purchasePlan === "乗り換え"
+          form.purchasePlan === "乗り換え"
         ? validOwnedCars
         : [];
 
@@ -918,8 +1064,20 @@ export default function Home() {
           form.avoidBodyTypes,
         conditions:
           form.avoidConditions,
-        reason:
-          form.avoidReason.trim(),
+        manufacturerReason:
+          form.avoidManufacturerReason.trim(),
+        modelReason:
+          form.avoidModelReason.trim(),
+        reason: [
+          form.avoidManufacturerReason.trim()
+            ? `避けたいメーカーの理由：${form.avoidManufacturerReason.trim()}`
+            : "",
+          form.avoidModelReason.trim()
+            ? `避けたい車種の理由：${form.avoidModelReason.trim()}`
+            : "",
+        ]
+          .filter(Boolean)
+          .join("／"),
       },
 
       desired: {
@@ -963,7 +1121,8 @@ export default function Home() {
       scrollTop();
       return;
     }
-        setLoading(true);
+
+    setLoading(true);
     setError("");
     setDiagnosis(null);
     setValidationError("");
@@ -1011,6 +1170,17 @@ export default function Home() {
       }
 
       setDiagnosis(data.result);
+
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem(
+          LAST_DIAGNOSIS_STORAGE_KEY,
+          JSON.stringify({
+            savedAt: Date.now(),
+            form,
+            diagnosis: data.result,
+          })
+        );
+      }
     } catch (caughtError) {
       setError(
         caughtError.message ||
@@ -1019,6 +1189,75 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
+  }
+
+  function buildDiagnosisReturnFlexMessage() {
+    const returnUrl =
+      `https://liff.line.me/${LIFF_ID}?restore=1`;
+
+    return {
+      type: "flex",
+      altText:
+        "ぴったり車種診断の結果をもう一度見る",
+      contents: {
+        type: "bubble",
+        size: "kilo",
+        body: {
+          type: "box",
+          layout: "vertical",
+          spacing: "md",
+          contents: [
+            {
+              type: "text",
+              text: "ぴったり車種診断",
+              weight: "bold",
+              color: "#D6B55B",
+              size: "sm",
+            },
+            {
+              type: "text",
+              text: "診断結果をもう一度確認できます",
+              weight: "bold",
+              color: "#07111F",
+              size: "lg",
+              wrap: true,
+            },
+            {
+              type: "text",
+              text: "在庫を見たあとも、下のボタンからすぐに戻れます。",
+              color: "#667085",
+              size: "sm",
+              wrap: true,
+            },
+          ],
+        },
+        footer: {
+          type: "box",
+          layout: "vertical",
+          contents: [
+            {
+              type: "button",
+              style: "primary",
+              color: "#D6B55B",
+              height: "sm",
+              action: {
+                type: "uri",
+                label: "診断結果をもう一度見る",
+                uri: returnUrl,
+              },
+            },
+          ],
+        },
+        styles: {
+          body: {
+            backgroundColor: "#F8FAFC",
+          },
+          footer: {
+            backgroundColor: "#F8FAFC",
+          },
+        },
+      },
+    };
   }
 
   async function sendMatchedInventoryToLine() {
@@ -1060,14 +1299,15 @@ export default function Home() {
       const inventoryLineMessages =
         buildInventoryLineMessages();
 
-      await window.liff.sendMessages(
-        inventoryLineMessages.map(
+      await window.liff.sendMessages([
+        ...inventoryLineMessages.map(
           (typeKey) => ({
             type: "text",
             text: typeKey,
           })
-        )
-      );
+        ),
+        buildDiagnosisReturnFlexMessage(),
+      ]);
 
       window.liff.closeWindow();
     } catch (caughtError) {
@@ -1100,6 +1340,19 @@ export default function Home() {
     setShowAnswers(false);
     setInventoryLoading(false);
     setInventoryError("");
+
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem(
+        LAST_DIAGNOSIS_STORAGE_KEY
+      );
+
+      window.history.replaceState(
+        {},
+        "",
+        window.location.pathname
+      );
+    }
+
     scrollTop();
   }
 
@@ -1150,7 +1403,10 @@ export default function Home() {
             <section className="question-card">
               <QuestionHeader
                 number="1"
-                title="この車に最大で何人乗りますか？"
+                titleLines={[
+                  "この車に最大で何人",
+                  "乗りますか？",
+                ]}
                 note="年に数回でも乗る可能性がある最大人数を選んでください。"
               />
 
@@ -1253,7 +1509,10 @@ export default function Home() {
             <section className="question-card">
               <QuestionHeader
                 number="2"
-                title="今のご家庭の車と、今回の購入について"
+                titleLines={[
+                  "今のご家庭の車と、",
+                  "今回の購入について",
+                ]}
                 note="乗り換えの場合だけ、現在の車について入力します。"
               />
 
@@ -1272,6 +1531,7 @@ export default function Home() {
                   selected={
                     form.hasOwnedCars === "yes"
                       ? "所有している"
+                      : form.hasOwnedCars === "no"
                       : form.hasOwnedCars === "no"
                         ? "所有していない"
                         : ""
@@ -1589,6 +1849,7 @@ export default function Home() {
               >
                 前の画面に戻る
               </button>
+
               <button
                 type="button"
                 className="primary-button"
@@ -1610,160 +1871,11 @@ export default function Home() {
             <section className="question-card">
               <QuestionHeader
                 number="3"
-                title="避けたい車を教えてください"
-                note="避けたいものがなければ「特になし」を選んでください。"
-              />
-
-              <ChoiceGrid
-                options={[
-                  "特になし",
+                titleLines={[
+                  "気になる車や条件を",
+                  "教えてください",
                 ]}
-                selected={
-                  form.avoidNone
-                    ? "特になし"
-                    : ""
-                }
-                single
-                onToggle={() =>
-                  setAvoidNone(
-                    !form.avoidNone
-                  )
-                }
-                columns="one"
-              />
-
-              {!form.avoidNone ? (
-                <div className="form-stack">
-                  <label>
-                    <span>
-                      避けたいメーカー
-                    </span>
-
-                    <input
-                      value={
-                        form.avoidManufacturers
-                      }
-                      onChange={(
-                        event
-                      ) =>
-                        updateField(
-                          "avoidManufacturers",
-                          event
-                            .target
-                            .value
-                        )
-                      }
-                      placeholder="例：日産、BMW"
-                    />
-                  </label>
-
-                  <label>
-                    <span>
-                      避けたい車種
-                    </span>
-
-                    <input
-                      value={
-                        form.avoidModels
-                      }
-                      onChange={(
-                        event
-                      ) =>
-                        updateField(
-                          "avoidModels",
-                          event
-                            .target
-                            .value
-                        )
-                      }
-                      placeholder="例：アルファード、プリウス"
-                    />
-                  </label>
-
-                  <div className="field-block">
-                    <div className="field-heading">
-                      <p>
-                        避けたい車のタイプ
-                      </p>
-
-                      <span>
-                        複数選択可
-                      </span>
-                    </div>
-
-                    <TypeChoiceGrid
-                      selected={
-                        form.avoidBodyTypes
-                      }
-                      onToggle={(value) =>
-                        toggleArrayField(
-                          "avoidBodyTypes",
-                          value
-                        )
-                      }
-                    />
-                  </div>
-
-                  <div className="field-block">
-                    <div className="field-heading">
-                      <p>
-                        避けたい条件
-                      </p>
-
-                      <span>
-                        複数選択可
-                      </span>
-                    </div>
-
-                    <ChoiceGrid
-                      options={
-                        AVOID_CONDITION_OPTIONS
-                      }
-                      selected={
-                        form.avoidConditions
-                      }
-                      onToggle={(value) =>
-                        toggleArrayField(
-                          "avoidConditions",
-                          value
-                        )
-                      }
-                      columns="two"
-                      compact
-                    />
-                  </div>
-
-                  <label>
-                    <span>
-                      避けたい理由（任意）
-                    </span>
-
-                    <textarea
-                      value={
-                        form.avoidReason
-                      }
-                      onChange={(
-                        event
-                      ) =>
-                        updateField(
-                          "avoidReason",
-                          event
-                            .target
-                            .value
-                        )
-                      }
-                      placeholder="例：以前乗って故障が続いたため。"
-                    />
-                  </label>
-                </div>
-              ) : null}
-            </section>
-
-            <section className="question-card">
-              <QuestionHeader
-                number="4"
-                title="気になる車や条件を教えてください"
-                note="まだ決め切っていなくても大丈夫です。候補に入れてよいものを選んでください。"
+                note="候補を絞り込むため、気になるタイプや条件を選んでください。"
               />
 
               <label>
@@ -1780,19 +1892,17 @@ export default function Home() {
                   ) =>
                     updateField(
                       "desiredManufacturers",
-                      event
-                        .target
-                        .value
+                      event.target.value
                     )
                   }
-                  placeholder="例：レクサス、トヨタ。なければ空欄"
+                  placeholder="気になるメーカー名を入力（なければ空欄）"
                 />
               </label>
 
               <div className="field-block">
                 <div className="field-heading">
                   <p>
-                    候補に入れてよい車のタイプ
+                    気になる車のタイプ
                   </p>
 
                   <span>
@@ -1863,6 +1973,175 @@ export default function Home() {
               )}
             </section>
 
+            <section className="question-card">
+              <QuestionHeader
+                number="4"
+                titleLines={[
+                  "避けたい車を",
+                  "教えてください",
+                ]}
+                note="該当するものがなければ「特になし」を選んでください。"
+              />
+
+              <ChoiceGrid
+                options={[
+                  "特になし",
+                ]}
+                selected={
+                  form.avoidNone
+                    ? "特になし"
+                    : ""
+                }
+                single
+                onToggle={() =>
+                  setAvoidNone(
+                    !form.avoidNone
+                  )
+                }
+                columns="one"
+              />
+
+              {!form.avoidNone ? (
+                <div className="form-stack">
+                  <label>
+                    <span>
+                      避けたいメーカー
+                    </span>
+
+                    <input
+                      value={
+                        form.avoidManufacturers
+                      }
+                      onChange={(
+                        event
+                      ) =>
+                        updateField(
+                          "avoidManufacturers",
+                          event.target.value
+                        )
+                      }
+                      placeholder="ここにメーカー名を入力"
+                    />
+                  </label>
+
+                  <label>
+                    <span>
+                      そのメーカーを避けたい理由（任意）
+                    </span>
+
+                    <textarea
+                      value={
+                        form.avoidManufacturerReason
+                      }
+                      onChange={(
+                        event
+                      ) =>
+                        updateField(
+                          "avoidManufacturerReason",
+                          event.target.value
+                        )
+                      }
+                      placeholder="理由があれば入力してください"
+                    />
+                  </label>
+                  <label>
+                    <span>
+                      避けたい車種
+                    </span>
+
+                    <input
+                      value={
+                        form.avoidModels
+                      }
+                      onChange={(
+                        event
+                      ) =>
+                        updateField(
+                          "avoidModels",
+                          event.target.value
+                        )
+                      }
+                      placeholder="ここに車種名を入力"
+                    />
+                  </label>
+
+                  <label>
+                    <span>
+                      その車種を避けたい理由（任意）
+                    </span>
+
+                    <textarea
+                      value={
+                        form.avoidModelReason
+                      }
+                      onChange={(
+                        event
+                      ) =>
+                        updateField(
+                          "avoidModelReason",
+                          event.target.value
+                        )
+                      }
+                      placeholder="理由があれば入力してください"
+                    />
+                  </label>
+
+                  <div className="field-block">
+                    <div className="field-heading">
+                      <p>
+                        避けたい車のタイプ
+                      </p>
+
+                      <span>
+                        複数選択可
+                      </span>
+                    </div>
+
+                    <TypeChoiceGrid
+                      selected={
+                        form.avoidBodyTypes
+                      }
+                      onToggle={(value) =>
+                        toggleArrayField(
+                          "avoidBodyTypes",
+                          value
+                        )
+                      }
+                    />
+                  </div>
+
+                  <div className="field-block">
+                    <div className="field-heading">
+                      <p>
+                        避けたい条件
+                      </p>
+
+                      <span>
+                        複数選択可
+                      </span>
+                    </div>
+
+                    <ChoiceGrid
+                      options={
+                        AVOID_CONDITION_OPTIONS
+                      }
+                      selected={
+                        form.avoidConditions
+                      }
+                      onToggle={(value) =>
+                        toggleArrayField(
+                          "avoidConditions",
+                          value
+                        )
+                      }
+                      columns="two"
+                      compact
+                    />
+                  </div>
+                </div>
+              ) : null}
+            </section>
+
             <nav>
               <button
                 type="button"
@@ -1893,7 +2172,10 @@ export default function Home() {
             <section className="question-card">
               <QuestionHeader
                 number="5"
-                title="その他の希望や気になること"
+                titleLines={[
+                  "その他の希望や",
+                  "気になること",
+                ]}
                 note="選択肢にない希望があれば入力してください。空欄でも診断できます。"
               />
 
@@ -1955,19 +2237,48 @@ export default function Home() {
         ) : null}
 
         {loading ? (
-          <div className="loading-box">
+          <div className="loading-box loading-experience">
+            <div
+              className="loading-orbit"
+              aria-hidden="true"
+            >
+              <span />
+              <span />
+              <span />
+            </div>
+
             <strong>
-              診断中
+              カーとぴあが選定中
             </strong>
 
             <h2>
-              今の暮らしと、これからの変化まで考えています。
+              条件を読み解きながら、
+              <br />
+              本当に合う車を探しています。
             </h2>
 
-            <p>
-              診断は30秒程度かかることがあります。
+            <div className="loading-step-card">
+              <span className="loading-step-number">
+                0{loadingStep + 1}
+              </span>
+
+              <p key={loadingStep}>
+                {LOADING_STEPS[loadingStep]}
+              </p>
+            </div>
+
+            <div
+              className="loading-progress"
+              aria-hidden="true"
+            >
+              <span key={loadingStep} />
+            </div>
+
+            <p className="loading-caption">
+              カーとぴあのスタッフ目線で、
+              候補車を一台ずつ比較しています。
               <br />
-              画面はこのままでお待ちください。
+              結果が出るまで、このままお待ちください。
             </p>
           </div>
         ) : null}
@@ -2012,7 +2323,7 @@ export default function Home() {
               </strong>
 
               <h2>
-                あなたに合う車種TOP10
+                あなたに合う車種TOP5
               </h2>
 
               <p>
@@ -2021,19 +2332,16 @@ export default function Home() {
             </section>
 
             <div className="recommendation-list">
-              {diagnosis.recommendations.map(
+              {rankedRecommendations.map(
                 (
                   recommendation,
                   index
                 ) => (
                   <RecommendationCard
                     key={`${recommendation.maker}-${recommendation.model}-${index}`}
-                    recommendation={{
-                      ...recommendation,
-                      rank:
-                        recommendation.rank ||
-                        index + 1,
-                    }}
+                    recommendation={
+                      recommendation
+                    }
                   />
                 )
               )}
@@ -2107,7 +2415,7 @@ export default function Home() {
               </h2>
 
               <p>
-                上のTOP10は、在庫に関係なく世の中の車種全体から診断した本命結果です。
+                上のTOP5は、在庫に関係なく世の中の車種全体から診断した本命結果です。
               </p>
 
               <button
@@ -2218,7 +2526,7 @@ export default function Home() {
               rgba(35, 61, 92, 0.34),
               transparent 34%
             ),
-                        #06111f;
+            #06111f;
           color: #ffffff;
           padding: 18px 12px 40px;
           font-family:
@@ -2246,7 +2554,7 @@ export default function Home() {
           max-width: 78%;
           height: auto;
           margin: 0 auto 13px;
-          border-radius: 12px;
+                    border-radius: 12px;
         }
 
         .title-area {
@@ -2316,6 +2624,11 @@ export default function Home() {
           line-height: 1.38;
           font-weight: 900;
           letter-spacing: 0.01em;
+        }
+
+        .question-title-line {
+          display: block;
+          text-wrap: balance;
         }
 
         .question-header p,
@@ -2622,7 +2935,7 @@ export default function Home() {
           margin-top: 18px;
           border-left: 3px solid #d6b55b;
           border-radius: 0 12px 12px 0;
-                    padding: 12px 13px;
+          padding: 12px 13px;
           background: rgba(214, 181, 91, 0.08);
           color: rgba(255, 255, 255, 0.78);
           font-size: 13px;
@@ -2752,7 +3065,7 @@ export default function Home() {
         .result-intro,
         .advice-box,
         .inventory-section {
-          border: 1px solid rgba(214, 181, 91, 0.4);
+                  border: 1px solid rgba(214, 181, 91, 0.4);
           border-radius: 18px;
           padding: 18px;
           background: rgba(214, 181, 91, 0.06);
@@ -2765,9 +3078,254 @@ export default function Home() {
           color: #efd477;
         }
 
+        .loading-experience {
+          position: relative;
+          overflow: hidden;
+          padding: 28px 22px;
+          background:
+            radial-gradient(
+              circle at 50% 0%,
+              rgba(214, 181, 91, 0.16),
+              transparent 52%
+            ),
+            rgba(214, 181, 91, 0.055);
+        }
+
+        .loading-experience::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            115deg,
+            transparent 20%,
+            rgba(255, 255, 255, 0.035) 45%,
+            transparent 70%
+          );
+          transform: translateX(-100%);
+          animation: loadingShine 3.2s ease-in-out infinite;
+          pointer-events: none;
+        }
+
+        .loading-orbit {
+          position: relative;
+          width: 92px;
+          height: 92px;
+          margin: 0 auto 22px;
+          border: 1px solid rgba(214, 181, 91, 0.28);
+          border-radius: 50%;
+        }
+
+        .loading-orbit::before,
+        .loading-orbit::after {
+          content: "";
+          position: absolute;
+          border-radius: 50%;
+        }
+
+        .loading-orbit::before {
+          inset: 12px;
+          border: 1px solid rgba(214, 181, 91, 0.42);
+          animation: orbitPulse 1.8s ease-in-out infinite;
+        }
+
+        .loading-orbit::after {
+          inset: 30px;
+          background: #d6b55b;
+          box-shadow:
+            0 0 0 8px rgba(214, 181, 91, 0.08),
+            0 0 28px rgba(214, 181, 91, 0.46);
+          animation: corePulse 1.45s ease-in-out infinite;
+        }
+
+        .loading-orbit span {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 9px;
+          height: 9px;
+          margin: -4.5px;
+          border-radius: 50%;
+          background: #f3d779;
+          transform-origin: 4.5px 4.5px;
+        }
+
+        .loading-orbit span:nth-child(1) {
+          animation: orbitOne 2.6s linear infinite;
+        }
+
+        .loading-orbit span:nth-child(2) {
+          opacity: 0.72;
+          animation: orbitTwo 3.4s linear infinite;
+        }
+
+        .loading-orbit span:nth-child(3) {
+          opacity: 0.46;
+          animation: orbitThree 4.2s linear infinite;
+        }
+
+        .loading-experience > strong {
+          display: block;
+          margin-bottom: 10px;
+          text-align: center;
+          letter-spacing: 0.08em;
+        }
+
         .loading-box h2 {
-          font-size: 18px;
+          margin: 0;
+          text-align: center;
+          font-size: 22px;
           line-height: 1.65;
+        }
+
+        .loading-step-card {
+          display: grid;
+          grid-template-columns: 42px 1fr;
+          align-items: center;
+          gap: 12px;
+          min-height: 88px;
+          margin-top: 24px;
+          border: 1px solid rgba(214, 181, 91, 0.28);
+          border-radius: 15px;
+          padding: 14px;
+          background: rgba(7, 17, 31, 0.42);
+        }
+
+        .loading-step-number {
+          display: grid;
+          place-items: center;
+          width: 42px;
+          height: 42px;
+          border-radius: 50%;
+          background: rgba(214, 181, 91, 0.14);
+          color: #f0d372;
+          font-size: 13px;
+          font-weight: 900;
+        }
+
+        .loading-experience .loading-step-card p {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.92);
+          font-size: 14px;
+          line-height: 1.65;
+          font-weight: 800;
+          animation: loadingTextIn 0.4s ease both;
+        }
+
+        .loading-progress {
+          height: 4px;
+          margin-top: 16px;
+          overflow: hidden;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.08);
+        }
+
+        .loading-progress span {
+          display: block;
+          width: 100%;
+          height: 100%;
+          border-radius: inherit;
+          background: linear-gradient(
+            90deg,
+            #a47f2f,
+            #f2d676
+          );
+          transform-origin: left;
+          animation: loadingProgress 2.4s linear both;
+        }
+
+        .loading-caption {
+          margin: 18px 0 0 !important;
+          text-align: center;
+          color: rgba(255, 255, 255, 0.64) !important;
+          font-size: 13px !important;
+          line-height: 1.8 !important;
+        }
+
+        @keyframes loadingShine {
+          0% {
+            transform: translateX(-100%);
+          }
+
+          55%,
+          100% {
+            transform: translateX(100%);
+          }
+        }
+
+        @keyframes orbitPulse {
+          0%,
+          100% {
+            transform: scale(0.9);
+            opacity: 0.45;
+          }
+
+          50% {
+            transform: scale(1.05);
+            opacity: 1;
+          }
+        }
+
+        @keyframes corePulse {
+          0%,
+          100% {
+            transform: scale(0.88);
+          }
+
+          50% {
+            transform: scale(1.08);
+          }
+        }
+
+        @keyframes orbitOne {
+          from {
+            transform: rotate(0deg) translateX(44px);
+          }
+
+          to {
+            transform: rotate(360deg) translateX(44px);
+          }
+        }
+
+        @keyframes orbitTwo {
+          from {
+            transform: rotate(120deg) translateX(34px);
+          }
+
+          to {
+            transform: rotate(480deg) translateX(34px);
+          }
+        }
+
+        @keyframes orbitThree {
+          from {
+            transform: rotate(240deg) translateX(25px);
+          }
+
+          to {
+            transform: rotate(600deg) translateX(25px);
+          }
+        }
+
+        @keyframes loadingTextIn {
+          from {
+            opacity: 0;
+            transform: translateY(5px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes loadingProgress {
+          from {
+            transform: scaleX(0);
+          }
+
+          to {
+            transform: scaleX(1);
+          }
         }
 
         .loading-box p,
@@ -2963,6 +3521,19 @@ export default function Home() {
 
           .question-card {
             padding: 18px 14px;
+          }
+
+          .question-header h2 {
+            font-size: clamp(22px, 7vw, 28px);
+          }
+
+          .loading-experience {
+            margin: 0 14px;
+            padding: 26px 18px;
+          }
+
+          .loading-box h2 {
+            font-size: 20px;
           }
 
           .choice-grid-three {
