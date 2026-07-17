@@ -6,9 +6,6 @@ import { useMemo, useState } from "react";
 const LIFF_ID =
   process.env.NEXT_PUBLIC_LIFF_ID || "";
 
-const PERFECT_INVENTORY_REQUEST_PREFIX =
-  "【ぴったり診断・在庫検索】";
-
 const MAX_PASSENGER_OPTIONS = [
   { label: "1〜2人", seats: 2 },
   { label: "3〜4人", seats: 4 },
@@ -460,6 +457,12 @@ export default function Home() {
       (item) => item.label === form.maxPassengers
     )?.seats || 0;
 
+  const hasLightTypeSelected =
+    form.desiredBodyTypes.some(
+      (typeKey) =>
+        LIGHT_TYPE_KEYS.includes(typeKey)
+    );
+
   const replacementTarget =
     form.ownedCars.find(
       (car) =>
@@ -483,7 +486,6 @@ export default function Home() {
           );
         })
       : [];
-
   const answerSummary = useMemo(() => {
     const ownedCarsText =
       form.hasOwnedCars === "yes"
@@ -666,82 +668,36 @@ export default function Home() {
     }
   }
 
-  function buildInventoryLineMessage() {
-    const desiredTypeKeys =
-      requiredSeats >= 5
-        ? form.desiredBodyTypes.filter(
-            (typeKey) =>
-              !LIGHT_TYPE_KEYS.includes(
-                typeKey
-              )
-          )
-        : form.desiredBodyTypes;
-
-    const retainedTypeKeys =
-      retainedCars
+  function buildInventoryLineMessages() {
+    const diagnosisTypeKeys =
+      diagnosis?.recommendations
+        ?.slice(0, 2)
         .map(
-          (car) =>
-            car.bodyType
+          (recommendation) =>
+            recommendation?.typeKey || ""
         )
-        .filter(
-          (typeKey) =>
-            typeKey &&
-            typeKey !==
-              "その他・分からない"
-        );
+        .filter(Boolean) || [];
 
-    const avoidManufacturers =
-      form.avoidNone
-        ? []
-        : splitTokens(
-            form.avoidManufacturers
-          );
+    const fallbackTypeKeys =
+      form.desiredBodyTypes.filter(
+        (typeKey) =>
+          typeKey !== "特にこだわらない"
+      );
 
-    const avoidModels =
-      form.avoidNone
-        ? []
-        : splitTokens(
-            form.avoidModels
-          );
+    const typeKeys = Array.from(
+      new Set([
+        ...diagnosisTypeKeys,
+        ...fallbackTypeKeys,
+      ])
+    ).slice(0, 2);
 
-    const avoidTypeKeys =
-      form.avoidNone
-        ? []
-        : form.avoidBodyTypes;
+    if (typeKeys.length > 0) {
+      return typeKeys;
+    }
 
-    const avoidConditions =
-      form.avoidNone
-        ? []
-        : form.avoidConditions;
-
-    return [
-      PERFECT_INVENTORY_REQUEST_PREFIX,
-      `必要人数：${requiredSeats}`,
-      `希望TYPE：${desiredTypeKeys.join(
-        "｜"
-      )}`,
-      `希望メーカー：${splitTokens(
-        form.desiredManufacturers
-      ).join("｜")}`,
-      `希望条件：${form.desiredConditions.join(
-        "｜"
-      )}`,
-      `避けたいメーカー：${avoidManufacturers.join(
-        "｜"
-      )}`,
-      `避けたい車種：${avoidModels.join(
-        "｜"
-      )}`,
-      `避けたいTYPE：${avoidTypeKeys.join(
-        "｜"
-      )}`,
-      `避けたい条件：${avoidConditions.join(
-        "｜"
-      )}`,
-      `世帯に残るTYPE：${retainedTypeKeys.join(
-        "｜"
-      )}`,
-    ].join("\n");
+    throw new Error(
+      "在庫検索に使う車のタイプを確定できませんでした。"
+    );
   }
 
   function toggleArrayField(
@@ -916,7 +872,8 @@ export default function Home() {
       };
     });
   }
-    function validatePage(
+
+  function validatePage(
     targetPage
   ) {
     if (targetPage === 1) {
@@ -1039,8 +996,7 @@ export default function Home() {
       window.history.back();
     }
   }
-
-  function makeWeightedPreferences() {
+    function makeWeightedPreferences() {
     return form.desiredConditions.map(
       (label) => {
         const matchedOption =
@@ -1274,13 +1230,17 @@ export default function Home() {
         );
       }
 
-      await window.liff.sendMessages([
-        {
-          type: "text",
-          text:
-            buildInventoryLineMessage(),
-        },
-      ]);
+      const inventoryLineMessages =
+        buildInventoryLineMessages();
+
+      await window.liff.sendMessages(
+        inventoryLineMessages.map(
+          (typeKey) => ({
+            type: "text",
+            text: typeKey,
+          })
+        )
+      );
 
       window.liff.closeWindow();
     } catch (caughtError) {
@@ -1386,7 +1346,24 @@ export default function Home() {
               onToggle={
                 setMaxPassengers
               }
+              disabledValues={
+                hasLightTypeSelected
+                  ? MAX_PASSENGER_OPTIONS.filter(
+                      (item) =>
+                        item.seats >= 5
+                    ).map(
+                      (item) =>
+                        item.label
+                    )
+                  : []
+              }
             />
+
+            {hasLightTypeSelected ? (
+              <p className="disabled-note passenger-disabled-note">
+                軽自動車を選択しているため、5人以上は選べません。
+              </p>
+            ) : null}
 
             <div className="sub-section">
               <p className="field-label">
@@ -1612,7 +1589,6 @@ export default function Home() {
                 </button>
               </div>
             ) : null}
-
             <div className="sub-section">
               <p className="field-label">
                 今回はどちらですか？
@@ -1744,6 +1720,7 @@ export default function Home() {
             </nav>
           </>
         ) : null}
+
         {!diagnosis &&
         !loading &&
         !error &&
@@ -1991,6 +1968,7 @@ export default function Home() {
             </nav>
           </>
         ) : null}
+
         {!diagnosis &&
         !loading &&
         !error &&
@@ -2103,7 +2081,6 @@ export default function Home() {
             </button>
           </div>
         ) : null}
-
         {diagnosis ? (
           <div className="result-stack">
             <section className="result-intro">
@@ -2289,6 +2266,7 @@ export default function Home() {
           ※これはAIによる車種診断です。実際の仕様・乗車定員・在庫状況は、最終的にスタッフが確認してご案内します。
         </p>
       </section>
+
       <style jsx>{`
         * {
           box-sizing: border-box;
@@ -2427,21 +2405,28 @@ export default function Home() {
         .choice-button.active {
           background: linear-gradient(
             135deg,
-            #f0d27d,
+            #f6dc91,
             #d6b55b
           );
-          border: 2px solid #f6dc91;
+          border: 3px solid #fff1b8;
           color: #07111f;
+          font-weight: 900;
+          outline: 2px solid #d6b55b;
+          outline-offset: 2px;
           box-shadow:
-            0 0 0 2px rgba(214, 181, 91, 0.18),
-            0 8px 18px rgba(0, 0, 0, 0.22);
-          transform: translateY(-1px);
+            0 0 0 4px rgba(214, 181, 91, 0.2),
+            0 10px 22px rgba(0, 0, 0, 0.3);
+          transform: translateY(-2px);
         }
 
         .choice-button.active .check-box {
+          width: 24px;
+          height: 24px;
           background: #07111f;
-          border-color: #07111f;
+          border: 2px solid #07111f;
           color: #ffffff;
+          font-size: 15px;
+          font-weight: 900;
         }
 
         .choice-button.disabled,
@@ -2584,6 +2569,10 @@ export default function Home() {
           font-weight: 800;
         }
 
+        .passenger-disabled-note {
+          margin-top: 12px;
+        }
+
         .none-row {
           display: flex;
           align-items: center;
@@ -2598,8 +2587,7 @@ export default function Home() {
         .none-row input {
           width: auto;
         }
-
-        .tip-box {
+                .tip-box {
           display: grid;
           gap: 6px;
           border: 1px solid rgba(214, 181, 91, 0.45);
@@ -2657,7 +2645,8 @@ export default function Home() {
         .full-button {
           margin-top: 12px;
         }
-                .loading-box,
+
+        .loading-box,
         .error-box,
         .result-intro,
         .advice-box,
