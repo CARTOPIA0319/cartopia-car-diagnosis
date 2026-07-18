@@ -571,7 +571,7 @@ async function consume(
         used: result.used,
         remaining: 0,
         error:
-          "AI診断は、1日に3回まで。日付が変わると、また3回診断できる。",
+          "ごめんね、AI診断は1日に3回までだよ。",
       },
       429
     );
