@@ -91,19 +91,19 @@ function getEnv() {
 
   if (!redisUrl || !redisToken) {
     throw new Error(
-      "診断回数保存用のRedis環境変数が設定されていません。"
+      "診断回数の保存設定が未完了。"
     );
   }
 
   if (!lineChannelId) {
     throw new Error(
-      "LINE_LOGIN_CHANNEL_IDが設定されていません。"
+      "LINE認証設定が未完了。"
     );
   }
 
   if (secret.length < 32) {
     throw new Error(
-      "DIAGNOSIS_LIMIT_SECRETは32文字以上で設定してください。"
+      "診断回数の保護設定が未完了。"
     );
   }
 
@@ -132,14 +132,14 @@ async function redis(command, env) {
     data = await response.json();
   } catch {
     throw new Error(
-      "診断回数データベースから不正な応答が返されました。"
+      "診断回数データベースから不正な応答。"
     );
   }
 
   if (!response.ok || data?.error) {
     throw new Error(
       data?.error ||
-        "診断回数データベースへの接続に失敗しました。"
+        "診断回数データベースへの接続に失敗。"
     );
   }
 
@@ -374,7 +374,7 @@ async function verifyAccessToken(
     ) <= 0
   ) {
     throw new Error(
-      "LINEアクセストークンを確認できませんでした。"
+      "LINE認証を確認できない。"
     );
   }
 
@@ -399,7 +399,7 @@ async function verifyAccessToken(
     !profile.userId
   ) {
     throw new Error(
-      "LINEユーザー情報を確認できませんでした。"
+      "LINEユーザー情報を確認できない。"
     );
   }
 
@@ -437,7 +437,7 @@ async function verifyIdToken(
     !data.sub
   ) {
     throw new Error(
-      "LINE IDトークンを確認できませんでした。"
+      "LINE認証を確認できない。"
     );
   }
 
@@ -483,7 +483,7 @@ async function getLineUserId(
   }
 
   throw new Error(
-    "LINE認証情報が送信されていません。"
+    "LINE認証情報が見つからない。"
   );
 }
 
@@ -509,7 +509,7 @@ function reservationKey(
 function normalize(result) {
   if (!Array.isArray(result)) {
     throw new Error(
-      "診断回数データの形式が正しくありません。"
+      "診断回数データの形式が不正。"
     );
   }
 
@@ -571,7 +571,7 @@ async function consume(
         used: result.used,
         remaining: 0,
         error:
-          "本日のAI診断は3回までです。明日になると再びご利用いただけます。",
+          "AI診断は、1日に3回まで。日付が変わると、また3回診断できる。",
       },
       429
     );
@@ -623,7 +623,7 @@ async function refund(
       {
         ok: false,
         error:
-          "返却対象の診断回数がありません。",
+          "返却できる診断回数なし。",
       },
       409,
       {
@@ -670,7 +670,7 @@ async function refund(
           ? {}
           : {
               error:
-                "返却対象の診断回数がありません。",
+                "返却できる診断回数なし。",
             }
       ),
     },
@@ -735,7 +735,7 @@ export async function POST(
         {
           ok: false,
           error:
-            "リクエストの形式が正しくありません。",
+            "リクエスト形式が不正。",
         },
         400
       );
@@ -758,7 +758,7 @@ export async function POST(
         {
           ok: false,
           error:
-            "指定された処理は利用できません。",
+            "指定された処理は利用不可。",
         },
         400
       );
@@ -805,7 +805,7 @@ export async function POST(
         ok: false,
         error:
           error?.message ||
-          "診断回数の確認中にエラーが発生しました。",
+          "診断回数の確認中にエラー。",
       },
       500
     );
