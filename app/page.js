@@ -9,10 +9,10 @@ const LAST_DIAGNOSIS_STORAGE_KEY =
   "cartopia-perfect-diagnosis-result-v1";
 
 const LOADING_STEPS = [
-  "ご家族の人数と、日常の使い方を整理しています。",
-  "希望条件に合う車種を、一台ずつ比較しています。",
-  "数年後の暮らしまで見据えて候補を見直しています。",
-  "マッチ度を確認し、最終候補を5台に絞っています。",
+  "家族の人数と、日常の使い方を整理中。",
+  "希望条件に合う車種を、一台ずつ比較中。",
+  "数年後の暮らしまで見据えて、候補を再確認中。",
+  "マッチ度を確認し、最終候補を5台に絞り込み中。",
 ];
 
 const MAX_PASSENGER_OPTIONS = [
@@ -641,7 +641,7 @@ export default function Home() {
     if (
       typeof window === "undefined" ||
       !window.liff ||
-      !LIFF_ID
+            !LIFF_ID
     ) {
       return;
     }
@@ -657,7 +657,7 @@ export default function Home() {
       setLiffReady(false);
       setLiffError(
         caughtError.message ||
-          "LINE連携の初期化に失敗しました。"
+          "LINE連携の初期化に失敗。"
       );
     }
   }
@@ -690,7 +690,7 @@ export default function Home() {
     }
 
     throw new Error(
-      "在庫検索に使う車のタイプを確定できませんでした。"
+      "在庫検索に使う車のタイプを確定できない。"
     );
   }
 
@@ -898,28 +898,28 @@ export default function Home() {
   function validateAllQuestions() {
     if (!form.maxPassengers) {
       return {
-        message: "最大で乗る人数を選んでください。",
+        message: "最大で乗る人数が未選択。",
         question: 1,
       };
     }
 
     if (form.driverAges.length === 0) {
       return {
-        message: "運転する人の年齢を選んでください。",
+        message: "運転する人の年齢が未選択。",
         question: 1,
       };
     }
 
     if (!form.hasOwnedCars) {
       return {
-        message: "現在、ご家庭で車を所有しているか選んでください。",
+        message: "現在の所有車について未回答。",
         question: 2,
       };
     }
 
     if (!form.purchasePlan) {
       return {
-        message: "増車・新規購入か、乗り換えかを選んでください。",
+        message: "今回の購入方法が未選択。",
         question: 2,
       };
     }
@@ -936,7 +936,7 @@ export default function Home() {
       )
     ) {
       return {
-        message: "乗り換えの場合は、現在の車種名とタイプを入力してください。",
+        message: "乗り換えの場合、現在の車種名とタイプが必要。",
         question: 2,
       };
     }
@@ -946,21 +946,21 @@ export default function Home() {
       !form.replacementTargetId
     ) {
       return {
-        message: "乗り換える予定の車を選んでください。",
+        message: "乗り換える予定の車が未選択。",
         question: 2,
       };
     }
 
     if (form.desiredBodyTypes.length === 0) {
       return {
-        message: "気になる車のタイプを選んでください。",
+        message: "気になる車のタイプが未選択。",
         question: 3,
       };
     }
 
     if (form.desiredConditions.length === 0) {
       return {
-        message: "気になる条件を1つ以上選んでください。",
+        message: "気になる条件を1つ以上選択。",
         question: 3,
       };
     }
@@ -978,7 +978,7 @@ export default function Home() {
       !hasAvoidInput
     ) {
       return {
-        message: "避けたい車がなければ「特になし」を選んでください。",
+        message: "避けたい車がない場合は「特になし」を選択。",
         question: 4,
       };
     }
@@ -992,14 +992,14 @@ export default function Home() {
       !window.liff
     ) {
       throw new Error(
-        "LINE連携の準備ができていません。少し待ってからもう一度お試しください。"
+        "LINE連携の準備中。少し待ってから再度操作。"
       );
     }
 
     if (!liffReady) {
       if (!LIFF_ID) {
         throw new Error(
-          "NEXT_PUBLIC_LIFF_IDが設定されていません。"
+          "LINEアプリ設定が未完了。"
         );
       }
 
@@ -1012,7 +1012,7 @@ export default function Home() {
 
     if (!window.liff.isInClient()) {
       throw new Error(
-        "LINE内のぴったり診断から開いてください。"
+        "LINE内の「ぴったり診断」から起動。"
       );
     }
 
@@ -1023,7 +1023,7 @@ export default function Home() {
 
     if (!accessToken && !idToken) {
       throw new Error(
-        "LINEユーザー情報を確認できませんでした。診断画面を開き直してください。"
+        "LINEユーザー情報を確認できないため、診断画面の再起動が必要。"
       );
     }
 
@@ -1057,7 +1057,7 @@ export default function Home() {
     if (!response.ok) {
       const limitError = new Error(
         data.error ||
-          "診断回数を確認できませんでした。"
+          "診断回数を確認できない。"
       );
 
       limitError.status = response.status;
@@ -1240,7 +1240,7 @@ export default function Home() {
     } catch (caughtError) {
       setRateLimitError(
         caughtError.message ||
-          "本日の診断回数を確認できませんでした。"
+          "今日の診断回数を確認できない。"
       );
 
       if (
@@ -1295,7 +1295,7 @@ export default function Home() {
       if (!response.ok) {
         throw new Error(
           data.error ||
-            "診断に失敗しました。"
+            "診断に失敗。"
         );
       }
 
@@ -1305,7 +1305,7 @@ export default function Home() {
         )
       ) {
         throw new Error(
-          "診断結果の形式が正しくありません。"
+          "診断結果の形式が不正。"
         );
       }
 
@@ -1341,7 +1341,7 @@ export default function Home() {
 
       setError(
         caughtError.message ||
-          "エラーが発生しました。"
+          "エラーが発生。"
       );
     } finally {
       setLoading(false);
@@ -1355,7 +1355,7 @@ export default function Home() {
     return {
       type: "flex",
       altText:
-        "ぴったり車種診断の結果をもう一度見る",
+        "ぴったり車種診断の結果を再表示",
       contents: {
         type: "bubble",
         size: "kilo",
@@ -1373,7 +1373,7 @@ export default function Home() {
             },
             {
               type: "text",
-              text: "診断結果をもう一度確認できます",
+              text: "診断結果をもう一度確認",
               weight: "bold",
               color: "#07111F",
               size: "lg",
@@ -1381,8 +1381,8 @@ export default function Home() {
             },
             {
               type: "text",
-              text: "在庫を見たあとも、下のボタンからすぐに戻れます。",
-              color: "#667085",
+              text: "在庫を見たあとも、下のボタンからすぐに戻れる。",
+                            color: "#667085",
               size: "sm",
               wrap: true,
             },
@@ -1399,7 +1399,7 @@ export default function Home() {
               height: "sm",
               action: {
                 type: "uri",
-                label: "診断結果をもう一度見る",
+                label: "診断結果を再表示",
                 uri: returnUrl,
               },
             },
@@ -1427,14 +1427,14 @@ export default function Home() {
         !window.liff
       ) {
         throw new Error(
-          "LINE連携の準備ができていません。少し待ってからもう一度押してください。"
+          "LINE連携の準備中。少し待ってから再度操作。"
         );
       }
 
       if (!liffReady) {
         if (!LIFF_ID) {
           throw new Error(
-            "NEXT_PUBLIC_LIFF_IDが設定されていません。"
+            "LINEアプリ設定が未完了。"
           );
         }
 
@@ -1449,7 +1449,7 @@ export default function Home() {
         !window.liff.isInClient()
       ) {
         throw new Error(
-          "LINE内のぴったり診断から開いてください。"
+          "LINE内の「ぴったり診断」から起動。"
         );
       }
 
@@ -1470,7 +1470,7 @@ export default function Home() {
     } catch (caughtError) {
       setInventoryError(
         caughtError.message ||
-          "LINEへの在庫検索依頼送信に失敗しました。"
+          "LINEへの在庫検索依頼の送信に失敗。"
       );
     } finally {
       setInventoryLoading(false);
@@ -1522,7 +1522,7 @@ export default function Home() {
         onError={() => {
           setLiffReady(false);
           setLiffError(
-            "LINE連携用SDKの読み込みに失敗しました。"
+            "LINE連携用SDKの読み込みに失敗。"
           );
         }}
       />
@@ -1560,10 +1560,10 @@ export default function Home() {
               <QuestionHeader
                 number="1"
                 titleLines={[
-                  "この車に最大で何人",
-                  "乗りますか？",
+                  "この車に乗る",
+                  "最大人数",
                 ]}
-                note="年に数回でも乗る可能性がある最大人数を選んでください。"
+                note="年に数回でも乗る可能性がある最大人数を選択。"
               />
 
               <ChoiceGrid
@@ -1595,7 +1595,7 @@ export default function Home() {
 
               {hasLightTypeSelected ? (
                 <p className="disabled-note passenger-disabled-note">
-                  軽自動車を選択しているため、5人以上は選べません。
+                  軽自動車を選択中のため、5人以上は対象外。
                 </p>
               ) : null}
 
@@ -1640,7 +1640,7 @@ export default function Home() {
                 </div>
 
                 <p className="helper-text">
-                  お子さんの成長や、将来の使い方も診断に反映します。
+                  子どもの成長や、将来の使い方も診断に反映。
                 </p>
 
                 <ChoiceGrid
@@ -1666,16 +1666,16 @@ export default function Home() {
               <QuestionHeader
                 number="2"
                 titleLines={[
-                  "今のご家庭の車と、",
-                  "今回の購入について",
+                  "現在の所有車と、",
+                  "今回の購入",
                 ]}
-                note="乗り換えの場合だけ、現在の車について入力します。"
+                note="現在の車の入力は、乗り換えの場合のみ。"
               />
 
               <div className="field-block first-field">
                 <div className="field-heading">
                   <p>
-                    現在、ご家庭で車を所有していますか？
+                    現在の所有状況
                   </p>
                 </div>
 
@@ -1709,7 +1709,7 @@ export default function Home() {
                 <div className="field-block">
                   <div className="field-heading">
                     <p>
-                      今回はどちらですか？
+                      今回の購入方法
                     </p>
                   </div>
 
@@ -1733,7 +1733,7 @@ export default function Home() {
               {form.hasOwnedCars ===
               "no" ? (
                 <div className="info-strip">
-                  新規購入として診断します。現在の車の入力は不要です。
+                  新規購入として診断。現在の車の入力は不要。
                 </div>
               ) : null}
 
@@ -1742,7 +1742,7 @@ export default function Home() {
               form.purchasePlan ===
                 "増車・新規購入" ? (
                 <div className="info-strip">
-                  増車の場合、現在の車の入力は省略できます。
+                  増車なら、現在の車は入力不要。
                 </div>
               ) : null}
 
@@ -1857,7 +1857,7 @@ export default function Home() {
                             }
                           >
                             <option value="">
-                              選択してください
+                              選択
                             </option>
 
                             {ALL_TYPE_OPTIONS.map(
@@ -1918,7 +1918,7 @@ export default function Home() {
                       }
                     >
                       <option value="">
-                        選択してください
+                        選択
                       </option>
 
                       {form.ownedCars.map(
@@ -1928,7 +1928,7 @@ export default function Home() {
                               car.id
                             }
                             value={
-                              car.id
+                                                            car.id
                             }
                           >
                             {car.model ||
@@ -1944,7 +1944,7 @@ export default function Home() {
                   <div className="field-block">
                     <div className="field-heading">
                       <p>
-                        乗り換えようと思った理由
+                        乗り換えを考えた理由
                       </p>
 
                       <span>
@@ -1989,7 +1989,7 @@ export default function Home() {
                             .value
                         )
                       }
-                      placeholder="例：修理中に車へ乗れない期間が困る。"
+                      placeholder="例：修理中に車が使えない期間が困る"
                     />
                   </label>
                 </div>
@@ -2001,9 +2001,9 @@ export default function Home() {
                 number="3"
                 titleLines={[
                   "気になる車や条件を",
-                  "教えてください",
+                  "選ぶ",
                 ]}
-                note="候補を絞り込むため、気になるタイプや条件を選んでください。"
+                note="候補を絞るため、気になるタイプや条件を選択。"
               />
 
               <label>
@@ -2056,7 +2056,7 @@ export default function Home() {
                   }
                   disabledMessage={
                     requiredSeats >= 5
-                      ? "5人以上を選択しているため、軽自動車は選べません。"
+                      ? "5人以上を選択中のため、軽自動車は対象外。"
                       : ""
                   }
                   showNoPreference
@@ -2105,10 +2105,10 @@ export default function Home() {
               <QuestionHeader
                 number="4"
                 titleLines={[
-                  "避けたい車を",
-                  "教えてください",
+                  "避けたい車や条件を",
+                  "選ぶ",
                 ]}
-                note="該当するものがなければ「特になし」を選んでください。"
+                note="該当がなければ「特になし」を選択。"
               />
 
               <ChoiceGrid
@@ -2168,7 +2168,7 @@ export default function Home() {
                           event.target.value
                         )
                       }
-                      placeholder="理由があれば入力してください"
+                      placeholder="理由があれば入力"
                     />
                   </label>
 
@@ -2210,7 +2210,7 @@ export default function Home() {
                           event.target.value
                         )
                       }
-                      placeholder="理由があれば入力してください"
+                      placeholder="理由があれば入力"
                     />
                   </label>
 
@@ -2277,7 +2277,7 @@ export default function Home() {
                   "その他の希望や",
                   "気になること",
                 ]}
-                note="選択肢にない希望があれば入力してください。空欄でも診断できます。"
+                note="選択肢にない希望があれば入力。空欄でも診断可能。"
               />
 
               <div className="tip-box">
@@ -2310,7 +2310,7 @@ export default function Home() {
                         .value
                     )
                   }
-                  placeholder="希望や不安、今の車で気に入っている点などを入力してください。"
+                  placeholder="希望や不安、今の車で気に入っている点などを入力"
                 />
               </label>
             </section>
@@ -2320,16 +2320,16 @@ export default function Home() {
               className="diagnosis-submit-card"
             >
               <strong>
-                回答内容をもとに、候補車を選定します
+                回答内容から、候補車を選定
               </strong>
 
               <p>
-                AI診断は、お一人につき1日3回までご利用いただけます。
+                AI診断は、1日に3回まで。
               </p>
 
               {remainingDiagnoses !== null ? (
                 <div className="remaining-count">
-                  本日の残り診断回数：
+                  今日の残り診断回数：
                   <strong>{remainingDiagnoses}回</strong>
                 </div>
               ) : null}
@@ -2369,7 +2369,7 @@ export default function Home() {
             <h2>
               条件を読み解きながら、
               <br />
-              本当に合う車を探しています。
+              本当に合う車を探索中。
             </h2>
 
             <div className="loading-step-card">
@@ -2391,9 +2391,9 @@ export default function Home() {
 
             <p className="loading-caption">
               カーとぴあのスタッフ目線で、
-              候補車を一台ずつ比較しています。
+              候補車を一台ずつ比較中。
               <br />
-              結果が出るまで、このままお待ちください。
+              結果が出るまで、そのまま待機。
             </p>
           </div>
         ) : null}
@@ -2471,7 +2471,6 @@ export default function Home() {
                 </p>
               </section>
             ) : null}
-
             {diagnosis.futureAdvice ? (
               <section className="advice-box">
                 <strong>
@@ -2528,7 +2527,7 @@ export default function Home() {
               </h2>
 
               <p>
-                上のTOP5は、在庫に関係なく世の中の車種全体から診断した本命結果です。
+                上のTOP5は、在庫に左右されず、車種全体から選んだ本命候補。
               </p>
 
               <button
@@ -2579,7 +2578,7 @@ export default function Home() {
         ) : null}
 
         <p className="small-note">
-          ※これはAIによる車種診断です。実際の仕様・乗車定員・在庫状況は、最終的にスタッフが確認してご案内します。
+          ※AIによる車種診断。実際の仕様・乗車定員・在庫状況は、最終的にスタッフが確認。
         </p>
       </section>
 
@@ -3092,7 +3091,7 @@ export default function Home() {
           gap: 5px;
           border: 1px solid rgba(214, 181, 91, 0.36);
           border-radius: 14px;
-          padding: 13px;
+                    padding: 13px;
           margin-bottom: 18px;
           background: rgba(214, 181, 91, 0.07);
         }
