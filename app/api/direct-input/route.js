@@ -5,6 +5,6 @@ export async function GET() {
     ok: true,
     department: "direct-input",
     status: "ready",
-    message: "直接入力部門が正常に稼働しています。",
+    message: "Direct Input API Ready",
   });
 }
