@@ -1,5 +1,6 @@
 import { classifyDirectInput } from "./classify";
 import { buildConfirmation } from "./buildConfirmation";
+import { findFaq } from "./faqMatcher";
 
 export const runtime = "nodejs";
 
@@ -23,7 +24,22 @@ export async function GET(request) {
       status: "ready",
       message:
         "\u76f4\u63a5\u5165\u529b\u90e8\u9580\u304c\u6b63\u5e38\u306b\u7a3c\u50cd\u3057\u3066\u3044\u307e\u3059\u3002",
-      usage: "?text=\u30b9\u30fc\u30d1\u30fc\u30ab\u30fc",
+      usage: "?text=\u4f55\u6642\u307e\u3067",
+    });
+  }
+
+  const faq = findFaq(text);
+
+  if (faq) {
+    return jsonResponse({
+      ok: true,
+      input: text,
+      classification: {
+        type: "faq",
+        confidence: "high",
+        useAi: false,
+      },
+      faq,
     });
   }
 
