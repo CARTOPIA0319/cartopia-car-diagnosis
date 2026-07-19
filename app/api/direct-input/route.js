@@ -1,6 +1,11 @@
 import { classifyDirectInput } from "./classify";
 import { buildConfirmation } from "./buildConfirmation";
 import { findFaq } from "./faqMatcher";
+import {
+  buildFaqReply,
+  buildReservationReply,
+  buildAiConfirmationReply,
+} from "./replyBuilder";
 
 export const runtime = "nodejs";
 
@@ -31,6 +36,8 @@ export async function GET(request) {
   const faq = findFaq(text);
 
   if (faq) {
+    const reply = buildFaqReply(faq);
+
     return jsonResponse({
       ok: true,
       input: text,
@@ -39,17 +46,27 @@ export async function GET(request) {
         confidence: "high",
         useAi: false,
       },
-      faq,
+      reply,
     });
   }
 
   const classification = classifyDirectInput(text);
   const confirmation = buildConfirmation(text, classification);
 
+  let reply = confirmation;
+
+  if (classification.type === "reservation") {
+    reply = buildReservationReply();
+  }
+
+  if (classification.useAi === true) {
+    reply = buildAiConfirmationReply();
+  }
+
   return jsonResponse({
     ok: true,
     input: text,
     classification,
-    confirmation,
+    reply,
   });
 }
