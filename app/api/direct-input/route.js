@@ -1,6 +1,7 @@
 import { classifyDirectInput } from "./classify";
 import { buildConfirmation } from "./buildConfirmation";
 import { findFaq } from "./faqMatcher";
+import { judgeByAI } from "./aiJudge";
 import {
   buildFaqReply,
   buildReservationReply,
@@ -27,9 +28,8 @@ export async function GET(request) {
       ok: true,
       department: "direct-input",
       status: "ready",
-      message:
-        "\u76f4\u63a5\u5165\u529b\u90e8\u9580\u304c\u6b63\u5e38\u306b\u7a3c\u50cd\u3057\u3066\u3044\u307e\u3059\u3002",
-      usage: "?text=\u4f55\u6642\u307e\u3067",
+      message: "直接入力部門が正常に稼働しています。",
+      usage: "?text=何時まで",
     });
   }
 
@@ -51,16 +51,26 @@ export async function GET(request) {
   }
 
   const classification = classifyDirectInput(text);
+
+  if (classification.useAi === true) {
+    const aiJudgement = await judgeByAI(text);
+    const reply = buildAiConfirmationReply();
+
+    return jsonResponse({
+      ok: true,
+      input: text,
+      classification,
+      aiJudgement,
+      reply,
+    });
+  }
+
   const confirmation = buildConfirmation(text, classification);
 
   let reply = confirmation;
 
   if (classification.type === "reservation") {
     reply = buildReservationReply();
-  }
-
-  if (classification.useAi === true) {
-    reply = buildAiConfirmationReply();
   }
 
   return jsonResponse({
