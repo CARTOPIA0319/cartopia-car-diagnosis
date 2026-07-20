@@ -1,137 +1,333 @@
+// app/api/direct-input/aiJudge.js
+// ===== Part 1 / 2 =====
+
 import OpenAI from "openai";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const ALLOWED_CATEGORIES = [
-  "vehicle-search",
-  "reservation",
-  "sell",
-  "purchase",
-  "faq",
-  "casual",
-  "nonsense",
+const MODEL =
+  process.env.OPENAI_MODEL ??
+  "gpt-5-mini";
+
+const ALLOWED_TYPES = [
+  "maker",
+  "brand",
+  "model",
+  "category",
+  "purpose",
+  "unknown",
 ];
 
-function createFallbackResult(input, errorMessage) {
+const ALLOWED_CONFIDENCE = [
+  "high",
+  "medium",
+  "low",
+];
+
+function createErrorResult(
+  input,
+  message,
+) {
   return {
     success: false,
-    useAi: true,
-    category: "nonsense",
+    matched: false,
+
+    input,
+
     confidence: "low",
-    keyword: input,
-    normalizedQuery: "",
-    message: errorMessage,
+
+    type: "unknown",
+
+    id: null,
+    makerId: null,
+    brandId: null,
+
+    keyword: "",
+    normalized: "",
+
+    reason: message,
   };
 }
 
-export async function judgeByAI(rawInput) {
-  const input = String(rawInput ?? "").trim();
+function createEmptyResult() {
+  return {
+    success: true,
+    matched: false,
+
+    input: "",
+
+    confidence: "high",
+
+    type: "unknown",
+
+    id: null,
+    makerId: null,
+    brandId: null,
+
+    keyword: "",
+    normalized: "",
+
+    reason: "empty input",
+  };
+}
+
+function buildInstructions() {
+  return `
+あなたは中古車販売店「カーとぴあ」の入力補完AIです。
+
+役割は辞書で判定できなかった入力だけを推測することです。
+
+絶対ルール
+
+・存在しないメーカーを作らない
+・存在しないブランドを作らない
+・存在しない車種を作らない
+・推測できなければ unknown
+・JSON以外は返さない
+・説明文を書かない
+
+type は
+
+maker
+brand
+model
+category
+purpose
+unknown
+
+のみ。
+
+confidence は
+
+high
+medium
+low
+
+のみ。
+
+normalized は
+
+検索しやすい形へ補正してください。
+
+例
+
+ランクル
+→ランドクルーザー
+
+ヴォクシ
+→ヴォクシー
+
+ハリヤー
+→ハリアー
+
+NBOX
+→N-BOX
+
+スペシア
+→スペーシア
+
+など。
+
+category は
+
+SUV
+軽自動車
+ミニバン
+セダン
+スポーツカー
+コンパクトカー
+など。
+
+purpose は
+
+子育て
+アウトドア
+雪道
+燃費重視
+仕事
+など。
+
+推測不能なら
+
+type=unknown
+
+matched=false
+
+としてください。
+`;
+}
+
+function buildSchema() {
+  return {
+    type: "object",
+
+    additionalProperties: false,
+
+    properties: {
+      matched: {
+        type: "boolean",
+      },
+
+      type: {
+        type: "string",
+
+        enum: ALLOWED_TYPES,
+      },
+
+      confidence: {
+        type: "string",
+
+        enum:
+          ALLOWED_CONFIDENCE,
+      },
+
+      id: {
+        type: "string",
+      },
+
+      makerId: {
+        type: "string",
+      },
+
+      brandId: {
+        type: "string",
+      },
+
+      keyword: {
+        type: "string",
+      },
+
+      normalized: {
+        type: "string",
+      },
+    },
+
+    required: [
+      "matched",
+      "type",
+      "confidence",
+      "id",
+      "makerId",
+      "brandId",
+      "keyword",
+      "normalized",
+    ],
+  };
+}
+
+async function requestAI(
+  input,
+) {
+  return openai.responses.create({
+    model: MODEL,
+
+    store: false,
+
+    reasoning: {
+      effort: "low",
+    },
+
+    instructions:
+      buildInstructions(),
+
+    input,
+
+    text: {
+      format: {
+        type: "json_schema",
+
+        name:
+          "vehicle_ai_judge",
+
+        strict: true,
+
+        schema:
+          buildSchema(),
+      },
+    },
+  });
+}
+// ===== Part 2 / 2 =====
+
+export async function judgeByAI(
+  rawInput,
+) {
+  const input = String(
+    rawInput ?? "",
+  ).trim();
 
   if (!input) {
-    return {
-      success: true,
-      useAi: false,
-      category: "nonsense",
-      confidence: "high",
-      keyword: "",
-      normalizedQuery: "",
-      message: "入力内容がありません。",
-    };
+    return createEmptyResult();
   }
 
-  if (!process.env.OPENAI_API_KEY) {
-    return createFallbackResult(
+  if (
+    !process.env.OPENAI_API_KEY
+  ) {
+    return createErrorResult(
       input,
-      "OPENAI_API_KEYが設定されていません。"
+      "OPENAI_API_KEY is not configured.",
     );
   }
 
   try {
-    const response = await openai.responses.create({
-      model: "gpt-5-mini",
-      store: false,
-      reasoning: {
-        effort: "low",
-      },
-      instructions: `
-あなたは日本の自動車販売店「カーとぴあ」の自由入力受付担当です。
+    const response =
+      await requestAI(input);
 
-ユーザーの入力を、必ず次のどれか1つに分類してください。
-
-- vehicle-search
-  車種名、車の種類、用途、希望条件、近い車種を探す依頼
-- reservation
-  車検、整備、修理、点検、オイル交換、鈑金などの予約や相談
-- sell
-  買取、査定、売却、手放す相談
-- purchase
-  車の購入、注文車、乗り換えの相談
-- faq
-  営業時間、住所、電話番号、定休日など店舗情報の質問
-- casual
-  挨拶、雑談、車と無関係だが意味のある文章
-- nonsense
-  意味不明な文字列、悪ふざけ、判読不能な入力
-
-判定ルール：
-- 「スーパーカー」「雪に強い車」「子育て向け」などは vehicle-search
-- 実在する車種名は vehicle-search
-- 下品な単語や悪ふざけだけなら nonsense
-- 無理に車両検索へ分類しない
-- normalizedQuery は検索に使える場合だけ簡潔に整える
-- nonsense、casual、reservation、sell、purchase、faq の場合は normalizedQuery を空文字にする
-`,
-      input,
-      text: {
-        format: {
-          type: "json_schema",
-          name: "direct_input_judgement",
-          strict: true,
-          schema: {
-            type: "object",
-            additionalProperties: false,
-            properties: {
-              category: {
-                type: "string",
-                enum: ALLOWED_CATEGORIES,
-              },
-              confidence: {
-                type: "string",
-                enum: ["high", "medium", "low"],
-              },
-              normalizedQuery: {
-                type: "string",
-              },
-            },
-            required: [
-              "category",
-              "confidence",
-              "normalizedQuery",
-            ],
-          },
-        },
-      },
-    });
-
-    const parsed = JSON.parse(response.output_text);
+    const parsed = JSON.parse(
+      response.output_text,
+    );
 
     return {
       success: true,
-      useAi: true,
-      category: parsed.category,
-      confidence: parsed.confidence,
-      keyword: input,
-      normalizedQuery: parsed.normalizedQuery,
-      message: "AI判定が完了しました。",
+
+      matched:
+        parsed.matched,
+
+      input,
+
+      type:
+        parsed.type ??
+        "unknown",
+
+      confidence:
+        parsed.confidence ??
+        "low",
+
+      id:
+        parsed.id || null,
+
+      makerId:
+        parsed.makerId ||
+        null,
+
+      brandId:
+        parsed.brandId ||
+        null,
+
+      keyword:
+        parsed.keyword ??
+        "",
+
+      normalized:
+        parsed.normalized ??
+        "",
+
+      reason: "AI matched",
     };
   } catch (error) {
-    console.error("direct-input aiJudge error:", error);
+    console.error(
+      "[AI Judge]",
+      error,
+    );
 
-    return createFallbackResult(
+    return createErrorResult(
       input,
-      "AI判定中にエラーが発生しました。"
+      error?.message ??
+        "Unknown AI error",
     );
   }
 }
+
+export default judgeByAI;
