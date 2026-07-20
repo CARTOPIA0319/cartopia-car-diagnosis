@@ -1,34 +1,46 @@
+// app/api/direct-input/faqMatcher.js
+
 import { FAQ_DATA } from "./faqData";
 
-function normalizeText(value) {
-  return String(value ?? "")
-    .trim()
+function normalize(text) {
+  return String(text ?? "")
+    .normalize("NFKC")
     .toLowerCase()
-    .replace(/\s+/g, "");
+    .replace(/\s+/g, "")
+    .trim();
 }
 
-export function findFaq(rawText) {
-  const text = normalizeText(rawText);
+export function findFaq(input) {
+  const text = normalize(input);
 
   if (!text) {
     return null;
   }
 
   for (const faq of FAQ_DATA) {
-    const matchedKeyword = faq.keywords.find((keyword) =>
-      text.includes(normalizeText(keyword))
-    );
+    const keywords = Array.isArray(faq.keywords)
+      ? faq.keywords
+      : [];
 
-    if (matchedKeyword) {
-      return {
-        type: "faq",
-        title: faq.title,
-        answer: faq.answer,
-        matchedKeyword,
-        useAi: false,
-      };
+    for (const keyword of keywords) {
+      if (
+        text.includes(
+          normalize(keyword),
+        )
+      ) {
+        return {
+          id: faq.id ?? null,
+          type: "faq",
+          title: faq.title,
+          answer: faq.answer,
+          matchedKeyword: keyword,
+          confidence: "high",
+        };
+      }
     }
   }
 
   return null;
 }
+
+export default findFaq;
