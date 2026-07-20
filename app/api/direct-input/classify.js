@@ -1,5 +1,8 @@
+// app/api/direct-input/classify.js
+
 function normalizeText(text) {
   return String(text ?? "")
+    .normalize("NFKC")
     .trim()
     .replace(/\s+/g, " ")
     .toLowerCase();
@@ -8,44 +11,48 @@ function normalizeText(text) {
 const RESERVATION_WORDS = [
   "予約",
   "車検",
-  "オイル交換",
   "点検",
   "整備",
   "修理",
+  "故障",
   "異音",
+  "オイル",
+  "オイル交換",
+  "タイヤ",
   "タイヤ交換",
+  "バッテリー",
   "鈑金",
   "板金",
 ];
 
 const SELL_WORDS = [
-  "売りたい",
-  "売却",
   "買取",
-  "買い取り",
   "査定",
+  "売却",
+  "売りたい",
   "手放したい",
 ];
 
 const PURCHASE_WORDS = [
+  "購入",
   "買いたい",
-  "購入したい",
-  "車を探して",
-  "車探して",
-  "乗り換え",
   "注文車",
+  "乗り換え",
+  "在庫",
 ];
 
 const DIAGNOSIS_WORDS = [
-  "ぴったり診断",
-  "車種診断",
-  "おすすめの車",
-  "どの車がいい",
-  "自分に合う車",
+  "診断",
+  "おすすめ",
+  "ぴったり",
+  "どの車",
+  "自分に合う",
 ];
 
 function containsAny(text, words) {
-  return words.some((word) => text.includes(word));
+  return words.some((word) =>
+    text.includes(word),
+  );
 }
 
 export function classifyDirectInput(rawText) {
@@ -59,7 +66,12 @@ export function classifyDirectInput(rawText) {
     };
   }
 
-  if (containsAny(text, RESERVATION_WORDS)) {
+  if (
+    containsAny(
+      text,
+      RESERVATION_WORDS,
+    )
+  ) {
     return {
       type: "reservation",
       confidence: "high",
@@ -67,7 +79,12 @@ export function classifyDirectInput(rawText) {
     };
   }
 
-  if (containsAny(text, SELL_WORDS)) {
+  if (
+    containsAny(
+      text,
+      SELL_WORDS,
+    )
+  ) {
     return {
       type: "sell",
       confidence: "high",
@@ -75,7 +92,12 @@ export function classifyDirectInput(rawText) {
     };
   }
 
-  if (containsAny(text, PURCHASE_WORDS)) {
+  if (
+    containsAny(
+      text,
+      PURCHASE_WORDS,
+    )
+  ) {
     return {
       type: "purchase",
       confidence: "high",
@@ -83,7 +105,12 @@ export function classifyDirectInput(rawText) {
     };
   }
 
-  if (containsAny(text, DIAGNOSIS_WORDS)) {
+  if (
+    containsAny(
+      text,
+      DIAGNOSIS_WORDS,
+    )
+  ) {
     return {
       type: "diagnosis",
       confidence: "high",
@@ -92,8 +119,10 @@ export function classifyDirectInput(rawText) {
   }
 
   return {
-    type: "unknown",
+    type: "vehicle-search",
     confidence: "low",
     useAi: true,
   };
 }
+
+export default classifyDirectInput;
