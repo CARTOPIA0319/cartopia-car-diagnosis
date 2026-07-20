@@ -1,3 +1,5 @@
+// app/api/direct-input/route.js
+
 import { classifyDirectInput } from "./classify";
 import { buildConfirmation } from "./buildConfirmation";
 import { findFaq } from "./faqMatcher";
@@ -21,9 +23,12 @@ function jsonResponse(data, status = 200) {
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const text = searchParams.get("text") ?? "";
 
-  if (!text.trim()) {
+  const text = String(
+    searchParams.get("text") ?? "",
+  ).trim();
+
+  if (!text) {
     return jsonResponse({
       ok: true,
       department: "direct-input",
@@ -36,8 +41,6 @@ export async function GET(request) {
   const faq = findFaq(text);
 
   if (faq) {
-    const reply = buildFaqReply(faq);
-
     return jsonResponse({
       ok: true,
       input: text,
@@ -46,31 +49,64 @@ export async function GET(request) {
         confidence: "high",
         useAi: false,
       },
-      reply,
+      reply: buildFaqReply(faq),
     });
   }
 
-  const classification = classifyDirectInput(text);
+  const classification =
+    classifyDirectInput(text);
 
-  if (classification.useAi === true) {
-    const aiJudgement = await judgeByAI(text);
-    const reply = buildAiConfirmationReply();
+  if (classification.useAi) {
+    const aiResult =
+      await judgeByAI(text);
+
+    if (
+      aiResult.success &&
+      aiResult.matched
+    ) {
+      return jsonResponse({
+        ok: true,
+        input: text,
+        classification: {
+          type:
+            aiResult.type,
+          confidence:
+            aiResult.confidence,
+          useAi: true,
+        },
+        ai: aiResult,
+        reply:
+          buildAiConfirmationReply(
+            aiResult,
+          ),
+      });
+    }
 
     return jsonResponse({
       ok: true,
       input: text,
       classification,
-      aiJudgement,
-      reply,
+      ai: aiResult,
+      reply: {
+        type: "unknown",
+        replyType: "text",
+        text: "申し訳ありません。内容を理解できませんでした。もう少し詳しく入力してください。",
+      },
     });
   }
 
-  const confirmation = buildConfirmation(text, classification);
+  let reply =
+    buildConfirmation(
+      text,
+      classification,
+    );
 
-  let reply = confirmation;
-
-  if (classification.type === "reservation") {
-    reply = buildReservationReply();
+  if (
+    classification.type ===
+    "reservation"
+  ) {
+    reply =
+      buildReservationReply();
   }
 
   return jsonResponse({
