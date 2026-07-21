@@ -1,5 +1,4 @@
 // app/api/direct-input/aiJudge.js
-// ===== Part 1 / 2 =====
 
 import OpenAI from "openai";
 
@@ -11,7 +10,7 @@ const MODEL =
   process.env.OPENAI_MODEL ??
   "gpt-5-mini";
 
-const ALLOWED_TYPES = [
+const TYPES = [
   "maker",
   "brand",
   "model",
@@ -20,75 +19,50 @@ const ALLOWED_TYPES = [
   "unknown",
 ];
 
-const ALLOWED_CONFIDENCE = [
+const CONFIDENCE = [
   "high",
   "medium",
   "low",
 ];
 
-function createErrorResult(
-  input,
-  message,
-) {
-  return {
-    success: false,
-    matched: false,
-
-    input,
-
-    confidence: "low",
-
-    type: "unknown",
-
-    id: null,
-    makerId: null,
-    brandId: null,
-
-    keyword: "",
-    normalized: "",
-
-    reason: message,
-  };
-}
-
-function createEmptyResult() {
+function emptyResult() {
   return {
     success: true,
     matched: false,
-
-    input: "",
-
-    confidence: "high",
-
     type: "unknown",
-
+    confidence: "high",
     id: null,
     makerId: null,
     brandId: null,
-
     keyword: "",
     normalized: "",
-
-    reason: "empty input",
   };
 }
 
-function buildInstructions() {
+function errorResult(message) {
+  return {
+    success: false,
+    matched: false,
+    type: "unknown",
+    confidence: "low",
+    id: null,
+    makerId: null,
+    brandId: null,
+    keyword: "",
+    normalized: "",
+    error: message,
+  };
+}
+
+function prompt() {
   return `
-あなたは中古車販売店「カーとぴあ」の入力補完AIです。
+あなたはカーとぴあ公式LINEの自由入力AIです。
 
-役割は辞書で判定できなかった入力だけを推測することです。
+辞書で判定できなかった入力のみ判定してください。
 
-絶対ルール
+回答はJSONのみ。
 
-・存在しないメーカーを作らない
-・存在しないブランドを作らない
-・存在しない車種を作らない
-・推測できなければ unknown
-・JSON以外は返さない
-・説明文を書かない
-
-type は
+typeは
 
 maker
 brand
@@ -99,7 +73,12 @@ unknown
 
 のみ。
 
-confidence は
+matchedは
+
+一致できた=true
+一致できない=false
+
+confidenceは
 
 high
 medium
@@ -107,225 +86,150 @@ low
 
 のみ。
 
-normalized は
-
-検索しやすい形へ補正してください。
+normalizedには正式名称を返してください。
 
 例
 
-ランクル
-→ランドクルーザー
+アル
+→アルファード
 
 ヴォクシ
 →ヴォクシー
 
-ハリヤー
-→ハリアー
-
 NBOX
 →N-BOX
 
-スペシア
-→スペーシア
+ランクル
+→ランドクルーザー
 
-など。
-
-category は
-
-SUV
-軽自動車
-ミニバン
-セダン
 スポーツカー
-コンパクトカー
-など。
+→スポーツカー
 
-purpose は
+雪道
+→雪道
 
 子育て
-アウトドア
-雪道
-燃費重視
-仕事
-など。
+→子育て
 
-推測不能なら
-
-type=unknown
+推測できない場合
 
 matched=false
+type=unknown
 
-としてください。
+を返してください。
 `;
 }
 
-function buildSchema() {
-  return {
-    type: "object",
-
-    additionalProperties: false,
-
-    properties: {
-      matched: {
-        type: "boolean",
-      },
-
-      type: {
-        type: "string",
-
-        enum: ALLOWED_TYPES,
-      },
-
-      confidence: {
-        type: "string",
-
-        enum:
-          ALLOWED_CONFIDENCE,
-      },
-
-      id: {
-        type: "string",
-      },
-
-      makerId: {
-        type: "string",
-      },
-
-      brandId: {
-        type: "string",
-      },
-
-      keyword: {
-        type: "string",
-      },
-
-      normalized: {
-        type: "string",
-      },
-    },
-
-    required: [
-      "matched",
-      "type",
-      "confidence",
-      "id",
-      "makerId",
-      "brandId",
-      "keyword",
-      "normalized",
-    ],
-  };
-}
-
-async function requestAI(
-  input,
-) {
-  return openai.responses.create({
-    model: MODEL,
-
-    store: false,
-
-    reasoning: {
-      effort: "low",
-    },
-
-    instructions:
-      buildInstructions(),
-
-    input,
-
-    text: {
-      format: {
-        type: "json_schema",
-
-        name:
-          "vehicle_ai_judge",
-
-        strict: true,
-
-        schema:
-          buildSchema(),
-      },
-    },
-  });
-}
-// ===== Part 2 / 2 =====
-
-export async function judgeByAI(
-  rawInput,
-) {
+export async function judgeByAI(rawInput) {
   const input = String(
     rawInput ?? "",
   ).trim();
 
   if (!input) {
-    return createEmptyResult();
+    return emptyResult();
   }
 
-  if (
-    !process.env.OPENAI_API_KEY
-  ) {
-    return createErrorResult(
-      input,
-      "OPENAI_API_KEY is not configured.",
+  if (!process.env.OPENAI_API_KEY) {
+    return errorResult(
+      "OPENAI_API_KEY is missing",
     );
   }
 
   try {
     const response =
-      await requestAI(input);
+      await openai.responses.create({
+        model: MODEL,
 
-    const parsed = JSON.parse(
+        store: false,
+
+        reasoning: {
+          effort: "low",
+        },
+
+        instructions: prompt(),
+
+        input,
+
+        text: {
+          format: {
+            type: "json_schema",
+
+            name: "vehicle_ai",
+
+            strict: true,
+
+            schema: {
+              type: "object",
+
+              additionalProperties: false,
+
+              properties: {
+                matched: {
+                  type: "boolean",
+                },
+
+                type: {
+                  type: "string",
+                  enum: TYPES,
+                },
+
+                confidence: {
+                  type: "string",
+                  enum: CONFIDENCE,
+                },
+
+                id: {
+                  type: "string",
+                },
+
+                makerId: {
+                  type: "string",
+                },
+
+                brandId: {
+                  type: "string",
+                },
+
+                keyword: {
+                  type: "string",
+                },
+
+                normalized: {
+                  type: "string",
+                },
+              },
+
+              required: [
+                "matched",
+                "type",
+                "confidence",
+                "id",
+                "makerId",
+                "brandId",
+                "keyword",
+                "normalized",
+              ],
+            },
+          },
+        },
+      });
+
+    const result = JSON.parse(
       response.output_text,
     );
 
     return {
       success: true,
-
-      matched:
-        parsed.matched,
-
-      input,
-
-      type:
-        parsed.type ??
-        "unknown",
-
-      confidence:
-        parsed.confidence ??
-        "low",
-
-      id:
-        parsed.id || null,
-
-      makerId:
-        parsed.makerId ||
-        null,
-
-      brandId:
-        parsed.brandId ||
-        null,
-
-      keyword:
-        parsed.keyword ??
-        "",
-
-      normalized:
-        parsed.normalized ??
-        "",
-
-      reason: "AI matched",
+      ...result,
     };
   } catch (error) {
     console.error(
-      "[AI Judge]",
+      "[aiJudge]",
       error,
     );
 
-    return createErrorResult(
-      input,
-      error?.message ??
-        "Unknown AI error",
+    return errorResult(
+      error.message,
     );
   }
 }
