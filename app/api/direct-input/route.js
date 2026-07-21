@@ -1,9 +1,9 @@
 // app/api/direct-input/route.js
 
 import { classifyDirectInput } from "./classify";
-import { buildConfirmation } from "./buildConfirmation";
 import { findFaq } from "./faqMatcher";
 import { judgeByAI } from "./aiJudge";
+import { buildConfirmation } from "./buildConfirmation";
 import {
   buildFaqReply,
   buildReservationReply,
@@ -12,107 +12,122 @@ import {
 
 export const runtime = "nodejs";
 
-function jsonResponse(data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
+function json(data, status = 200) {
+  return new Response(
+    JSON.stringify(data),
+    {
+      status,
+      headers: {
+        "Content-Type":
+          "application/json; charset=utf-8",
+      },
     },
-  });
+  );
 }
 
-export async function GET(request) {
-  const { searchParams } = new URL(request.url);
+export async function POST(request) {
+  try {
+    const body =
+      await request.json();
 
-  const text = String(
-    searchParams.get("text") ?? "",
-  ).trim();
+    const text = String(
+      body.text ?? "",
+    ).trim();
 
-  if (!text) {
-    return jsonResponse({
-      ok: true,
-      department: "direct-input",
-      status: "ready",
-      message: "直接入力部門が正常に稼働しています。",
-      usage: "?text=何時まで",
-    });
-  }
-
-  const faq = findFaq(text);
-
-  if (faq) {
-    return jsonResponse({
-      ok: true,
-      input: text,
-      classification: {
-        type: "faq",
-        confidence: "high",
-        useAi: false,
-      },
-      reply: buildFaqReply(faq),
-    });
-  }
-
-  const classification =
-    classifyDirectInput(text);
-
-  if (classification.useAi) {
-    const aiResult =
-      await judgeByAI(text);
-
-    if (
-      aiResult.success &&
-      aiResult.matched
-    ) {
-      return jsonResponse({
-        ok: true,
-        input: text,
-        classification: {
-          type:
-            aiResult.type,
-          confidence:
-            aiResult.confidence,
-          useAi: true,
+    if (!text) {
+      return json(
+        {
+          ok: false,
+          message:
+            "text is required",
         },
-        ai: aiResult,
+        400,
+      );
+    }
+
+    // FAQ
+    const faq = findFaq(text);
+
+    if (faq) {
+      return json({
+        ok: true,
+        route: "faq",
         reply:
-          buildAiConfirmationReply(
-            aiResult,
-          ),
+          buildFaqReply(faq),
       });
     }
 
-    return jsonResponse({
+    // 一次分類
+    const classification =
+      classifyDirectInput(text);
+
+    // AI判定
+    if (classification.useAi) {
+      const ai =
+        await judgeByAI(text);
+
+      if (
+        ai.success &&
+        ai.matched
+      ) {
+        return json({
+          ok: true,
+          route: "ai",
+          classification,
+          ai,
+          reply:
+            buildAiConfirmationReply(
+              ai,
+            ),
+        });
+      }
+
+      return json({
+        ok: true,
+        route: "unknown",
+        classification,
+        ai,
+        reply: {
+          type: "text",
+          text: "申し訳ありません。内容を理解できませんでした。別の言い方でもう一度お試しください。",
+        },
+      });
+    }
+
+    // 通常分岐
+    if (
+      classification.type ===
+      "reservation"
+    ) {
+      return json({
+        ok: true,
+        route: "reservation",
+        classification,
+        reply:
+          buildReservationReply(),
+      });
+    }
+
+    return json({
       ok: true,
-      input: text,
+      route: "confirmation",
       classification,
-      ai: aiResult,
-      reply: {
-        type: "unknown",
-        replyType: "text",
-        text: "申し訳ありません。内容を理解できませんでした。もう少し詳しく入力してください。",
-      },
+      reply:
+        buildConfirmation(
+          text,
+          classification,
+        ),
     });
-  }
+  } catch (error) {
+    console.error(error);
 
-  let reply =
-    buildConfirmation(
-      text,
-      classification,
+    return json(
+      {
+        ok: false,
+        message:
+          "Internal Server Error",
+      },
+      500,
     );
-
-  if (
-    classification.type ===
-    "reservation"
-  ) {
-    reply =
-      buildReservationReply();
   }
-
-  return jsonResponse({
-    ok: true,
-    input: text,
-    classification,
-    reply,
-  });
 }
