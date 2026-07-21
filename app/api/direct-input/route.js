@@ -9,37 +9,30 @@ import {
   buildReservationReply,
   buildAiConfirmationReply,
 } from "./replyBuilder";
+import resolveSearchTarget from "./searchResolver";
 
 export const runtime = "nodejs";
 
 function json(data, status = 200) {
-  return new Response(
-    JSON.stringify(data),
-    {
-      status,
-      headers: {
-        "Content-Type":
-          "application/json; charset=utf-8",
-      },
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
     },
-  );
+  });
 }
 
 export async function POST(request) {
   try {
-    const body =
-      await request.json();
+    const body = await request.json();
 
-    const text = String(
-      body.text ?? "",
-    ).trim();
+    const text = String(body.text ?? "").trim();
 
     if (!text) {
       return json(
         {
           ok: false,
-          message:
-            "text is required",
+          message: "text is required",
         },
         400,
       );
@@ -52,8 +45,7 @@ export async function POST(request) {
       return json({
         ok: true,
         route: "faq",
-        reply:
-          buildFaqReply(faq),
+        reply: buildFaqReply(faq),
       });
     }
 
@@ -70,11 +62,15 @@ export async function POST(request) {
         ai.success &&
         ai.matched
       ) {
+        const search =
+          resolveSearchTarget(ai);
+
         return json({
           ok: true,
-          route: "ai",
+          route: "search",
           classification,
           ai,
+          search,
           reply:
             buildAiConfirmationReply(
               ai,
@@ -89,12 +85,11 @@ export async function POST(request) {
         ai,
         reply: {
           type: "text",
-          text: "申し訳ありません。内容を理解できませんでした。別の言い方でもう一度お試しください。",
+          text: "申し訳ありません。内容を理解できませんでした。別の言い方で入力してください。",
         },
       });
     }
 
-    // 通常分岐
     if (
       classification.type ===
       "reservation"
