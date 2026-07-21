@@ -1,5 +1,7 @@
 // app/api/direct-input/replyBuilder.js
 
+import resolveSearchTarget from "./searchResolver";
+
 export function buildFaqReply(faq) {
   return {
     type: "faq",
@@ -39,39 +41,26 @@ export function buildReservationReply() {
   };
 }
 
-export function buildAiConfirmationReply(aiResult = {}) {
-  const titleMap = {
-    maker: "メーカー候補",
-    brand: "ブランド候補",
-    model: "車種候補",
-    category: "車種カテゴリ",
-    purpose: "利用目的",
-    unknown: "検索",
-  };
-
-  const title =
-    titleMap[aiResult.type] ?? "検索";
-
-  const keyword =
-    aiResult.normalized ||
-    aiResult.keyword ||
-    "";
+export function buildAiConfirmationReply(ai) {
+  const search =
+    resolveSearchTarget(ai);
 
   return {
     type: "ai-confirmation",
+
     replyType: "buttons",
-    title,
-    text: keyword
-      ? `「${keyword}」で検索しますか？`
-      : "検索しますか？",
-    keyword,
-    normalized: aiResult.normalized ?? "",
-    confidence: aiResult.confidence ?? "low",
+
+    title: "検索しますか？",
+
+    text: `「${search.query}」で検索します。よろしいですか？`,
+
+    search,
+
     actions: [
       {
         type: "message",
         label: "検索する",
-        text: keyword || "検索",
+        text: `検索:${search.query}`,
       },
       {
         type: "message",
