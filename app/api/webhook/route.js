@@ -1,7 +1,7 @@
 import {
   INVENTORY_SEARCH_RESULT_TYPES,
   searchInventoryData,
-} from "./_lib/inventorySearch.js";
+} from "../_lib/inventorySearch.js";
 
 const INVENTORY_URL =
   "https://raw.githubusercontent.com/CARTOPIA0319/cartopia-car-diagnosis/main/data/inventory.json";
