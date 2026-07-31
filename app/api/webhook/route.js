@@ -211,6 +211,88 @@ async function handleEvent(event) {
 
   if (
     postbackData.startsWith(
+      "inventory-similar|"
+    )
+  ) {
+    const [
+      ,
+      encodedQuery,
+      offsetText,
+    ] = postbackData.split("|");
+
+    const query =
+      decodeURIComponent(
+        encodedQuery || ""
+      );
+
+    const offset = Number(
+      offsetText || "0"
+    );
+
+    const inventory =
+      await loadInventory();
+
+    const searchResult =
+      searchInventoryData(
+        inventory,
+        query
+      );
+
+    const results =
+      prepareSearchVehicles(
+        searchResult.similarVehicles
+      );
+
+    if (
+      searchResult.type !==
+        INVENTORY_SEARCH_RESULT_TYPES.MODEL ||
+      !searchResult.model ||
+      !results.length ||
+      offset >= results.length
+    ) {
+      await replyMessage(
+        event.replyToken,
+        [
+          {
+            type: "text",
+            text:
+              "在庫情報が更新されたため、もう一度車種名を送ってください😊",
+          },
+        ]
+      );
+
+      return;
+    }
+
+    const messages = [];
+
+    if (offset === 0) {
+      messages.push({
+        type: "text",
+        text:
+          `${searchResult.model.modelName}と同じタイプの在庫は${results.length}台です😊\n\n` +
+          "展示販売中の車から先に、支払総額が高い順でご紹介します🚗",
+      });
+    }
+
+    messages.push(
+      makeSimilarVehiclePageCarouselMessage(
+        results,
+        query,
+        offset
+      )
+    );
+
+    await replyMessage(
+      event.replyToken,
+      messages
+    );
+
+    return;
+  }
+
+  if (
+    postbackData.startsWith(
       "inventory-search-more|"
     )
   ) {
@@ -289,7 +371,10 @@ async function handleEvent(event) {
         makeSearchVehiclePageCarouselMessage(
           results,
           query,
-          offset
+          offset,
+          prepareSearchVehicles(
+            searchResult.similarVehicles
+          )
         ),
       ]
     );
@@ -659,41 +744,6 @@ async function handleEvent(event) {
     return;
   }
 
-  if (
-    text.startsWith(
-      "この車について相談したい："
-    )
-  ) {
-    return;
-  }
-
-  const initialSearchResult =
-    searchInventoryData(
-      {
-        vehicles: [],
-      },
-      text
-    );
-
-  if (
-    initialSearchResult.type ===
-    INVENTORY_SEARCH_RESULT_TYPES.UNKNOWN
-  ) {
-    return;
-  }
-
-  if (
-    initialSearchResult.type ===
-    INVENTORY_SEARCH_RESULT_TYPES.AMBIGUOUS
-  ) {
-    await replyInventorySearchResult(
-      event.replyToken,
-      initialSearchResult
-    );
-
-    return;
-  }
-
   const inventory =
     await loadInventory();
 
@@ -718,7 +768,7 @@ function isRoughSearchText(text) {
 
 function normalizeType(type) {
   if (
-        type ===
+    type ===
     "こだわりなし"
   ) {
     return "特にこだわりはない";
@@ -1148,7 +1198,7 @@ function isUsefulExtraInfo(
     )
   ) {
     return false;
-  }
+      }
 
   return true;
 }
@@ -1301,11 +1351,20 @@ async function replyInventorySearchResult(
         searchResult.vehicles
       );
 
+    const similarResults =
+      prepareSearchVehicles(
+        searchResult.similarVehicles
+      );
+
     const targetName =
       searchResult.type ===
       INVENTORY_SEARCH_RESULT_TYPES.MAKER
         ? searchResult.maker.makerName
-        : searchResult.model.modelName;
+        : (
+            searchResult.displayName ||
+            searchResult.model?.modelName ||
+            searchResult.query
+          );
 
     await replyMessage(
       replyToken,
@@ -1319,7 +1378,8 @@ async function replyInventorySearchResult(
         makeSearchVehiclePageCarouselMessage(
           results,
           searchResult.query,
-          0
+          0,
+          similarResults
         ),
       ]
     );
@@ -1331,19 +1391,14 @@ async function replyInventorySearchResult(
     searchResult.type ===
     INVENTORY_SEARCH_RESULT_TYPES.NO_STOCK
   ) {
-    const isMaker =
-      searchResult.targetType ===
-      INVENTORY_SEARCH_RESULT_TYPES.MAKER;
-
     const targetName =
-      isMaker
+      searchResult.targetType ===
+      INVENTORY_SEARCH_RESULT_TYPES.MAKER
         ? searchResult.maker?.makerName
-        : searchResult.model?.modelName;
-
-    const targetLabel =
-      isMaker
-        ? "メーカー"
-        : "車種";
+        : (
+            searchResult.displayName ||
+            searchResult.model?.modelName
+          );
 
     await replyMessage(
       replyToken,
@@ -1351,7 +1406,7 @@ async function replyInventorySearchResult(
         {
           type: "text",
           text:
-            `${targetName || searchResult.query}は${targetLabel}として確認できましたが、現在の在庫にはありませんでした🙇‍♀️\n\n` +
+            `${targetName || searchResult.query}は車種として確認できましたが、現在の在庫にはありませんでした🙇‍♀️\n\n` +
             "在庫にない場合も、全国からご希望に合う一台をお探しできます😊",
         },
       ]
@@ -1395,9 +1450,434 @@ async function replyInventorySearchResult(
 
     return;
   }
+
+  await replyMessage(
+    replyToken,
+    [
+      {
+        type: "text",
+        text:
+          "メーカー名または車種名として確認できませんでした🙇‍♀️\n\n" +
+          "「トヨタ」「アルファード」「N-BOX」のように送ってください😊",
+      },
+    ]
+  );
 }
 
 function makeSearchVehiclePageCarouselMessage(
+  results,
+  query,
+  offset,
+  similarResults = []
+) {
+  const pageVehicles =
+    results.slice(
+      offset,
+      offset +
+        VEHICLES_PER_PAGE
+    );
+
+  const nextOffset =
+    offset +
+    VEHICLES_PER_PAGE;
+
+  const hasMore =
+    nextOffset <
+    results.length;
+
+  const contents =
+    pageVehicles.map(
+      makeVehicleBubble
+    );
+
+  if (hasMore) {
+    contents.push(
+      makeSearchMoreBubble(
+        results,
+        query,
+        nextOffset
+      )
+    );
+  } else if (
+    similarResults.length
+  ) {
+    contents.push(
+      makeSimilarSearchBubble(
+        similarResults,
+        query
+      )
+    );
+  }
+
+  return {
+    type: "flex",
+    altText:
+      `${query}の在庫検索結果`,
+    contents: {
+      type: "carousel",
+      contents,
+    },
+  };
+}
+
+function makeSearchMoreBubble(
+  results,
+  query,
+  nextOffset
+) {
+  const remaining =
+    results.length -
+    nextOffset;
+
+  const previewVehicles =
+    results.slice(
+      nextOffset,
+      nextOffset +
+        VEHICLES_PER_PAGE
+    );
+
+  const nextCount =
+    previewVehicles.length;
+
+  return {
+    type: "bubble",
+    size: "mega",
+    body: {
+      type: "box",
+      layout: "vertical",
+      spacing: "sm",
+      backgroundColor:
+        "#F8F5EF",
+      paddingAll: "14px",
+      contents: [
+        {
+          type: "box",
+          layout: "vertical",
+          backgroundColor:
+            "#0B1F3A",
+          cornerRadius: "lg",
+          paddingAll: "12px",
+          contents: [
+            {
+              type: "text",
+              text:
+                `他に該当車が${remaining}台あるよ😊`,
+              weight: "bold",
+              size:
+                remaining >= 10
+                  ? "md"
+                  : "lg",
+              color:
+                "#FFFFFF",
+              align: "center",
+              wrap: true,
+            },
+            {
+              type: "text",
+              text:
+                "次に表示される車はこちら💁",
+              size: "sm",
+              color:
+                "#E5D08A",
+              align: "center",
+              wrap: true,
+              margin: "xs",
+            },
+          ],
+        },
+        {
+          type: "box",
+          layout: "vertical",
+          spacing: "sm",
+          contents:
+            makeSearchPreviewRows(
+              previewVehicles,
+              query,
+              nextOffset,
+              nextCount
+            ),
+        },
+      ],
+    },
+  };
+}
+
+function makeSearchPreviewRows(
+  vehicles,
+  query,
+  nextOffset,
+  nextCount
+) {
+  const previewItems =
+    vehicles.map(
+      makePreviewImageBox
+    );
+
+  previewItems.push(
+    makeSearchPreviewButtonBox(
+      query,
+      nextOffset,
+      nextCount
+    )
+  );
+
+  const rows = [];
+
+  for (
+    let index = 0;
+    index <
+    previewItems.length;
+    index += 2
+  ) {
+    const rowItems =
+      previewItems.slice(
+        index,
+        index + 2
+      );
+
+    if (
+      rowItems.length === 1
+    ) {
+      rowItems.push(
+        makePreviewSpacerBox()
+      );
+    }
+
+    rows.push({
+      type: "box",
+      layout:
+        "horizontal",
+      spacing: "sm",
+      contents: rowItems,
+    });
+  }
+
+  return rows;
+}
+
+function makeSearchPreviewButtonBox(
+  query,
+  nextOffset,
+  nextCount
+) {
+  return {
+    type: "box",
+    layout: "vertical",
+    flex: 1,
+    height:
+      PREVIEW_HEIGHT,
+    backgroundColor:
+      "#0B1F3A",
+    cornerRadius: "md",
+    justifyContent:
+      "center",
+    alignItems:
+      "center",
+    action: {
+      type: "postback",
+      data:
+        `inventory-search-more|${encodeURIComponent(
+          query
+        )}|${nextOffset}`,
+      displayText:
+        `次の${nextCount}台を見る`,
+    },
+    contents: [
+      {
+        type: "text",
+        text:
+          `次の${nextCount}台`,
+        color:
+          "#FFFFFF",
+        weight: "bold",
+        size: "md",
+        align: "center",
+      },
+      {
+        type: "text",
+        text: "を見る",
+        color:
+          "#E5D08A",
+        weight: "bold",
+        size: "md",
+        align: "center",
+        margin: "none",
+      },
+    ],
+  };
+}
+
+function makeSimilarSearchBubble(
+  results,
+  query
+) {
+  const previewVehicles =
+    results.slice(
+      0,
+      VEHICLES_PER_PAGE
+    );
+
+  return {
+    type: "bubble",
+    size: "mega",
+    body: {
+      type: "box",
+      layout: "vertical",
+      spacing: "sm",
+      backgroundColor:
+        "#F8F5EF",
+      paddingAll: "14px",
+      contents: [
+        {
+          type: "box",
+          layout: "vertical",
+          backgroundColor:
+            "#0B1F3A",
+          cornerRadius: "lg",
+          paddingAll: "12px",
+          contents: [
+            {
+              type: "text",
+              text:
+                `同じタイプの車が${results.length}台あるよ😊`,
+              weight: "bold",
+              size:
+                results.length >= 10
+                  ? "md"
+                  : "lg",
+              color:
+                "#FFFFFF",
+              align: "center",
+              wrap: true,
+            },
+            {
+              type: "text",
+              text:
+                "似た車はこちら💁",
+              size: "sm",
+              color:
+                "#E5D08A",
+              align: "center",
+              wrap: true,
+              margin: "xs",
+            },
+          ],
+        },
+        {
+          type: "box",
+          layout: "vertical",
+          spacing: "sm",
+          contents:
+            makeSimilarPreviewRows(
+              previewVehicles,
+              query
+            ),
+        },
+      ],
+    },
+  };
+}
+
+function makeSimilarPreviewRows(
+  vehicles,
+  query
+) {
+  const previewItems =
+    vehicles.map(
+      makePreviewImageBox
+    );
+
+  previewItems.push(
+    makeSimilarPreviewButtonBox(
+      query
+    )
+  );
+
+  const rows = [];
+
+  for (
+    let index = 0;
+    index <
+    previewItems.length;
+    index += 2
+  ) {
+    const rowItems =
+      previewItems.slice(
+        index,
+        index + 2
+      );
+
+    if (
+      rowItems.length === 1
+    ) {
+      rowItems.push(
+        makePreviewSpacerBox()
+      );
+    }
+
+    rows.push({
+      type: "box",
+      layout:
+        "horizontal",
+      spacing: "sm",
+      contents: rowItems,
+    });
+  }
+
+  return rows;
+}
+
+function makeSimilarPreviewButtonBox(
+  query
+) {
+  return {
+    type: "box",
+    layout: "vertical",
+    flex: 1,
+    height:
+      PREVIEW_HEIGHT,
+    backgroundColor:
+      "#0B1F3A",
+    cornerRadius: "md",
+    justifyContent:
+      "center",
+    alignItems:
+      "center",
+    action: {
+      type: "postback",
+      data:
+        `inventory-similar|${encodeURIComponent(
+          query
+        )}|0`,
+      displayText:
+        "同じタイプの車を見る",
+    },
+    contents: [
+      {
+        type: "text",
+        text:
+          "同じタイプの車",
+        color:
+          "#FFFFFF",
+        weight: "bold",
+        size: "sm",
+        align: "center",
+      },
+      {
+        type: "text",
+        text: "を見る",
+        color:
+          "#E5D08A",
+        weight: "bold",
+        size: "md",
+        align: "center",
+        margin: "none",
+      },
+    ],
+  };
+}
+
+function makeSimilarVehiclePageCarouselMessage(
   results,
   query,
   offset
@@ -1424,9 +1904,8 @@ function makeSearchVehiclePageCarouselMessage(
 
   if (hasMore) {
     contents.push(
-      makeSearchMoreBubble(
-        results.length -
-          nextOffset,
+      makeSimilarMoreBubble(
+        results,
         query,
         nextOffset
       )
@@ -1436,24 +1915,32 @@ function makeSearchVehiclePageCarouselMessage(
   return {
     type: "flex",
     altText:
-      `${query}の在庫検索結果`,
+      `${query}と同じタイプの在庫`,
     contents: {
-            type: "carousel",
+      type: "carousel",
       contents,
     },
   };
 }
 
-function makeSearchMoreBubble(
-  remaining,
+function makeSimilarMoreBubble(
+  results,
   query,
   nextOffset
 ) {
-  const nextCount =
-    Math.min(
-      VEHICLES_PER_PAGE,
-      remaining
+  const remaining =
+    results.length -
+    nextOffset;
+
+  const previewVehicles =
+    results.slice(
+      nextOffset,
+      nextOffset +
+        VEHICLES_PER_PAGE
     );
+
+  const nextCount =
+    previewVehicles.length;
 
   return {
     type: "bubble",
@@ -1461,47 +1948,165 @@ function makeSearchMoreBubble(
     body: {
       type: "box",
       layout: "vertical",
-      justifyContent:
-        "center",
-      alignItems:
-        "center",
+      spacing: "sm",
       backgroundColor:
         "#F8F5EF",
-      paddingAll: "24px",
-      action: {
-        type: "postback",
-        data:
-          `inventory-search-more|${encodeURIComponent(
-            query
-          )}|${nextOffset}`,
-        displayText:
-          `次の${nextCount}台を見る`,
-      },
+      paddingAll: "14px",
       contents: [
         {
-          type: "text",
-          text:
-            `他に該当車が${remaining}台あります😊`,
-          weight: "bold",
-          size: "lg",
-          color:
+          type: "box",
+          layout: "vertical",
+          backgroundColor:
             "#0B1F3A",
-          align: "center",
-          wrap: true,
+          cornerRadius: "lg",
+          paddingAll: "12px",
+          contents: [
+            {
+              type: "text",
+              text:
+                `他に該当車が${remaining}台あるよ😊`,
+              weight: "bold",
+              size:
+                remaining >= 10
+                  ? "md"
+                  : "lg",
+              color:
+                "#FFFFFF",
+              align: "center",
+              wrap: true,
+            },
+            {
+              type: "text",
+              text:
+                "次に表示される車はこちら💁",
+              size: "sm",
+              color:
+                "#E5D08A",
+              align: "center",
+              wrap: true,
+              margin: "xs",
+            },
+          ],
         },
         {
-          type: "text",
-          text:
-            `次の${nextCount}台を見る`,
-          weight: "bold",
-          size: "md",
-          color:
-            "#D97706",
-          align: "center",
-          margin: "xl",
+          type: "box",
+          layout: "vertical",
+          spacing: "sm",
+          contents:
+            makeSimilarPagePreviewRows(
+              previewVehicles,
+              query,
+              nextOffset,
+              nextCount
+            ),
         },
       ],
     },
+  };
+}
+
+function makeSimilarPagePreviewRows(
+  vehicles,
+  query,
+  nextOffset,
+  nextCount
+) {
+  const previewItems =
+    vehicles.map(
+      makePreviewImageBox
+    );
+
+  previewItems.push(
+    makeSimilarPagePreviewButtonBox(
+      query,
+      nextOffset,
+      nextCount
+    )
+  );
+
+  const rows = [];
+
+  for (
+    let index = 0;
+    index <
+    previewItems.length;
+    index += 2
+  ) {
+    const rowItems =
+      previewItems.slice(
+        index,
+        index + 2
+      );
+
+    if (
+      rowItems.length === 1
+    ) {
+      rowItems.push(
+        makePreviewSpacerBox()
+      );
+    }
+
+    rows.push({
+      type: "box",
+      layout:
+        "horizontal",
+      spacing: "sm",
+      contents: rowItems,
+    });
+  }
+
+  return rows;
+}
+
+function makeSimilarPagePreviewButtonBox(
+  query,
+  nextOffset,
+  nextCount
+) {
+  return {
+    type: "box",
+    layout: "vertical",
+    flex: 1,
+    height:
+      PREVIEW_HEIGHT,
+    backgroundColor:
+      "#0B1F3A",
+    cornerRadius: "md",
+    justifyContent:
+      "center",
+    alignItems:
+      "center",
+    action: {
+      type: "postback",
+      data:
+        `inventory-similar|${encodeURIComponent(
+          query
+        )}|${nextOffset}`,
+      displayText:
+        `次の${nextCount}台を見る`,
+    },
+    contents: [
+      {
+        type: "text",
+        text:
+          `次の${nextCount}台`,
+        color:
+          "#FFFFFF",
+        weight: "bold",
+        size: "md",
+        align: "center",
+      },
+      {
+        type: "text",
+        text: "を見る",
+        color:
+          "#E5D08A",
+        weight: "bold",
+        size: "md",
+        align: "center",
+        margin: "none",
+      },
+    ],
   };
 }
 
@@ -1793,7 +2398,7 @@ function makePreviewButtonBox(
         size: "md",
         align: "center",
       },
-      {
+            {
         type: "text",
         text: "を見る",
         color:
@@ -2157,7 +2762,8 @@ function makeInfoBox(
 
   const isColor =
     kind === "color";
-    const valueSize =
+
+  const valueSize =
     getInfoValueSize(
       valueText,
       kind
