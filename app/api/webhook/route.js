@@ -67,6 +67,10 @@ const lightTypeQuickReply = {
       "軽自動車 トラック"
     ),
     makeMessageAction(
+      "軽バス",
+      "軽バス"
+    ),
+    makeMessageAction(
       "スポーティ",
       "軽自動車 スポーティ"
     ),
@@ -243,10 +247,26 @@ async function handleEvent(event) {
         searchResult.similarVehicles
       );
 
-    if (
-      searchResult.type !==
+    const isModelSearch =
+      searchResult.type ===
         INVENTORY_SEARCH_RESULT_TYPES.MODEL ||
-      !searchResult.model ||
+      (
+        searchResult.type ===
+          INVENTORY_SEARCH_RESULT_TYPES.NO_STOCK &&
+        searchResult.targetType ===
+          INVENTORY_SEARCH_RESULT_TYPES.MODEL
+      );
+
+    const hasModelTarget =
+      Boolean(
+        searchResult.model
+      ) ||
+      searchResult.candidates.length >
+        0;
+
+    if (
+      !isModelSearch ||
+      !hasModelTarget ||
       !results.length ||
       offset >= results.length
     ) {
@@ -267,10 +287,15 @@ async function handleEvent(event) {
     const messages = [];
 
     if (offset === 0) {
+      const targetName =
+        getSearchTargetName(
+          searchResult
+        );
+
       messages.push({
         type: "text",
         text:
-          `${searchResult.model.modelName}と同じタイプの在庫は${results.length}台です😊\n\n` +
+          `${targetName}と同じタイプの在庫は${results.length}台です😊\n\n` +
           "展示販売中の車から先に、支払総額が高い順でご紹介します🚗",
       });
     }
@@ -324,6 +349,7 @@ async function handleEvent(event) {
       ![
         INVENTORY_SEARCH_RESULT_TYPES.MAKER,
         INVENTORY_SEARCH_RESULT_TYPES.MODEL,
+        INVENTORY_SEARCH_RESULT_TYPES.CATEGORY,
       ].includes(
         searchResult.type
       )
@@ -1198,7 +1224,7 @@ function isUsefulExtraInfo(
     )
   ) {
     return false;
-      }
+  }
 
   return true;
 }
@@ -1344,7 +1370,9 @@ async function replyInventorySearchResult(
     searchResult.type ===
       INVENTORY_SEARCH_RESULT_TYPES.MAKER ||
     searchResult.type ===
-      INVENTORY_SEARCH_RESULT_TYPES.MODEL
+      INVENTORY_SEARCH_RESULT_TYPES.MODEL ||
+    searchResult.type ===
+      INVENTORY_SEARCH_RESULT_TYPES.CATEGORY
   ) {
     const results =
       prepareSearchVehicles(
@@ -1357,30 +1385,47 @@ async function replyInventorySearchResult(
       );
 
     const targetName =
+      getSearchTargetName(
+        searchResult
+      );
+
+    const isCategorySearch =
       searchResult.type ===
-      INVENTORY_SEARCH_RESULT_TYPES.MAKER
-        ? searchResult.maker.makerName
+      INVENTORY_SEARCH_RESULT_TYPES.CATEGORY;
+
+    const resultText =
+      isCategorySearch
+        ? (
+            `${targetName}で見つかった在庫は${results.length}台です😊\n\n` +
+            "展示販売中の車から先に、支払総額が高い順でご紹介します🚗\n\n" +
+            "ほかのタイプの軽も、下のボタンからざっくり探せます🔍"
+          )
         : (
-            searchResult.displayName ||
-            searchResult.model?.modelName ||
-            searchResult.query
+            `${targetName}で見つかった在庫は${results.length}台です😊\n\n` +
+            "展示販売中の車から先に、支払総額が高い順でご紹介します🚗"
           );
+
+    const carouselMessage =
+      makeSearchVehiclePageCarouselMessage(
+        results,
+        searchResult.query,
+        0,
+        similarResults
+      );
+
+    if (isCategorySearch) {
+      carouselMessage.quickReply =
+        lightTypeQuickReply;
+    }
 
     await replyMessage(
       replyToken,
       [
         {
           type: "text",
-          text:
-            `${targetName}で見つかった在庫は${results.length}台です😊\n\n` +
-            "展示販売中の車から先に、支払総額が高い順でご紹介します🚗",
+          text: resultText,
         },
-        makeSearchVehiclePageCarouselMessage(
-          results,
-          searchResult.query,
-          0,
-          similarResults
-        ),
+        carouselMessage,
       ]
     );
 
@@ -1392,23 +1437,69 @@ async function replyInventorySearchResult(
     INVENTORY_SEARCH_RESULT_TYPES.NO_STOCK
   ) {
     const targetName =
+      getSearchTargetName(
+        searchResult
+      );
+
+    const similarResults =
+      prepareSearchVehicles(
+        searchResult.similarVehicles
+      );
+
+    if (similarResults.length) {
+      await replyMessage(
+        replyToken,
+        [
+          {
+            type: "text",
+            text:
+              `${targetName}の在庫は現在ありませんでした🙇‍♀️\n\n` +
+              `ただ、同じタイプの在庫が${similarResults.length}台あります😊\n` +
+              "似た車はこちらです🚗",
+          },
+          makeSimilarVehiclePageCarouselMessage(
+            similarResults,
+            searchResult.query,
+            0
+          ),
+        ]
+      );
+
+      return;
+    }
+
+    const isCategorySearch =
+      searchResult.targetType ===
+      INVENTORY_SEARCH_RESULT_TYPES.CATEGORY;
+
+    const recognizedTypeName =
       searchResult.targetType ===
       INVENTORY_SEARCH_RESULT_TYPES.MAKER
-        ? searchResult.maker?.makerName
+        ? "メーカー"
         : (
-            searchResult.displayName ||
-            searchResult.model?.modelName
+            isCategorySearch
+              ? "車のタイプ"
+              : "車種"
           );
+
+    const noStockMessage = {
+      type: "text",
+      text:
+        `${targetName || searchResult.query}は${recognizedTypeName}として確認できましたが、現在の在庫にはありませんでした🙇‍♀️\n\n` +
+        "在庫にない場合も、全国からご希望に合う一台をお探しできます😊",
+    };
+
+    if (isCategorySearch) {
+      noStockMessage.text +=
+        "\n\nほかのタイプの軽は、下のボタンからざっくり探せます🔍";
+      noStockMessage.quickReply =
+        lightTypeQuickReply;
+    }
 
     await replyMessage(
       replyToken,
       [
-        {
-          type: "text",
-          text:
-            `${targetName || searchResult.query}は車種として確認できましたが、現在の在庫にはありませんでした🙇‍♀️\n\n` +
-            "在庫にない場合も、全国からご希望に合う一台をお探しできます😊",
-        },
+        noStockMessage,
       ]
     );
 
@@ -1461,6 +1552,40 @@ async function replyInventorySearchResult(
           "「トヨタ」「アルファード」「N-BOX」のように送ってください😊",
       },
     ]
+  );
+}
+
+function getSearchTargetName(
+  searchResult
+) {
+  if (
+    searchResult.type ===
+      INVENTORY_SEARCH_RESULT_TYPES.MAKER ||
+    searchResult.targetType ===
+      INVENTORY_SEARCH_RESULT_TYPES.MAKER
+  ) {
+    return (
+      searchResult.maker?.makerName ||
+      searchResult.query
+    );
+  }
+
+  if (
+    searchResult.type ===
+      INVENTORY_SEARCH_RESULT_TYPES.CATEGORY ||
+    searchResult.targetType ===
+      INVENTORY_SEARCH_RESULT_TYPES.CATEGORY
+  ) {
+    return (
+      searchResult.category?.displayName ||
+      searchResult.query
+    );
+  }
+
+  return (
+    searchResult.displayName ||
+    searchResult.model?.modelName ||
+    searchResult.query
   );
 }
 
@@ -2398,7 +2523,7 @@ function makePreviewButtonBox(
         size: "md",
         align: "center",
       },
-            {
+      {
         type: "text",
         text: "を見る",
         color:
