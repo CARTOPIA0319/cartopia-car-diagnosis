@@ -12,6 +12,7 @@ import {
 export const INVENTORY_SEARCH_RESULT_TYPES = Object.freeze({
   MAKER: "maker",
   MODEL: "model",
+  CATEGORY: "category",
   AMBIGUOUS: "ambiguous",
   NO_STOCK: "no-stock",
   UNKNOWN: "unknown",
@@ -28,26 +29,6 @@ function freezeResult(result) {
     similarVehicles: freezeArray(result.similarVehicles || []),
     candidates: freezeArray(result.candidates || []),
   });
-}
-
-function matchPriority(matchType) {
-  if (matchType === "exact") return 0;
-  if (matchType === "prefix") return 1;
-  return 2;
-}
-
-function keepHighestPriorityCandidates(candidates) {
-  if (!candidates.length) {
-    return [];
-  }
-
-  const highestPriority = Math.min(
-    ...candidates.map((candidate) => matchPriority(candidate.matchType))
-  );
-
-  return candidates.filter(
-    (candidate) => matchPriority(candidate.matchType) === highestPriority
-  );
 }
 
 const VEHICLE_CLASS_INVENTORY_KEYS = Object.freeze({
@@ -72,6 +53,145 @@ const EXCLUDED_SIMILAR_TYPE_KEYS = new Set([
   "EV・HV",
   "特にこだわりはない",
 ]);
+
+function defineInventorySearchCategories(rows) {
+  return Object.freeze(
+    rows.map(
+      ([
+        key,
+        displayName,
+        aliases,
+        vehicleClassKey,
+        typeKeys,
+        modelKeys,
+        carNameParts,
+      ]) =>
+        Object.freeze({
+          key,
+          displayName,
+          aliases: Object.freeze(
+            Array.from(
+              new Set([
+                displayName,
+                ...aliases,
+              ])
+            )
+          ),
+          normalizedAliases:
+            Object.freeze(
+              Array.from(
+                new Set(
+                  [
+                    displayName,
+                    ...aliases,
+                  ]
+                    .map(
+                      normalizeDomesticModelText
+                    )
+                    .filter(Boolean)
+                )
+              )
+            ),
+          vehicleClassKey,
+          typeKeys:
+            Object.freeze([
+              ...typeKeys,
+            ]),
+          modelKeys:
+            Object.freeze([
+              ...modelKeys,
+            ]),
+          normalizedCarNameParts:
+            Object.freeze(
+              carNameParts
+                .map(
+                  normalizeDomesticModelText
+                )
+                .filter(Boolean)
+            ),
+        })
+    )
+  );
+}
+
+const INVENTORY_SEARCH_CATEGORIES =
+  defineInventorySearchCategories([
+    [
+      "kei-truck",
+      "軽トラック",
+      [
+        "軽トラ",
+      ],
+      "軽自動車",
+      [
+        "トラック",
+      ],
+      [
+        "nissan:clipper-truck",
+        "mazda:scrum-truck",
+        "subaru:sambar-truck",
+        "suzuki:carry",
+        "daihatsu:hijet-truck",
+        "mitsubishi:minicab-truck",
+      ],
+      [
+        "クリッパートラック",
+        "スクラムトラック",
+        "サンバートラック",
+        "キャリイ",
+        "スーパーキャリイ",
+        "ハイゼットトラック",
+        "ミニキャブトラック",
+        "アクティトラック",
+        "ピクシストラック",
+      ],
+    ],
+    [
+      "kei-bus",
+      "軽バス",
+      [
+        "軽バン",
+        "軽箱バン",
+        "箱バン",
+        "軽ワンボックス",
+      ],
+      "軽自動車",
+      [],
+      [
+        "nissan:clipper-rio",
+        "nissan:clipper-van",
+        "honda:n-van",
+        "honda:vamos",
+        "mazda:scrum-wagon",
+        "subaru:sambar-van",
+        "suzuki:every-wagon",
+        "suzuki:every-van",
+        "daihatsu:atrai",
+        "daihatsu:hijet-cargo",
+        "mitsubishi:minicab-van",
+      ],
+      [
+        "NV100クリッパー",
+        "クリッパーリオ",
+        "クリッパーバン",
+        "N-VAN",
+        "バモス",
+        "ホビオ",
+        "スクラムワゴン",
+        "スクラムバン",
+        "サンバーバン",
+        "サンバーディアス",
+        "ディアスワゴン",
+        "エブリイ",
+        "アトレー",
+        "ハイゼットカーゴ",
+        "ミニキャブバン",
+        "タウンボックス",
+        "ピクシスバン",
+        "アクティバン",
+      ],
+    ],
+  ]);
 
 function findVehiclesByModels(inventory, models) {
   const modelKeys = new Set(
@@ -119,67 +239,211 @@ function getRequiredInventoryTypeKeys(model) {
 
 function getInventoryTypeKeySet(vehicle) {
   return new Set([
-    ...(vehicle?.types || []),
-    ...(vehicle?.typeKeys || []),
+    ...(
+      Array.isArray(
+        vehicle?.types
+      )
+        ? vehicle.types
+        : []
+    ),
+    ...(
+      Array.isArray(
+        vehicle?.typeKeys
+      )
+        ? vehicle.typeKeys
+        : []
+    ),
   ]);
+}
+
+function resolveInventorySearchCategory(
+  input
+) {
+  const normalizedInput =
+    normalizeDomesticModelText(
+      input
+    );
+
+  if (!normalizedInput) {
+    return null;
+  }
+
+  return (
+    INVENTORY_SEARCH_CATEGORIES.find(
+      (category) =>
+        category.normalizedAliases.includes(
+          normalizedInput
+        )
+    ) || null
+  );
+}
+
+function findVehiclesByCategory(
+  inventory,
+  category
+) {
+  const categoryModelKeys =
+    new Set(
+      category.modelKeys
+    );
+
+  return inventory.filter(
+    (vehicle) => {
+      const inventoryTypeKeys =
+        getInventoryTypeKeySet(
+          vehicle
+        );
+
+      if (
+        category.vehicleClassKey &&
+        !inventoryTypeKeys.has(
+          category.vehicleClassKey
+        )
+      ) {
+        return false;
+      }
+
+      const matchesType =
+        category.typeKeys.some(
+          (typeKey) =>
+            inventoryTypeKeys.has(
+              typeKey
+            )
+        );
+
+      const matchesModel =
+        findDomesticInventoryModelCandidates(
+          vehicle
+        ).some(
+          (candidate) =>
+            categoryModelKeys.has(
+              candidate.key
+            )
+        );
+
+      const normalizedCarName =
+        normalizeDomesticModelText(
+          vehicle?.carName
+        );
+
+      const matchesCarName =
+        normalizedCarName &&
+        category.normalizedCarNameParts.some(
+          (part) =>
+            normalizedCarName.includes(
+              part
+            )
+        );
+
+      return (
+        matchesType ||
+        matchesModel ||
+        matchesCarName
+      );
+    }
+  );
+}
+
+function matchesSimilarModelType(
+  vehicle,
+  model
+) {
+  const requiredTypeKeys =
+    getRequiredInventoryTypeKeys(
+      model
+    );
+
+  if (!requiredTypeKeys.length) {
+    return false;
+  }
+
+  const vehicleClassKey =
+    VEHICLE_CLASS_INVENTORY_KEYS[
+      model.vehicleClass
+    ];
+
+  const modelTypeKeys =
+    requiredTypeKeys.filter(
+      (typeKey) =>
+        typeKey !==
+        vehicleClassKey
+    );
+
+  const inventoryTypeKeys =
+    getInventoryTypeKeySet(
+      vehicle
+    );
+
+  const matchesVehicleClass =
+    !vehicleClassKey ||
+    inventoryTypeKeys.has(
+      vehicleClassKey
+    );
+
+  const matchesModelType =
+    !modelTypeKeys.length ||
+    modelTypeKeys.some(
+      (typeKey) =>
+        inventoryTypeKeys.has(
+          typeKey
+        )
+    );
+
+  return (
+    matchesVehicleClass &&
+    matchesModelType
+  );
+}
+
+function findSimilarVehiclesByModels(
+  inventory,
+  models
+) {
+  const searchedModelKeys =
+    new Set(
+      models.map(
+        (model) =>
+          model.key
+      )
+    );
+
+  return inventory.filter(
+    (vehicle) => {
+      const isSearchedModel =
+        findDomesticInventoryModelCandidates(
+          vehicle
+        ).some(
+          (candidate) =>
+            searchedModelKeys.has(
+              candidate.key
+            )
+        );
+
+      if (isSearchedModel) {
+        return false;
+      }
+
+      return models.some(
+        (model) =>
+          matchesSimilarModelType(
+            vehicle,
+            model
+          )
+      );
+    }
+  );
 }
 
 function findSimilarVehiclesByModel(
   inventory,
   model
 ) {
-  const requiredTypeKeys =
-    getRequiredInventoryTypeKeys(model);
-
-  if (!requiredTypeKeys.length) {
-    return [];
-  }
-
-  const vehicleClassKey =
-    VEHICLE_CLASS_INVENTORY_KEYS[model.vehicleClass];
-
-  const modelTypeKeys =
-    requiredTypeKeys.filter(
-      (typeKey) =>
-        typeKey !== vehicleClassKey
-    );
-
-  return inventory.filter((vehicle) => {
-    const isSearchedModel =
-      findDomesticInventoryModelCandidates(
-        vehicle
-      ).some(
-        (candidate) =>
-          candidate.key === model.key
-      );
-
-    if (isSearchedModel) {
-      return false;
-    }
-
-    const inventoryTypeKeys =
-      getInventoryTypeKeySet(vehicle);
-
-    const matchesVehicleClass =
-      !vehicleClassKey ||
-      inventoryTypeKeys.has(
-        vehicleClassKey
-      );
-
-    const matchesModelType =
-      !modelTypeKeys.length ||
-      modelTypeKeys.some(
-        (typeKey) =>
-          inventoryTypeKeys.has(
-            typeKey
-          )
-      );
-
-    return (
-      matchesVehicleClass &&
-      matchesModelType
-    );
-  });
+  return findSimilarVehiclesByModels(
+    inventory,
+    [
+      model,
+    ]
+  );
 }
 
 function makeUnknownResult(query) {
@@ -196,6 +460,39 @@ export function searchInventory(inventory, input) {
 
   if (!query || normalizedQuery.length < 2) {
     return makeUnknownResult(query);
+  }
+
+  const category =
+    resolveInventorySearchCategory(
+      query
+    );
+
+  if (category) {
+    const matchedVehicles =
+      findVehiclesByCategory(
+        vehicles,
+        category
+      );
+
+    if (!matchedVehicles.length) {
+      return freezeResult({
+        type:
+          INVENTORY_SEARCH_RESULT_TYPES.NO_STOCK,
+        query,
+        targetType:
+          INVENTORY_SEARCH_RESULT_TYPES.CATEGORY,
+        category,
+      });
+    }
+
+    return freezeResult({
+      type:
+        INVENTORY_SEARCH_RESULT_TYPES.CATEGORY,
+      query,
+      category,
+      vehicles:
+        matchedVehicles,
+    });
   }
 
   const allModelCandidates = findDomesticModelCandidates(query);
@@ -224,15 +521,14 @@ export function searchInventory(inventory, input) {
     });
   }
 
-  const highestPriorityModelCandidates = keepHighestPriorityCandidates(
-    findDomesticModelCandidates(query)
-  );
+  const modelCandidates =
+    allModelCandidates;
 
-  if (highestPriorityModelCandidates.length > 1) {
+  if (modelCandidates.length > 1) {
     const matchedVehicles =
       findVehiclesByModels(
         vehicles,
-        highestPriorityModelCandidates
+        modelCandidates
       );
 
     if (!matchedVehicles.length) {
@@ -242,7 +538,12 @@ export function searchInventory(inventory, input) {
         targetType: INVENTORY_SEARCH_RESULT_TYPES.MODEL,
         displayName: query,
         candidates:
-          highestPriorityModelCandidates,
+          modelCandidates,
+        similarVehicles:
+          findSimilarVehiclesByModels(
+            vehicles,
+            modelCandidates
+          ),
       });
     }
 
@@ -250,13 +551,14 @@ export function searchInventory(inventory, input) {
       type: INVENTORY_SEARCH_RESULT_TYPES.MODEL,
       query,
       displayName: query,
-      candidates: highestPriorityModelCandidates,
+      candidates: modelCandidates,
       vehicles: matchedVehicles,
     });
   }
 
-  if (highestPriorityModelCandidates.length === 1) {
-    const model = highestPriorityModelCandidates[0];
+  if (modelCandidates.length === 1) {
+    const model =
+      modelCandidates[0];
     const matchedVehicles = findVehiclesByModel(vehicles, model.key);
 
     if (!matchedVehicles.length) {
@@ -265,6 +567,11 @@ export function searchInventory(inventory, input) {
         query,
         targetType: INVENTORY_SEARCH_RESULT_TYPES.MODEL,
         model,
+        similarVehicles:
+          findSimilarVehiclesByModel(
+            vehicles,
+            model
+          ),
       });
     }
 
