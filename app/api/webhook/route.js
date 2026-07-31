@@ -1,3 +1,8 @@
+import {
+  INVENTORY_SEARCH_RESULT_TYPES,
+  searchInventoryData,
+} from "./_lib/inventorySearch.js";
+
 const INVENTORY_URL =
   "https://raw.githubusercontent.com/CARTOPIA0319/cartopia-car-diagnosis/main/data/inventory.json";
 
@@ -203,6 +208,94 @@ async function handleEvent(event) {
     event.type === "postback"
       ? event.postback?.data || ""
       : "";
+
+  if (
+    postbackData.startsWith(
+      "inventory-search-more|"
+    )
+  ) {
+    const [
+      ,
+      encodedQuery,
+      offsetText,
+    ] = postbackData.split("|");
+
+    const query =
+      decodeURIComponent(
+        encodedQuery || ""
+      );
+
+    const offset = Number(
+      offsetText || "0"
+    );
+
+    const inventory =
+      await loadInventory();
+
+    const searchResult =
+      searchInventoryData(
+        inventory,
+        query
+      );
+
+    if (
+      ![
+        INVENTORY_SEARCH_RESULT_TYPES.MAKER,
+        INVENTORY_SEARCH_RESULT_TYPES.MODEL,
+      ].includes(
+        searchResult.type
+      )
+    ) {
+      await replyMessage(
+        event.replyToken,
+        [
+          {
+            type: "text",
+            text:
+              "在庫情報が更新されたため、もう一度車種名またはメーカー名を送ってください😊",
+          },
+        ]
+      );
+
+      return;
+    }
+
+    const results =
+      prepareSearchVehicles(
+        searchResult.vehicles
+      );
+
+    if (
+      !results.length ||
+      offset >= results.length
+    ) {
+      await replyMessage(
+        event.replyToken,
+        [
+          {
+            type: "text",
+            text:
+              "表示できる在庫はここまでです😊",
+          },
+        ]
+      );
+
+      return;
+    }
+
+    await replyMessage(
+      event.replyToken,
+      [
+        makeSearchVehiclePageCarouselMessage(
+          results,
+          query,
+          offset
+        ),
+      ]
+    );
+
+    return;
+  }
 
   if (postbackData.startsWith("more|")) {
     const [
@@ -558,7 +651,62 @@ async function handleEvent(event) {
         },
       ]
     );
+
+    return;
   }
+
+  if (!text) {
+    return;
+  }
+
+  if (
+    text.startsWith(
+      "この車について相談したい："
+    )
+  ) {
+    return;
+  }
+
+  const initialSearchResult =
+    searchInventoryData(
+      {
+        vehicles: [],
+      },
+      text
+    );
+
+  if (
+    initialSearchResult.type ===
+    INVENTORY_SEARCH_RESULT_TYPES.UNKNOWN
+  ) {
+    return;
+  }
+
+  if (
+    initialSearchResult.type ===
+    INVENTORY_SEARCH_RESULT_TYPES.AMBIGUOUS
+  ) {
+    await replyInventorySearchResult(
+      event.replyToken,
+      initialSearchResult
+    );
+
+    return;
+  }
+
+  const inventory =
+    await loadInventory();
+
+  const searchResult =
+    searchInventoryData(
+      inventory,
+      text
+    );
+
+  await replyInventorySearchResult(
+    event.replyToken,
+    searchResult
+  );
 }
 
 function isRoughSearchText(text) {
@@ -570,7 +718,7 @@ function isRoughSearchText(text) {
 
 function normalizeType(type) {
   if (
-    type ===
+        type ===
     "こだわりなし"
   ) {
     return "特にこだわりはない";
@@ -1101,6 +1249,260 @@ function priceNumber(
   return match
     ? Number(match[1])
     : 0;
+}
+
+function prepareSearchVehicles(
+  vehicles
+) {
+  return [...vehicles]
+    .map(
+      normalizeVehicleForDisplay
+    )
+    .sort((first, second) => {
+      const firstStatus =
+        statusPriority(first);
+
+      const secondStatus =
+        statusPriority(second);
+
+      if (
+        firstStatus !==
+        secondStatus
+      ) {
+        return (
+          firstStatus -
+          secondStatus
+        );
+      }
+
+      return (
+        priceNumber(
+          second.totalPrice
+        ) -
+        priceNumber(
+          first.totalPrice
+        )
+      );
+    });
+}
+
+async function replyInventorySearchResult(
+  replyToken,
+  searchResult
+) {
+  if (
+    searchResult.type ===
+      INVENTORY_SEARCH_RESULT_TYPES.MAKER ||
+    searchResult.type ===
+      INVENTORY_SEARCH_RESULT_TYPES.MODEL
+  ) {
+    const results =
+      prepareSearchVehicles(
+        searchResult.vehicles
+      );
+
+    const targetName =
+      searchResult.type ===
+      INVENTORY_SEARCH_RESULT_TYPES.MAKER
+        ? searchResult.maker.makerName
+        : searchResult.model.modelName;
+
+    await replyMessage(
+      replyToken,
+      [
+        {
+          type: "text",
+          text:
+            `${targetName}で見つかった在庫は${results.length}台です😊\n\n` +
+            "展示販売中の車から先に、支払総額が高い順でご紹介します🚗",
+        },
+        makeSearchVehiclePageCarouselMessage(
+          results,
+          searchResult.query,
+          0
+        ),
+      ]
+    );
+
+    return;
+  }
+
+  if (
+    searchResult.type ===
+    INVENTORY_SEARCH_RESULT_TYPES.NO_STOCK
+  ) {
+    const isMaker =
+      searchResult.targetType ===
+      INVENTORY_SEARCH_RESULT_TYPES.MAKER;
+
+    const targetName =
+      isMaker
+        ? searchResult.maker?.makerName
+        : searchResult.model?.modelName;
+
+    const targetLabel =
+      isMaker
+        ? "メーカー"
+        : "車種";
+
+    await replyMessage(
+      replyToken,
+      [
+        {
+          type: "text",
+          text:
+            `${targetName || searchResult.query}は${targetLabel}として確認できましたが、現在の在庫にはありませんでした🙇‍♀️\n\n` +
+            "在庫にない場合も、全国からご希望に合う一台をお探しできます😊",
+        },
+      ]
+    );
+
+    return;
+  }
+
+  if (
+    searchResult.type ===
+    INVENTORY_SEARCH_RESULT_TYPES.AMBIGUOUS
+  ) {
+    const candidateNames =
+      searchResult.candidates
+        .map(
+          (candidate) =>
+            candidate.modelName
+        )
+        .slice(0, 13);
+
+    await replyMessage(
+      replyToken,
+      [
+        {
+          type: "text",
+          text:
+            "候補が複数見つかりました😊\n\n" +
+            "探している車種を選んでください🚗",
+          quickReply: {
+            items:
+              candidateNames.map(
+                (name) =>
+                  makeMessageAction(
+                    name
+                  )
+              ),
+          },
+        },
+      ]
+    );
+
+    return;
+  }
+}
+
+function makeSearchVehiclePageCarouselMessage(
+  results,
+  query,
+  offset
+) {
+  const pageVehicles =
+    results.slice(
+      offset,
+      offset +
+        VEHICLES_PER_PAGE
+    );
+
+  const nextOffset =
+    offset +
+    VEHICLES_PER_PAGE;
+
+  const hasMore =
+    nextOffset <
+    results.length;
+
+  const contents =
+    pageVehicles.map(
+      makeVehicleBubble
+    );
+
+  if (hasMore) {
+    contents.push(
+      makeSearchMoreBubble(
+        results.length -
+          nextOffset,
+        query,
+        nextOffset
+      )
+    );
+  }
+
+  return {
+    type: "flex",
+    altText:
+      `${query}の在庫検索結果`,
+    contents: {
+            type: "carousel",
+      contents,
+    },
+  };
+}
+
+function makeSearchMoreBubble(
+  remaining,
+  query,
+  nextOffset
+) {
+  const nextCount =
+    Math.min(
+      VEHICLES_PER_PAGE,
+      remaining
+    );
+
+  return {
+    type: "bubble",
+    size: "mega",
+    body: {
+      type: "box",
+      layout: "vertical",
+      justifyContent:
+        "center",
+      alignItems:
+        "center",
+      backgroundColor:
+        "#F8F5EF",
+      paddingAll: "24px",
+      action: {
+        type: "postback",
+        data:
+          `inventory-search-more|${encodeURIComponent(
+            query
+          )}|${nextOffset}`,
+        displayText:
+          `次の${nextCount}台を見る`,
+      },
+      contents: [
+        {
+          type: "text",
+          text:
+            `他に該当車が${remaining}台あります😊`,
+          weight: "bold",
+          size: "lg",
+          color:
+            "#0B1F3A",
+          align: "center",
+          wrap: true,
+        },
+        {
+          type: "text",
+          text:
+            `次の${nextCount}台を見る`,
+          weight: "bold",
+          size: "md",
+          color:
+            "#D97706",
+          align: "center",
+          margin: "xl",
+        },
+      ],
+    },
+  };
 }
 
 function makeVehiclePageCarouselMessage(
@@ -1755,8 +2157,7 @@ function makeInfoBox(
 
   const isColor =
     kind === "color";
-
-  const valueSize =
+    const valueSize =
     getInfoValueSize(
       valueText,
       kind
