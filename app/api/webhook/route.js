@@ -1,6 +1,7 @@
 import {
   INVENTORY_SEARCH_RESULT_TYPES,
   searchInventoryData,
+  selectSimilarInventoryData,
 } from "../_lib/inventorySearch.js";
 
 const INVENTORY_URL =
@@ -21,6 +22,22 @@ function makeMessageAction(label, text = label) {
       type: "message",
       label,
       text,
+    },
+  };
+}
+
+function makePostbackAction(
+  label,
+  data,
+  displayText = label
+) {
+  return {
+    type: "action",
+    action: {
+      type: "postback",
+      label,
+      data,
+      displayText,
     },
   };
 }
@@ -65,10 +82,6 @@ const lightTypeQuickReply = {
     makeMessageAction(
       "トラック",
       "軽自動車 トラック"
-    ),
-    makeMessageAction(
-      "軽バス",
-      "軽バス"
     ),
     makeMessageAction(
       "スポーティ",
@@ -212,6 +225,155 @@ async function handleEvent(event) {
     event.type === "postback"
       ? event.postback?.data || ""
       : "";
+
+  if (
+    postbackData.startsWith(
+      "inventory-similar-filter|"
+    )
+  ) {
+    const [
+      ,
+      encodedQuery,
+      vehicleClassText,
+      modelTypeText,
+      offsetText,
+    ] = postbackData.split("|");
+
+    const query =
+      decodeURIComponent(
+        encodedQuery || ""
+      );
+
+    const requestedSelection = {
+      vehicleClass:
+        vehicleClassText === "-"
+          ? ""
+          : vehicleClassText || "",
+      modelType:
+        modelTypeText === "-"
+          ? ""
+          : modelTypeText || "",
+    };
+
+    const offset = Number(
+      offsetText || "0"
+    );
+
+    const inventory =
+      await loadInventory();
+
+    const searchResult =
+      selectSimilarInventoryData(
+        inventory,
+        query,
+        requestedSelection
+      );
+
+    if (
+      searchResult.type ===
+        INVENTORY_SEARCH_RESULT_TYPES.AMBIGUOUS &&
+      searchResult.similarSelection?.axis
+    ) {
+      await replyMessage(
+        event.replyToken,
+        [
+          makeSimilarSelectionMessage(
+            searchResult
+          ),
+        ]
+      );
+
+      return;
+    }
+
+    const hasResolvedSelection =
+      searchResult.type ===
+        INVENTORY_SEARCH_RESULT_TYPES.MODEL &&
+      searchResult.similarSelection?.valid &&
+      !searchResult.similarSelection?.axis;
+
+    if (!hasResolvedSelection) {
+      await replyMessage(
+        event.replyToken,
+        [
+          {
+            type: "text",
+            text:
+              "選択内容を確認できなかったため、もう一度車種名を送ってください😊",
+          },
+        ]
+      );
+
+      return;
+    }
+
+    const results =
+      prepareSearchVehicles(
+        searchResult.similarVehicles
+      );
+
+    if (!results.length) {
+      await replyMessage(
+        event.replyToken,
+        [
+          {
+            type: "text",
+            text:
+              "選んだタイプに当てはまる在庫は現在ありませんでした🙇‍♀️\n\n" +
+              "在庫にない場合も、全国からご希望に合う一台をお探しできます😊",
+          },
+        ]
+      );
+
+      return;
+    }
+
+    if (
+      !Number.isFinite(offset) ||
+      offset < 0 ||
+      offset >= results.length
+    ) {
+      await replyMessage(
+        event.replyToken,
+        [
+          {
+            type: "text",
+            text:
+              "在庫情報が更新されたため、もう一度車種名を送ってください😊",
+          },
+        ]
+      );
+
+      return;
+    }
+
+    const messages = [];
+
+    if (offset === 0) {
+      messages.push({
+        type: "text",
+        text:
+          `選んだタイプの在庫は${results.length}台です😊\n\n` +
+          "展示販売中の車から先に、支払総額が高い順でご紹介します🚗",
+      });
+    }
+
+    messages.push(
+      makeSimilarVehiclePageCarouselMessage(
+        results,
+        query,
+        offset,
+        searchResult.similarSelection
+      )
+    );
+
+    await replyMessage(
+      event.replyToken,
+      messages
+    );
+
+    return;
+  }
 
   if (
     postbackData.startsWith(
@@ -375,6 +537,8 @@ async function handleEvent(event) {
 
     if (
       !results.length ||
+      !Number.isFinite(offset) ||
+      offset < 0 ||
       offset >= results.length
     ) {
       await replyMessage(
@@ -391,18 +555,36 @@ async function handleEvent(event) {
       return;
     }
 
+    const messages = [
+      makeSearchVehiclePageCarouselMessage(
+        results,
+        query,
+        offset,
+        prepareSearchVehicles(
+          searchResult.similarVehicles
+        )
+      ),
+    ];
+
+    const isLastPage =
+      offset +
+        VEHICLES_PER_PAGE >=
+      results.length;
+
+    if (
+      isLastPage &&
+      searchResult.similarSelection?.axis
+    ) {
+      messages.push(
+        makeSimilarSelectionMessage(
+          searchResult
+        )
+      );
+    }
+
     await replyMessage(
       event.replyToken,
-      [
-        makeSearchVehiclePageCarouselMessage(
-          results,
-          query,
-          offset,
-          prepareSearchVehicles(
-            searchResult.similarVehicles
-          )
-        ),
-      ]
+      messages
     );
 
     return;
@@ -1418,15 +1600,29 @@ async function replyInventorySearchResult(
         lightTypeQuickReply;
     }
 
+    const messages = [
+      {
+        type: "text",
+        text: resultText,
+      },
+      carouselMessage,
+    ];
+
+    if (
+      results.length <=
+        VEHICLES_PER_PAGE &&
+      searchResult.similarSelection?.axis
+    ) {
+      messages.push(
+        makeSimilarSelectionMessage(
+          searchResult
+        )
+      );
+    }
+
     await replyMessage(
       replyToken,
-      [
-        {
-          type: "text",
-          text: resultText,
-        },
-        carouselMessage,
-      ]
+      messages
     );
 
     return;
@@ -1445,6 +1641,29 @@ async function replyInventorySearchResult(
       prepareSearchVehicles(
         searchResult.similarVehicles
       );
+
+    if (
+      searchResult.targetType ===
+        INVENTORY_SEARCH_RESULT_TYPES.MODEL &&
+      searchResult.similarSelection?.axis
+    ) {
+      await replyMessage(
+        replyToken,
+        [
+          {
+            type: "text",
+            text:
+              `${targetName}の在庫は現在ありませんでした🙇‍♀️\n\n` +
+              "似たタイプの在庫を探すため、次から選んでください😊",
+          },
+          makeSimilarSelectionMessage(
+            searchResult
+          ),
+        ]
+      );
+
+      return;
+    }
 
     if (similarResults.length) {
       await replyMessage(
@@ -1587,6 +1806,80 @@ function getSearchTargetName(
     searchResult.model?.modelName ||
     searchResult.query
   );
+}
+
+function makeSimilarSelectionPostbackData(
+  query,
+  vehicleClass,
+  modelType,
+  offset = 0
+) {
+  return (
+    "inventory-similar-filter|" +
+    `${encodeURIComponent(query)}|` +
+    `${vehicleClass || "-"}|` +
+    `${modelType || "-"}|` +
+    `${offset}`
+  );
+}
+
+function makeSimilarSelectionMessage(
+  searchResult
+) {
+  const targetName =
+    getSearchTargetName(
+      searchResult
+    );
+
+  const selection =
+    searchResult.similarSelection;
+
+  const isVehicleClassSelection =
+    selection?.axis ===
+    "vehicleClass";
+
+  const question =
+    isVehicleClassSelection
+      ? `お探しの${targetName}は、軽自動車と普通車のどちらですか？🚗`
+      : `お探しの${targetName}は、どのタイプですか？🚗`;
+
+  const items =
+    (selection?.options || [])
+      .slice(0, 13)
+      .map(
+        (option) => {
+          const vehicleClass =
+            isVehicleClassSelection
+              ? option.key
+              : selection.vehicleClass;
+
+          const modelType =
+            isVehicleClassSelection
+              ? selection.modelType
+              : option.key;
+
+          return makePostbackAction(
+            option.label,
+            makeSimilarSelectionPostbackData(
+              searchResult.query,
+              vehicleClass,
+              modelType,
+              0
+            ),
+            `${targetName}：${option.label}`
+          );
+        }
+      );
+
+  return {
+    type: "text",
+    text:
+      question +
+      "\n\n選んだタイプに近い在庫をご紹介します😊",
+    quickReply: {
+      items,
+    },
+  };
 }
 
 function makeSearchVehiclePageCarouselMessage(
@@ -2005,7 +2298,8 @@ function makeSimilarPreviewButtonBox(
 function makeSimilarVehiclePageCarouselMessage(
   results,
   query,
-  offset
+  offset,
+  similarSelection = null
 ) {
   const pageVehicles =
     results.slice(
@@ -2032,7 +2326,8 @@ function makeSimilarVehiclePageCarouselMessage(
       makeSimilarMoreBubble(
         results,
         query,
-        nextOffset
+        nextOffset,
+        similarSelection
       )
     );
   }
@@ -2051,7 +2346,8 @@ function makeSimilarVehiclePageCarouselMessage(
 function makeSimilarMoreBubble(
   results,
   query,
-  nextOffset
+  nextOffset,
+  similarSelection
 ) {
   const remaining =
     results.length -
@@ -2122,7 +2418,8 @@ function makeSimilarMoreBubble(
               previewVehicles,
               query,
               nextOffset,
-              nextCount
+              nextCount,
+              similarSelection
             ),
         },
       ],
@@ -2134,7 +2431,8 @@ function makeSimilarPagePreviewRows(
   vehicles,
   query,
   nextOffset,
-  nextCount
+  nextCount,
+  similarSelection
 ) {
   const previewItems =
     vehicles.map(
@@ -2145,7 +2443,8 @@ function makeSimilarPagePreviewRows(
     makeSimilarPagePreviewButtonBox(
       query,
       nextOffset,
-      nextCount
+      nextCount,
+      similarSelection
     )
   );
 
@@ -2186,7 +2485,8 @@ function makeSimilarPagePreviewRows(
 function makeSimilarPagePreviewButtonBox(
   query,
   nextOffset,
-  nextCount
+  nextCount,
+  similarSelection
 ) {
   return {
     type: "box",
@@ -2204,9 +2504,16 @@ function makeSimilarPagePreviewButtonBox(
     action: {
       type: "postback",
       data:
-        `inventory-similar|${encodeURIComponent(
-          query
-        )}|${nextOffset}`,
+        similarSelection
+          ? makeSimilarSelectionPostbackData(
+              query,
+              similarSelection.vehicleClass,
+              similarSelection.modelType,
+              nextOffset
+            )
+          : `inventory-similar|${encodeURIComponent(
+              query
+            )}|${nextOffset}`,
       displayText:
         `次の${nextCount}台を見る`,
     },
