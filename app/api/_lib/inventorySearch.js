@@ -23,11 +23,22 @@ function freezeArray(values) {
 }
 
 function freezeResult(result) {
+  const similarSelection =
+    result.similarSelection
+      ? Object.freeze({
+          ...result.similarSelection,
+          options: freezeArray(
+            result.similarSelection.options || []
+          ),
+        })
+      : null;
+
   return Object.freeze({
     ...result,
     vehicles: freezeArray(result.vehicles || []),
     similarVehicles: freezeArray(result.similarVehicles || []),
     candidates: freezeArray(result.candidates || []),
+    similarSelection,
   });
 }
 
@@ -49,10 +60,35 @@ const MODEL_TYPE_INVENTORY_KEYS = Object.freeze({
   "van-truck": "バン・トラック",
 });
 
-const EXCLUDED_SIMILAR_TYPE_KEYS = new Set([
-  "EV・HV",
-  "特にこだわりはない",
+const VEHICLE_CLASS_OPTIONS = Object.freeze([
+  Object.freeze({
+    key: "kei",
+    label: "軽自動車",
+  }),
+  Object.freeze({
+    key: "standard",
+    label: "普通車",
+  }),
 ]);
+
+const MODEL_TYPE_OPTIONS_BY_CLASS = Object.freeze({
+  kei: Object.freeze([
+    "slide-door",
+    "standard",
+    "suv",
+    "truck",
+    "sporty",
+  ]),
+  standard: Object.freeze([
+    "compact",
+    "minivan",
+    "suv",
+    "sedan",
+    "station-wagon",
+    "sporty",
+    "van-truck",
+  ]),
+});
 
 function defineInventorySearchCategories(rows) {
   return Object.freeze(
@@ -146,52 +182,221 @@ const INVENTORY_SEARCH_CATEGORIES =
         "ピクシストラック",
       ],
     ],
-    [
-      "kei-bus",
-      "軽バス",
-      [
-        "軽バン",
-        "軽箱バン",
-        "箱バン",
-        "軽ワンボックス",
-      ],
-      "軽自動車",
-      [],
-      [
-        "nissan:clipper-rio",
-        "nissan:clipper-van",
-        "honda:n-van",
-        "honda:vamos",
-        "mazda:scrum-wagon",
-        "subaru:sambar-van",
-        "suzuki:every-wagon",
-        "suzuki:every-van",
-        "daihatsu:atrai",
-        "daihatsu:hijet-cargo",
-        "mitsubishi:minicab-van",
-      ],
-      [
-        "NV100クリッパー",
-        "クリッパーリオ",
-        "クリッパーバン",
-        "N-VAN",
-        "バモス",
-        "ホビオ",
-        "スクラムワゴン",
-        "スクラムバン",
-        "サンバーバン",
-        "サンバーディアス",
-        "ディアスワゴン",
-        "エブリイ",
-        "アトレー",
-        "ハイゼットカーゴ",
-        "ミニキャブバン",
-        "タウンボックス",
-        "ピクシスバン",
-        "アクティバン",
-      ],
-    ],
   ]);
+
+function keepDirectInputCandidates(candidates) {
+  const exactCandidates =
+    candidates.filter(
+      (candidate) =>
+        candidate.matchType === "exact"
+    );
+
+  if (exactCandidates.length) {
+    const exactMakerKeys =
+      new Set(
+        exactCandidates.map(
+          (candidate) =>
+            candidate.makerKey
+        )
+      );
+
+    return candidates.filter(
+      (candidate) =>
+        (
+          candidate.matchType === "exact" ||
+          candidate.matchType === "prefix"
+        ) &&
+        exactMakerKeys.has(
+          candidate.makerKey
+        )
+    );
+  }
+
+  const hasExactOrPrefix =
+    candidates.some(
+      (candidate) =>
+        candidate.matchType === "prefix"
+    );
+
+  if (!hasExactOrPrefix) {
+    return candidates;
+  }
+
+  return candidates.filter(
+    (candidate) =>
+      candidate.matchType === "prefix"
+  );
+}
+
+function uniqueValues(values) {
+  return Array.from(new Set(values));
+}
+
+function getAllowedModelTypeKeys(model) {
+  const allowedTypeKeys =
+    MODEL_TYPE_OPTIONS_BY_CLASS[
+      model.vehicleClass
+    ] || [];
+
+  return model.types.filter(
+    (typeKey) =>
+      allowedTypeKeys.includes(typeKey) &&
+      MODEL_TYPE_INVENTORY_KEYS[typeKey]
+  );
+}
+
+function makeSimilarSelection(
+  models,
+  requestedSelection = {}
+) {
+  const vehicleClassKeys =
+    uniqueValues(
+      models
+        .map(
+          (model) =>
+            model.vehicleClass
+        )
+        .filter(
+          (key) =>
+            VEHICLE_CLASS_INVENTORY_KEYS[key]
+        )
+    );
+
+  const requestedVehicleClass =
+    requestedSelection.vehicleClass || "";
+
+  if (
+    requestedVehicleClass &&
+    !vehicleClassKeys.includes(
+      requestedVehicleClass
+    )
+  ) {
+    return Object.freeze({
+      valid: false,
+      axis: null,
+      vehicleClass: null,
+      modelType: null,
+      options: Object.freeze([]),
+    });
+  }
+
+  if (
+    vehicleClassKeys.length > 1 &&
+    !requestedVehicleClass
+  ) {
+    const availableKeys =
+      new Set(vehicleClassKeys);
+
+    return Object.freeze({
+      valid: true,
+      axis: "vehicleClass",
+      vehicleClass: null,
+      modelType: null,
+      options: Object.freeze(
+        VEHICLE_CLASS_OPTIONS
+          .filter(
+            (option) =>
+              availableKeys.has(
+                option.key
+              )
+          )
+      ),
+    });
+  }
+
+  const vehicleClass =
+    requestedVehicleClass ||
+    vehicleClassKeys[0] ||
+    null;
+
+  const selectedModels =
+    models.filter(
+      (model) =>
+        !vehicleClass ||
+        model.vehicleClass ===
+          vehicleClass
+    );
+
+  const modelTypeKeys =
+    uniqueValues(
+      selectedModels.flatMap(
+        getAllowedModelTypeKeys
+      )
+    );
+
+  const requestedModelType =
+    requestedSelection.modelType || "";
+
+  if (
+    requestedModelType &&
+    !modelTypeKeys.includes(
+      requestedModelType
+    )
+  ) {
+    return Object.freeze({
+      valid: false,
+      axis: null,
+      vehicleClass,
+      modelType: null,
+      options: Object.freeze([]),
+    });
+  }
+
+  if (
+    modelTypeKeys.length > 1 &&
+    !requestedModelType
+  ) {
+    const availableKeys =
+      new Set(modelTypeKeys);
+
+    const orderedTypeKeys =
+      MODEL_TYPE_OPTIONS_BY_CLASS[
+        vehicleClass
+      ] || [];
+
+    return Object.freeze({
+      valid: true,
+      axis: "modelType",
+      vehicleClass,
+      modelType: null,
+      options: Object.freeze(
+        orderedTypeKeys
+          .filter(
+            (typeKey) =>
+              availableKeys.has(
+                typeKey
+              )
+          )
+          .map(
+            (typeKey) =>
+              Object.freeze({
+                key: typeKey,
+                label:
+                  MODEL_TYPE_INVENTORY_KEYS[
+                    typeKey
+                  ],
+              })
+          )
+      ),
+    });
+  }
+
+  return Object.freeze({
+    valid:
+      Boolean(vehicleClass) &&
+      Boolean(
+        requestedModelType ||
+        modelTypeKeys[0]
+      ),
+    axis: null,
+    vehicleClass,
+    modelType:
+      requestedModelType ||
+      modelTypeKeys[0] ||
+      null,
+    options: Object.freeze([]),
+  });
+}
 
 function findVehiclesByModels(inventory, models) {
   const modelKeys = new Set(
@@ -203,38 +408,6 @@ function findVehiclesByModels(inventory, models) {
       (model) => modelKeys.has(model.key)
     )
   );
-}
-
-function findVehiclesByModel(inventory, modelKey) {
-  return findVehiclesByModels(
-    inventory,
-    [
-      {
-        key: modelKey,
-      },
-    ]
-  );
-}
-
-function getRequiredInventoryTypeKeys(model) {
-  const vehicleClassKey =
-    VEHICLE_CLASS_INVENTORY_KEYS[model.vehicleClass];
-
-  const typeKeys = model.types
-    .map(
-      (type) =>
-        MODEL_TYPE_INVENTORY_KEYS[type]
-    )
-    .filter(
-      (type) =>
-        type &&
-        !EXCLUDED_SIMILAR_TYPE_KEYS.has(type)
-    );
-
-  return [
-    vehicleClassKey,
-    ...typeKeys,
-  ].filter(Boolean);
 }
 
 function getInventoryTypeKeySet(vehicle) {
@@ -344,64 +517,54 @@ function findVehiclesByCategory(
   );
 }
 
-function matchesSimilarModelType(
+function matchesSimilarSelection(
   vehicle,
-  model
+  similarSelection
 ) {
-  const requiredTypeKeys =
-    getRequiredInventoryTypeKeys(
-      model
-    );
-
-  if (!requiredTypeKeys.length) {
+  if (
+    !similarSelection?.valid ||
+    similarSelection.axis ||
+    !similarSelection.vehicleClass ||
+    !similarSelection.modelType
+  ) {
     return false;
   }
 
   const vehicleClassKey =
     VEHICLE_CLASS_INVENTORY_KEYS[
-      model.vehicleClass
+      similarSelection.vehicleClass
     ];
 
-  const modelTypeKeys =
-    requiredTypeKeys.filter(
-      (typeKey) =>
-        typeKey !==
-        vehicleClassKey
-    );
+  const modelTypeKey =
+    MODEL_TYPE_INVENTORY_KEYS[
+      similarSelection.modelType
+    ];
 
   const inventoryTypeKeys =
     getInventoryTypeKeySet(
       vehicle
     );
 
-  const matchesVehicleClass =
-    !vehicleClassKey ||
+  return (
+    Boolean(vehicleClassKey) &&
+    Boolean(modelTypeKey) &&
     inventoryTypeKeys.has(
       vehicleClassKey
-    );
-
-  const matchesModelType =
-    !modelTypeKeys.length ||
-    modelTypeKeys.some(
-      (typeKey) =>
-        inventoryTypeKeys.has(
-          typeKey
-        )
-    );
-
-  return (
-    matchesVehicleClass &&
-    matchesModelType
+    ) &&
+    inventoryTypeKeys.has(
+      modelTypeKey
+    )
   );
 }
 
 function findSimilarVehiclesByModels(
   inventory,
-  models
+  searchedModels,
+  similarSelection
 ) {
   const searchedModelKeys =
     new Set(
-      models.map(
+      searchedModels.map(
         (model) =>
           model.key
       )
@@ -423,26 +586,11 @@ function findSimilarVehiclesByModels(
         return false;
       }
 
-      return models.some(
-        (model) =>
-          matchesSimilarModelType(
-            vehicle,
-            model
-          )
+      return matchesSimilarSelection(
+        vehicle,
+        similarSelection
       );
     }
-  );
-}
-
-function findSimilarVehiclesByModel(
-  inventory,
-  model
-) {
-  return findSimilarVehiclesByModels(
-    inventory,
-    [
-      model,
-    ]
   );
 }
 
@@ -495,7 +643,8 @@ export function searchInventory(inventory, input) {
     });
   }
 
-  const allModelCandidates = findDomesticModelCandidates(query);
+  const allModelCandidates =
+    findDomesticModelCandidates(query);
   const exactModelCandidates = allModelCandidates.filter(
     (candidate) => candidate.matchType === "exact"
   );
@@ -522,69 +671,66 @@ export function searchInventory(inventory, input) {
   }
 
   const modelCandidates =
-    allModelCandidates;
+    keepDirectInputCandidates(
+      allModelCandidates
+    );
 
-  if (modelCandidates.length > 1) {
+  if (modelCandidates.length) {
+    const model =
+      modelCandidates.length === 1
+        ? modelCandidates[0]
+        : null;
+
     const matchedVehicles =
       findVehiclesByModels(
         vehicles,
         modelCandidates
       );
 
-    if (!matchedVehicles.length) {
-      return freezeResult({
-        type: INVENTORY_SEARCH_RESULT_TYPES.NO_STOCK,
-        query,
-        targetType: INVENTORY_SEARCH_RESULT_TYPES.MODEL,
-        displayName: query,
-        candidates:
-          modelCandidates,
-        similarVehicles:
-          findSimilarVehiclesByModels(
+    const similarSelection =
+      makeSimilarSelection(
+        modelCandidates
+      );
+
+    const similarVehicles =
+      similarSelection.valid &&
+      !similarSelection.axis
+        ? findSimilarVehiclesByModels(
             vehicles,
-            modelCandidates
-          ),
-      });
-    }
+            modelCandidates,
+            similarSelection
+          )
+        : [];
 
-    return freezeResult({
-      type: INVENTORY_SEARCH_RESULT_TYPES.MODEL,
+    const commonResult = {
       query,
-      displayName: query,
-      candidates: modelCandidates,
-      vehicles: matchedVehicles,
-    });
-  }
-
-  if (modelCandidates.length === 1) {
-    const model =
-      modelCandidates[0];
-    const matchedVehicles = findVehiclesByModel(vehicles, model.key);
-
-    if (!matchedVehicles.length) {
-      return freezeResult({
-        type: INVENTORY_SEARCH_RESULT_TYPES.NO_STOCK,
-        query,
-        targetType: INVENTORY_SEARCH_RESULT_TYPES.MODEL,
-        model,
-        similarVehicles:
-          findSimilarVehiclesByModel(
-            vehicles,
-            model
-          ),
-      });
-    }
-
-    return freezeResult({
-      type: INVENTORY_SEARCH_RESULT_TYPES.MODEL,
-      query,
+      displayName:
+        modelCandidates.length > 1
+          ? query
+          : undefined,
       model,
-      vehicles: matchedVehicles,
-      similarVehicles:
-        findSimilarVehiclesByModel(
-          vehicles,
-          model
-        ),
+      candidates:
+        modelCandidates,
+      similarSelection,
+      similarVehicles,
+    };
+
+    if (!matchedVehicles.length) {
+      return freezeResult({
+        ...commonResult,
+        type:
+          INVENTORY_SEARCH_RESULT_TYPES.NO_STOCK,
+        targetType:
+          INVENTORY_SEARCH_RESULT_TYPES.MODEL,
+      });
+    }
+
+    return freezeResult({
+      ...commonResult,
+      type:
+        INVENTORY_SEARCH_RESULT_TYPES.MODEL,
+      vehicles:
+        matchedVehicles,
     });
   }
 
@@ -593,4 +739,98 @@ export function searchInventory(inventory, input) {
 
 export function searchInventoryData(inventoryData, input) {
   return searchInventory(inventoryData?.vehicles, input);
+}
+
+export function selectSimilarInventory(
+  inventory,
+  input,
+  requestedSelection = {}
+) {
+  const vehicles =
+    Array.isArray(inventory)
+      ? inventory
+      : [];
+
+  const query =
+    String(input ?? "").trim();
+
+  const normalizedQuery =
+    normalizeDomesticModelText(
+      query
+    );
+
+  if (
+    !query ||
+    normalizedQuery.length < 2
+  ) {
+    return makeUnknownResult(query);
+  }
+
+  const modelCandidates =
+    keepDirectInputCandidates(
+      findDomesticModelCandidates(
+        query
+      )
+    );
+
+  if (!modelCandidates.length) {
+    return makeUnknownResult(query);
+  }
+
+  const similarSelection =
+    makeSimilarSelection(
+      modelCandidates,
+      requestedSelection
+    );
+
+  if (!similarSelection.valid) {
+    return makeUnknownResult(query);
+  }
+
+  const commonResult = {
+    query,
+    displayName:
+      modelCandidates.length > 1
+        ? query
+        : undefined,
+    model:
+      modelCandidates.length === 1
+        ? modelCandidates[0]
+        : null,
+    candidates:
+      modelCandidates,
+    similarSelection,
+  };
+
+  if (similarSelection.axis) {
+    return freezeResult({
+      ...commonResult,
+      type:
+        INVENTORY_SEARCH_RESULT_TYPES.AMBIGUOUS,
+    });
+  }
+
+  return freezeResult({
+    ...commonResult,
+    type:
+      INVENTORY_SEARCH_RESULT_TYPES.MODEL,
+    similarVehicles:
+      findSimilarVehiclesByModels(
+        vehicles,
+        modelCandidates,
+        similarSelection
+      ),
+  });
+}
+
+export function selectSimilarInventoryData(
+  inventoryData,
+  input,
+  requestedSelection = {}
+) {
+  return selectSimilarInventory(
+    inventoryData?.vehicles,
+    input,
+    requestedSelection
+  );
 }
