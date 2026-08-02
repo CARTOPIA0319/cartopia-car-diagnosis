@@ -4,7 +4,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
-const CODE_VERSION = "saved-list-direct-v11-maker-seat-capacity";
+const CODE_VERSION = "saved-list-direct-v12-saved-grade-name";
 
 const BASE_URL = "https://motorgate.jp";
 const PUBLIC_LIST_URL =
@@ -2132,7 +2132,7 @@ function extractTypesFromText(
       /TYPE\s*:\s*([\s\S]*?)(?=TYPE\s*:|\n|$)/gi
     )
   ) {
-        const value =
+    const value =
       compactText(
         match[1]
       )
@@ -2211,7 +2211,6 @@ function extractSelectedOption(
       ),
   };
 }
-
 function extractControls(html) {
   const controls = [];
   const source =
@@ -2471,6 +2470,130 @@ function findControlValueByPatterns(
   }
 
   return "";
+}
+
+function findDescriptiveControlValue(
+  html,
+  names,
+  patterns = []
+) {
+  const targets =
+    names
+      .map(
+        normalizeControlKey
+      )
+      .filter(Boolean);
+
+  const controls =
+    extractControls(html);
+
+  const candidates = [];
+
+  for (
+    const control of controls
+  ) {
+    const identifiers =
+      [
+        control.name,
+        control.id,
+        control.className,
+      ]
+        .map(
+          normalizeControlKey
+        )
+        .filter(Boolean);
+
+    const key =
+      identifiers.join(" ");
+
+    const exactMatch =
+      identifiers.some(
+        (identifier) =>
+          targets.includes(
+            identifier
+          )
+      );
+
+    const specificMatch =
+      identifiers.some(
+        (identifier) =>
+          targets.some(
+            (target) =>
+              target !== "grade" &&
+              identifier.includes(
+                target
+              )
+          )
+      );
+
+    const matches =
+      exactMatch ||
+      specificMatch ||
+      patterns.some(
+        (pattern) =>
+          pattern.test(key)
+      );
+
+    if (!matches) {
+      continue;
+    }
+
+    for (
+      const candidate of [
+        control.text,
+        control.value,
+      ]
+    ) {
+      const value =
+        compactText(candidate);
+
+      if (
+        isMeaningfulValue(value) &&
+        !/^[0-9０-９]+$/.test(value)
+      ) {
+        const unrelatedGradeField =
+          /(?:grade.*(?:extra|info|note|addition|additional)|(?:extra|info|note|addition|additional).*grade)/.test(
+            key
+          );
+
+        candidates.push({
+          value,
+          score:
+            (
+              exactMatch
+                ? 300
+                : specificMatch
+                  ? 200
+                  : 100
+            ) +
+            (
+              candidate ===
+              control.text
+                ? 20
+                : 0
+            ) -
+            (
+              unrelatedGradeField
+                ? 250
+                : 0
+            ),
+        });
+
+        break;
+      }
+    }
+  }
+
+  candidates.sort(
+    (first, second) =>
+      second.score -
+      first.score
+  );
+
+  return (
+    candidates[0]?.value ||
+    ""
+  );
 }
 
 function extractLabelValuePairs(html) {
@@ -3196,7 +3319,7 @@ function extractCommonVehicleDetails(
     );
 
   const gradeName =
-    findControlValue(
+    findDescriptiveControlValue(
       html,
       [
         "GradeName",
@@ -3205,21 +3328,823 @@ function extractCommonVehicleDetails(
         "Gurade",
         "grade_nm",
         "grade",
-      ]
-    ) ||
-    findControlValueByPatterns(
-      html,
+      ],
       [
         /grade/,
         /gurade/,
       ]
     ) ||
+    (() => {
+      const nearby =
+        findValueNearLabel(
+          html,
+          [
+            "グレード",
+          ]
+        );
+
+      return /^[0-9０-９]+$/.test(
+        compactText(nearby)
+      )
+        ? ""
+        : nearby;
+    })();
+
+  const classificationName =
+    findControlValue(
+      html,
+      [
+        "Katashiki",
+        "ClassificationName",
+        "ModelCode",
+        "classification_name",
+        "model_code",
+        "katashiki",
+      ]
+    ) ||
+    findControlValueByPatterns(
+      html,
+      [
+        /katashiki/,
+        /classification/,
+        /modelcode/,
+      ]
+    ) ||
     findValueNearLabel(
       html,
       [
-        "グレード",
+        "型式",
       ]
     );
+
+  const mileage =
+    normalizeMileage(
+      findControlValue(
+        html,
+        [
+          "Soukou",
+          "SoukouKyori",
+          "Mileage",
+          "MileageDistance",
+          "RunDistance",
+          "soukou_kyori",
+          "run_distance",
+        ]
+      ) ||
+      findControlValueByPatterns(
+        html,
+        [
+          /soukou/,
+          /mileage/,
+          /rundistance/,
+        ]
+      ) ||
+      findValueNearLabel(
+        html,
+        [
+          "走行距離",
+          "走行",
+        ]
+      ) ||
+      text.match(
+        /\d+(?:\.\d+)?万[ＫKk]/
+      )?.[0] ||
+      text.match(
+        /\d{1,7}(?:,\d{3})*\s*(?:km|ＫＭ|ｋｍ)/i
+      )?.[0] ||
+      ""
+    ) || "";
+
+  const inspection =
+    findControlValue(
+      html,
+      [
+        "Shaken",
+        "Inspection",
+        "InspectionDate",
+        "Syaken",
+        "shaken_date",
+        "inspection_date",
+      ]
+    ) ||
+    findControlValueByPatterns(
+      html,
+      [
+        /shaken/,
+        /syaken/,
+        /inspection/,
+      ]
+    ) ||
+    findValueNearLabel(
+      html,
+      [
+        "車検",
+        "車検有効期限",
+      ]
+    );
+
+  const displacement =
+    normalizeDisplacement(
+      findControlValue(
+        html,
+        [
+          "Haikiryo",
+          "Displacement",
+          "EngineDisplacement",
+          "haiki_ryo",
+          "engine_displacement",
+        ]
+      ) ||
+      findControlValueByPatterns(
+        html,
+        [
+          /haikiryo/,
+          /displacement/,
+        ]
+      ) ||
+      findValueNearLabel(
+        html,
+        [
+          "排気量",
+        ]
+      )
+    ) || "";
+
+  const bodyPrice =
+    normalizePrice(
+      findControlValue(
+        html,
+        [
+          "Kakaku",
+          "BodyPrice",
+          "VehiclePrice",
+          "CarPrice",
+          "body_price",
+          "vehicle_price",
+          "car_price",
+        ]
+      ) ||
+      findControlValueByPatterns(
+        html,
+        [
+          /bodyprice/,
+          /vehicleprice/,
+          /carprice/,
+          /kakaku/,
+        ]
+      ) ||
+      findValueNearLabel(
+        html,
+        [
+          "車両本体価格",
+          "本体価格",
+        ]
+      )
+    );
+
+  const totalPrice =
+    normalizePrice(
+      findControlValue(
+        html,
+        [
+          "TotalPrice",
+          "SiharaiTotal",
+          "ShiharaiTotal",
+          "PaymentTotal",
+          "total_price",
+          "payment_total",
+        ]
+      ) ||
+      findControlValueByPatterns(
+        html,
+        [
+          /totalprice/,
+          /paymenttotal/,
+          /siharaitotal/,
+          /shiharaitotal/,
+        ]
+      ) ||
+      findValueNearLabel(
+        html,
+        [
+          "支払総額",
+          "総額",
+        ]
+      )
+    );
+
+  const gradeExtraInfo =
+    findControlValue(
+      html,
+      [
+        "grade_additional_info",
+        "grade_info",
+        "GradeAddition",
+        "grade_extra_info",
+        "grade_note",
+      ]
+    ) ||
+    findControlValueByPatterns(
+      html,
+      [
+        /grade.*(?:info|addition|extra|note)/,
+      ]
+    ) ||
+    findValueNearLabel(
+      html,
+      [
+        "グレード付加情報",
+        "グレード情報",
+      ]
+    );
+
+  return {
+    carName:
+      cleanVehicleText(
+        carName
+      ),
+    makerName:
+      extractMakerName(
+        html,
+        carName
+      ),
+    seatCapacity:
+      extractSeatCapacity(
+        html
+      ),
+    gradeName:
+      cleanVehicleText(
+        gradeName
+      ),
+    classificationName:
+      compactText(
+        classificationName
+      ),
+    year:
+      extractRegistrationYear(
+        html
+      ),
+    mileage,
+    color:
+      extractBodyColor(
+        html
+      ),
+    inspection:
+      compactText(
+        inspection
+      ),
+    displacement,
+    bodyPrice,
+    totalPrice,
+    gradeExtraInfo:
+      compactText(
+        gradeExtraInfo
+      ),
+    imageUrl:
+      chooseBestImage(
+        extractImageCandidates(
+          html,
+          pageUrl
+        )
+      ),
+  };
+}
+function findValueNearLabel(
+  html,
+  labels
+) {
+  const pairValue =
+    findPairValue(
+      html,
+      labels
+    );
+
+  if (pairValue) {
+    return pairValue;
+  }
+
+  const region =
+    findRegionNearLabel(
+      html,
+      labels
+    );
+
+  if (!region) {
+    return "";
+  }
+
+  const controls =
+    extractControls(
+      region
+    );
+
+  for (
+    const control of
+    controls
+  ) {
+    const value =
+      compactText(
+        control.text ||
+        control.value
+      );
+
+    if (
+      isMeaningfulValue(
+        value
+      )
+    ) {
+      return value;
+    }
+  }
+
+  let text =
+    compactText(
+      cleanHtmlToText(
+        region
+      )
+    );
+
+  for (const label of labels) {
+    text = text.replace(
+      new RegExp(
+        `^.*?${escapeRegExp(
+          label
+        )}\\s*[：:]?\\s*`,
+        "i"
+      ),
+      ""
+    );
+  }
+
+  return isMeaningfulValue(
+    text
+  )
+    ? text
+    : "";
+}
+
+function extractRegistrationYear(
+  html
+) {
+  const direct =
+    findControlValue(
+      html,
+      [
+        "nenshiki",
+        "syodo",
+        "shodo",
+        "firstregistration",
+        "firstregist",
+        "registrationyear",
+        "registyear",
+        "modelyear",
+        "first_year",
+        "registration_year",
+        "syodo_year",
+        "shodo_year",
+      ]
+    ) ||
+    findControlValueByPatterns(
+      html,
+      [
+        /(?:syodo|shodo|firstreg|registration).*year/,
+        /year.*(?:syodo|shodo|firstreg|registration)/,
+        /(?:nenshiki|modelyear|registyear)/,
+      ]
+    ) ||
+    findValueNearLabel(
+      html,
+      [
+        "初度登録年月",
+        "初年度登録年月",
+        "初度登録",
+        "初年度登録",
+        "初度検査年月",
+        "年式",
+      ]
+    );
+
+  const normalized =
+    normalizeYear(
+      direct
+    );
+
+  if (normalized) {
+    return normalized;
+  }
+
+  const controls =
+    extractControls(
+      html
+    );
+
+  for (
+    const control of
+    controls
+  ) {
+    const key =
+      normalizeControlKey(
+        `${control.name} ${control.id} ${control.className}`
+      );
+
+    if (
+      !/(?:syodo|shodo|firstreg|registration|nenshiki|modelyear|registyear)/.test(
+        key
+      )
+    ) {
+      continue;
+    }
+
+    const value =
+      compactText(
+        control.text ||
+        control.value
+      );
+
+    const year =
+      normalizeYear(
+        value
+      );
+
+    if (year) {
+      return year;
+    }
+  }
+
+  return "";
+}
+
+function extractBodyColor(html) {
+  const value =
+    findControlValue(
+      html,
+      [
+        "bodycolor",
+        "carcolor",
+        "exteriorcolor",
+        "colorname",
+        "bodyiro",
+        "car_iro",
+        "body_color",
+        "car_color",
+        "color_name",
+        "syatai_color",
+        "shatai_color",
+        "syataiiro",
+        "shataiiro",
+      ]
+    ) ||
+    findControlValueByPatterns(
+      html,
+      [
+        /(?:body|car|exterior|syatai|shatai).*(?:color|iro)/,
+        /(?:color|iro).*(?:body|car|exterior|syatai|shatai)/,
+      ]
+    ) ||
+    findValueNearLabel(
+      html,
+      [
+        "車体色",
+        "ボディカラー",
+        "外装色",
+        "カラー",
+        "色",
+      ]
+    );
+
+  return compactText(
+    value
+  )
+    .replace(
+      /^(車体色|ボディカラー|外装色|カラー|色)\s*[：:]?\s*/,
+      ""
+    )
+    .replace(
+      /(カラーコード|色コード)[\s\S]*$/,
+      ""
+    )
+    .slice(0, 100)
+    .trim();
+}
+
+function normalizeMakerSearchText(value) {
+  return String(value || "")
+    .normalize("NFKC")
+    .toUpperCase()
+    .replace(
+      /[\s　・･ー―‐\-_/／,，.。()（）\[\]「」『』:：]/g,
+      ""
+    );
+}
+
+const MODEL_MAKER_RULES = [
+  ["レクサス", /^(LS|ES|IS|GS|LC|RC|RX|NX|UX|LX|GX|LBX)/],
+  ["トヨタ", /^(アクア|アルファード|ヴェルファイア|ヴォクシー|エスティマ|カムリ|カローラ|クラウン|シエンタ|タンク|ノア|ハイエース|ハリアー|プリウス|プロボックス|ポルテ|ヤリス|ライズ|ランドクルーザー|ルーミー|レジアスエース)/],
+  ["日産", /^(NT100クリッパートラック|NV100クリッパーリオ|エクストレイル|エルグランド|オーラ|キックス|キャラバン|クリッパー|サクラ|セレナ|デイズ|ノート|フーガ|リーフ|ルークス)/],
+  ["ホンダ", /^(NBOX|NONE|NVAN|NWGN|オデッセイ|シビック|ステップワゴン|フィット|フリード|ヴェゼル)/],
+  ["マツダ", /^(CX3|CX30|CX5|CX60|CX8|CX80|MAZDA2|MAZDA3|MAZDA6|アテンザ|デミオ|ロードスター)/],
+  ["スバル", /^(BRZ|WRX|XV|インプレッサ|クロストレック|ステラ|フォレスター|レガシィ|レヴォーグ)/],
+  ["三菱", /^(EKクロス|アウトランダー|エクリプスクロス|デリカ|パジェロ|ミニキャブ)/],
+  ["スズキ", /^(アルト|エブリイ|キャリイ|クロスビー|ジムニー|スイフト|スペーシア|ソリオ|ハスラー|ラパン|ワゴンR)/],
+  ["ダイハツ", /^(アトレー|ウェイク|キャスト|コペン|タフト|タント|トール|ハイゼット|ミライース|ムーヴ|ロッキー)/],
+  ["三菱ふそう", /^キャンター/],
+  ["いすゞ", /^(エルフ|フォワード)/],
+  ["日野", /^(デュトロ|レンジャー|プロフィア)/],
+];
+
+function normalizeMakerName(value) {
+  const text =
+    normalizeMakerSearchText(
+      value
+    );
+
+  if (!text) return "";
+
+  const aliases = [
+    ["トヨタ", ["トヨタ", "TOYOTA"]],
+    ["レクサス", ["レクサス", "LEXUS"]],
+    ["日産", ["日産", "ニッサン", "NISSAN"]],
+    ["ホンダ", ["ホンダ", "HONDA"]],
+    ["マツダ", ["マツダ", "MAZDA"]],
+    ["スバル", ["スバル", "SUBARU"]],
+    ["三菱ふそう", ["三菱ふそう", "ふそう", "FUSO"]],
+    ["三菱", ["三菱", "ミツビシ", "MITSUBISHI"]],
+    ["スズキ", ["スズキ", "SUZUKI"]],
+    ["ダイハツ", ["ダイハツ", "DAIHATSU"]],
+    ["いすゞ", ["いすゞ", "イスズ", "ISUZU"]],
+    ["日野", ["日野", "HINO"]],
+    ["UDトラックス", ["UDトラックス", "UDTRUCKS"]],
+    ["BMW", ["BMW"]],
+    ["メルセデス・ベンツ", ["メルセデスベンツ", "メルセデス", "ベンツ", "MERCEDESBENZ", "MERCEDES", "BENZ"]],
+    ["アウディ", ["アウディ", "AUDI"]],
+    ["フォルクスワーゲン", ["フォルクスワーゲン", "VOLKSWAGEN"]],
+    ["ボルボ", ["ボルボ", "VOLVO"]],
+    ["MINI", ["MINI"]],
+    ["ジープ", ["ジープ", "JEEP"]],
+    ["プジョー", ["プジョー", "PEUGEOT"]],
+    ["シトロエン", ["シトロエン", "CITROEN"]],
+    ["ルノー", ["ルノー", "RENAULT"]],
+    ["フィアット", ["フィアット", "FIAT"]],
+    ["アバルト", ["アバルト", "ABARTH"]],
+    ["ポルシェ", ["ポルシェ", "PORSCHE"]],
+    ["ジャガー", ["ジャガー", "JAGUAR"]],
+    ["ランドローバー", ["ランドローバー", "LANDROVER", "レンジローバー", "RANGEROVER"]],
+    ["テスラ", ["テスラ", "TESLA"]],
+  ];
+
+  for (const [makerName, values] of aliases) {
+    if (
+      values.some((alias) =>
+        text.includes(
+          normalizeMakerSearchText(
+            alias
+          )
+        )
+      )
+    ) {
+      return makerName;
+    }
+  }
+
+  return "";
+}
+
+function inferMakerName(carName) {
+  const text =
+    normalizeMakerSearchText(
+      carName
+    );
+
+  if (!text) return "";
+
+  for (const [makerName, pattern] of MODEL_MAKER_RULES) {
+    if (pattern.test(text)) {
+      return makerName;
+    }
+  }
+
+  return "";
+}
+
+function extractMakerName(
+  html,
+  carName
+) {
+  const value =
+    findControlValue(
+      html,
+      [
+        "MakerName",
+        "Maker",
+        "Manufacturer",
+        "BrandName",
+        "maker_name",
+        "manufacturer_name",
+        "brand_name",
+        "car_maker",
+        "vehicle_maker",
+      ]
+    ) ||
+    findControlValueByPatterns(
+      html,
+      [
+        /maker/,
+        /manufacturer/,
+        /brandname/,
+      ]
+    ) ||
+    findValueNearLabel(
+      html,
+      [
+        "メーカー名",
+        "メーカー",
+        "自動車メーカー",
+        "ブランド",
+      ]
+    );
+
+  return (
+    normalizeMakerName(
+      value
+    ) ||
+    inferMakerName(
+      carName
+    )
+  );
+}
+
+function normalizeSeatCapacity(value) {
+  const text =
+    toHalfWidthAscii(
+      decodeHtmlEntities(
+        String(value || "")
+      )
+    )
+      .normalize("NFKC")
+      .replace(/,/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  if (!text) return null;
+
+  const matched =
+    text.match(
+      /(?:乗車定員|乗員定員|乗車人数|定員|seatingcapacity|seatcapacity|passengercapacity)\s*[：:=]?\s*(\d{1,2})\s*(?:人|名)?/i
+    ) ||
+    text.match(
+      /(\d{1,2})\s*(?:人|名)(?:乗り|乗車)?/
+    ) ||
+    text.match(
+      /^(\d{1,2})$/
+    );
+
+  const number =
+    Number(
+      matched?.[1] ||
+      NaN
+    );
+
+  return Number.isInteger(number) &&
+    number >= 1 &&
+    number <= 20
+    ? number
+    : null;
+}
+
+function extractSeatCapacity(html) {
+  const value =
+    findControlValue(
+      html,
+      [
+        "Teiin",
+        "JoushaTeiin",
+        "JyosyaTeiin",
+        "PassengerCapacity",
+        "SeatingCapacity",
+        "SeatCapacity",
+        "teiin",
+        "jousha_teiin",
+        "jyosya_teiin",
+        "passenger_capacity",
+        "seating_capacity",
+        "seat_capacity",
+      ]
+    ) ||
+    findControlValueByPatterns(
+      html,
+      [
+        /(?:jousha|jyosya|josha).*teiin/,
+        /teiin/,
+        /passengercapacity/,
+        /seatingcapacity/,
+        /seatcapacity/,
+      ]
+    ) ||
+    findValueNearLabel(
+      html,
+      [
+        "乗車定員",
+        "乗員定員",
+        "乗車人数",
+        "定員",
+      ]
+    );
+
+  const direct =
+    normalizeSeatCapacity(
+      value
+    );
+
+  if (direct) {
+    return direct;
+  }
+
+  const text =
+    cleanHtmlToText(
+      html
+    );
+
+  return normalizeSeatCapacity(
+    text.match(
+      /(?:乗車定員|乗員定員|乗車人数|定員)\s*[：:]?\s*\d{1,2}\s*(?:人|名)?/
+    )?.[0] ||
+    text.match(
+      /\d{1,2}\s*人乗り/
+    )?.[0] ||
+    ""
+  );
+}
+
+function extractCommonVehicleDetails(
+  html,
+  pageUrl
+) {
+  const text =
+    cleanHtmlToText(
+      html
+    );
+
+  const carName =
+    findControlValue(
+      html,
+      [
+        "CarName",
+        "Syamei",
+        "Shamei",
+        "VehicleName",
+        "car_name",
+        "syamei_name",
+        "shamei_name",
+        "vehicle_name",
+        "model_name",
+      ]
+    ) ||
+    findControlValueByPatterns(
+      html,
+      [
+        /(?:car|vehicle|syamei|shamei).*name/,
+        /name.*(?:car|vehicle|syamei|shamei)/,
+      ]
+    ) ||
+    findValueNearLabel(
+      html,
+      [
+        "車名",
+        "車種",
+      ]
+    );
+
+  const gradeName =
+    findDescriptiveControlValue(
+      html,
+      [
+        "GradeName",
+        "Grade",
+        "grade_name",
+        "Gurade",
+        "grade_nm",
+        "grade",
+      ],
+      [
+        /grade/,
+        /gurade/,
+      ]
+    ) ||
+    (() => {
+      const nearby =
+        findValueNearLabel(
+          html,
+          [
+            "グレード",
+          ]
+        );
+
+      return /^[0-9０-９]+$/.test(
+        compactText(nearby)
+      )
+        ? ""
+        : nearby;
+    })();
 
   const classificationName =
     findControlValue(
@@ -3607,11 +4532,34 @@ function mergePreviousVehicle(
     "gooUrl",
   ]) {
     if (
+      key === "gradeName" &&
+      /^[0-9０-９]+$/.test(
+        compactText(
+          result[key]
+        )
+      )
+    ) {
+      result[key] = "";
+    }
+
+    const previousValue =
+      previousVehicle[key];
+
+    const invalidPreviousGrade =
+      key === "gradeName" &&
+      /^[0-9０-９]+$/.test(
+        compactText(
+          previousValue
+        )
+      );
+
+    if (
       !result[key] &&
-      previousVehicle[key]
+      previousValue &&
+      !invalidPreviousGrade
     ) {
       result[key] =
-        previousVehicle[key];
+        previousValue;
     }
   }
 
@@ -4129,9 +5077,16 @@ async function fetchVehicleDetail(
       gradeName
     )
   ) {
-    gradeName =
+    const previousGradeName =
       previous.gradeName ||
       "";
+
+    gradeName =
+      /^[0-9０-９]+$/.test(
+        previousGradeName
+      )
+        ? ""
+        : previousGradeName;
   }
 
   const title =
@@ -4265,7 +5220,7 @@ async function fetchVehicleDetail(
         success:
           types.length >
           0,
-                containsFatalError:
+        containsFatalError:
           best.html.includes(
             "FatalError"
           ),
@@ -4309,1943 +5264,6 @@ async function fetchVehicleDetail(
     previousVehicle
   );
 }
-
-async function mapWithConcurrency(
-  items,
-  limit,
-  mapper
-) {
-  const results =
-    new Array(
-      items.length
-    );
-
-  let nextIndex = 0;
-
-  async function worker() {
-    while (true) {
-      const index =
-        nextIndex++;
-
-      if (
-        index >=
-        items.length
-      ) {
-        return;
-      }
-
-      results[index] =
-        await mapper(
-          items[index],
-          index
-        );
-    }
-  }
-
-  await Promise.all(
-    Array.from(
-      {
-        length:
-          Math.min(
-            limit,
-            Math.max(
-              1,
-              items.length
-            )
-          ),
-      },
-      () => worker()
-    )
-  );
-
-  return results;
-}
-
-async function attachVehicleDetails(
-  jar,
-  vehicles,
-  previousMap = new Map()
-) {
-  return mapWithConcurrency(
-    vehicles,
-    DETAIL_CONCURRENCY,
-    (vehicle) =>
-      fetchVehicleDetail(
-        jar,
-        vehicle,
-        previousMap.get(
-          vehicle.stockId
-        ) || null
-      )
-  );
-}
-
-function toInventoryVehicle(
-  vehicle
-) {
-  return {
-    stockId:
-      vehicle.stockId,
-    title:
-      vehicle.title,
-    description:
-      vehicle.description,
-    carName:
-      vehicle.carName,
-    gradeName:
-      vehicle.gradeName,
-    gradeExtraInfo:
-      vehicle
-        .gradeExtraInfo ||
-      "",
-    classificationName:
-      vehicle
-        .classificationName,
-    makerName:
-      normalizeMakerName(
-        vehicle.makerName
-      ) ||
-      inferMakerName(
-        vehicle.carName ||
-        vehicle.title
-      ),
-    seatCapacity:
-      normalizeSeatCapacity(
-        vehicle.seatCapacity
-      ),
-    year:
-      vehicle.year,
-    mileage:
-      vehicle.mileage,
-    color:
-      vehicle.color,
-    inspection:
-      vehicle.inspection,
-    displacement:
-      vehicle.displacement,
-    bodyPrice:
-      vehicle.bodyPrice,
-    totalPrice:
-      vehicle.totalPrice,
-    imageUrl:
-      vehicle.imageUrl,
-    detailUrl:
-      vehicle.detailUrl,
-    gooUrl:
-      vehicle.gooUrl,
-    sourceStatus:
-      vehicle.sourceStatus,
-    sourcePageUrl:
-      vehicle.sourcePageUrl ||
-      "",
-    editUrl:
-      vehicle.editUrl ||
-      "",
-    editUrls:
-      vehicle.editUrls ||
-      [],
-    types:
-      vehicle.types ||
-      [],
-    typeKeys:
-      vehicle.typeKeys ||
-      [],
-    listResult:
-      vehicle.listResult ||
-      null,
-    updatedAt:
-      new Date()
-        .toISOString(),
-    typeResult:
-      vehicle.typeResult ||
-      null,
-    detailResult:
-      vehicle.detailResult ||
-      null,
-  };
-}
-
-async function fetchPublicVehicles(
-  jar,
-  previousMap
-) {
-  const response =
-    await fetchWithTimeout(
-      PUBLIC_LIST_URL,
-      {
-        headers: {
-          Cookie:
-            jarToCookie(
-              jar
-            ),
-          Referer:
-            `${BASE_URL}/top`,
-          "User-Agent":
-            USER_AGENT,
-          "Accept-Language":
-            "ja,en-US;q=0.9,en;q=0.8",
-        },
-      },
-      30000
-    );
-
-  const html =
-    await readResponseText(
-      response
-    );
-
-  const containsLoginForm =
-    html.includes(
-      'name="client_pw"'
-    ) ||
-    html.includes(
-      "name='client_pw'"
-    );
-
-  const imageMap =
-    extractQualityImageMap(
-      html,
-      PUBLIC_LIST_URL
-    );
-
-  const rows =
-    extractVehicleRows(
-      html
-    );
-
-  const vehicles =
-    rows.map((row) =>
-      parsePublicVehicleRow(
-        row,
-        PUBLIC_LIST_URL,
-        imageMap
-      )
-    );
-
-  const detailed =
-    await attachVehicleDetails(
-      jar,
-      vehicles,
-      previousMap
-    );
-
-  return {
-    status:
-      response.status,
-    containsLoginForm,
-    foundRows:
-      rows.length,
-    imageMapCount:
-      Object.keys(
-        imageMap
-      ).length,
-    vehicles:
-      detailed.map(
-        toInventoryVehicle
-      ),
-  };
-}
-
-function summarizeSavedListFields(
-  vehicles
-) {
-  const saved =
-    (vehicles || []).filter(
-      (vehicle) =>
-        vehicle
-          .sourceStatus ===
-        "一時保存"
-    );
-
-  const count =
-    (key) =>
-      saved.filter(
-        (vehicle) =>
-          vehicle
-            .listResult?.[
-            key
-          ]
-      ).length;
-
-  return {
-    total:
-      saved.length,
-    carNameFound:
-      count(
-        "carName"
-      ),
-    gradeNameFound:
-      count(
-        "gradeName"
-      ),
-    yearFound:
-      count("year"),
-    displacementFound:
-      count(
-        "displacement"
-      ),
-    colorFound:
-      count("color"),
-    mileageFound:
-      count(
-        "mileage"
-      ),
-    bodyPriceFound:
-      count(
-        "bodyPrice"
-      ),
-    totalPriceFound:
-      count(
-        "totalPrice"
-      ),
-    imageFound:
-      count(
-        "imageUrl"
-      ),
-  };
-}
-
-async function fetchSavedPage(
-  jar,
-  pageUrl
-) {
-  const response =
-    await fetchWithTimeout(
-      pageUrl,
-      {
-        headers: {
-          Cookie:
-            jarToCookie(
-              jar
-            ),
-          Referer:
-            `${BASE_URL}/top`,
-          "User-Agent":
-            USER_AGENT,
-          "Accept-Language":
-            "ja,en-US;q=0.9,en;q=0.8",
-        },
-      },
-      30000
-    );
-
-  const html =
-    await readResponseText(
-      response
-    );
-
-  const containsLoginForm =
-    html.includes(
-      'name="client_pw"'
-    ) ||
-    html.includes(
-      "name='client_pw'"
-    );
-
-  const vehicles =
-    extractSavedVehicles(
-      html,
-      pageUrl
-    );
-
-  return {
-    pageUrl,
-    status:
-      response.status,
-    containsLoginForm,
-    count:
-      vehicles.length,
-    listFields:
-      summarizeSavedListFields(
-        vehicles
-      ),
-    vehicles,
-  };
-}
-
-async function fetchSavedVehicles(
-  jar,
-  previousMap
-) {
-  const pages = [];
-  const allVehicles = [];
-
-  const seenStockIds =
-    new Set();
-
-  for (
-    const pageUrl of
-    SAVED_LIST_URLS
-  ) {
-    const page =
-      await fetchSavedPage(
-        jar,
-        pageUrl
-      );
-
-    const newVehicles =
-      page.vehicles.filter(
-        (vehicle) =>
-          !seenStockIds.has(
-            vehicle.stockId
-          )
-      );
-
-    for (
-      const vehicle of
-      newVehicles
-    ) {
-      seenStockIds.add(
-        vehicle.stockId
-      );
-
-      allVehicles.push(
-        vehicle
-      );
-    }
-
-    pages.push({
-      pageUrl:
-        page.pageUrl,
-      status:
-        page.status,
-      containsLoginForm:
-        page.containsLoginForm,
-      count:
-        page.count,
-      newCount:
-        newVehicles.length,
-      listFields:
-        page.listFields,
-    });
-
-    if (
-      page.count === 0 ||
-      newVehicles.length ===
-        0
-    ) {
-      break;
-    }
-  }
-
-  const unique =
-    uniqueByStockId(
-      allVehicles
-    );
-
-  const detailed =
-    await attachVehicleDetails(
-      jar,
-      unique,
-      previousMap
-    );
-
-  return {
-    pages,
-    vehicles:
-      detailed.map(
-        toInventoryVehicle
-      ),
-  };
-}
-
-function getGitHubConfig() {
-  return {
-    token:
-      process.env
-        .GITHUB_TOKEN ||
-      "",
-    owner:
-      process.env
-        .GITHUB_OWNER ||
-      "CARTOPIA0319",
-    repo:
-      process.env
-        .GITHUB_REPO ||
-      "cartopia-car-diagnosis",
-    branch:
-      process.env
-        .GITHUB_BRANCH ||
-      "main",
-    path:
-      "data/inventory.json",
-  };
-}
-
-function getGitHubHeaders(
-  includeJson = false
-) {
-  const {
-    token,
-  } = getGitHubConfig();
-
-  return {
-    Authorization:
-      `Bearer ${token}`,
-    Accept:
-      "application/vnd.github+json",
-    "X-GitHub-Api-Version":
-      "2022-11-28",
-    "User-Agent":
-      "cartopia-inventory-updater",
-    "Cache-Control":
-      "no-store",
-    ...(
-      includeJson
-        ? {
-            "Content-Type":
-              "application/json",
-          }
-        : {}
-    ),
-  };
-}
-
-async function githubApi(
-  url,
-  options = {}
-) {
-  const response =
-    await fetchWithTimeout(
-      url,
-      {
-        ...options,
-        headers: {
-          ...getGitHubHeaders(
-            Boolean(
-              options.body
-            )
-          ),
-          ...(
-            options.headers ||
-            {}
-          ),
-        },
-      },
-      30000
-    );
-
-  const text =
-    await response.text();
-
-  let data = {};
-
-  try {
-    data =
-      text
-        ? JSON.parse(text)
-        : {};
-  } catch {
-    data = {
-      raw: text,
-    };
-  }
-
-  return {
-    response,
-    data,
-  };
-}
-
-async function fetchGitHubInventoryFile() {
-  const {
-    token,
-    owner,
-    repo,
-    branch,
-    path,
-  } = getGitHubConfig();
-
-  if (!token) {
-    return {
-      success: false,
-      status: null,
-      sha: null,
-      inventory: {
-        vehicles: [],
-      },
-      error:
-        "GITHUB_TOKEN is not set",
-    };
-  }
-
-  const apiUrl =
-    `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-
-  const {
-    response,
-    data,
-  } = await githubApi(
-    `${apiUrl}?ref=${encodeURIComponent(
-      branch
-    )}&t=${Date.now()}`
-  );
-
-  if (!response.ok) {
-    return {
-      success: false,
-      status:
-        response.status,
-      sha: null,
-      inventory: {
-        vehicles: [],
-      },
-      error: data,
-    };
-  }
-
-  let inventory = {
-    vehicles: [],
-  };
-
-  if (data.content) {
-    try {
-      const decoded =
-        Buffer.from(
-          String(
-            data.content
-          ).replace(
-            /\n/g,
-            ""
-          ),
-          "base64"
-        ).toString(
-          "utf8"
-        );
-
-      inventory =
-        JSON.parse(
-          decoded
-        );
-    } catch (error) {
-      inventory = {
-        vehicles: [],
-        readError:
-          error.message ||
-          String(error),
-      };
-    }
-  }
-
-  return {
-    success: true,
-    status:
-      response.status,
-    sha:
-      data.sha ||
-      null,
-    inventory,
-    error: "",
-  };
-}
-
-async function fetchCurrentInventoryFromGitHub() {
-  const result =
-    await fetchGitHubInventoryFile();
-
-  return {
-    sha:
-      result.sha,
-    inventory:
-      result.inventory ||
-      {
-        vehicles: [],
-      },
-    readStatus:
-      result.status,
-    readError:
-      result.error ||
-      "",
-  };
-}
-
-async function commitInventoryToGitHub(
-  inventoryData,
-  existingSha,
-  message =
-    "refresh public and saved inventory data"
-) {
-  const {
-    token,
-    owner,
-    repo,
-    branch,
-    path,
-  } = getGitHubConfig();
-
-  if (!token) {
-    return {
-      saved: false,
-      reason:
-        "GITHUB_TOKEN is not set",
-    };
-  }
-
-  const apiUrl =
-    `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-
-  const content =
-    Buffer.from(
-      JSON.stringify(
-        inventoryData,
-        null,
-        2
-      ),
-      "utf8"
-    ).toString(
-      "base64"
-    );
-
-  async function put(sha) {
-    const requestBody = {
-      message,
-      content,
-      branch,
-    };
-
-    if (sha) {
-      requestBody.sha =
-        sha;
-    }
-
-    const {
-      response,
-      data,
-    } = await githubApi(
-      apiUrl,
-      {
-        method:
-          "PUT",
-        body:
-          JSON.stringify(
-            requestBody
-          ),
-      }
-    );
-
-    return {
-      response,
-      data,
-      usedSha:
-        sha || "",
-    };
-  }
-
-  let lastResult =
-    null;
-
-  let lastSha =
-    existingSha ||
-    null;
-
-  for (
-    let attempt = 1;
-    attempt <=
-      GITHUB_SAVE_RETRIES;
-    attempt += 1
-  ) {
-    const latest =
-      await fetchGitHubInventoryFile();
-
-    lastSha =
-      latest.sha ||
-      lastSha ||
-      null;
-
-    lastResult =
-      await put(
-        lastSha
-      );
-
-    if (
-      lastResult
-        .response.ok
-    ) {
-      return {
-        saved: true,
-        status:
-          lastResult
-            .response.status,
-        path,
-        branch,
-        attempt,
-        usedSha:
-          lastResult
-            .usedSha,
-        commit:
-          lastResult
-            .data.commit
-            ?.html_url ||
-          "",
-        commitSha:
-          lastResult
-            .data.commit
-            ?.sha ||
-          "",
-        contentSha:
-          lastResult
-            .data.content
-            ?.sha ||
-          "",
-        error: "",
-      };
-    }
-
-    const errorMessage =
-      String(
-        lastResult
-          .data?.message ||
-        ""
-      ).toLowerCase();
-
-    const conflict =
-      lastResult
-        .response.status ===
-        409 ||
-      lastResult
-        .response.status ===
-        422 ||
-      errorMessage.includes(
-        "sha"
-      ) ||
-      errorMessage.includes(
-        "conflict"
-      ) ||
-      errorMessage.includes(
-        "does not match"
-      );
-
-    if (!conflict) {
-      break;
-    }
-
-    await sleep(
-      500 *
-      attempt
-    );
-  }
-
-  return {
-    saved: false,
-    status:
-      lastResult
-        ?.response
-        ?.status ||
-      null,
-    path,
-    branch,
-    attempt:
-      GITHUB_SAVE_RETRIES,
-    usedSha:
-      lastResult
-        ?.usedSha ||
-      "",
-    commit: "",
-    commitSha: "",
-    contentSha: "",
-    error:
-      lastResult
-        ?.data ||
-      {
-        message:
-          "GitHub save failed",
-      },
-  };
-}
-
-async function readUpdateLock() {
-  const {
-    token,
-    owner,
-    repo,
-  } = getGitHubConfig();
-
-  if (!token) {
-    return {
-      locked: false,
-      available: false,
-      error:
-        "GITHUB_TOKEN is not set",
-    };
-  }
-
-  const refUrl =
-    `https://api.github.com/repos/${owner}/${repo}/git/ref/${LOCK_REF_NAME}`;
-
-  const {
-    response,
-    data,
-  } = await githubApi(
-    refUrl
-  );
-
-  if (
-    response.status ===
-    404
-  ) {
-    return {
-      locked: false,
-      available: true,
-      error: "",
-    };
-  }
-
-  if (!response.ok) {
-    return {
-      locked: false,
-      available: false,
-      error: data,
-    };
-  }
-
-  const refSha =
-    data.object?.sha ||
-    "";
-
-  let createdAt = "";
-  let runId = "";
-  let trigger = "";
-
-  if (
-    data.object?.type ===
-      "tag" &&
-    refSha
-  ) {
-    const tagUrl =
-      `https://api.github.com/repos/${owner}/${repo}/git/tags/${refSha}`;
-
-    const tagResult =
-      await githubApi(
-        tagUrl
-      );
-
-    if (
-      tagResult
-        .response.ok
-    ) {
-      createdAt =
-        tagResult
-          .data.tagger
-          ?.date ||
-        "";
-
-      try {
-        const parsed =
-          JSON.parse(
-            tagResult
-              .data.message ||
-            "{}"
-          );
-
-        runId =
-          parsed.runId ||
-          "";
-
-        trigger =
-          parsed.trigger ||
-          "";
-      } catch {
-        runId = "";
-      }
-    }
-  }
-
-  const createdTime =
-    createdAt
-      ? new Date(
-          createdAt
-        ).getTime()
-      : 0;
-
-  const ageMs =
-    createdTime
-      ? Date.now() -
-        createdTime
-      : 0;
-
-  return {
-    locked: true,
-    available: true,
-    refSha,
-    createdAt,
-    ageMs,
-    stale:
-      Boolean(
-        createdTime &&
-        ageMs >
-          LOCK_TTL_MS
-      ),
-    runId,
-    trigger,
-    error: "",
-  };
-}
-
-async function deleteUpdateLock(
-  expectedRefSha = ""
-) {
-  const {
-    owner,
-    repo,
-  } = getGitHubConfig();
-
-  const current =
-    await readUpdateLock();
-
-  if (!current.locked) {
-    return {
-      deleted: true,
-      reason:
-        "lock already absent",
-    };
-  }
-
-  if (
-    expectedRefSha &&
-    current.refSha !==
-      expectedRefSha
-  ) {
-    return {
-      deleted: false,
-      reason:
-        "lock belongs to another run",
-    };
-  }
-
-  const deleteUrl =
-    `https://api.github.com/repos/${owner}/${repo}/git/refs/${LOCK_REF_NAME}`;
-
-  const {
-    response,
-    data,
-  } = await githubApi(
-    deleteUrl,
-    {
-      method:
-        "DELETE",
-    }
-  );
-
-  return {
-    deleted:
-      response.ok ||
-      response.status ===
-        404,
-    status:
-      response.status,
-    error:
-      response.ok
-        ? ""
-        : data,
-  };
-}
-
-async function acquireUpdateLock(
-  runId,
-  trigger
-) {
-  const {
-    token,
-    owner,
-    repo,
-    branch,
-  } = getGitHubConfig();
-
-  if (!token) {
-    return {
-      acquired: false,
-      error:
-        "GITHUB_TOKEN is not set",
-    };
-  }
-
-  const current =
-    await readUpdateLock();
-
-  if (
-    current.locked &&
-    !current.stale
-  ) {
-    return {
-      acquired: false,
-      running: true,
-      current,
-      error: "",
-    };
-  }
-
-  if (
-    current.locked &&
-    current.stale
-  ) {
-    await deleteUpdateLock(
-      current.refSha
-    );
-  }
-
-  const branchRefUrl =
-    `https://api.github.com/repos/${owner}/${repo}/git/ref/heads/${encodeURIComponent(
-      branch
-    )}`;
-
-  const branchResult =
-    await githubApi(
-      branchRefUrl
-    );
-
-  if (
-    !branchResult
-      .response.ok
-  ) {
-    return {
-      acquired: false,
-      running: false,
-      error:
-        branchResult
-          .data,
-    };
-  }
-
-  const commitSha =
-    branchResult
-      .data.object
-      ?.sha;
-
-  if (!commitSha) {
-    return {
-      acquired: false,
-      running: false,
-      error:
-        "main commit SHA not found",
-    };
-  }
-
-  const createdAt =
-    new Date()
-      .toISOString();
-
-  const tagObjectUrl =
-    `https://api.github.com/repos/${owner}/${repo}/git/tags`;
-
-  const tagResult =
-    await githubApi(
-      tagObjectUrl,
-      {
-        method:
-          "POST",
-        body:
-          JSON.stringify({
-            tag:
-              `cartopia-inventory-update-${runId}`,
-            message:
-              JSON.stringify({
-                runId,
-                trigger,
-                createdAt,
-              }),
-            object:
-              commitSha,
-            type:
-              "commit",
-            tagger: {
-              name:
-                "CARTOPIA Inventory Updater",
-              email:
-                "cartopia@example.invalid",
-              date:
-                createdAt,
-            },
-          }),
-      }
-    );
-
-  if (
-    !tagResult
-      .response.ok
-  ) {
-    return {
-      acquired: false,
-      running: false,
-      error:
-        tagResult.data,
-    };
-  }
-
-  const tagObjectSha =
-    tagResult.data.sha;
-
-  const createRefUrl =
-    `https://api.github.com/repos/${owner}/${repo}/git/refs`;
-
-  const refResult =
-    await githubApi(
-      createRefUrl,
-      {
-        method:
-          "POST",
-        body:
-          JSON.stringify({
-            ref:
-              `refs/${LOCK_REF_NAME}`,
-            sha:
-              tagObjectSha,
-          }),
-      }
-    );
-
-  if (
-    refResult
-      .response.ok
-  ) {
-    return {
-      acquired: true,
-      running: true,
-      runId,
-      trigger,
-      createdAt,
-      refSha:
-        tagObjectSha,
-      error: "",
-    };
-  }
-
-  if (
-    refResult
-      .response.status ===
-      409 ||
-    refResult
-      .response.status ===
-      422
-  ) {
-    const existing =
-      await readUpdateLock();
-
-    return {
-      acquired: false,
-      running: true,
-      current:
-        existing,
-      error: "",
-    };
-  }
-
-  return {
-    acquired: false,
-    running: false,
-    error:
-      refResult.data,
-  };
-}
-
-function mergeVehicles(
-  publicVehicles,
-  savedVehicles
-) {
-  return uniqueByStockId([
-    ...(
-      publicVehicles ||
-      []
-    ),
-    ...(
-      savedVehicles ||
-      []
-    ),
-  ]);
-}
-
-function summarizeTypeResults(
-  vehicles
-) {
-  return {
-    success:
-      vehicles.filter(
-        (vehicle) =>
-          vehicle
-            .typeResult
-            ?.success
-      ).length,
-    failed:
-      vehicles.filter(
-        (vehicle) =>
-          !vehicle
-            .typeResult
-            ?.success
-      ).length,
-    timeout:
-      vehicles.filter(
-        (vehicle) =>
-          vehicle
-            .typeResult
-            ?.timeout
-      ).length,
-  };
-}
-
-function summarizeGradeExtraInfo(
-  vehicles
-) {
-  return {
-    found:
-      vehicles.filter(
-        (vehicle) =>
-          vehicle
-            .gradeExtraInfo
-      ).length,
-    missing:
-      vehicles.filter(
-        (vehicle) =>
-          !vehicle
-            .gradeExtraInfo
-      ).length,
-  };
-}
-
-function summarizeSavedDetailFields(
-  vehicles
-) {
-  const saved =
-    vehicles.filter(
-      (vehicle) =>
-        vehicle
-          .sourceStatus ===
-        "一時保存"
-    );
-
-  return {
-    total:
-      saved.length,
-    yearFound:
-      saved.filter(
-        (vehicle) =>
-          vehicle.year
-      ).length,
-    yearMissing:
-      saved.filter(
-        (vehicle) =>
-          !vehicle.year
-      ).length,
-    colorFound:
-      saved.filter(
-        (vehicle) =>
-          vehicle.color
-      ).length,
-    colorMissing:
-      saved.filter(
-        (vehicle) =>
-          !vehicle.color
-      ).length,
-    mileageFound:
-      saved.filter(
-        (vehicle) =>
-          vehicle.mileage
-      ).length,
-    mileageMissing:
-      saved.filter(
-        (vehicle) =>
-          !vehicle.mileage
-      ).length,
-    imageFound:
-      saved.filter(
-        (vehicle) =>
-          vehicle.imageUrl
-      ).length,
-    imageMissing:
-      saved.filter(
-        (vehicle) =>
-          !vehicle.imageUrl
-      ).length,
-    bodyPriceFound:
-      saved.filter(
-        (vehicle) =>
-          vehicle.bodyPrice
-      ).length,
-    totalPriceFound:
-      saved.filter(
-        (vehicle) =>
-          vehicle.totalPrice
-      ).length,
-    detailFetchFailed:
-      saved.filter(
-        (vehicle) =>
-          vehicle
-            .detailResult
-            ?.success ===
-          false
-      ).length,
-  };
-}
-
-function getTriggerLabel(
-  request
-) {
-  const url =
-    new URL(
-      request.url
-    );
-
-  const source =
-    url.searchParams.get(
-      "source"
-    ) || "";
-
-  if (
-    source ===
-    "github-actions"
-  ) {
-    return "GitHub Actions自動更新";
-  }
-
-  const cronHeader =
-    request.headers.get(
-      "x-vercel-cron"
-    );
-
-  const userAgent =
-    request.headers.get(
-      "user-agent"
-    ) || "";
-
-  if (
-    cronHeader ||
-    userAgent
-      .toLowerCase()
-      .includes(
-        "vercel-cron"
-      )
-  ) {
-    return "Vercel Cron自動更新";
-  }
-
-  return "URL手動更新";
-}
-
-function buildFailureInventoryData(
-  currentInventory,
-  status
-) {
-  return {
-    ...(
-      currentInventory ||
-      {}
-    ),
-    lastFailedAt:
-      status.finishedAt,
-    lastUpdateStatus:
-      status,
-  };
-}
-
-async function runInventoryUpdate({
-  runId,
-  trigger,
-}) {
-  const startedAt =
-    new Date();
-
-  let current = {
-    sha: null,
-    inventory: {
-      vehicles: [],
-    },
-    readStatus: null,
-    readError: "",
-  };
-
-  try {
-    current =
-      await fetchCurrentInventoryFromGitHub();
-
-    const previousMap =
-      new Map(
-        (
-          current
-            .inventory
-            ?.vehicles ||
-          []
-        )
-          .filter(
-            (vehicle) =>
-              vehicle
-                ?.stockId
-          )
-          .map(
-            (vehicle) => [
-              vehicle.stockId,
-              vehicle,
-            ]
-          )
-      );
-
-    const {
-      jar,
-      loginStatus,
-    } =
-      await loginMotorgate();
-
-    const [
-      publicResult,
-      savedResult,
-    ] =
-      await Promise.all([
-        fetchPublicVehicles(
-          jar,
-          previousMap
-        ),
-        fetchSavedVehicles(
-          jar,
-          previousMap
-        ),
-      ]);
-
-    const vehicles =
-      mergeVehicles(
-        publicResult
-          .vehicles,
-        savedResult
-          .vehicles
-      );
-
-    const finishedAt =
-      new Date();
-
-    const durationSeconds =
-      Math.round(
-        (
-          finishedAt
-            .getTime() -
-          startedAt
-            .getTime()
-        ) /
-        1000
-      );
-
-    const typeResults =
-      summarizeTypeResults(
-        vehicles
-      );
-
-    const savedDetailFields =
-      summarizeSavedDetailFields(
-        vehicles
-      );
-
-    const savedListFields =
-      summarizeSavedListFields(
-        vehicles
-      );
-
-    const success =
-      loginStatus === 302 &&
-      publicResult
-        .status === 200 &&
-      !publicResult
-        .containsLoginForm &&
-      savedResult
-        .pages.every(
-          (page) =>
-            page.status ===
-              200 &&
-            !page
-              .containsLoginForm
-        ) &&
-      vehicles.length >
-        0;
-
-    const errors = [
-      loginStatus !== 302
-        ? `ログイン異常: ${loginStatus}`
-        : "",
-      publicResult
-        .status !== 200
-        ? `掲載在庫取得異常: ${publicResult.status}`
-        : "",
-      publicResult
-        .containsLoginForm
-        ? "掲載在庫取得時にログインフォームが表示されました"
-        : "",
-      savedResult
-        .pages.some(
-          (page) =>
-            page.status !==
-            200
-        )
-        ? "一時保存一覧ページの取得に失敗しました"
-        : "",
-      savedResult
-        .pages.some(
-          (page) =>
-            page
-              .containsLoginForm
-        )
-        ? "一時保存一覧取得時にログインフォームが表示されました"
-        : "",
-      vehicles.length ===
-        0
-        ? "在庫取得件数が0件です"
-        : "",
-    ].filter(Boolean);
-
-    const lastUpdateStatus = {
-      success,
-      statusText:
-        success
-          ? "正常更新"
-          : "更新確認が必要",
-      runId,
-      trigger,
-      startedAt:
-        startedAt
-          .toISOString(),
-      finishedAt:
-        finishedAt
-          .toISOString(),
-      durationSeconds,
-      error:
-        errors.join(
-          " / "
-        ),
-      timeout: false,
-      typeFailed:
-        typeResults.failed,
-      typeTimeout:
-        typeResults.timeout,
-      savedYearMissing:
-        savedDetailFields
-          .yearMissing,
-      savedColorMissing:
-        savedDetailFields
-          .colorMissing,
-      savedMileageMissing:
-        savedDetailFields
-          .mileageMissing,
-      savedImageMissing:
-        savedDetailFields
-          .imageMissing,
-      savedDetailFetchFailed:
-        savedDetailFields
-          .detailFetchFailed,
-    };
-
-    const inventoryData = {
-      codeVersion:
-        CODE_VERSION,
-      updatedAt:
-        finishedAt
-          .toISOString(),
-      source:
-        "motorgate",
-      updateMode:
-        "full-public-and-saved-refresh",
-      lastUpdateStatus,
-      counts: {
-        publicVehicles:
-          publicResult
-            .vehicles
-            .length,
-        savedVehicles:
-          savedResult
-            .vehicles
-            .length,
-        vehicles:
-          vehicles.length,
-        publicFoundRows:
-          publicResult
-            .foundRows,
-        publicImageMapCount:
-          publicResult
-            .imageMapCount,
-      },
-      checks: {
-        githubRead: {
-          status:
-            current
-              .readStatus,
-          shaFound:
-            Boolean(
-              current.sha
-            ),
-          sha:
-            current.sha ||
-            "",
-          error:
-            current
-              .readError ||
-            "",
-        },
-        loginStatus,
-        publicListStatus:
-          publicResult
-            .status,
-        publicContainsLoginForm:
-          publicResult
-            .containsLoginForm,
-        savedPages:
-          savedResult.pages,
-        typeResults,
-        gradeExtraInfo:
-          summarizeGradeExtraInfo(
-            vehicles
-          ),
-        savedListFields,
-        savedDetailFields,
-      },
-      vehicles,
-    };
-
-    const github =
-      await commitInventoryToGitHub(
-        inventoryData,
-        current.sha,
-        `add maker and seat capacity ${runId}`
-      );
-
-    console.log(
-      JSON.stringify({
-        event:
-          "inventory-update-finished",
-        runId,
-        trigger,
-        success,
-        githubSaved:
-          github.saved,
-        counts:
-          inventoryData
-            .counts,
-        durationSeconds,
-      })
-    );
-
-    return {
-      success:
-        success &&
-        github.saved,
-      scrapingSuccess:
-        success,
-      codeVersion:
-        CODE_VERSION,
-      runId,
-      trigger,
-      github,
-      counts:
-        inventoryData
-          .counts,
-      savedListFields,
-      savedDetailFields,
-      lastUpdateStatus,
-    };
-  } catch (error) {
-    const finishedAt =
-      new Date();
-
-    const failureStatus = {
-      success: false,
-      statusText:
-        "更新失敗",
-      runId,
-      trigger,
-      startedAt:
-        startedAt
-          .toISOString(),
-      finishedAt:
-        finishedAt
-          .toISOString(),
-      durationSeconds:
-        Math.round(
-          (
-            finishedAt
-              .getTime() -
-            startedAt
-              .getTime()
-          ) /
-          1000
-        ),
-      error:
-        error.message ||
-        String(error),
-      timeout:
-        isTimeoutError(
-          error
-        ),
-      typeFailed: null,
-      typeTimeout: null,
-      savedYearMissing:
-        null,
-      savedColorMissing:
-        null,
-      savedMileageMissing:
-        null,
-      savedImageMissing:
-        null,
-      savedDetailFetchFailed:
-        null,
-    };
-
-    let github = {
-      saved: false,
-      reason:
-        "failure status was not saved",
-    };
-
-    try {
-      github =
-        await commitInventoryToGitHub(
-          buildFailureInventoryData(
-            current
-              .inventory,
-            failureStatus
-          ),
-          current.sha,
-          `record failed inventory update ${runId}`
-        );
-    } catch (
-      commitError
-    ) {
-      github = {
-        saved: false,
-        reason:
-          "failed to save failure status",
-        error:
-          commitError
-            .message ||
-          String(
-            commitError
-          ),
-      };
-    }
-
-    console.error(
-      JSON.stringify({
-        event:
-          "inventory-update-failed",
-        runId,
-        trigger,
-        error:
-          error.message ||
-          String(error),
-      })
-    );
-
-    return {
-      success: false,
-      codeVersion:
-        CODE_VERSION,
-      runId,
-      trigger,
-      github,
-      lastUpdateStatus:
-        failureStatus,
-      error:
-        error.message ||
-        String(error),
-    };
-  }
-}
-
-async function buildStatusResponse() {
-  const current =
-    await fetchCurrentInventoryFromGitHub();
-
-  const lock =
-    await readUpdateLock();
-
-  const savedPriceSamples =
-    (
-      current
-        .inventory
-        ?.vehicles ||
-      []
-    )
-      .filter(
-        (vehicle) =>
-          vehicle
-            .sourceStatus ===
-          "一時保存"
-      )
-      .slice(
-        0,
-        5
-      )
-      .map(
-        (vehicle) => ({
-          stockId:
-            vehicle.stockId,
-          carName:
-            vehicle.carName,
-          gradeName:
-            vehicle.gradeName,
-          bodyPrice:
-            vehicle.bodyPrice,
-          totalPrice:
-            vehicle.totalPrice,
-        })
-      );
-
-  return {
-    success: true,
-    codeVersion:
-      CODE_VERSION,
-    running:
-      Boolean(
-        lock.locked &&
-        !lock.stale
-      ),
-    lock: {
-      locked:
-        Boolean(
-          lock.locked
-        ),
-      stale:
-        Boolean(
-          lock.stale
-        ),
-      runId:
-        lock.runId ||
-        "",
-      trigger:
-        lock.trigger ||
-        "",
-      createdAt:
-        lock.createdAt ||
-        "",
-      ageSeconds:
-        lock.ageMs
-          ? Math.round(
-              lock.ageMs /
-              1000
-            )
-          : 0,
-    },
-    inventory: {
-      codeVersion:
-        current
-          .inventory
-          ?.codeVersion ||
-        "",
-      updatedAt:
-        current
-          .inventory
-          ?.updatedAt ||
-        "",
-      counts:
-        current
-          .inventory
-          ?.counts ||
-        {},
-      lastUpdateStatus:
-        current
-          .inventory
-          ?.lastUpdateStatus ||
-        null,
-      checks:
-        current
-          .inventory
-          ?.checks ||
-        {},
-      savedPriceSamples,
-    },
-  };
-}
-
 export async function GET(request) {
   const url =
     new URL(
