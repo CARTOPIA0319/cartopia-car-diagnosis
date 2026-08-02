@@ -319,7 +319,7 @@ async function handleEvent(event) {
           {
             type: "text",
             text:
-              "選んだタイプに当てはまる在庫は現在ありませんでした🙇‍♀️\n\n" +
+              `選んだタイプに当てはまる、${query}以外の別車種の在庫は現在ありませんでした🙇‍♀️\n\n` +
               "在庫にない場合も、全国からご希望に合う一台をお探しできます😊",
           },
         ]
@@ -353,7 +353,8 @@ async function handleEvent(event) {
       messages.push({
         type: "text",
         text:
-          `選んだタイプの在庫は${results.length}台です😊\n\n` +
+          `選んだタイプで、現在ご案内できる別車種の在庫は${results.length}台です😊\n\n` +
+          `※${query}ではありません。\n\n` +
           "展示販売中の車から先に、支払総額が高い順でご紹介します🚗",
       });
     }
@@ -457,7 +458,8 @@ async function handleEvent(event) {
       messages.push({
         type: "text",
         text:
-          `${targetName}と同じタイプの在庫は${results.length}台です😊\n\n` +
+          `${targetName}と同じタイプで、現在ご案内できる別車種の在庫は${results.length}台です😊\n\n` +
+          `※${targetName}ではありません。\n\n` +
           "展示販売中の車から先に、支払総額が高い順でご紹介します🚗",
       });
     }
@@ -1654,7 +1656,7 @@ async function replyInventorySearchResult(
             type: "text",
             text:
               `${targetName}の在庫は現在ありませんでした🙇‍♀️\n\n` +
-              "似たタイプの在庫を探すため、次から選んでください😊",
+              `代わりに、${targetName}と近いタイプの別車種をご案内できます😊`,
           },
           makeSimilarSelectionMessage(
             searchResult
@@ -1673,8 +1675,8 @@ async function replyInventorySearchResult(
             type: "text",
             text:
               `${targetName}の在庫は現在ありませんでした🙇‍♀️\n\n` +
-              `ただ、同じタイプの在庫が${similarResults.length}台あります😊\n` +
-              "似た車はこちらです🚗",
+              `代わりに、同じタイプの別車種の在庫が${similarResults.length}台あります😊\n` +
+              "別車種はこちらです🚗",
           },
           makeSimilarVehiclePageCarouselMessage(
             similarResults,
@@ -1840,8 +1842,8 @@ function makeSimilarSelectionMessage(
 
   const question =
     isVehicleClassSelection
-      ? `お探しの${targetName}は、軽自動車と普通車のどちらですか？🚗`
-      : `お探しの${targetName}は、どのタイプですか？🚗`;
+      ? "別車種の候補は、軽自動車と普通車のどちらから探しますか？🚗"
+      : "別車種の候補は、どのタイプから探しますか？🚗";
 
   const items =
     (selection?.options || [])
@@ -1875,7 +1877,7 @@ function makeSimilarSelectionMessage(
     type: "text",
     text:
       question +
-      "\n\n選んだタイプに近い在庫をご紹介します😊",
+      `\n\n選んだ条件に合う、${targetName}以外の別車種をご紹介します😊`,
     quickReply: {
       items,
     },
