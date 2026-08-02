@@ -4,7 +4,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
-const CODE_VERSION = "saved-list-direct-v12-saved-grade-name";
+const CODE_VERSION = "saved-list-direct-v13-saved-grade-recovery";
 
 const BASE_URL = "https://motorgate.jp";
 const PUBLIC_LIST_URL = `${BASE_URL}/stock/newsearch/stocklist/index/1/100`;
@@ -952,9 +952,11 @@ function parseSavedVehicleRow(rowHtml, headers, pageUrl) {
     cellTextByHeader(cells, headers, ["車種", "車名"]),
   );
 
-  let gradeName = cleanVehicleText(
-    cellTextByHeader(cells, headers, ["グレード"]),
-  );
+  let gradeName =
+    normalizeGradeNameCandidate(
+      cellTextByHeader(cells, headers, ["グレード", "グレード名"]),
+      carName,
+    ) || extractGradeName(rowHtml, carName);
 
   let year = normalizeYear(cellTextByHeader(cells, headers, ["年式"]));
 
@@ -1030,17 +1032,14 @@ function parseSavedVehicleRow(rowHtml, headers, pageUrl) {
     }
 
     if (!gradeName) {
-      gradeName = candidates.find((value) => value !== carName) || "";
+      gradeName =
+        candidates
+          .map((value) => normalizeGradeNameCandidate(value, carName))
+          .find(Boolean) || "";
     }
   }
 
-  if (gradeName && carName && compactText(gradeName) === compactText(carName)) {
-    gradeName = "";
-  }
-
-  if (/^[0-9０-９]+$/.test(gradeName)) {
-    gradeName = "";
-  }
+  gradeName = normalizeGradeNameCandidate(gradeName, carName);
 
   const imageHtml = cellHtmlByHeader(cells, headers, ["写真"]) || rowHtml;
 
@@ -1327,7 +1326,45 @@ function findControlValueByPatterns(html, patterns) {
   return "";
 }
 
-function findDescriptiveControlValue(html, names, patterns = []) {
+function normalizeGradeNameCandidate(value, carName = "") {
+  const text = cleanVehicleText(value)
+    .replace(/^(?:グレード名?|grade(?:\s*name)?)\s*[：:]?\s*/i, "")
+    .trim();
+
+  if (!isMeaningfulValue(text)) {
+    return "";
+  }
+
+  if (/^[0-9０-９]+(?:\.[0-9０-９]+)?$/.test(text)) {
+    return "";
+  }
+
+  if (/^(?:グレード名?|grade(?:\s*name)?)$/i.test(text)) {
+    return "";
+  }
+
+  if (text.length > 120) {
+    return "";
+  }
+
+  const normalizedCarName = compactText(carName);
+
+  if (normalizedCarName && compactText(text) === normalizedCarName) {
+    return "";
+  }
+
+  return text;
+}
+
+function isGradeAdditionalFieldKey(value) {
+  const key = normalizeControlKey(value);
+
+  return /(?:grade|gurade).*(?:extra|info|note|addition|additional)|(?:extra|info|note|addition|additional).*(?:grade|gurade)/.test(
+    key,
+  );
+}
+
+function findDescriptiveControlValue(html, names, patterns = [], carName = "") {
   const targets = names.map(normalizeControlKey).filter(Boolean);
 
   const controls = extractControls(html);
@@ -1340,6 +1377,10 @@ function findDescriptiveControlValue(html, names, patterns = []) {
       .filter(Boolean);
 
     const key = identifiers.join(" ");
+
+    if (isGradeAdditionalFieldKey(key)) {
+      continue;
+    }
 
     const exactMatch = identifiers.some((identifier) =>
       targets.includes(identifier),
@@ -1360,31 +1401,127 @@ function findDescriptiveControlValue(html, names, patterns = []) {
       continue;
     }
 
-    for (const candidate of [control.text, control.value]) {
-      const value = compactText(candidate);
+    for (const [candidateIndex, candidate] of [
+      control.text,
+      control.value,
+    ].entries()) {
+      const value = normalizeGradeNameCandidate(candidate, carName);
 
-      if (isMeaningfulValue(value) && !/^[0-9０-９]+$/.test(value)) {
-        const unrelatedGradeField =
-          /(?:grade.*(?:extra|info|note|addition|additional)|(?:extra|info|note|addition|additional).*grade)/.test(
-            key,
-          );
-
-        candidates.push({
-          value,
-          score:
-            (exactMatch ? 300 : specificMatch ? 200 : 100) +
-            (candidate === control.text ? 20 : 0) -
-            (unrelatedGradeField ? 250 : 0),
-        });
-
-        break;
+      if (!value) {
+        continue;
       }
+
+      const nameField = identifiers.some(
+        (identifier) =>
+          identifier.includes("gradename") ||
+          identifier.includes("guradename") ||
+          identifier.includes("gradenm"),
+      );
+
+      const idLikeField = identifiers.some((identifier) =>
+        /(?:grade|gurade).*(?:id|code|no|kbn|flag|flg|status)$/.test(
+          identifier,
+        ),
+      );
+
+      if (idLikeField && candidateIndex === 1) {
+        continue;
+      }
+
+      candidates.push({
+        value,
+        score:
+          (exactMatch ? 400 : specificMatch ? 300 : 200) +
+          (nameField ? 100 : 0) +
+          (candidateIndex === 0 ? 80 : 0) -
+          (idLikeField ? 250 : 0),
+      });
     }
   }
 
   candidates.sort((first, second) => second.score - first.score);
 
   return candidates[0]?.value || "";
+}
+
+function findGradeNameFromPairs(html, carName = "") {
+  const allowedLabels = new Set([
+    normalizeHeaderText("グレード"),
+    normalizeHeaderText("グレード名"),
+    normalizeHeaderText("Grade"),
+    normalizeHeaderText("GradeName"),
+  ]);
+
+  for (const pair of extractLabelValuePairs(html)) {
+    const label = normalizeHeaderText(pair.label);
+
+    if (!allowedLabels.has(label)) {
+      continue;
+    }
+
+    const value = normalizeGradeNameCandidate(pair.value, carName);
+
+    if (value) {
+      return value;
+    }
+  }
+
+  return "";
+}
+
+function findGradeNameFromLinks(html, carName = "") {
+  const parameterNames = ["grade_name", "GradeName", "gradeName", "grade_nm"];
+
+  for (const href of extractRawHrefValues(html)) {
+    for (const parameterName of parameterNames) {
+      const value = normalizeGradeNameCandidate(
+        getQueryParamDecoded(href, parameterName),
+        carName,
+      );
+
+      if (value) {
+        return value;
+      }
+    }
+  }
+
+  return "";
+}
+
+function findEmbeddedGradeName(html, carName = "") {
+  const source = decodeHtmlEntities(String(html || ""));
+
+  const patterns = [
+    /\bdata-grade-name\s*=\s*["']([^"']+)["']/gi,
+    /["'](?:grade_name|gradeName|GradeName|grade_nm)["']\s*[:=]\s*["']([^"']+)["']/gi,
+    /\b(?:grade_name|gradeName|GradeName|grade_nm)\s*[:=]\s*["']([^"']+)["']/gi,
+  ];
+
+  for (const pattern of patterns) {
+    for (const match of source.matchAll(pattern)) {
+      const value = normalizeGradeNameCandidate(match[1], carName);
+
+      if (value) {
+        return value;
+      }
+    }
+  }
+
+  return "";
+}
+
+function extractGradeName(html, carName = "") {
+  return (
+    findDescriptiveControlValue(
+      html,
+      ["GradeName", "Grade", "grade_name", "Gurade", "grade_nm", "grade"],
+      [/grade/, /gurade/],
+      carName,
+    ) ||
+    findGradeNameFromLinks(html, carName) ||
+    findGradeNameFromPairs(html, carName) ||
+    findEmbeddedGradeName(html, carName)
+  );
 }
 
 function extractLabelValuePairs(html) {
@@ -1844,17 +1981,7 @@ function extractCommonVehicleDetails(html, pageUrl) {
     ]) ||
     findValueNearLabel(html, ["車名", "車種"]);
 
-  const gradeName =
-    findDescriptiveControlValue(
-      html,
-      ["GradeName", "Grade", "grade_name", "Gurade", "grade_nm", "grade"],
-      [/grade/, /gurade/],
-    ) ||
-    (() => {
-      const nearby = findValueNearLabel(html, ["グレード"]);
-
-      return /^[0-9０-９]+$/.test(compactText(nearby)) ? "" : nearby;
-    })();
+  const gradeName = extractGradeName(html, carName);
 
   const classificationName =
     findControlValue(html, [
@@ -1971,7 +2098,7 @@ function extractCommonVehicleDetails(html, pageUrl) {
     carName: cleanVehicleText(carName),
     makerName: extractMakerName(html, carName),
     seatCapacity: extractSeatCapacity(html),
-    gradeName: cleanVehicleText(gradeName),
+    gradeName: normalizeGradeNameCandidate(gradeName, carName),
     classificationName: compactText(classificationName),
     year: extractRegistrationYear(html),
     mileage,
@@ -2074,16 +2201,27 @@ function mergePreviousVehicle(vehicle, previousVehicle) {
     "detailUrl",
     "gooUrl",
   ]) {
-    if (key === "gradeName" && /^[0-9０-９]+$/.test(compactText(result[key]))) {
-      result[key] = "";
-    }
-
     const previousValue = previousVehicle[key];
 
-    const invalidPreviousGrade =
-      key === "gradeName" && /^[0-9０-９]+$/.test(compactText(previousValue));
+    if (key === "gradeName") {
+      result[key] = normalizeGradeNameCandidate(
+        result[key],
+        result.carName || previousVehicle.carName,
+      );
 
-    if (!result[key] && previousValue && !invalidPreviousGrade) {
+      const previousGradeName = normalizeGradeNameCandidate(
+        previousValue,
+        previousVehicle.carName || result.carName,
+      );
+
+      if (!result[key] && previousGradeName) {
+        result[key] = previousGradeName;
+      }
+
+      continue;
+    }
+
+    if (!result[key] && previousValue) {
       result[key] = previousValue;
     }
   }
@@ -2112,7 +2250,13 @@ function buildDetailUrlCandidates(vehicle) {
   );
 }
 
-function detailScore(details, types) {
+function detailScore(details, types, sourceStatus = "") {
+  const savedGradeBonus =
+    sourceStatus === "一時保存" &&
+    normalizeGradeNameCandidate(details.gradeName, details.carName)
+      ? 20
+      : 0;
+
   return (
     [
       details.carName,
@@ -2129,7 +2273,9 @@ function detailScore(details, types) {
       details.totalPrice,
       details.gradeExtraInfo,
       details.imageUrl,
-    ].filter(Boolean).length + (types || []).length
+    ].filter(Boolean).length +
+    (types || []).length +
+    savedGradeBonus
   );
 }
 
@@ -2142,6 +2288,26 @@ function chooseMergedValue(vehicle, previous, details, key) {
 
   if (key === "imageUrl") {
     return chooseBestImage(detailValue, currentValue, previousValue);
+  }
+
+  if (key === "gradeName") {
+    const carName =
+      details?.carName || vehicle.carName || previous?.carName || "";
+
+    const values =
+      vehicle.sourceStatus === "一時保存"
+        ? [detailValue, currentValue, previousValue]
+        : [currentValue, detailValue, previousValue];
+
+    for (const value of values) {
+      const gradeName = normalizeGradeNameCandidate(value, carName);
+
+      if (gradeName) {
+        return gradeName;
+      }
+    }
+
+    return "";
   }
 
   if (vehicle.sourceStatus === "一時保存") {
@@ -2192,6 +2358,7 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
         success: false,
         url: "",
         attempts: 0,
+        gradeName: Boolean(fallback.gradeName),
         year: Boolean(fallback.year),
         mileage: Boolean(fallback.mileage),
         color: Boolean(fallback.color),
@@ -2254,7 +2421,7 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
 
         const details = extractCommonVehicleDetails(html, candidateUrl);
 
-        const score = detailScore(details, pageTypes);
+        const score = detailScore(details, pageTypes, vehicle.sourceStatus);
 
         if (!best || score > best.score) {
           best = {
@@ -2271,6 +2438,14 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
           vehicle.sourceStatus === "一時保存" &&
           Boolean(
             collectedTypes.length &&
+              (normalizeGradeNameCandidate(
+                details.gradeName,
+                details.carName || vehicle.carName,
+              ) ||
+                normalizeGradeNameCandidate(
+                  vehicle.gradeName,
+                  vehicle.carName,
+                )) &&
               (details.year || vehicle.year) &&
               (details.color || vehicle.color) &&
               (details.imageUrl || vehicle.imageUrl) &&
@@ -2307,6 +2482,7 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
         success: false,
         url: "",
         attempts,
+        gradeName: Boolean(fallback.gradeName),
         year: Boolean(fallback.year),
         mileage: Boolean(fallback.mileage),
         color: Boolean(fallback.color),
@@ -2346,15 +2522,10 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
     chooseMergedValue(vehicle, previous, details, "seatCapacity"),
   );
 
-  let gradeName = chooseMergedValue(vehicle, previous, details, "gradeName");
-
-  if (/^[0-9０-９]+$/.test(gradeName)) {
-    const previousGradeName = previous.gradeName || "";
-
-    gradeName = /^[0-9０-９]+$/.test(previousGradeName)
-      ? ""
-      : previousGradeName;
-  }
+  const gradeName = normalizeGradeNameCandidate(
+    chooseMergedValue(vehicle, previous, details, "gradeName"),
+    carName,
+  );
 
   const title =
     [carName, gradeName].filter(Boolean).join(" ").trim() ||
@@ -2429,6 +2600,9 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
         attempts,
         makerName: Boolean(details.makerName),
         seatCapacity: Boolean(details.seatCapacity),
+        gradeName: Boolean(
+          normalizeGradeNameCandidate(details.gradeName, details.carName),
+        ),
         year: Boolean(details.year),
         mileage: Boolean(details.mileage),
         color: Boolean(details.color),
@@ -3133,6 +3307,8 @@ function summarizeSavedDetailFields(vehicles) {
 
   return {
     total: saved.length,
+    gradeNameFound: saved.filter((vehicle) => vehicle.gradeName).length,
+    gradeNameMissing: saved.filter((vehicle) => !vehicle.gradeName).length,
     yearFound: saved.filter((vehicle) => vehicle.year).length,
     yearMissing: saved.filter((vehicle) => !vehicle.year).length,
     colorFound: saved.filter((vehicle) => vehicle.color).length,
@@ -3257,6 +3433,7 @@ async function runInventoryUpdate({ runId, trigger }) {
       timeout: false,
       typeFailed: typeResults.failed,
       typeTimeout: typeResults.timeout,
+      savedGradeNameMissing: savedDetailFields.gradeNameMissing,
       savedYearMissing: savedDetailFields.yearMissing,
       savedColorMissing: savedDetailFields.colorMissing,
       savedMileageMissing: savedDetailFields.mileageMissing,
@@ -3299,7 +3476,7 @@ async function runInventoryUpdate({ runId, trigger }) {
     const github = await commitInventoryToGitHub(
       inventoryData,
       current.sha,
-      `add maker and seat capacity ${runId}`,
+      `refresh inventory with saved vehicle grades ${runId}`,
     );
 
     console.log(
@@ -3343,6 +3520,7 @@ async function runInventoryUpdate({ runId, trigger }) {
       timeout: isTimeoutError(error),
       typeFailed: null,
       typeTimeout: null,
+      savedGradeNameMissing: null,
       savedYearMissing: null,
       savedColorMissing: null,
       savedMileageMissing: null,
