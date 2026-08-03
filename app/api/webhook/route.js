@@ -1988,7 +1988,7 @@ function makeGradeExtraBox(gradeExtraInfo, isPublicVehicle) {
           contents: [
             {
               type: "text",
-              text: "ただいま展示に向けて\n車内清掃・ボディ研磨を進めています",
+              text: "ただいま展示に向けて\n車内清掃・ボディ研磨中です",
               size: "md",
               color: "#FFFFFF",
               weight: "bold",
