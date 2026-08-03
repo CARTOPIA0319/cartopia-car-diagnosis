@@ -254,13 +254,9 @@ async function handleEvent(event) {
     const [, encodedQuery, offsetText] = postbackData.split("|");
 
     const query = decodeURIComponent(encodedQuery || "");
-
     const offset = Number(offsetText || "0");
-
     const inventory = await loadInventory();
-
     const searchResult = searchInventoryData(inventory, query);
-
     const results = prepareSearchVehicles(searchResult.similarVehicles);
 
     const isModelSearch =
@@ -306,7 +302,6 @@ async function handleEvent(event) {
     );
 
     await replyMessage(event.replyToken, messages);
-
     return;
   }
 
@@ -314,11 +309,8 @@ async function handleEvent(event) {
     const [, encodedQuery, offsetText] = postbackData.split("|");
 
     const query = decodeURIComponent(encodedQuery || "");
-
     const offset = Number(offsetText || "0");
-
     const inventory = await loadInventory();
-
     const searchResult = searchInventoryData(inventory, query);
 
     if (
@@ -372,15 +364,12 @@ async function handleEvent(event) {
     }
 
     await replyMessage(event.replyToken, messages);
-
     return;
   }
 
   if (postbackData.startsWith("more|")) {
     const [, size, rawType, offsetText] = postbackData.split("|");
-
     const offset = Number(offsetText || "0");
-
     const results = await findVehicles(size, normalizeType(rawType));
 
     if (!results.length || offset >= results.length) {
@@ -471,7 +460,6 @@ async function handleEvent(event) {
 
   if (isRoughSearchText(text)) {
     const [size, rawType] = text.split(" ");
-
     const results = await findVehicles(size, normalizeType(rawType));
 
     if (results.length === 0) {
@@ -619,7 +607,6 @@ async function handleEvent(event) {
   }
 
   const inventory = await loadInventory();
-
   const searchResult = searchInventoryData(inventory, text);
 
   await replyInventorySearchResult(event.replyToken, searchResult);
@@ -643,7 +630,6 @@ function normalizeType(type) {
 
 async function findVehicles(size, type) {
   const inventory = await loadInventory();
-
   const vehicles = inventory.vehicles || [];
 
   return vehicles
@@ -653,7 +639,6 @@ async function findVehicles(size, type) {
       }
 
       const keys = [...(vehicle.types || []), ...(vehicle.typeKeys || [])];
-
       const hasSize = keys.includes(size);
 
       const hasType =
@@ -684,7 +669,6 @@ function normalizeVehicleForDisplay(vehicle) {
   );
 
   const gradeName = chooseGradeName(vehicle, carName);
-
   const gradeExtraInfo = chooseGradeExtraInfo(vehicle, carName, gradeName);
 
   return {
@@ -784,7 +768,6 @@ function isUsefulGradeName(value, carName) {
 
 function deriveGradeFromSource(source, carName) {
   let text = cleanDisplayText(source);
-
   const normalizedCarName = cleanDisplayText(carName);
 
   if (!text) {
@@ -1973,34 +1956,58 @@ function makeGradeExtraBox(gradeExtraInfo, isPublicVehicle) {
   if (!isPublicVehicle) {
     return {
       type: "box",
-      layout: "horizontal",
-      height: "92px",
+      layout: "vertical",
+      height: "118px",
       margin: "sm",
-      paddingAll: "8px",
-      spacing: "sm",
       backgroundColor: "#FFF9EC",
       borderColor: "#D8BE72",
       borderWidth: "1px",
       cornerRadius: "md",
-      alignItems: "center",
       contents: [
         {
           type: "image",
-          url: "https://raw.githubusercontent.com/CARTOPIA0319/cartopia-car-diagnosis/main/public/preparing-vehicle.png",
-          flex: 2,
+          url: "https://raw.githubusercontent.com/CARTOPIA0319/cartopia-car-diagnosis/main/public/preparing-vehicle.PNG",
           size: "full",
-          aspectRatio: "4:3",
+          aspectRatio: "20:7",
           aspectMode: "cover",
         },
         {
-          type: "text",
-          text: "ただいま展示前の車内清掃やボディ研磨を実施しております",
-          flex: 3,
-          size: "xxs",
-          color: "#0B1F3A",
-          weight: "bold",
-          wrap: true,
-          maxLines: 4,
+          type: "box",
+          layout: "vertical",
+          position: "absolute",
+          width: "100%",
+          height: "118px",
+          paddingStart: "12px",
+          paddingEnd: "12px",
+          paddingTop: "9px",
+          paddingBottom: "9px",
+          backgroundColor: "#0B1F3AB3",
+          cornerRadius: "md",
+          justifyContent: "center",
+          alignItems: "center",
+          contents: [
+            {
+              type: "text",
+              text: "ただいま展示に向けて\n車内清掃・ボディ研磨を進めています",
+              size: "md",
+              color: "#FFFFFF",
+              weight: "bold",
+              align: "center",
+              wrap: true,
+              maxLines: 2,
+            },
+            {
+              type: "text",
+              text: "販売・現車確認は可能です\nお気軽にご相談ください",
+              size: "sm",
+              color: "#E5D08A",
+              weight: "bold",
+              align: "center",
+              wrap: true,
+              maxLines: 2,
+              margin: "sm",
+            },
+          ],
         },
       ],
     };
