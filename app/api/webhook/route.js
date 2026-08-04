@@ -1968,7 +1968,7 @@ function makeGradeExtraBox(gradeExtraInfo, isPublicVehicle) {
           type: "image",
           url: "https://raw.githubusercontent.com/CARTOPIA0319/cartopia-car-diagnosis/main/public/preparing-vehicle.PNG",
           size: "full",
-          aspectRatio: "20:7",
+          aspectRatio: "20:9",
           aspectMode: "cover",
         },
         {
