@@ -150,6 +150,10 @@ async function handleEvent(event) {
   const postbackData =
     event.type === "postback" ? event.postback?.data || "" : "";
 
+  if (text.startsWith("この車について相談したい：")) {
+    return;
+  }
+
   if (postbackData.startsWith("inventory-similar-filter|")) {
     const [, encodedQuery, vehicleClassText, modelTypeText, offsetText] =
       postbackData.split("|");
@@ -1788,6 +1792,22 @@ function makeVehicleBubble(vehicle) {
   const isPublicVehicle = vehicle?.sourceStatus === "掲載在庫";
   const gooUrl = isPublicVehicle ? validUrl(vehicle?.gooUrl) : "";
 
+  const cardAction = isPublicVehicle
+    ? gooUrl
+      ? {
+          type: "uri",
+          uri: gooUrl,
+        }
+      : null
+    : {
+        type: "message",
+        label: "この車を相談",
+        text: `この車について相談したい：${safeText(
+          vehicle?.carName || vehicle?.title,
+          "車両情報",
+        )}`,
+      };
+
   const gradeExtraInfo = safeText(vehicle?.gradeExtraInfo, FALLBACK_EXTRA_INFO);
 
   const expensePrice = calculateExpensePrice(
@@ -1819,18 +1839,9 @@ function makeVehicleBubble(vehicle) {
     makeInfoRow(vehicle),
   ];
 
-  if (gooUrl) {
-    bodyContents.push({
-      type: "text",
-      text: "詳細は写真をタップ ↗",
-      size: "xs",
-      color: "#888888",
-      align: "center",
-      margin: "xs",
-    });
+  if (isPublicVehicle) {
+    bodyContents.push(makePublicDetailButton(gooUrl));
   }
-
-  bodyContents.push(makeConsultButton(vehicle));
 
   return {
     type: "bubble",
@@ -1840,8 +1851,9 @@ function makeVehicleBubble(vehicle) {
       layout: "vertical",
       spacing: "none",
       paddingAll: "0px",
+      ...(cardAction ? { action: cardAction } : {}),
       contents: [
-        ...(imageUrl ? [makeHeroImage(imageUrl, vehicle, gooUrl)] : []),
+        makeHeroImage(imageUrl, vehicle),
         makeVehicleTitleBox(vehicle),
         {
           type: "box",
@@ -1858,27 +1870,42 @@ function makeVehicleBubble(vehicle) {
   };
 }
 
-function makeHeroImage(imageUrl, vehicle, gooUrl) {
+function makeHeroImage(imageUrl, vehicle) {
   return {
     type: "box",
     layout: "vertical",
     height: "176px",
-    ...(gooUrl
-      ? {
-          action: {
-            type: "uri",
-            uri: gooUrl,
-          },
-        }
-      : {}),
     contents: [
-      {
-        type: "image",
-        url: imageUrl,
-        size: "full",
-        aspectRatio: "16:9",
-        aspectMode: "cover",
-      },
+      ...(imageUrl
+        ? [
+            {
+              type: "image",
+              url: imageUrl,
+              size: "full",
+              aspectRatio: "16:9",
+              aspectMode: "cover",
+            },
+          ]
+        : [
+            {
+              type: "box",
+              layout: "vertical",
+              height: "176px",
+              backgroundColor: "#E9EDF2",
+              justifyContent: "center",
+              alignItems: "center",
+              contents: [
+                {
+                  type: "text",
+                  text: "写真準備中",
+                  size: "sm",
+                  color: "#6B7280",
+                  weight: "bold",
+                  align: "center",
+                },
+              ],
+            },
+          ]),
       makeStatusRibbon(vehicle),
     ],
   };
@@ -1957,7 +1984,7 @@ function makeGradeExtraBox(gradeExtraInfo, isPublicVehicle) {
     return {
       type: "box",
       layout: "vertical",
-      height: "118px",
+      height: "136px",
       margin: "sm",
       backgroundColor: "#FFF9EC",
       borderColor: "#D8BE72",
@@ -1976,7 +2003,7 @@ function makeGradeExtraBox(gradeExtraInfo, isPublicVehicle) {
           layout: "vertical",
           position: "absolute",
           width: "100%",
-          height: "118px",
+          height: "136px",
           paddingStart: "12px",
           paddingEnd: "12px",
           paddingTop: "9px",
@@ -1998,13 +2025,23 @@ function makeGradeExtraBox(gradeExtraInfo, isPublicVehicle) {
             },
             {
               type: "text",
-              text: "販売・現車確認は可能です\nお気軽にご相談ください",
+              text: "販売・現車確認は可能です",
               size: "sm",
               color: "#E5D08A",
               weight: "bold",
               align: "center",
               wrap: true,
-              maxLines: 2,
+              maxLines: 1,
+              margin: "sm",
+            },
+            {
+              type: "text",
+              text: "💬 ご相談はカードをタップ",
+              size: "sm",
+              color: "#FFFFFF",
+              weight: "bold",
+              align: "center",
+              wrap: false,
               margin: "sm",
             },
           ],
@@ -2018,13 +2055,22 @@ function makeGradeExtraBox(gradeExtraInfo, isPublicVehicle) {
     layout: "vertical",
     height: "92px",
     margin: "sm",
+    backgroundColor: "#F8F5EF",
+    borderColor: "#D8BE72",
+    borderWidth: "1px",
+    cornerRadius: "md",
+    paddingStart: "10px",
+    paddingEnd: "10px",
+    paddingTop: "8px",
+    paddingBottom: "8px",
     justifyContent: "center",
     contents: [
       {
         type: "text",
         text: gradeExtraInfo,
-        size: "xxs",
-        color: "#333333",
+        size: "xs",
+        color: "#253247",
+        weight: "bold",
         wrap: true,
         maxLines: 4,
       },
@@ -2283,21 +2329,34 @@ function splitTextByLength(text, length) {
   return result;
 }
 
-function makeConsultButton(vehicle) {
+function makePublicDetailButton(gooUrl) {
   return {
-    type: "button",
-    style: "primary",
-    height: "sm",
-    color: "#0B1F3A",
-    margin: "sm",
-    action: {
-      type: "message",
-      label: "💬 この車を相談",
-      text: `この車について相談したい：${safeText(
-        vehicle?.carName || vehicle?.title,
-        "車両情報",
-      )}`,
-    },
+    type: "box",
+    layout: "vertical",
+    height: "40px",
+    backgroundColor: "#0B1F3A",
+    cornerRadius: "md",
+    justifyContent: "center",
+    alignItems: "center",
+    ...(gooUrl
+      ? {
+          action: {
+            type: "uri",
+            uri: gooUrl,
+          },
+        }
+      : {}),
+    contents: [
+      {
+        type: "text",
+        text: gooUrl ? "🔍 タップして詳しく見る ↗" : "詳細ページ準備中",
+        size: "sm",
+        color: gooUrl ? "#FFFFFF" : "#AAB2BF",
+        weight: "bold",
+        align: "center",
+        wrap: false,
+      },
+    ],
   };
 }
 
@@ -2367,7 +2426,7 @@ function formatMileage(mileageText) {
     kilometers = value;
   }
 
-  return `${Math.round(kilometers).toLocaleString("ja-JP")}km`;
+  return `約${(kilometers / 10000).toFixed(1)}万㌔`;
 }
 
 function safeText(value, fallback = "-") {
