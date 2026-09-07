@@ -1,19 +1,19 @@
 {
   "codeVersion": "saved-list-direct-v13-saved-grade-recovery",
-  "updatedAt": "2026-09-07T04:29:28.055Z",
+  "updatedAt": "2026-09-07T10:12:09.830Z",
   "source": "motorgate",
   "updateMode": "full-public-and-saved-refresh",
   "lastUpdateStatus": {
     "success": true,
     "statusText": "正常更新",
-    "runId": "20260907042835005-w208idnm",
+    "runId": "20260907101109818-juw4re8t",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-09-07T04:28:36.067Z",
-    "finishedAt": "2026-09-07T04:29:28.055Z",
-    "durationSeconds": 52,
+    "startedAt": "2026-09-07T10:11:10.891Z",
+    "finishedAt": "2026-09-07T10:12:09.830Z",
+    "durationSeconds": 59,
     "error": "",
     "timeout": false,
-    "typeFailed": 1,
+    "typeFailed": 3,
     "typeTimeout": 0,
     "savedGradeNameMissing": 0,
     "savedYearMissing": 0,
@@ -23,17 +23,17 @@
     "savedDetailFetchFailed": 0
   },
   "counts": {
-    "publicVehicles": 32,
-    "savedVehicles": 27,
-    "vehicles": 59,
-    "publicFoundRows": 32,
-    "publicImageMapCount": 32
+    "publicVehicles": 35,
+    "savedVehicles": 26,
+    "vehicles": 61,
+    "publicFoundRows": 35,
+    "publicImageMapCount": 35
   },
   "checks": {
     "githubRead": {
       "status": 200,
       "shaFound": true,
-      "sha": "5123884d81422f504ef887ba2e0ec1e67ec985f3",
+      "sha": "df230f672c2eda8168d0eca8c9ae44f8788fd263",
       "error": ""
     },
     "loginStatus": 302,
@@ -63,76 +63,76 @@
         "pageUrl": "https://motorgate.jp/stock/savelist/index/2",
         "status": 200,
         "containsLoginForm": false,
-        "count": 2,
-        "newCount": 2,
+        "count": 1,
+        "newCount": 1,
         "listFields": {
-          "total": 2,
-          "carNameFound": 2,
+          "total": 1,
+          "carNameFound": 1,
           "gradeNameFound": 0,
-          "yearFound": 2,
-          "displacementFound": 2,
-          "colorFound": 2,
-          "mileageFound": 2,
-          "bodyPriceFound": 2,
-          "totalPriceFound": 2,
-          "imageFound": 2
+          "yearFound": 1,
+          "displacementFound": 1,
+          "colorFound": 1,
+          "mileageFound": 1,
+          "bodyPriceFound": 1,
+          "totalPriceFound": 1,
+          "imageFound": 1
         }
       },
       {
         "pageUrl": "https://motorgate.jp/stock/savelist/index/3",
         "status": 200,
         "containsLoginForm": false,
-        "count": 2,
+        "count": 1,
         "newCount": 0,
         "listFields": {
-          "total": 2,
-          "carNameFound": 2,
+          "total": 1,
+          "carNameFound": 1,
           "gradeNameFound": 0,
-          "yearFound": 2,
-          "displacementFound": 2,
-          "colorFound": 2,
-          "mileageFound": 2,
-          "bodyPriceFound": 2,
-          "totalPriceFound": 2,
-          "imageFound": 2
+          "yearFound": 1,
+          "displacementFound": 1,
+          "colorFound": 1,
+          "mileageFound": 1,
+          "bodyPriceFound": 1,
+          "totalPriceFound": 1,
+          "imageFound": 1
         }
       }
     ],
     "typeResults": {
       "success": 58,
-      "failed": 1,
+      "failed": 3,
       "timeout": 0
     },
     "gradeExtraInfo": {
-      "found": 59,
+      "found": 61,
       "missing": 0
     },
     "savedListFields": {
-      "total": 27,
-      "carNameFound": 27,
+      "total": 26,
+      "carNameFound": 26,
       "gradeNameFound": 0,
-      "yearFound": 27,
-      "displacementFound": 27,
-      "colorFound": 27,
-      "mileageFound": 27,
-      "bodyPriceFound": 27,
-      "totalPriceFound": 27,
-      "imageFound": 27
+      "yearFound": 26,
+      "displacementFound": 26,
+      "colorFound": 26,
+      "mileageFound": 26,
+      "bodyPriceFound": 26,
+      "totalPriceFound": 26,
+      "imageFound": 26
     },
     "savedDetailFields": {
-      "total": 27,
-      "gradeNameFound": 27,
+      "total": 26,
+      "gradeNameFound": 26,
       "gradeNameMissing": 0,
-      "yearFound": 27,
+      "yearFound": 26,
       "yearMissing": 0,
-      "colorFound": 27,
+      "colorFound": 26,
       "colorMissing": 0,
-      "mileageFound": 27,
+      "mileageFound": 26,
       "mileageMissing": 0,
-      "imageFound": 27,
+      "imageFound": 26,
       "imageMissing": 0,
-      "bodyPriceFound": 27,
-      "totalPriceFound": 27,
+      "bodyPriceFound": 26,
+      "totalPriceFound": 26,
       "detailFetchFailed": 0
     }
   },
@@ -154,7 +154,7 @@
       "displacement": "2.5L",
       "bodyPrice": "226万円",
       "totalPrice": "237.5万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260729/H/70009023323026072900200.jpg?1788755325",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260729/H/70009023323026072900200.jpg?1788775880",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260729W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260729002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -183,7 +183,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -221,7 +221,7 @@
       "displacement": "660cc",
       "bodyPrice": "228.4万円",
       "totalPrice": "232.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260731/H/70009023323026073100200.jpg?1788755325",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260731/H/70009023323026073100200.jpg?1788775880",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260731W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260731002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -252,7 +252,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -290,7 +290,7 @@
       "displacement": "660cc",
       "bodyPrice": "145.8万円",
       "totalPrice": "148.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260406/H/70009023323026040600300.jpg?1788755325",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260406/H/70009023323026040600300.jpg?1788775880",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260406W003",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260406003&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -317,7 +317,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -355,7 +355,7 @@
       "displacement": "2.0L",
       "bodyPrice": "324.9万円",
       "totalPrice": "335.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260604/H/70009023323026060400100.jpg?1788755325",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260604/H/70009023323026060400100.jpg?1788775879",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260604W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260604001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -384,7 +384,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -422,7 +422,7 @@
       "displacement": "660cc",
       "bodyPrice": "134.4万円",
       "totalPrice": "138.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100200.jpg?1788755325",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100200.jpg?1788775879",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260421002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -451,7 +451,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -489,7 +489,7 @@
       "displacement": "660cc",
       "bodyPrice": "130.7万円",
       "totalPrice": "133.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260414/H/70009023323026041400200.jpg?1788755325",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260414/H/70009023323026041400200.jpg?1788775880",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260414W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260414002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -518,7 +518,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -556,7 +556,7 @@
       "displacement": "1.5L",
       "bodyPrice": "42.5万円",
       "totalPrice": "48.7万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260622/H/70009023323026062200100.jpg?1788755332",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260622/H/70009023323026062200100.jpg?1788775889",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260622W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260622001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -585,7 +585,7 @@
         "EV・HV"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -623,7 +623,7 @@
       "displacement": "2.5L",
       "bodyPrice": "428.1万円",
       "totalPrice": "438.5万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260422/H/70009023323026042200200.jpg?1788755337",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260422/H/70009023323026042200200.jpg?1788775889",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260422W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260422002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -650,7 +650,7 @@
         "EV・HV"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -688,7 +688,7 @@
       "displacement": "2.5L",
       "bodyPrice": "380万円",
       "totalPrice": "386.8万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900100.jpg?1788755337",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900100.jpg?1788775889",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260809W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260809001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -717,7 +717,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -755,7 +755,7 @@
       "displacement": "4.6L",
       "bodyPrice": "199.8万円",
       "totalPrice": "208.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260623/H/70009023323026062300100.jpg?1788755333",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260623/H/70009023323026062300100.jpg?1788775889",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260623W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260623001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -780,7 +780,7 @@
         "バン・トラック"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -818,7 +818,7 @@
       "displacement": "2.5L",
       "bodyPrice": "503.5万円",
       "totalPrice": "509.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260323/H/70009023323026032300200.jpg?1788755333",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260323/H/70009023323026032300200.jpg?1788775889",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260323W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260323002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -847,7 +847,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -885,7 +885,7 @@
       "displacement": "2.5L",
       "bodyPrice": "355.4万円",
       "totalPrice": "363.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260413/H/70009023323026041300100.jpg?1788755338",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260413/H/70009023323026041300100.jpg?1788775889",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260413W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260413001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -912,7 +912,7 @@
         "EV・HV"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -950,7 +950,7 @@
       "displacement": "660cc",
       "bodyPrice": "110.1万円",
       "totalPrice": "112.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260723/H/70009023323026072300100.jpg?1788755342",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260723/H/70009023323026072300100.jpg?1788775898",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260723W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260723001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -977,7 +977,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1015,7 +1015,7 @@
       "displacement": "1.0L",
       "bodyPrice": "156.6万円",
       "totalPrice": "163.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260403/H/70009023323026040300100.jpg?1788755340",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260403/H/70009023323026040300100.jpg?1788775898",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260403W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260403001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1040,7 +1040,7 @@
         "コンパクトカー"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1078,7 +1078,7 @@
       "displacement": "1.5L",
       "bodyPrice": "116.9万円",
       "totalPrice": "125.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100300.jpg?1788755340",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100300.jpg?1788775898",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W003",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260421003&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1107,7 +1107,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1145,7 +1145,7 @@
       "displacement": "2.2L",
       "bodyPrice": "381.2万円",
       "totalPrice": "387.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260319/H/70009023323026031900200.jpg?1788755344",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260319/H/70009023323026031900200.jpg?1788775898",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260319W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260319002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1172,7 +1172,7 @@
         "SUV"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1210,7 +1210,7 @@
       "displacement": "3.0L",
       "bodyPrice": "259.1万円",
       "totalPrice": "262.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260808/H/70009023323026080800200.jpg?1788755345",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260808/H/70009023323026080800200.jpg?1788775898",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260808W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260808002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1235,7 +1235,7 @@
         "バン・トラック"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1273,7 +1273,7 @@
       "displacement": "2.0L",
       "bodyPrice": "241.7万円",
       "totalPrice": "252.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260526/H/70009023323026052600200.jpg?1788755347",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260526/H/70009023323026052600200.jpg?1788775898",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260526W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260526002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1298,7 +1298,7 @@
         "ミニバン"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1336,9 +1336,9 @@
       "displacement": "2.7L",
       "bodyPrice": "458.8万円",
       "totalPrice": "469.9万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260827/H/70009023323026082700300.jpg?1788755347",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260827/H/70009023323026082700300.jpg?1788775906",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260827W003",
-      "gooUrl": "",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260827003&area_cd=11",
       "sourceStatus": "掲載在庫",
       "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260827W003&StockStatus=00180002&ScreenId=CB101GR",
@@ -1365,7 +1365,7 @@
         "バン・トラック"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1403,7 +1403,7 @@
       "displacement": "660cc",
       "bodyPrice": "153.9万円",
       "totalPrice": "157.7万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260706/H/70009023323026070600100.jpg?1788755347",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260706/H/70009023323026070600100.jpg?1788775906",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260706W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260706001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1430,7 +1430,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1441,6 +1441,71 @@
       "detailResult": {
         "success": true,
         "url": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260706W001&StockStatus=00180002&ScreenId=CB101GR",
+        "attempts": 1,
+        "makerName": true,
+        "seatCapacity": true,
+        "gradeName": true,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
+      }
+    },
+    {
+      "stockId": "0902332A30260808W001",
+      "title": "ハイゼットトラック ジャンボエクストラ",
+      "description": "ハイゼットトラック ジャンボエクストラ 切替式４ＷＤ ＬＥＤヘッドライト／フォグ 天井収納 デフロック パーキングソナー アオリガード アオリチェーン 純正オーディオ 衝突軽減ブレーキ スマートキー 電動格納ドアミラー パワーウィンドウ",
+      "carName": "ハイゼットトラック",
+      "gradeName": "ジャンボエクストラ",
+      "gradeExtraInfo": "1",
+      "classificationName": "S510P",
+      "makerName": "ダイハツ",
+      "seatCapacity": 1,
+      "year": "2024年",
+      "mileage": "2.8万K",
+      "color": "ブラックＭ",
+      "inspection": "車検整備付",
+      "displacement": "660cc",
+      "bodyPrice": "149.5万円",
+      "totalPrice": "153.3万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260808/H/70009023323026080800100.jpg",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260808W001",
+      "gooUrl": "",
+      "sourceStatus": "掲載在庫",
+      "sourcePageUrl": "",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260808W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260808W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260808W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260808W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260808W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260808W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260808W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
+      "types": [
+        "軽自…",
+        "軽自動車",
+        "トラック",
+        "特にこだわりはない"
+      ],
+      "typeKeys": [
+        "軽自…",
+        "軽自動車",
+        "トラック",
+        "特にこだわりはない"
+      ],
+      "listResult": null,
+      "updatedAt": "2026-09-07T10:12:09.830Z",
+      "typeResult": {
+        "status": 200,
+        "success": true,
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260808W001&StockStatus=00180002&ScreenId=CB101GR",
         "attempts": 1,
         "makerName": true,
         "seatCapacity": true,
@@ -1468,7 +1533,7 @@
       "displacement": "660cc",
       "bodyPrice": "133万円",
       "totalPrice": "135.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900200.jpg?1788755351",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900200.jpg?1788775906",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260809W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260809002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1495,7 +1560,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1533,7 +1598,7 @@
       "displacement": "660cc",
       "bodyPrice": "129.4万円",
       "totalPrice": "133.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260609/H/70009023323026060900200.jpg?1788755351",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260609/H/70009023323026060900200.jpg?1788775906",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260609W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260609002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1562,7 +1627,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1600,7 +1665,7 @@
       "displacement": "660cc",
       "bodyPrice": "95.1万円",
       "totalPrice": "98.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260313/H/70009023323026031300100.jpg?1788755351",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260313/H/70009023323026031300100.jpg?1788775906",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260313W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260313001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1629,7 +1694,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1667,7 +1732,7 @@
       "displacement": "2.5L",
       "bodyPrice": "496.9万円",
       "totalPrice": "503.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260824/H/70009023323026082400300.jpg?1788755354",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260824/H/70009023323026082400300.jpg?1788775914",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260824W003",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260824003&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1698,7 +1763,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1736,7 +1801,7 @@
       "displacement": "1.3L",
       "bodyPrice": "99.8万円",
       "totalPrice": "108.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260626/H/70009023323026062600100.jpg?1788755354",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260626/H/70009023323026062600100.jpg?1788775914",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260626W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260626001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1763,7 +1828,7 @@
         "ステーションワゴン"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1801,7 +1866,7 @@
       "displacement": "660cc",
       "bodyPrice": "191.8万円",
       "totalPrice": "195.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260624/H/70009023323026062400100.jpg?1788755354",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260624/H/70009023323026062400100.jpg?1788775914",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260624W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260624001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1828,7 +1893,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1839,6 +1904,75 @@
       "detailResult": {
         "success": true,
         "url": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260624W001&StockStatus=00180002&ScreenId=CB101GR",
+        "attempts": 1,
+        "makerName": true,
+        "seatCapacity": true,
+        "gradeName": true,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
+      }
+    },
+    {
+      "stockId": "0902332A30260820W001",
+      "title": "ヤリス ハイブリッドＺ",
+      "description": "ヤリス ハイブリッドＺ ４ＷＤ モデリスタアルミホイール 新品サマータイヤ組替済み スタットレスアルミ組付属 純正コネクトナビ ＴＶ バックカメラ ＬＥＤヘッドライト／フォグ 前席シートヒーター クルーズコントロール ＨＵＤ",
+      "carName": "ヤリス",
+      "gradeName": "ハイブリッドＺ",
+      "gradeExtraInfo": "1",
+      "classificationName": "MXPH15",
+      "makerName": "トヨタ",
+      "seatCapacity": 1,
+      "year": "2020年",
+      "mileage": "2.7万K",
+      "color": "ブラック",
+      "inspection": "検2027年10月",
+      "displacement": "1.5L",
+      "bodyPrice": "207.8万円",
+      "totalPrice": "212.6万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260820/H/70009023323026082000100.jpg?1788775914",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260820W001",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260820001&area_cd=11",
+      "sourceStatus": "掲載在庫",
+      "sourcePageUrl": "",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260820W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260820W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260820W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260820W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260820W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260820W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260820W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
+      "types": [
+        "普通…",
+        "普通車",
+        "コンパクトカー",
+        "ステーションワゴン",
+        "EV・HV",
+        "スポーティ"
+      ],
+      "typeKeys": [
+        "普通…",
+        "普通車",
+        "コンパクトカー",
+        "ステーションワゴン",
+        "EV・HV",
+        "スポーティ"
+      ],
+      "listResult": null,
+      "updatedAt": "2026-09-07T10:12:09.830Z",
+      "typeResult": {
+        "status": 200,
+        "success": true,
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260820W001&StockStatus=00180002&ScreenId=CB101GR",
         "attempts": 1,
         "makerName": true,
         "seatCapacity": true,
@@ -1866,7 +2000,7 @@
       "displacement": "660cc",
       "bodyPrice": "125.6万円",
       "totalPrice": "129.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260515/H/70009023323026051500300.jpg?1788755360",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260515/H/70009023323026051500300.jpg?1788775914",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260515W003",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260515003&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1893,7 +2027,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1931,7 +2065,7 @@
       "displacement": "2.5L",
       "bodyPrice": "121万円",
       "totalPrice": "132.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260422/H/70009023323026042200300.jpg?1788755358",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260422/H/70009023323026042200300.jpg?1788775914",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260422W003",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260422003&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1958,7 +2092,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1996,7 +2130,7 @@
       "displacement": "1.8L",
       "bodyPrice": "313.3万円",
       "totalPrice": "322.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260327/H/70009023323026032700100.jpg?1788755358",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260327/H/70009023323026032700100.jpg?1788775923",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260327W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260327001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2025,7 +2159,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2063,7 +2197,7 @@
       "displacement": "1.6L",
       "bodyPrice": "241.4万円",
       "totalPrice": "252.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260409/H/70009023323026040900100.jpg?1788755361",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260409/H/70009023323026040900100.jpg?1788775923",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260409W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260409001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2090,7 +2224,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2101,6 +2235,75 @@
       "detailResult": {
         "success": true,
         "url": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260409W001&StockStatus=00180002&ScreenId=CB101GR",
+        "attempts": 1,
+        "makerName": true,
+        "seatCapacity": true,
+        "gradeName": true,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
+      }
+    },
+    {
+      "stockId": "0902332A30260818W001",
+      "title": "レヴォーグ ＳＴＩスポーツ ＥＸ",
+      "description": "レヴォーグ ＳＴＩスポーツ ＥＸ ４ＷＤ アイサイト ＳＴＩ本革シート スバルスターリンクナビ パワーバックドア メモリーパワーシート エンジンスターター ＥＴＣ ４席シートヒーター ＬＥＤヘッドライト／フォグ／デイライト リアフォグ",
+      "carName": "レヴォーグ",
+      "gradeName": "ＳＴＩスポーツ ＥＸ",
+      "gradeExtraInfo": "1",
+      "classificationName": "VN5",
+      "makerName": "スバル",
+      "seatCapacity": 1,
+      "year": "2021年",
+      "mileage": "7.5万K",
+      "color": "クリスタルホワイトパール",
+      "inspection": "車検整備付",
+      "displacement": "1.8L",
+      "bodyPrice": "239万円",
+      "totalPrice": "248.2万円",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260818/H/70009023323026081800100.jpg?1788775923",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260818W001",
+      "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260818001&area_cd=11",
+      "sourceStatus": "掲載在庫",
+      "sourcePageUrl": "",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260818W001&StockStatus=00180002&ScreenId=CB101GR",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260818W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260818W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260818W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260818W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260818W001&StockStatus=00180002&ScreenId=CB101GR",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260818W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
+      "types": [
+        "普通…",
+        "普通車",
+        "コンパクトカー",
+        "ステーションワゴン",
+        "EV・HV",
+        "スポーティ"
+      ],
+      "typeKeys": [
+        "普通…",
+        "普通車",
+        "コンパクトカー",
+        "ステーションワゴン",
+        "EV・HV",
+        "スポーティ"
+      ],
+      "listResult": null,
+      "updatedAt": "2026-09-07T10:12:09.830Z",
+      "typeResult": {
+        "status": 200,
+        "success": true,
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260818W001&StockStatus=00180002&ScreenId=CB101GR",
         "attempts": 1,
         "makerName": true,
         "seatCapacity": true,
@@ -2128,7 +2331,7 @@
       "displacement": "660cc",
       "bodyPrice": "39.3万円",
       "totalPrice": "43.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260617/H/70009023323026061700200.jpg?1788755364",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260617/H/70009023323026061700200.jpg?1788775925",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260617W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260617002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2155,7 +2358,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2193,7 +2396,7 @@
       "displacement": "2.0L",
       "bodyPrice": "218.8万円",
       "totalPrice": "229.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100100.jpg?1788755362",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100100.jpg?1788775925",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260421001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2218,7 +2421,7 @@
         "ミニバン"
       ],
       "listResult": null,
-      "updatedAt": "2026-09-07T04:29:28.055Z",
+      "updatedAt": "2026-09-07T10:12:09.830Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2230,6 +2433,132 @@
         "success": true,
         "url": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W001&StockStatus=00180002&ScreenId=CB101GR",
         "attempts": 1,
+        "makerName": true,
+        "seatCapacity": true,
+        "gradeName": true,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
+      }
+    },
+    {
+      "stockId": "0902332A30260907W002",
+      "title": "レガシィアウトバック リミテッド",
+      "description": "レガシィアウトバック",
+      "carName": "レガシィアウトバック",
+      "gradeName": "リミテッド",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "makerName": "スバル",
+      "seatCapacity": 1,
+      "year": "2017年",
+      "mileage": "8.1万K",
+      "color": "ホワイト",
+      "inspection": "00330002",
+      "displacement": "2017cc",
+      "bodyPrice": "8.1万円",
+      "totalPrice": "8.1万円",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260907W00279.jpg?1788775880",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260907W002&ScreenId=SIH_001",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260907W002&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260907W002&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260907W002&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260907W002&StockStatus=00180002&ScreenId=CB101GR"
+      ],
+      "types": [],
+      "typeKeys": [],
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true,
+        "priceCandidates": []
+      },
+      "updatedAt": "2026-09-07T10:12:05.998Z",
+      "typeResult": {
+        "status": 200,
+        "success": false,
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260907W002&ScreenId=SIH_001",
+        "attempts": 4,
+        "makerName": true,
+        "seatCapacity": true,
+        "gradeName": true,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
+      }
+    },
+    {
+      "stockId": "0902332A30260907W001",
+      "title": "ミニキャブトラック ダンプ",
+      "description": "ミニキャブトラック",
+      "carName": "ミニキャブトラック",
+      "gradeName": "ダンプ",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "makerName": "三菱",
+      "seatCapacity": 1,
+      "year": "2016年",
+      "mileage": "0.8万K",
+      "color": "カタログカラー 検索",
+      "inspection": "00330002",
+      "displacement": "2016cc",
+      "bodyPrice": "0.8万円",
+      "totalPrice": "0.8万円",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260907W00179.jpg?1788775881",
+      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260907W001&ScreenId=SIH_001",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
+      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260907W001&ScreenId=SIH_001",
+      "editUrls": [
+        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260907W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260907W001&ScreenId=SIH_001",
+        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260907W001&StockStatus=00180002&ScreenId=CB101GR"
+      ],
+      "types": [],
+      "typeKeys": [],
+      "listResult": {
+        "carName": true,
+        "gradeName": false,
+        "year": true,
+        "displacement": true,
+        "color": true,
+        "mileage": true,
+        "bodyPrice": true,
+        "totalPrice": true,
+        "imageUrl": true,
+        "priceCandidates": []
+      },
+      "updatedAt": "2026-09-07T10:12:05.998Z",
+      "typeResult": {
+        "status": 200,
+        "success": false,
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260907W001&ScreenId=SIH_001",
+        "attempts": 4,
         "makerName": true,
         "seatCapacity": true,
         "gradeName": true,
@@ -2256,7 +2585,7 @@
       "displacement": "2023cc",
       "bodyPrice": "266.0万円",
       "totalPrice": "273.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260830/H/70009023323026083000100.jpg?1788755323",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260830/H/70009023323026083000100.jpg?1788775880",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260830W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2300,7 +2629,7 @@
           "266.0万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2338,7 +2667,7 @@
       "displacement": "2024cc",
       "bodyPrice": "0.7万円",
       "totalPrice": "0.7万円",
-      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260904W00179.jpg?1788755324",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260904W00179.jpg?1788775880",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260904W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2363,7 +2692,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2401,7 +2730,7 @@
       "displacement": "2022cc",
       "bodyPrice": "272.0万円",
       "totalPrice": "278.7万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260902/H/70009023323026090200100.jpg?1788755323",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260902/H/70009023323026090200100.jpg?1788775881",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260902W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2445,7 +2774,7 @@
           "272.0万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2456,86 +2785,6 @@
       "detailResult": {
         "success": true,
         "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260902W001&ScreenId=SIH_001",
-        "attempts": 1,
-        "makerName": true,
-        "seatCapacity": true,
-        "gradeName": true,
-        "year": false,
-        "mileage": true,
-        "color": true,
-        "imageUrl": true
-      }
-    },
-    {
-      "stockId": "0902332A30260820W001",
-      "title": "ヤリス ハイブリッドＺ",
-      "description": "ヤリス",
-      "carName": "ヤリス",
-      "gradeName": "ハイブリッドＺ",
-      "gradeExtraInfo": "1",
-      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
-      "makerName": "トヨタ",
-      "seatCapacity": 1,
-      "year": "2020年",
-      "mileage": "2.7万K",
-      "color": "ブラック２０２",
-      "inspection": "2027",
-      "displacement": "2020cc",
-      "bodyPrice": "207.8万円",
-      "totalPrice": "212.6万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260820/H/70009023323026082000100.jpg?1788755323",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260820W001&ScreenId=SIH_001",
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
-      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260820W001&ScreenId=SIH_001",
-      "editUrls": [
-        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260820W001&ScreenId=SIH_001",
-        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260820W001&ScreenId=SIH_001",
-        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260820W001&StockStatus=00180002&ScreenId=CB101GR"
-      ],
-      "types": [
-        "普通…",
-        "普通車",
-        "コンパクトカー",
-        "ステーションワゴン",
-        "EV・HV",
-        "スポーティ"
-      ],
-      "typeKeys": [
-        "普通…",
-        "普通車",
-        "コンパクトカー",
-        "ステーションワゴン",
-        "EV・HV",
-        "スポーティ"
-      ],
-      "listResult": {
-        "carName": true,
-        "gradeName": false,
-        "year": true,
-        "displacement": true,
-        "color": true,
-        "mileage": true,
-        "bodyPrice": true,
-        "totalPrice": true,
-        "imageUrl": true,
-        "priceCandidates": [
-          "212.6万円",
-          "207.8万円"
-        ]
-      },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
-      "typeResult": {
-        "status": 200,
-        "success": true,
-        "containsFatalError": false,
-        "timeout": false,
-        "error": ""
-      },
-      "detailResult": {
-        "success": true,
-        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260820W001&ScreenId=SIH_001",
         "attempts": 1,
         "makerName": true,
         "seatCapacity": true,
@@ -2563,7 +2812,7 @@
       "displacement": "2015cc",
       "bodyPrice": "253.8万円",
       "totalPrice": "263.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260827/H/70009023323026082700100.jpg?1788755324",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260827/H/70009023323026082700100.jpg?1788775881",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260827W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2601,7 +2850,7 @@
           "253.8万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2639,7 +2888,7 @@
       "displacement": "2021cc",
       "bodyPrice": "224.9万円",
       "totalPrice": "232.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260827/H/70009023323026082700200.jpg?1788755324",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260827/H/70009023323026082700200.jpg?1788775889",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260827W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2683,7 +2932,7 @@
           "224.9万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2721,7 +2970,7 @@
       "displacement": "2019cc",
       "bodyPrice": "102.1万円",
       "totalPrice": "107.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260731/H/70009023323026073100100.jpg?1788755330",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260731/H/70009023323026073100100.jpg?1788775889",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260731W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2761,7 +3010,7 @@
           "102.1万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2799,7 +3048,7 @@
       "displacement": "2023cc",
       "bodyPrice": "291.2万円",
       "totalPrice": "297.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260824/H/70009023323026082400400.jpg?1788755331",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260824/H/70009023323026082400400.jpg?1788775889",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260824W004&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2841,7 +3090,7 @@
           "291.2万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2879,7 +3128,7 @@
       "displacement": "2019cc",
       "bodyPrice": "145.5万円",
       "totalPrice": "153.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260824/H/70009023323026082400100.jpg?1788755331",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260824/H/70009023323026082400100.jpg?1788775897",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260824W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2919,7 +3168,7 @@
           "145.5万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2957,7 +3206,7 @@
       "displacement": "2014cc",
       "bodyPrice": "85.7万円",
       "totalPrice": "92.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900300.jpg?1788755331",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900300.jpg?1788775897",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260809W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2997,7 +3246,7 @@
           "85.7万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3008,86 +3257,6 @@
       "detailResult": {
         "success": true,
         "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260809W003&ScreenId=SIH_001",
-        "attempts": 1,
-        "makerName": true,
-        "seatCapacity": true,
-        "gradeName": true,
-        "year": false,
-        "mileage": true,
-        "color": true,
-        "imageUrl": true
-      }
-    },
-    {
-      "stockId": "0902332A30260818W001",
-      "title": "レヴォーグ ＳＴＩスポーツ ＥＸ",
-      "description": "レヴォーグ",
-      "carName": "レヴォーグ",
-      "gradeName": "ＳＴＩスポーツ ＥＸ",
-      "gradeExtraInfo": "1",
-      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
-      "makerName": "スバル",
-      "seatCapacity": 1,
-      "year": "2021年",
-      "mileage": "7.5万K",
-      "color": "クリスタルホワイトパール",
-      "inspection": "00330002",
-      "displacement": "2021cc",
-      "bodyPrice": "239.0万円",
-      "totalPrice": "248.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260818/H/70009023323026081800100.jpg?1788755332",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260818W001&ScreenId=SIH_001",
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
-      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260818W001&ScreenId=SIH_001",
-      "editUrls": [
-        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260818W001&ScreenId=SIH_001",
-        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260818W001&ScreenId=SIH_001",
-        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260818W001&StockStatus=00180002&ScreenId=CB101GR"
-      ],
-      "types": [
-        "普通…",
-        "普通車",
-        "コンパクトカー",
-        "ステーションワゴン",
-        "EV・HV",
-        "スポーティ"
-      ],
-      "typeKeys": [
-        "普通…",
-        "普通車",
-        "コンパクトカー",
-        "ステーションワゴン",
-        "EV・HV",
-        "スポーティ"
-      ],
-      "listResult": {
-        "carName": true,
-        "gradeName": false,
-        "year": true,
-        "displacement": true,
-        "color": true,
-        "mileage": true,
-        "bodyPrice": true,
-        "totalPrice": true,
-        "imageUrl": true,
-        "priceCandidates": [
-          "248.2万円",
-          "239.0万円"
-        ]
-      },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
-      "typeResult": {
-        "status": 200,
-        "success": true,
-        "containsFatalError": false,
-        "timeout": false,
-        "error": ""
-      },
-      "detailResult": {
-        "success": true,
-        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260818W001&ScreenId=SIH_001",
         "attempts": 1,
         "makerName": true,
         "seatCapacity": true,
@@ -3115,7 +3284,7 @@
       "displacement": "2018cc",
       "bodyPrice": "40.7万円",
       "totalPrice": "43.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900300.jpg?1788755337",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900300.jpg?1788775897",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260819W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3153,7 +3322,7 @@
           "40.7万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3191,7 +3360,7 @@
       "displacement": "2023cc",
       "bodyPrice": "379.4万円",
       "totalPrice": "388.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260824/H/70009023323026082400200.jpg?1788755337",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260824/H/70009023323026082400200.jpg?1788775906",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260824W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3231,7 +3400,7 @@
           "379.4万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3269,7 +3438,7 @@
       "displacement": "2013cc",
       "bodyPrice": "68.2万円",
       "totalPrice": "72.3万円",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026082400500.jpg?1788755318",
+      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026082400500.jpg?1788775873",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260824W005&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3307,7 +3476,7 @@
           "68.2万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3345,7 +3514,7 @@
       "displacement": "2022cc",
       "bodyPrice": "148.5万円",
       "totalPrice": "152.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900200.jpg?1788755338",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900200.jpg?1788775905",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260819W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3387,7 +3556,7 @@
           "148.5万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3425,7 +3594,7 @@
       "displacement": "2019cc",
       "bodyPrice": "332.5万円",
       "totalPrice": "343.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260616/H/70009023323026061600100.jpg?1788755338",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260616/H/70009023323026061600100.jpg?1788775907",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260616W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3461,7 +3630,7 @@
           "332.5万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3499,7 +3668,7 @@
       "displacement": "2016cc",
       "bodyPrice": "99.7万円",
       "totalPrice": "108.3万円",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026081900100.jpg?1788755318",
+      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026081900100.jpg?1788775873",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260819W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3541,7 +3710,7 @@
           "99.7万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3579,7 +3748,7 @@
       "displacement": "2012cc",
       "bodyPrice": "80.1万円",
       "totalPrice": "83.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260808/H/70009023323026080800300.jpg?1788755344",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260808/H/70009023323026080800300.jpg?1788775907",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260808W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3619,7 +3788,7 @@
           "80.1万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3630,82 +3799,6 @@
       "detailResult": {
         "success": true,
         "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260808W003&ScreenId=SIH_001",
-        "attempts": 1,
-        "makerName": true,
-        "seatCapacity": true,
-        "gradeName": true,
-        "year": false,
-        "mileage": true,
-        "color": true,
-        "imageUrl": true
-      }
-    },
-    {
-      "stockId": "0902332A30260808W001",
-      "title": "ハイゼットトラック ジャンボエクストラ",
-      "description": "ハイゼットトラック",
-      "carName": "ハイゼットトラック",
-      "gradeName": "ジャンボエクストラ",
-      "gradeExtraInfo": "1",
-      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
-      "makerName": "ダイハツ",
-      "seatCapacity": 1,
-      "year": "2024年",
-      "mileage": "2.8万K",
-      "color": "ブラックＭ",
-      "inspection": "00330002",
-      "displacement": "2024cc",
-      "bodyPrice": "150.1万円",
-      "totalPrice": "153.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260808/H/70009023323026080800100.jpg?1788755344",
-      "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260808W001&ScreenId=SIH_001",
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
-      "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260808W001&ScreenId=SIH_001",
-      "editUrls": [
-        "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260808W001&ScreenId=SIH_001",
-        "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260808W001&ScreenId=SIH_001",
-        "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260808W001&StockStatus=00180002&ScreenId=CB101GR"
-      ],
-      "types": [
-        "軽自…",
-        "軽自動車",
-        "トラック",
-        "特にこだわりはない"
-      ],
-      "typeKeys": [
-        "軽自…",
-        "軽自動車",
-        "トラック",
-        "特にこだわりはない"
-      ],
-      "listResult": {
-        "carName": true,
-        "gradeName": false,
-        "year": true,
-        "displacement": true,
-        "color": true,
-        "mileage": true,
-        "bodyPrice": true,
-        "totalPrice": true,
-        "imageUrl": true,
-        "priceCandidates": [
-          "153.3万円",
-          "150.1万円"
-        ]
-      },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
-      "typeResult": {
-        "status": 200,
-        "success": true,
-        "containsFatalError": false,
-        "timeout": false,
-        "error": ""
-      },
-      "detailResult": {
-        "success": true,
-        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260808W001&ScreenId=SIH_001",
         "attempts": 1,
         "makerName": true,
         "seatCapacity": true,
@@ -3733,7 +3826,7 @@
       "displacement": "2018cc",
       "bodyPrice": "164.6万円",
       "totalPrice": "173.2万円",
-      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260803W00179.jpg?1788755344",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260803W00179.jpg?1788775913",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260803W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3777,7 +3870,7 @@
           "164.6万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3815,7 +3908,7 @@
       "displacement": "2021cc",
       "bodyPrice": "166.5万円",
       "totalPrice": "169.5万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260723/H/70009023323026072300300.jpg?1788755344",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260723/H/70009023323026072300300.jpg?1788775913",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260723W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3855,7 +3948,7 @@
           "166.5万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3893,7 +3986,7 @@
       "displacement": "2015cc",
       "bodyPrice": "40.9万円",
       "totalPrice": "44.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260310/H/70009023323026031000100.jpg?1788755346",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260310/H/70009023323026031000100.jpg?1788775913",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260310W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3933,7 +4026,7 @@
           "40.9万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3971,7 +4064,7 @@
       "displacement": "2017cc",
       "bodyPrice": "86.2万円",
       "totalPrice": "88.8万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260706/H/70009023323026070600200.jpg?1788755350",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260706/H/70009023323026070600200.jpg?1788775914",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260706W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -4009,7 +4102,7 @@
           "86.2万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -4047,7 +4140,7 @@
       "displacement": "2022cc",
       "bodyPrice": "151.8万円",
       "totalPrice": "155.7万円",
-      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260709W00379.jpg?1788755350",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30260709W00379.jpg?1788775914",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260709W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -4085,7 +4178,7 @@
           "151.8万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -4123,7 +4216,7 @@
       "displacement": "2012cc",
       "bodyPrice": "32.1万円",
       "totalPrice": "38.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260526/H/70009023323026052600400.jpg?1788755351",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260526/H/70009023323026052600400.jpg?1788775914",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260526W004&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -4161,7 +4254,7 @@
           "32.1万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -4199,11 +4292,11 @@
       "displacement": "2015cc",
       "bodyPrice": "102.5万円",
       "totalPrice": "106.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260702/H/70009023323026070200100.jpg?1788755350",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260702/H/70009023323026070200100.jpg?1788775922",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260702W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260702W001&ScreenId=SIH_001",
       "editUrls": [
         "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260702W001&ScreenId=SIH_001",
@@ -4239,7 +4332,7 @@
           "102.5万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -4277,7 +4370,7 @@
       "displacement": "2021cc",
       "bodyPrice": "144.0万円",
       "totalPrice": "147.8万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260612/H/70009023323026061200200.jpg?1788755354",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260612/H/70009023323026061200200.jpg?1788775922",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260612W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -4317,7 +4410,7 @@
           "144.0万円"
         ]
       },
-      "updatedAt": "2026-09-07T04:29:18.830Z",
+      "updatedAt": "2026-09-07T10:12:05.998Z",
       "typeResult": {
         "status": 200,
         "success": true,
