@@ -3,6 +3,7 @@ import {
   searchInventoryData,
   selectSimilarInventoryData,
 } from "../_lib/inventorySearch.js";
+import { handlePromiseEvent } from "../_lib/promises/handler.js";
 
 const INVENTORY_URL =
   "https://raw.githubusercontent.com/CARTOPIA0319/cartopia-car-diagnosis/main/data/inventory.json";
@@ -149,6 +150,13 @@ async function handleEvent(event) {
 
   const postbackData =
     event.type === "postback" ? event.postback?.data || "" : "";
+
+  const promiseMessage = handlePromiseEvent(text, postbackData);
+
+  if (promiseMessage) {
+    await replyMessage(event.replyToken, [promiseMessage]);
+    return;
+  }
 
   if (text.startsWith("この車について相談したい：")) {
     return;
