@@ -1,4 +1,6 @@
+
 import { getPromiseById, getNextPromise } from "./index.js";
+import { PROMISE_CONTENT } from "./content.js";
 
 const COLORS = Object.freeze({
   navy: "#0B1F3A",
@@ -23,6 +25,42 @@ function makeNavigationButton(label, data) {
   };
 }
 
+function makeSection(section) {
+  const contents = [];
+
+  if (section.heading) {
+    contents.push({
+      type: "text",
+      text: section.heading,
+      size: "lg",
+      weight: "bold",
+      color: COLORS.navy,
+      wrap: true,
+    });
+  }
+
+  if (section.text) {
+    contents.push({
+      type: "text",
+      text: section.text,
+      size: "md",
+      color: COLORS.text,
+      wrap: true,
+    });
+  }
+
+  if (contents.length === 0) {
+    return null;
+  }
+
+  return {
+    type: "box",
+    layout: "vertical",
+    spacing: "md",
+    contents,
+  };
+}
+
 export function makePromiseDetailFlex(id) {
   const promise = getPromiseById(id);
 
@@ -31,6 +69,11 @@ export function makePromiseDetailFlex(id) {
   }
 
   const nextPromise = getNextPromise(id);
+  const sections = PROMISE_CONTENT[id]?.sections || [];
+
+  const sectionBoxes = sections
+    .map(makeSection)
+    .filter(Boolean);
 
   const buttons = [];
 
@@ -94,13 +137,7 @@ export function makePromiseDetailFlex(id) {
             paddingAll: "20px",
             spacing: "md",
             contents: [
-              {
-                type: "text",
-                text: "本文は確定済みの内容を組み込みます。",
-                size: "md",
-                color: COLORS.text,
-                wrap: true,
-              },
+              ...sectionBoxes,
               ...buttons,
             ],
           },
