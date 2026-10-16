@@ -4,23 +4,23 @@
   "source": "motorgate",
   "updateMode": "full-public-and-saved-refresh",
   "lastUpdateStatus": {
-    "success": true,
-    "statusText": "正常更新",
-    "runId": "20261016122036846-klp5aled",
+    "success": false,
+    "statusText": "更新失敗",
+    "runId": "20261016172116052-ujvcx957",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-10-16T12:20:38.759Z",
-    "finishedAt": "2026-10-16T12:21:53.367Z",
-    "durationSeconds": 75,
-    "error": "",
+    "startedAt": "2026-10-16T17:21:17.198Z",
+    "finishedAt": "2026-10-16T17:21:27.829Z",
+    "durationSeconds": 11,
+    "error": "fetch failed",
     "timeout": false,
-    "typeFailed": 10,
-    "typeTimeout": 0,
-    "savedGradeNameMissing": 0,
-    "savedYearMissing": 0,
-    "savedColorMissing": 0,
-    "savedMileageMissing": 0,
-    "savedImageMissing": 0,
-    "savedDetailFetchFailed": 0
+    "typeFailed": null,
+    "typeTimeout": null,
+    "savedGradeNameMissing": null,
+    "savedYearMissing": null,
+    "savedColorMissing": null,
+    "savedMileageMissing": null,
+    "savedImageMissing": null,
+    "savedDetailFetchFailed": null
   },
   "counts": {
     "publicVehicles": 31,
@@ -4408,5 +4408,6 @@
         "imageUrl": true
       }
     }
-  ]
+  ],
+  "lastFailedAt": "2026-10-16T17:21:27.829Z"
 }
