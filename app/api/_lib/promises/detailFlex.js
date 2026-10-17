@@ -6,6 +6,9 @@ import { getPromiseImage } from "./images.js";
 
 const { colors, typography, spacing } = PROMISE_THEME;
 
+// すべての約束で共通の画像表示比率
+const PROMISE_IMAGE_ASPECT_RATIO = "16:9";
+
 function makeNavigationButton(label, data) {
   return {
     type: "button",
@@ -34,8 +37,8 @@ function makeImage(image) {
     type: "image",
     url: image.url,
     size: "full",
-    aspectRatio: image.aspectRatio || "4:3",
-    aspectMode: "fit",
+    aspectRatio: PROMISE_IMAGE_ASPECT_RATIO,
+    aspectMode: "cover",
   };
 }
 
