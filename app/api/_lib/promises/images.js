@@ -1,6 +1,10 @@
 
 export const PROMISE_IMAGES = Object.freeze({
-  "01": Object.freeze({}),
+  "01": Object.freeze({
+    hero: Object.freeze({
+      url: "https://cartopia-car-diagnosis.vercel.app/promises/01/F54CECFE-871C-441E-A692-A1A6F6C43D56.png",
+    }),
+  }),
   "02": Object.freeze({}),
   "03": Object.freeze({}),
   "04": Object.freeze({}),
