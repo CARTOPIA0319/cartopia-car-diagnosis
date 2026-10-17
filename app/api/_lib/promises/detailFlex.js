@@ -2,6 +2,7 @@
 import { getPromiseById, getNextPromise } from "./index.js";
 import { PROMISE_CONTENT } from "./content.js";
 import { PROMISE_THEME } from "./theme.js";
+import { getPromiseImages } from "./images.js";
 
 const { colors, typography, spacing } = PROMISE_THEME;
 
@@ -17,6 +18,24 @@ function makeNavigationButton(label, data) {
       data,
       displayText: label,
     },
+  };
+}
+
+function makeImage(image) {
+  if (!image || typeof image.url !== "string") {
+    return null;
+  }
+
+  if (!/^https:\/\//.test(image.url)) {
+    return null;
+  }
+
+  return {
+    type: "image",
+    url: image.url,
+    size: "full",
+    aspectRatio: image.aspectRatio || "4:3",
+    aspectMode: "fit",
   };
 }
 
@@ -68,9 +87,14 @@ export function makePromiseDetailFlex(id) {
 
   const nextPromise = getNextPromise(id);
   const sections = PROMISE_CONTENT[id]?.sections || [];
+  const images = getPromiseImages(id);
 
   const sectionBoxes = sections
     .map(makeSection)
+    .filter(Boolean);
+
+  const imageComponents = images
+    .map(makeImage)
     .filter(Boolean);
 
   const buttons = [];
@@ -132,6 +156,7 @@ export function makePromiseDetailFlex(id) {
             spacing: spacing.section,
             contents: [
               ...sectionBoxes,
+              ...imageComponents,
               ...buttons,
             ],
           },
