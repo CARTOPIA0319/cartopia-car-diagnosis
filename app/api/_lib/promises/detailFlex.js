@@ -1,20 +1,15 @@
 
 import { getPromiseById, getNextPromise } from "./index.js";
 import { PROMISE_CONTENT } from "./content.js";
+import { PROMISE_THEME } from "./theme.js";
 
-const COLORS = Object.freeze({
-  navy: "#0B1F3A",
-  gold: "#D8BE72",
-  beige: "#F8F5EF",
-  white: "#FFFFFF",
-  text: "#253247",
-});
+const { colors, typography, spacing } = PROMISE_THEME;
 
 function makeNavigationButton(label, data) {
   return {
     type: "button",
     style: "primary",
-    color: COLORS.navy,
+    color: colors.navy,
     height: "sm",
     action: {
       type: "postback",
@@ -32,9 +27,10 @@ function makeSection(section) {
     contents.push({
       type: "text",
       text: section.heading,
-      size: "lg",
-      weight: "bold",
-      color: COLORS.navy,
+      size: typography.heading.size,
+      weight: typography.heading.weight,
+      align: typography.heading.align,
+      color: colors.navy,
       wrap: true,
     });
   }
@@ -43,8 +39,10 @@ function makeSection(section) {
     contents.push({
       type: "text",
       text: section.text,
-      size: "md",
-      color: COLORS.text,
+      size: typography.body.size,
+      weight: typography.body.weight,
+      align: typography.body.align,
+      color: colors.text,
       wrap: true,
     });
   }
@@ -107,25 +105,21 @@ export function makePromiseDetailFlex(id) {
           {
             type: "box",
             layout: "vertical",
-            backgroundColor: COLORS.navy,
-            paddingAll: "24px",
+            backgroundColor: colors.navy,
+            paddingAll: spacing.cover,
             spacing: "md",
             contents: [
               {
                 type: "text",
                 text: promise.id,
-                size: "3xl",
-                weight: "bold",
-                color: COLORS.gold,
-                align: "center",
+                ...typography.number,
+                color: colors.gold,
               },
               {
                 type: "text",
                 text: promise.title,
-                size: "xl",
-                weight: "bold",
-                color: COLORS.white,
-                align: "center",
+                ...typography.title,
+                color: colors.white,
                 wrap: true,
               },
             ],
@@ -133,9 +127,9 @@ export function makePromiseDetailFlex(id) {
           {
             type: "box",
             layout: "vertical",
-            backgroundColor: COLORS.beige,
-            paddingAll: "20px",
-            spacing: "md",
+            backgroundColor: colors.beige,
+            paddingAll: spacing.content,
+            spacing: spacing.section,
             contents: [
               ...sectionBoxes,
               ...buttons,
