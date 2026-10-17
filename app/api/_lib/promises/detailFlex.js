@@ -2,7 +2,7 @@
 import { getPromiseById, getNextPromise } from "./index.js";
 import { PROMISE_CONTENT } from "./content.js";
 import { PROMISE_THEME } from "./theme.js";
-import { getPromiseImages } from "./images.js";
+import { getPromiseImage } from "./images.js";
 
 const { colors, typography, spacing } = PROMISE_THEME;
 
@@ -22,11 +22,11 @@ function makeNavigationButton(label, data) {
 }
 
 function makeImage(image) {
-  if (!image || typeof image.url !== "string") {
-    return null;
-  }
-
-  if (!/^https:\/\//.test(image.url)) {
+  if (
+    !image ||
+    typeof image.url !== "string" ||
+    !/^https:\/\//.test(image.url)
+  ) {
     return null;
   }
 
@@ -39,7 +39,20 @@ function makeImage(image) {
   };
 }
 
-function makeSection(section) {
+function makeSection(section, promiseId) {
+  if (!section || typeof section !== "object") {
+    return null;
+  }
+
+  if (section.type === "image") {
+    const image = getPromiseImage(
+      promiseId,
+      section.imageKey
+    );
+
+    return makeImage(image);
+  }
+
   const contents = [];
 
   if (section.heading) {
@@ -87,14 +100,9 @@ export function makePromiseDetailFlex(id) {
 
   const nextPromise = getNextPromise(id);
   const sections = PROMISE_CONTENT[id]?.sections || [];
-  const images = getPromiseImages(id);
 
-  const sectionBoxes = sections
-    .map(makeSection)
-    .filter(Boolean);
-
-  const imageComponents = images
-    .map(makeImage)
+  const sectionComponents = sections
+    .map((section) => makeSection(section, id))
     .filter(Boolean);
 
   const buttons = [];
@@ -155,8 +163,7 @@ export function makePromiseDetailFlex(id) {
             paddingAll: spacing.content,
             spacing: spacing.section,
             contents: [
-              ...sectionBoxes,
-              ...imageComponents,
+              ...sectionComponents,
               ...buttons,
             ],
           },
