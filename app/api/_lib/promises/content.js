@@ -6,11 +6,6 @@ export const PROMISE_CONTENT = Object.freeze({
         type: "image",
         imageKey: "hero",
       },
-      {
-        type: "intro",
-        heading: "販売する車への約束",
-        text: "",
-      },
     ],
   },
 
