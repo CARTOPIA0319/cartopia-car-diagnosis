@@ -6,8 +6,17 @@ import { getPromiseImage } from "./images.js";
 
 const { colors, typography, spacing } = PROMISE_THEME;
 
-// すべての約束で共通の画像表示比率
 const PROMISE_IMAGE_ASPECT_RATIO = "16:9";
+
+// 約束01だけに適用する装飾色
+const DESIGN = Object.freeze({
+  navy: "#102B43",
+  gold: "#B59458",
+  goldLight: "#E4C78B",
+  beige: "#EAE3D5",
+  white: "#FFFFFF",
+  text: "#263747",
+});
 
 function makeNavigationButton(label, data) {
   return {
@@ -42,20 +51,8 @@ function makeImage(image) {
   };
 }
 
-function makeSection(section, promiseId) {
-  if (!section || typeof section !== "object") {
-    return null;
-  }
-
-  if (section.type === "image") {
-    const image = getPromiseImage(
-      promiseId,
-      section.imageKey
-    );
-
-    return makeImage(image);
-  }
-
+// 既存の文章表示。02〜05では従来どおり使用。
+function makeStandardSection(section) {
   const contents = [];
 
   if (section.heading) {
@@ -94,6 +91,163 @@ function makeSection(section, promiseId) {
   };
 }
 
+function makeText(text, options = {}) {
+  return {
+    type: "text",
+    text,
+    wrap: true,
+    ...options,
+  };
+}
+
+// 約束01の章番号・見出し・本文・強調文
+function makeChapterSection(section, chapterNumber) {
+  const contents = [];
+
+  contents.push(
+    makeText(`CHAPTER ${String(chapterNumber).padStart(2, "0")}`, {
+      size: "xs",
+      weight: "bold",
+      color: DESIGN.gold,
+    })
+  );
+
+  if (section.heading) {
+    // 既存の見出し文字列を変えず、改行による区切りだけを利用
+    const headingParts = section.heading.split("\n\n");
+
+    headingParts.forEach((part, index) => {
+      contents.push(
+        makeText(part, {
+          size: index === 0 ? "sm" : typography.heading.size,
+          weight: "bold",
+          color: index === 0 ? DESIGN.gold : DESIGN.navy,
+          margin: index === 0 ? "md" : "lg",
+        })
+      );
+    });
+  }
+
+  if (section.text) {
+    // 最後の段落を強調する。原文の文字は変更しない。
+    const paragraphs = section.text.split("\n\n");
+    const lastParagraph = paragraphs.pop();
+
+    if (paragraphs.length > 0) {
+      contents.push(
+        makeText(paragraphs.join("\n\n"), {
+          size: typography.body.size,
+          weight: typography.body.weight,
+          align: typography.body.align,
+          color: colors.text,
+          margin: "lg",
+        })
+      );
+    }
+
+    if (lastParagraph) {
+      contents.push({
+        type: "box",
+        layout: "vertical",
+        backgroundColor: DESIGN.beige,
+        paddingAll: "16px",
+        margin: "xl",
+        contents: [
+          makeText(lastParagraph, {
+            size: typography.body.size,
+            weight: "bold",
+            color: DESIGN.navy,
+            align: "center",
+          }),
+        ],
+      });
+    }
+  }
+
+  return {
+    type: "box",
+    layout: "vertical",
+    spacing: "sm",
+    contents,
+  };
+}
+
+// 約束01の締め。原文を保持したまま色を切り替える。
+function makeFinalSection(section) {
+  const contents = [];
+
+  if (section.heading) {
+    contents.push(
+      makeText(section.heading, {
+        size: typography.heading.size,
+        weight: "bold",
+        color: DESIGN.goldLight,
+        align: "center",
+      })
+    );
+  }
+
+  if (section.text) {
+    contents.push(
+      makeText(section.text, {
+        size: typography.body.size,
+        weight: typography.body.weight,
+        color: DESIGN.white,
+        align: "center",
+        margin: "xl",
+      })
+    );
+  }
+
+  return {
+    type: "box",
+    layout: "vertical",
+    backgroundColor: DESIGN.navy,
+    paddingAll: "22px",
+    spacing: "md",
+    contents,
+  };
+}
+
+function makeSection(section, promiseId, sectionIndex) {
+  if (!section || typeof section !== "object") {
+    return null;
+  }
+
+  if (section.type === "image") {
+    return makeImage(
+      getPromiseImage(promiseId, section.imageKey)
+    );
+  }
+
+  if (promiseId !== "01") {
+    return makeStandardSection(section);
+  }
+
+  // 約束01の既存構成：
+  // 0 表紙画像
+  // 1 導入
+  // 2,4,6,8,10 各章画像
+  // 3,5,7,9,11 各章文章
+  // 12 締め
+  if (sectionIndex === 12) {
+    return makeFinalSection(section);
+  }
+
+  if (
+    sectionIndex >= 3 &&
+    sectionIndex <= 11 &&
+    sectionIndex % 2 === 1
+  ) {
+    return makeChapterSection(
+      section,
+      (sectionIndex - 1) / 2
+    );
+  }
+
+  return makeStandardSection(section);
+}
+
 export function makePromiseDetailFlex(id) {
   const promise = getPromiseById(id);
 
@@ -105,7 +259,7 @@ export function makePromiseDetailFlex(id) {
   const sections = PROMISE_CONTENT[id]?.sections || [];
 
   const sectionComponents = sections
-    .map((section) => makeSection(section, id))
+    .map((section, index) => makeSection(section, id, index))
     .filter(Boolean);
 
   const buttons = [];
@@ -125,6 +279,13 @@ export function makePromiseDetailFlex(id) {
       "promise|list"
     )
   );
+
+  // 締めを濃紺にした約束01では、
+  // ボタンとの間に余白を確保する。
+  const buttonContents = buttons.map((button, index) => ({
+    ...button,
+    margin: index === 0 ? "xl" : "md",
+  }));
 
   return {
     type: "flex",
@@ -167,7 +328,7 @@ export function makePromiseDetailFlex(id) {
             spacing: spacing.section,
             contents: [
               ...sectionComponents,
-              ...buttons,
+              ...buttonContents,
             ],
           },
         ],
