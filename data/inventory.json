@@ -6,10 +6,10 @@
   "lastUpdateStatus": {
     "success": false,
     "statusText": "更新失敗",
-    "runId": "20261021200459960-q4c8kp4y",
+    "runId": "20261021231520453-v8ynytb0",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-10-21T20:05:01.692Z",
-    "finishedAt": "2026-10-21T20:05:12.170Z",
+    "startedAt": "2026-10-21T23:15:21.634Z",
+    "finishedAt": "2026-10-21T23:15:32.115Z",
     "durationSeconds": 10,
     "error": "fetch failed",
     "timeout": false,
@@ -4409,5 +4409,5 @@
       }
     }
   ],
-  "lastFailedAt": "2026-10-21T20:05:12.170Z"
+  "lastFailedAt": "2026-10-21T23:15:32.115Z"
 }
