@@ -6,10 +6,10 @@
   "lastUpdateStatus": {
     "success": false,
     "statusText": "更新失敗",
-    "runId": "20261022151247416-plyrpmoa",
+    "runId": "20261022200029723-avs6958z",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-10-22T15:12:48.918Z",
-    "finishedAt": "2026-10-22T15:12:59.394Z",
+    "startedAt": "2026-10-22T20:00:31.025Z",
+    "finishedAt": "2026-10-22T20:00:41.501Z",
     "durationSeconds": 10,
     "error": "fetch failed",
     "timeout": false,
@@ -4409,5 +4409,5 @@
       }
     }
   ],
-  "lastFailedAt": "2026-10-22T15:12:59.394Z"
+  "lastFailedAt": "2026-10-22T20:00:41.501Z"
 }
