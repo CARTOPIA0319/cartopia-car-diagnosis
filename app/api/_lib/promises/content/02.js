@@ -29,7 +29,7 @@ export const PROMISE_02 = Object.freeze({
     },
     {
       type: "image",
-      imageKey: "polish",
+      imageKey: "polishing",
     },
     {
       type: "text",
@@ -38,7 +38,7 @@ export const PROMISE_02 = Object.freeze({
     },
     {
       type: "image",
-      imageKey: "family",
+      imageKey: "nextOwner",
     },
     {
       type: "text",
