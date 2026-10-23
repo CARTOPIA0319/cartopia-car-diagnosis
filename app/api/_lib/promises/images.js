@@ -20,7 +20,25 @@ export const PROMISE_IMAGES = Object.freeze({
       url: "https://cartopia-car-diagnosis.vercel.app/promises/01/IMG_5636.jpeg",
     }),
   }),
-  "02": Object.freeze({}),
+
+  "02": Object.freeze({
+    hero: Object.freeze({
+      url: "https://cartopia-car-diagnosis.vercel.app/promises/02/A2F87DF6-46B6-4DD4-8CE3-CA16F66DCB7E.png",
+    }),
+    customer: Object.freeze({
+      url: "https://cartopia-car-diagnosis.vercel.app/promises/02/9E315387-2652-4429-A113-787828BAA672.png",
+    }),
+    details: Object.freeze({
+      url: "https://cartopia-car-diagnosis.vercel.app/promises/02/CBD27649-BC78-4455-B508-E40DCA1C066D.png",
+    }),
+    polishing: Object.freeze({
+      url: "https://cartopia-car-diagnosis.vercel.app/promises/02/30238D7B-9913-4917-B10F-4CD79F8C2F19.png",
+    }),
+    nextOwner: Object.freeze({
+      url: "https://cartopia-car-diagnosis.vercel.app/promises/02/25079233-2367-413C-8A23-6F58D2B7FE79.png",
+    }),
+  }),
+
   "03": Object.freeze({}),
   "04": Object.freeze({}),
   "05": Object.freeze({}),
