@@ -1,31 +1,28 @@
+import {
+  getPromiseById,
+  getNextPromise,
+} from "./index.js";
 
-import { getPromiseById, getNextPromise } from "./index.js";
 import { PROMISE_CONTENT } from "./content.js";
 import { PROMISE_THEME } from "./theme.js";
 import { getPromiseImage } from "./images.js";
 
-const { colors, typography, spacing } = PROMISE_THEME;
+const {
+  colors,
+  typography,
+  spacing,
+  layout,
+  chapter,
+  final,
+  navigation,
+} = PROMISE_THEME;
 
-const DESIGN = Object.freeze({
-  navy: "#102B43",
-  gold: "#B59458",
-  goldLight: "#E4C78B",
-  beige: "#EAE3D5",
-  white: "#FFFFFF",
-});
-
-function makeNavigationButton(label, data) {
+function makeText(text, options = {}) {
   return {
-    type: "button",
-    style: "primary",
-    color: colors.navy,
-    height: "sm",
-    action: {
-      type: "postback",
-      label,
-      data,
-      displayText: label,
-    },
+    type: "text",
+    text,
+    wrap: true,
+    ...options,
   };
 }
 
@@ -41,18 +38,24 @@ function makeImage(image) {
   return {
     type: "image",
     url: image.url,
-    size: "full",
-    aspectRatio: "16:9",
-    aspectMode: "cover",
+    size: layout.imageSize,
+    aspectRatio: layout.imageAspectRatio,
+    aspectMode: layout.imageAspectMode,
   };
 }
 
-function makeText(text, options = {}) {
+function makeNavigationButton(label, data) {
   return {
-    type: "text",
-    text,
-    wrap: true,
-    ...options,
+    type: "button",
+    style: navigation.style,
+    color: navigation.color,
+    height: navigation.height,
+    action: {
+      type: "postback",
+      label,
+      data,
+      displayText: label,
+    },
   };
 }
 
@@ -66,9 +69,7 @@ function makeStandardSection(section) {
   if (section.heading) {
     contents.push(
       makeText(section.heading, {
-        size: typography.heading.size,
-        weight: typography.heading.weight,
-        align: typography.heading.align,
+        ...typography.heading,
         color: colors.navy,
       })
     );
@@ -77,9 +78,7 @@ function makeStandardSection(section) {
   if (section.text) {
     contents.push(
       makeText(section.text, {
-        size: typography.body.size,
-        weight: typography.body.weight,
-        align: typography.body.align,
+        ...typography.body,
         color: colors.text,
       })
     );
@@ -92,7 +91,7 @@ function makeStandardSection(section) {
   return {
     type: "box",
     layout: "vertical",
-    spacing: "md",
+    spacing: layout.sectionSpacing,
     contents,
   };
 }
@@ -108,57 +107,54 @@ function makeSection(section, promiseId) {
     );
   }
 
-  return makeStandardSection(section);
+  if (section.type === "text") {
+    return makeStandardSection(section);
+  }
+
+  return null;
 }
 
-// 章番号と章タイトルだけを濃いベージュで囲む。
-// 本文や章末の強調文には背景を付けない。
+function splitHeading(heading) {
+  const parts = String(heading || "").split("\n\n");
+
+  return {
+    title: parts[0] || "",
+    phrase: parts.slice(1).join("\n\n"),
+  };
+}
+
 function makeChapterHeader(section, chapterNumber) {
-  const parts = (section.heading || "").split("\n\n");
-  const chapterTitle = parts[0] || "";
+  const { title } = splitHeading(section.heading);
 
   return {
     type: "box",
     layout: "vertical",
-    backgroundColor: DESIGN.beige,
-    paddingAll: "18px",
-    spacing: "md",
+    backgroundColor: chapter.backgroundColor,
+    paddingAll: chapter.padding,
+    spacing: chapter.spacing,
     contents: [
       makeText(
-        `CHAPTER ${String(chapterNumber).padStart(2, "0")}`,
-        {
-          size: "sm",
-          weight: "bold",
-          color: DESIGN.gold,
-        }
+        `${chapter.prefix} ${String(chapterNumber).padStart(
+          chapter.numberDigits,
+          "0"
+        )}`,
+        chapter.number
       ),
-      makeText(chapterTitle, {
-        size: typography.heading.size,
-        weight: "bold",
-        color: DESIGN.navy,
-      }),
+      makeText(title, chapter.title),
     ],
   };
 }
 
-// 画像の直後に置く章のフレーズ。
 function makeChapterPhrase(section) {
-  const parts = (section.heading || "").split("\n\n");
-  const phrase = parts.slice(1).join("\n\n");
+  const { phrase } = splitHeading(section.heading);
 
   if (!phrase) {
     return null;
   }
 
-  return makeText(phrase, {
-    size: typography.heading.size,
-    weight: "bold",
-    color: DESIGN.navy,
-  });
+  return makeText(phrase, chapter.phrase);
 }
 
-// 全章の最後の強調文を統一する。
-// 背景なし、左寄せ、章のフレーズと同じ文字サイズ・太さ。
 function makeChapterBody(section) {
   if (!section.text) {
     return null;
@@ -172,9 +168,7 @@ function makeChapterBody(section) {
   if (paragraphs.length > 0) {
     contents.push(
       makeText(paragraphs.join("\n\n"), {
-        size: typography.body.size,
-        weight: typography.body.weight,
-        align: typography.body.align,
+        ...typography.body,
         color: colors.text,
       })
     );
@@ -183,35 +177,46 @@ function makeChapterBody(section) {
   if (lastParagraph) {
     contents.push(
       makeText(lastParagraph, {
-        size: typography.heading.size,
-        weight: "bold",
-        color: DESIGN.navy,
-        align: "start",
-        margin: paragraphs.length > 0 ? "xl" : "none",
+        ...chapter.emphasis,
+        margin:
+          paragraphs.length > 0
+            ? chapter.emphasis.margin
+            : "none",
       })
     );
+  }
+
+  if (contents.length === 0) {
+    return null;
   }
 
   return {
     type: "box",
     layout: "vertical",
-    spacing: "md",
+    spacing: layout.sectionSpacing,
     contents,
   };
 }
 
-// 表示順：章番号・章タイトル → 写真 → フレーズ → 本文
-function makeChapter(imageSection, textSection, id, number) {
+function makeChapter(
+  imageSection,
+  textSection,
+  promiseId,
+  chapterNumber
+) {
   const contents = [
-    makeChapterHeader(textSection, number),
+    makeChapterHeader(textSection, chapterNumber),
   ];
 
-  const chapterImage = makeImage(
-    getPromiseImage(id, imageSection.imageKey)
+  const image = makeImage(
+    getPromiseImage(
+      promiseId,
+      imageSection.imageKey
+    )
   );
 
-  if (chapterImage) {
-    contents.push(chapterImage);
+  if (image) {
+    contents.push(image);
   }
 
   const phrase = makeChapterPhrase(textSection);
@@ -229,105 +234,142 @@ function makeChapter(imageSection, textSection, id, number) {
   return {
     type: "box",
     layout: "vertical",
-    spacing: "lg",
+    spacing: layout.chapterSpacing,
     contents,
   };
 }
 
-// 締め：ネイビー背景、全文左寄せ。
-// 幅に対して文字が大きくなりすぎないよう調整。
 function makeFinalSection(section) {
   const contents = [];
 
   if (section.heading) {
     contents.push(
-      makeText(section.heading, {
-        size: "md",
-        weight: "bold",
-        color: DESIGN.goldLight,
-        align: "start",
-      })
+      makeText(section.heading, final.heading)
     );
   }
 
   if (section.text) {
     contents.push(
-      makeText(section.text, {
-        size: "sm",
-        weight: "regular",
-        color: DESIGN.white,
-        align: "start",
-        margin: "xl",
-      })
+      makeText(section.text, final.body)
     );
+  }
+
+  if (contents.length === 0) {
+    return null;
   }
 
   return {
     type: "box",
     layout: "vertical",
-    backgroundColor: DESIGN.navy,
-    paddingAll: "16px",
-    spacing: "md",
+    backgroundColor: final.backgroundColor,
+    paddingAll: final.padding,
+    spacing: final.spacing,
     contents,
   };
 }
 
-function makePromise01Sections(sections) {
+// 全約束共通の文章構成
+//
+// 先頭：画像＋導入文
+// 中間：画像＋章本文を繰り返す
+// 最後：締めの文章
+//
+// 章数は固定しない。
+// 約束番号による特別処理も行わない。
+
+function makePromiseSections(sections, promiseId) {
+  if (!Array.isArray(sections)) {
+    return [];
+  }
+
   const result = [];
 
-  // 冒頭画像と導入文
-  for (const section of sections.slice(0, 2)) {
-    const component = makeSection(section, "01");
-
-    if (component) {
-      result.push(component);
-    }
+  if (sections.length === 0) {
+    return result;
   }
 
-  // 第1章から第5章
-  for (let chapter = 1; chapter <= 5; chapter++) {
-    const imageIndex = chapter * 2;
-    const textIndex = imageIndex + 1;
+  let index = 0;
+  let chapterNumber = 0;
 
-    const imageSection = sections[imageIndex];
-    const textSection = sections[textIndex];
+  // 冒頭画像
+  if (sections[index]?.type === "image") {
+    const image = makeSection(
+      sections[index],
+      promiseId
+    );
 
+    if (image) {
+      result.push(image);
+    }
+
+    index++;
+  }
+
+  // 導入文
+  if (sections[index]?.type === "text") {
+    const introduction = makeSection(
+      sections[index],
+      promiseId
+    );
+
+    if (introduction) {
+      result.push(introduction);
+    }
+
+    index++;
+  }
+
+  // 中間の章と最後の締め
+  while (index < sections.length) {
+    const current = sections[index];
+    const next = sections[index + 1];
+
+    // 画像＋本文を1章として扱う
     if (
-      imageSection?.type === "image" &&
-      textSection?.type === "text"
+      current?.type === "image" &&
+      next?.type === "text"
     ) {
+      chapterNumber++;
+
       result.push(
         makeChapter(
-          imageSection,
-          textSection,
-          "01",
-          chapter
+          current,
+          next,
+          promiseId,
+          chapterNumber
         )
       );
-    } else {
-      // 予期しない構成でも既存内容は残す
-      for (const section of [imageSection, textSection]) {
-        const component = makeSection(section, "01");
 
-        if (component) {
-          result.push(component);
-        }
-      }
+      index += 2;
+      continue;
     }
-  }
 
-  // 締め
-  if (sections[12]) {
-    result.push(makeFinalSection(sections[12]));
-  }
+    // 最後に単独で置かれた文章は締め
+    if (
+      current?.type === "text" &&
+      index === sections.length - 1
+    ) {
+      const closing = makeFinalSection(current);
 
-  // 将来追加されるセクションも維持
-  for (const section of sections.slice(13)) {
-    const component = makeSection(section, "01");
+      if (closing) {
+        result.push(closing);
+      }
+
+      index++;
+      continue;
+    }
+
+    // 想定外の構成でも内容を消さない
+    const component = makeSection(
+      current,
+      promiseId
+    );
 
     if (component) {
       result.push(component);
     }
+
+    index++;
   }
 
   return result;
@@ -341,21 +383,21 @@ export function makePromiseDetailFlex(id) {
   }
 
   const nextPromise = getNextPromise(id);
-  const sections = PROMISE_CONTENT[id]?.sections || [];
 
-  const sectionComponents =
-    id === "01"
-      ? makePromise01Sections(sections)
-      : sections
-          .map((section) => makeSection(section, id))
-          .filter(Boolean);
+  const sections =
+    PROMISE_CONTENT[id]?.sections || [];
+
+  const sectionComponents = makePromiseSections(
+    sections,
+    id
+  );
 
   const buttons = [];
 
   if (nextPromise) {
     buttons.push(
       makeNavigationButton(
-        "次の約束を読む",
+        navigation.nextLabel,
         `promise|${nextPromise.id}`
       )
     );
@@ -363,7 +405,7 @@ export function makePromiseDetailFlex(id) {
 
   buttons.push(
     makeNavigationButton(
-      "約束の一覧へ戻る",
+      navigation.listLabel,
       "promise|list"
     )
   );
@@ -373,7 +415,7 @@ export function makePromiseDetailFlex(id) {
     altText: `${promise.id} ${promise.title}`,
     contents: {
       type: "bubble",
-      size: "mega",
+      size: layout.bubbleSize,
       body: {
         type: "box",
         layout: "vertical",
@@ -384,21 +426,16 @@ export function makePromiseDetailFlex(id) {
             layout: "vertical",
             backgroundColor: colors.navy,
             paddingAll: spacing.cover,
-            spacing: "md",
+            spacing: layout.sectionSpacing,
             contents: [
-              {
-                type: "text",
-                text: promise.id,
+              makeText(promise.id, {
                 ...typography.number,
                 color: colors.gold,
-              },
-              {
-                type: "text",
-                text: promise.title,
+              }),
+              makeText(promise.title, {
                 ...typography.title,
                 color: colors.white,
-                wrap: true,
-              },
+              }),
             ],
           },
           {
