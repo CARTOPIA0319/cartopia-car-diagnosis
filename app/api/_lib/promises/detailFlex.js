@@ -1,3 +1,4 @@
+
 import {
   getPromiseById,
   getNextPromise,
@@ -16,6 +17,181 @@ const {
   final,
   navigation,
 } = PROMISE_THEME;
+
+// 全約束共通の自動改行設定。
+// 文字数は日本語の全角文字を基準とした目安。
+// LINEの端末差による表示幅までは保証できない。
+const LINE_BREAK = Object.freeze({
+  chapterTitle: 11,
+  heading: 15,
+  phrase: 15,
+  body: 22,
+  finalHeading: 15,
+  finalBody: 22,
+  minLastLine: 4,
+});
+
+// 句読点や助詞など、自然な区切りを優先する。
+function getBreakPriority(text, position) {
+  const previous = text.slice(0, position);
+  const last = previous.slice(-1);
+
+  if (/[、。！？!?]/.test(last)) {
+    return 100;
+  }
+
+  if (/[）)」』]/.test(last)) {
+    return 90;
+  }
+
+  if (
+    /(?:には|では|から|まで|より|こそ|ても|でも|なら|とは|へと)$/.test(
+      previous
+    )
+  ) {
+    return 75;
+  }
+
+  if (/[はがをにへでともやの]/.test(last)) {
+    return 55;
+  }
+
+  return 0;
+}
+
+// 文字の表示幅を簡易的に見積もる。
+// 半角英数字は全角文字より狭いものとして扱う。
+function getTextWidth(text) {
+  let width = 0;
+
+  for (const character of Array.from(text)) {
+    if (/[\u0020-\u007E]/.test(character)) {
+      width += 0.55;
+    } else {
+      width += 1;
+    }
+  }
+
+  return width;
+}
+
+function chooseBreakPosition(text, limit, minLastLine) {
+  const characters = Array.from(text);
+
+  if (getTextWidth(text) <= limit) {
+    return characters.length;
+  }
+
+  const candidates = [];
+
+  for (let position = 1; position < characters.length; position++) {
+    const left = characters.slice(0, position).join("");
+    const right = characters.slice(position).join("");
+
+    const leftWidth = getTextWidth(left);
+
+    if (leftWidth > limit) {
+      break;
+    }
+
+    const rightLength = Array.from(right).length;
+
+    // 句読点を次の行の先頭に残さない。
+    if (/^[、。！？!?）)」』]/.test(right)) {
+      continue;
+    }
+
+    const priority = getBreakPriority(left, position);
+
+    // 行末近くの自然な区切りを優先する。
+    const fillRatio = leftWidth / limit;
+
+    let score = priority + fillRatio * 25;
+
+    if (rightLength < minLastLine) {
+      score -= 100;
+    }
+
+    // あまりに短い行を避ける。
+    if (fillRatio < 0.45) {
+      score -= 50;
+    }
+
+    candidates.push({
+      position,
+      score,
+    });
+  }
+
+  if (candidates.length === 0) {
+    let position = 1;
+
+    while (
+      position < characters.length &&
+      getTextWidth(
+        characters.slice(0, position + 1).join("")
+      ) <= limit
+    ) {
+      position++;
+    }
+
+    return position;
+  }
+
+  candidates.sort((a, b) => b.score - a.score);
+
+  return candidates[0].position;
+}
+
+function wrapLine(line, limit) {
+  if (!line || getTextWidth(line) <= limit) {
+    return line;
+  }
+
+  const result = [];
+  let remaining = line;
+
+  while (getTextWidth(remaining) > limit) {
+    const position = chooseBreakPosition(
+      remaining,
+      limit,
+      LINE_BREAK.minLastLine
+    );
+
+    const characters = Array.from(remaining);
+
+    if (
+      position <= 0 ||
+      position >= characters.length
+    ) {
+      break;
+    }
+
+    result.push(
+      characters.slice(0, position).join("")
+    );
+
+    remaining = characters.slice(position).join("");
+  }
+
+  if (remaining) {
+    result.push(remaining);
+  }
+
+  return result.join("\n");
+}
+
+function autoWrap(text, limit) {
+  if (typeof text !== "string" || !text) {
+    return text;
+  }
+
+  // 元の改行と空行は維持する。
+  return text
+    .split("\n")
+    .map((line) => wrapLine(line, limit))
+    .join("\n");
+}
 
 function makeText(text, options = {}) {
   return {
@@ -68,19 +244,31 @@ function makeStandardSection(section) {
 
   if (section.heading) {
     contents.push(
-      makeText(section.heading, {
-        ...typography.heading,
-        color: colors.navy,
-      })
+      makeText(
+        autoWrap(
+          section.heading,
+          LINE_BREAK.heading
+        ),
+        {
+          ...typography.heading,
+          color: colors.navy,
+        }
+      )
     );
   }
 
   if (section.text) {
     contents.push(
-      makeText(section.text, {
-        ...typography.body,
-        color: colors.text,
-      })
+      makeText(
+        autoWrap(
+          section.text,
+          LINE_BREAK.body
+        ),
+        {
+          ...typography.body,
+          color: colors.text,
+        }
+      )
     );
   }
 
@@ -140,7 +328,13 @@ function makeChapterHeader(section, chapterNumber) {
         )}`,
         chapter.number
       ),
-      makeText(title, chapter.title),
+      makeText(
+        autoWrap(
+          title,
+          LINE_BREAK.chapterTitle
+        ),
+        chapter.title
+      ),
     ],
   };
 }
@@ -152,7 +346,13 @@ function makeChapterPhrase(section) {
     return null;
   }
 
-  return makeText(phrase, chapter.phrase);
+  return makeText(
+    autoWrap(
+      phrase,
+      LINE_BREAK.phrase
+    ),
+    chapter.phrase
+  );
 }
 
 function makeChapterBody(section) {
@@ -167,22 +367,34 @@ function makeChapterBody(section) {
 
   if (paragraphs.length > 0) {
     contents.push(
-      makeText(paragraphs.join("\n\n"), {
-        ...typography.body,
-        color: colors.text,
-      })
+      makeText(
+        autoWrap(
+          paragraphs.join("\n\n"),
+          LINE_BREAK.body
+        ),
+        {
+          ...typography.body,
+          color: colors.text,
+        }
+      )
     );
   }
 
   if (lastParagraph) {
     contents.push(
-      makeText(lastParagraph, {
-        ...chapter.emphasis,
-        margin:
-          paragraphs.length > 0
-            ? chapter.emphasis.margin
-            : "none",
-      })
+      makeText(
+        autoWrap(
+          lastParagraph,
+          LINE_BREAK.body
+        ),
+        {
+          ...chapter.emphasis,
+          margin:
+            paragraphs.length > 0
+              ? chapter.emphasis.margin
+              : "none",
+        }
+      )
     );
   }
 
@@ -244,13 +456,25 @@ function makeFinalSection(section) {
 
   if (section.heading) {
     contents.push(
-      makeText(section.heading, final.heading)
+      makeText(
+        autoWrap(
+          section.heading,
+          LINE_BREAK.finalHeading
+        ),
+        final.heading
+      )
     );
   }
 
   if (section.text) {
     contents.push(
-      makeText(section.text, final.body)
+      makeText(
+        autoWrap(
+          section.text,
+          LINE_BREAK.finalBody
+        ),
+        final.body
+      )
     );
   }
 
