@@ -17,8 +17,8 @@ const CARD = Object.freeze({
   imageAspectRatio: "16:9",
   imageHeight: "165px",
   titleHeight: "115px",
-  chapterRowHeight: "65px",
-  chapterFontSize: "13px",
+  chapterRowHeight: "48px",
+  chapterFontSize: "15px",
   contentsPadding: "18px",
   buttonPadding: "18px",
 });
@@ -79,13 +79,12 @@ function getMaximumChapterCount(promises) {
   );
 }
 
-// CHAPTER番号の下に章タイトルを配置する。
 function makeChapterRow(chapterItem) {
   return {
     type: "box",
     layout: "vertical",
     height: CARD.chapterRowHeight,
-    spacing: "xs",
+    spacing: "none",
     justifyContent: "center",
     contents: [
       {
@@ -93,7 +92,7 @@ function makeChapterRow(chapterItem) {
         text: `CHAPTER ${String(
           chapterItem.number
         ).padStart(2, "0")}`,
-        size: "xxs",
+        size: "sm",
         weight: "bold",
         color: COLORS.gold,
       },
