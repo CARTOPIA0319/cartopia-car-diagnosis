@@ -5,22 +5,13 @@
   "updateMode": "full-public-and-saved-refresh",
   "lastUpdateStatus": {
     "success": false,
-    "statusText": "更新失敗",
-    "runId": "20261025111557071-1ehvo8tq",
+    "statusText": "更新失敗・保存済み分を保持",
+    "runId": "20261025145900207-oi0t5ogs",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-10-25T11:15:58.290Z",
-    "finishedAt": "2026-10-25T11:16:08.770Z",
-    "durationSeconds": 10,
-    "error": "fetch failed",
-    "timeout": false,
-    "typeFailed": null,
-    "typeTimeout": null,
-    "savedGradeNameMissing": null,
-    "savedYearMissing": null,
-    "savedColorMissing": null,
-    "savedMileageMissing": null,
-    "savedImageMissing": null,
-    "savedDetailFetchFailed": null
+    "startedAt": "2026-10-25T14:59:01.360Z",
+    "finishedAt": "2026-10-25T14:59:11.837Z",
+    "error": "MOTOR GATEログイン: motorgate.jp/login/index: fetch failed (UND_ERR_CONNECT_TIMEOUT)",
+    "timeout": true
   },
   "counts": {
     "publicVehicles": 31,
@@ -4409,5 +4400,5 @@
       }
     }
   ],
-  "lastFailedAt": "2026-10-25T11:16:08.770Z"
+  "lastFailedAt": "2026-10-25T14:59:11.837Z"
 }
