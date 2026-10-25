@@ -4,7 +4,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
-const CODE_VERSION = "saved-list-direct-v13-saved-grade-recovery";
+const CODE_VERSION = "resumable-batch-v14";
 
 const BASE_URL = "https://motorgate.jp";
 const PUBLIC_LIST_URL = `${BASE_URL}/stock/newsearch/stocklist/index/1/100`;
@@ -18,14 +18,17 @@ const SAVED_LIST_URLS = Array.from({ length: 10 }, (_, index) =>
 const USER_AGENT =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36";
 
-const DETAIL_CONCURRENCY = 6;
+// 1リクエスト最大10台。2台ごとに車両と進捗を同じJSONへ確定保存する。
+const DETAIL_CONCURRENCY = 2;
+const BATCH_SIZE = 10;
+const VEHICLE_BUDGET_MS = 25000;
+const WORK_BUDGET_MS = 170000;
+const MAX_DETAIL_ATTEMPTS = 3;
 const DETAIL_RETRIES = 0;
 const DETAIL_TIMEOUT_MS = 18000;
 
 const LOCK_REF_NAME = "tags/cartopia-inventory-update-lock";
-
 const LOCK_TTL_MS = 12 * 60 * 1000;
-const GITHUB_SAVE_RETRIES = 5;
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data, null, 2), {
@@ -50,21 +53,41 @@ function createRunId() {
 
 function isTimeoutError(error) {
   const text = `${error?.name || ""} ${error?.message || ""}`.toLowerCase();
-
   return text.includes("timeout") || text.includes("abort");
 }
 
-async function fetchWithTimeout(url, options = {}, timeoutMs = 30000) {
+async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
   const controller = new AbortController();
-
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  const timer = setTimeout(() => controller.abort(), Math.min(timeoutMs, 15000));
 
   try {
-    return await fetch(url, {
+    const response = await fetch(url, {
       ...options,
       signal: controller.signal,
       cache: "no-store",
     });
+
+    // ヘッダーだけでなく本文の受信まで制限時間に含める。
+    const bytes = await response.arrayBuffer();
+
+    return {
+      ok: response.ok,
+      status: response.status,
+      headers: response.headers,
+      url: response.url,
+      arrayBuffer: async () => bytes,
+      text: async () => new TextDecoder().decode(bytes),
+    };
+  } catch (error) {
+    const location = new URL(url);
+
+    throw new Error(
+      `${location.hostname}${location.pathname}: ${
+        controller.signal.aborted
+          ? "timeout"
+          : error.message || String(error)
+      }${error.cause?.code ? ` (${error.cause.code})` : ""}`,
+    );
   } finally {
     clearTimeout(timer);
   }
@@ -75,13 +98,11 @@ function addCookies(jar, setCookieText) {
 
   for (const piece of String(setCookieText).split(/,\s*(?=[^;,]+=)/)) {
     const first = piece.split(";")[0].trim();
-
     const equalIndex = first.indexOf("=");
 
     if (equalIndex <= 0) continue;
 
     const name = first.slice(0, equalIndex);
-
     const value = first.slice(equalIndex + 1);
 
     if (value === "deleted") {
@@ -129,16 +150,13 @@ function normalizeCharset(value) {
 
 async function readResponseText(response) {
   const buffer = await response.arrayBuffer();
-
   const bytes = new Uint8Array(buffer);
-
   const contentType = response.headers.get("content-type") || "";
 
   let charset = contentType.match(/charset\s*=\s*([^;\s]+)/i)?.[1] || "";
 
   if (!charset) {
     const head = Buffer.from(bytes.slice(0, 4096)).toString("latin1");
-
     charset = head.match(/charset=["']?\s*([^\s"'/>]+)/i)?.[1] || "utf-8";
   }
 
@@ -429,9 +447,7 @@ function extractImageCandidates(html, baseUrl = BASE_URL) {
 
   for (const match of source.matchAll(/<input\b([^>]*)>/gi)) {
     const attributes = match[1] || "";
-
     const name = extractAttribute(attributes, "name");
-
     const value = extractAttribute(attributes, "value");
 
     if (/quality_img_url|image|photo|picture/i.test(name) && value) {
@@ -547,7 +563,6 @@ function formatPriceNumber(value) {
   }
 
   const rounded = Math.round(value * 10) / 10;
-
   return `${rounded.toFixed(1)}万円`;
 }
 
@@ -575,7 +590,6 @@ function resolveSavedPricePair({
   const candidates = extractPriceCandidates(cleanHtmlToText(rowHtml));
 
   let bodyNumber = priceToNumber(explicitBodyPrice);
-
   let totalNumber = priceToNumber(explicitTotalPrice);
 
   const inferredTotal = candidates[0];
@@ -612,7 +626,6 @@ function resolveSavedPricePair({
       totalLooksTooSmall)
   ) {
     totalNumber = inferredTotal;
-
     bodyNumber = inferredBody;
   } else {
     if (!Number.isFinite(totalNumber) && Number.isFinite(inferredTotal)) {
@@ -646,11 +659,8 @@ function repairSavedPricePair(
   previousTotalPrice,
 ) {
   const bodyNumber = priceToNumber(bodyPrice);
-
   const totalNumber = priceToNumber(totalPrice);
-
   const previousBodyNumber = priceToNumber(previousBodyPrice);
-
   const previousTotalNumber = priceToNumber(previousTotalPrice);
 
   const currentInvalid =
@@ -726,7 +736,6 @@ function normalizeMileage(value) {
 
 function normalizeYear(value) {
   const text = compactText(toHalfWidthAscii(value));
-
   const western = text.match(/((?:19|20)\d{2})\s*年?/);
 
   if (western) {
@@ -738,7 +747,6 @@ function normalizeYear(value) {
   if (!era) return "";
 
   const year = era[2] === "元" ? 1 : Number(era[2]);
-
   const base = era[1] === "令和" ? 2018 : era[1] === "平成" ? 1988 : 1925;
 
   return `${base + year}年`;
@@ -751,13 +759,11 @@ function normalizeDisplacement(value) {
 
   if (/cc|ＣＣ/i.test(text)) {
     const number = text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0] || "";
-
     return number ? `${number}cc` : "";
   }
 
   if (/L|Ｌ/i.test(text)) {
     const number = text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0] || "";
-
     return number ? `${number}L` : "";
   }
 
@@ -823,35 +829,29 @@ function headerIndex(headers, aliases) {
 
   return headers.findIndex((header) => {
     const normalizedHeader = normalizeHeaderText(header);
-
     return normalizedAliases.some((alias) => normalizedHeader.includes(alias));
   });
 }
 
 function cellTextByHeader(cells, headers, aliases) {
   const index = headerIndex(headers, aliases);
-
   return index >= 0 ? cells[index]?.text || "" : "";
 }
 
 function cellHtmlByHeader(cells, headers, aliases) {
   const index = headerIndex(headers, aliases);
-
   return index >= 0 ? cells[index]?.html || "" : "";
 }
 
 function parsePublicVehicleRow(row, baseUrl, qualityImageMap) {
   const { stockId, rowHtml } = row;
-
   const rawHrefs = extractRawHrefValues(rowHtml);
-
   const urls = extractHrefValues(rowHtml, baseUrl);
 
   const rawTireHref =
     rawHrefs.find((href) => href.includes("get_tire_from_car_model")) || "";
 
   const carName = getQueryParamDecoded(rawTireHref, "car_name");
-
   const gradeName = getQueryParamDecoded(rawTireHref, "grade_name");
 
   const classificationName = getQueryParamDecoded(
@@ -868,11 +868,8 @@ function parsePublicVehicleRow(row, baseUrl, qualityImageMap) {
   );
 
   const infoItems = extractLiTexts(extractTdByClass(rowHtml, "item__info"));
-
   const costCell = extractTdByClass(rowHtml, "item__cost");
-
   const bodyPrice = extractSpanById(costCell, `kakaku_display_${stockId}`);
-
   const totalPrice = extractSpanById(costCell, `total_display_${stockId}`);
 
   const title =
@@ -927,7 +924,6 @@ function parseSavedVehicleRow(rowHtml, headers, pageUrl) {
   }
 
   const urls = extractHrefValues(rowHtml, pageUrl);
-
   const clientId = process.env.MOTORGATE_CLIENT_ID || "0902332";
 
   const editUrls = Array.from(
@@ -986,7 +982,6 @@ function parseSavedVehicleRow(rowHtml, headers, pageUrl) {
   });
 
   let bodyPrice = resolvedPrices.bodyPrice;
-
   let totalPrice = resolvedPrices.totalPrice;
 
   const cellTexts = cells.map((cell) => cleanVehicleText(cell.text));
@@ -1104,7 +1099,6 @@ function parseSavedVehicleRow(rowHtml, headers, pageUrl) {
 
 function extractSavedVehicles(html, pageUrl) {
   const headers = findSavedHeaderMap(html);
-
   const vehicles = [];
 
   for (const rowHtml of extractAllTableRows(html)) {
@@ -1211,7 +1205,6 @@ function extractControls(html) {
 
   for (const match of source.matchAll(/<input\b([^>]*)>/gi)) {
     const attributes = match[1] || "";
-
     const type = extractAttribute(attributes, "type").toLowerCase();
 
     if (
@@ -1248,7 +1241,6 @@ function extractControls(html) {
     /<select\b([^>]*)>([\s\S]*?)<\/select>/gi,
   )) {
     const attributes = match[1] || "";
-
     const selected = extractSelectedOption(match[2]);
 
     controls.push({
@@ -1282,7 +1274,6 @@ function isMeaningfulValue(value) {
 
 function findControlValue(html, names) {
   const targets = names.map(normalizeControlKey).filter(Boolean);
-
   const controls = extractControls(html);
 
   for (const control of controls) {
@@ -1366,9 +1357,7 @@ function isGradeAdditionalFieldKey(value) {
 
 function findDescriptiveControlValue(html, names, patterns = [], carName = "") {
   const targets = names.map(normalizeControlKey).filter(Boolean);
-
   const controls = extractControls(html);
-
   const candidates = [];
 
   for (const control of controls) {
@@ -1530,7 +1519,6 @@ function extractLabelValuePairs(html) {
 
   for (const rowHtml of extractAllTableRows(source)) {
     const headers = extractCells(rowHtml, "th");
-
     const cells = extractCells(rowHtml, "td");
 
     if (headers.length && cells.length) {
@@ -1604,7 +1592,6 @@ function findRegionNearLabel(html, labels) {
       ["<div", "</div>"],
     ]) {
       const start = source.lastIndexOf(startTag, index);
-
       const end = source.indexOf(endTag, index);
 
       if (start >= 0 && end >= 0 && end - start <= 20000) {
@@ -1703,7 +1690,6 @@ function extractRegistrationYear(html) {
     }
 
     const value = compactText(control.text || control.value);
-
     const year = normalizeYear(value);
 
     if (year) {
@@ -2114,7 +2100,6 @@ function extractCommonVehicleDetails(html, pageUrl) {
 
 async function loginMotorgate() {
   const loginUrl = `${BASE_URL}/login/index`;
-
   const jar = {};
 
   const loginPage = await fetchWithTimeout(
@@ -2281,9 +2266,7 @@ function detailScore(details, types, sourceStatus = "") {
 
 function chooseMergedValue(vehicle, previous, details, key) {
   const currentValue = vehicle[key] || "";
-
   const previousValue = previous?.[key] || "";
-
   const detailValue = details?.[key] || "";
 
   if (key === "imageUrl") {
@@ -2341,6 +2324,7 @@ function chooseMergedValue(vehicle, previous, details, key) {
 }
 
 async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
+  const deadline = Date.now() + VEHICLE_BUDGET_MS;
   const candidates = buildDetailUrlCandidates(vehicle);
 
   if (!candidates.length) {
@@ -2374,6 +2358,11 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
 
   candidateLoop: for (const candidateUrl of candidates) {
     for (let retry = 0; retry <= DETAIL_RETRIES; retry += 1) {
+      if (Date.now() >= deadline) {
+        errors.push("vehicle detail timeout");
+        break candidateLoop;
+      }
+
       attempts += 1;
 
       try {
@@ -2391,7 +2380,7 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
               "Cache-Control": "no-store",
             },
           },
-          DETAIL_TIMEOUT_MS,
+          Math.min(DETAIL_TIMEOUT_MS, Math.max(1, deadline - Date.now())),
         );
 
         const html = await readResponseText(response);
@@ -2400,7 +2389,11 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
           html.includes('name="client_pw"') ||
           html.includes("name='client_pw'");
 
-        if (!response.ok || containsLoginForm) {
+        if (
+          !response.ok ||
+          containsLoginForm ||
+          /FatalError|Fatal error/i.test(html)
+        ) {
           errors.push(
             `${candidateUrl}: HTTP ${response.status}${
               containsLoginForm ? " login form" : ""
@@ -2420,6 +2413,28 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
         collectedTypes = Array.from(new Set([...collectedTypes, ...pageTypes]));
 
         const details = extractCommonVehicleDetails(html, candidateUrl);
+
+        if (
+          ![
+            details.carName,
+            details.gradeName,
+            details.classificationName,
+            details.year,
+            details.mileage,
+            details.color,
+          ].some(Boolean) &&
+          !pageTypes.length
+        ) {
+          errors.push(`${candidateUrl}: vehicle fields not found`);
+          continue;
+        }
+
+        const pageStockId = extractStockId(html);
+
+        if (pageStockId && pageStockId !== vehicle.stockId) {
+          errors.push(`${candidateUrl}: stock ID mismatch`);
+          continue;
+        }
 
         const score = detailScore(details, pageTypes, vehicle.sourceStatus);
 
@@ -2492,7 +2507,6 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
   }
 
   const previous = previousVehicle || {};
-
   const details = best.details;
 
   const types =
@@ -2534,7 +2548,6 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
     "";
 
   let bodyPrice = chooseMergedValue(vehicle, previous, details, "bodyPrice");
-
   let totalPrice = chooseMergedValue(vehicle, previous, details, "totalPrice");
 
   if (vehicle.sourceStatus === "一時保存") {
@@ -2546,7 +2559,6 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
     );
 
     bodyPrice = repaired.bodyPrice;
-
     totalPrice = repaired.totalPrice;
   }
 
@@ -2596,6 +2608,7 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
       },
       detailResult: {
         success: true,
+        freshTypes: collectedTypes.length > 0,
         url: best.url,
         attempts,
         makerName: Boolean(details.makerName),
@@ -2610,41 +2623,6 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
       },
     },
     previousVehicle,
-  );
-}
-
-async function mapWithConcurrency(items, limit, mapper) {
-  const results = new Array(items.length);
-
-  let nextIndex = 0;
-
-  async function worker() {
-    while (true) {
-      const index = nextIndex++;
-
-      if (index >= items.length) {
-        return;
-      }
-
-      results[index] = await mapper(items[index], index);
-    }
-  }
-
-  await Promise.all(
-    Array.from(
-      {
-        length: Math.min(limit, Math.max(1, items.length)),
-      },
-      () => worker(),
-    ),
-  );
-
-  return results;
-}
-
-async function attachVehicleDetails(jar, vehicles, previousMap = new Map()) {
-  return mapWithConcurrency(vehicles, DETAIL_CONCURRENCY, (vehicle) =>
-    fetchVehicleDetail(jar, vehicle, previousMap.get(vehicle.stockId) || null),
   );
 }
 
@@ -2684,7 +2662,7 @@ function toInventoryVehicle(vehicle) {
   };
 }
 
-async function fetchPublicVehicles(jar, previousMap) {
+async function fetchPublicVehicles(jar) {
   const response = await fetchWithTimeout(
     PUBLIC_LIST_URL,
     {
@@ -2704,21 +2682,32 @@ async function fetchPublicVehicles(jar, previousMap) {
     html.includes('name="client_pw"') || html.includes("name='client_pw'");
 
   const imageMap = extractQualityImageMap(html, PUBLIC_LIST_URL);
-
   const rows = extractVehicleRows(html);
 
   const vehicles = rows.map((row) =>
     parsePublicVehicleRow(row, PUBLIC_LIST_URL, imageMap),
   );
 
-  const detailed = await attachVehicleDetails(jar, vehicles, previousMap);
+  if (
+    response.status !== 200 ||
+    containsLoginForm ||
+    /FatalError|Fatal error/i.test(html)
+  ) {
+    throw new Error(`掲載在庫一覧の取得失敗: HTTP ${response.status}`);
+  }
+
+  if (!rows.length || rows.length >= 100) {
+    throw new Error(
+      "掲載在庫一覧が0件、または100件上限です。全件確認できないため既存在庫を保持します。",
+    );
+  }
 
   return {
     status: response.status,
     containsLoginForm,
     foundRows: rows.length,
     imageMapCount: Object.keys(imageMap).length,
-    vehicles: detailed.map(toInventoryVehicle),
+    vehicles,
   };
 }
 
@@ -2765,6 +2754,20 @@ async function fetchSavedPage(jar, pageUrl) {
 
   const vehicles = extractSavedVehicles(html, pageUrl);
 
+  if (
+    response.status !== 200 ||
+    containsLoginForm ||
+    /FatalError|Fatal error/i.test(html)
+  ) {
+    throw new Error(`一時保存一覧の取得失敗: HTTP ${response.status}`);
+  }
+
+  if (!vehicles.length && !/<table\b/i.test(html)) {
+    throw new Error(
+      "一時保存一覧の形式を確認できません。既存在庫を保持します。",
+    );
+  }
+
   return {
     pageUrl,
     status: response.status,
@@ -2772,49 +2775,6 @@ async function fetchSavedPage(jar, pageUrl) {
     count: vehicles.length,
     listFields: summarizeSavedListFields(vehicles),
     vehicles,
-  };
-}
-
-async function fetchSavedVehicles(jar, previousMap) {
-  const pages = [];
-  const allVehicles = [];
-
-  const seenStockIds = new Set();
-
-  for (const pageUrl of SAVED_LIST_URLS) {
-    const page = await fetchSavedPage(jar, pageUrl);
-
-    const newVehicles = page.vehicles.filter(
-      (vehicle) => !seenStockIds.has(vehicle.stockId),
-    );
-
-    for (const vehicle of newVehicles) {
-      seenStockIds.add(vehicle.stockId);
-
-      allVehicles.push(vehicle);
-    }
-
-    pages.push({
-      pageUrl: page.pageUrl,
-      status: page.status,
-      containsLoginForm: page.containsLoginForm,
-      count: page.count,
-      newCount: newVehicles.length,
-      listFields: page.listFields,
-    });
-
-    if (page.count === 0 || newVehicles.length === 0) {
-      break;
-    }
-  }
-
-  const unique = uniqueByStockId(allVehicles);
-
-  const detailed = await attachVehicleDetails(jar, unique, previousMap);
-
-  return {
-    pages,
-    vehicles: detailed.map(toInventoryVehicle),
   };
 }
 
@@ -2859,7 +2819,6 @@ async function githubApi(url, options = {}) {
   );
 
   const text = await response.text();
-
   let data = {};
 
   try {
@@ -2909,147 +2868,87 @@ async function fetchGitHubInventoryFile() {
     };
   }
 
-  let inventory = {
-    vehicles: [],
-  };
+  try {
+    if (!data.content || !data.sha) {
+      throw new Error("GitHub file content/SHA missing");
+    }
 
-  if (data.content) {
-    try {
-      const decoded = Buffer.from(
+    const inventory = JSON.parse(
+      Buffer.from(
         String(data.content).replace(/\n/g, ""),
         "base64",
-      ).toString("utf8");
+      ).toString("utf8"),
+    );
 
-      inventory = JSON.parse(decoded);
-    } catch (error) {
-      inventory = {
-        vehicles: [],
-        readError: error.message || String(error),
-      };
+    if (!Array.isArray(inventory.vehicles) || inventory.readError) {
+      throw new Error("inventory.vehicles is invalid");
     }
-  }
 
-  return {
-    success: true,
-    status: response.status,
-    sha: data.sha || null,
-    inventory,
-    error: "",
-  };
+    return {
+      success: true,
+      status: response.status,
+      sha: data.sha,
+      inventory,
+      error: "",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      status: response.status,
+      sha: null,
+      inventory: null,
+      error: error.message || String(error),
+    };
+  }
 }
 
 async function fetchCurrentInventoryFromGitHub() {
   const result = await fetchGitHubInventoryFile();
 
+  if (!result.success) {
+    throw new Error(
+      `既存在庫の読込失敗: ${JSON.stringify(result.error)}`,
+    );
+  }
+
   return {
     sha: result.sha,
-    inventory: result.inventory || {
-      vehicles: [],
-    },
+    inventory: result.inventory,
     readStatus: result.status,
-    readError: result.error || "",
+    readError: "",
   };
 }
 
-async function commitInventoryToGitHub(
-  inventoryData,
-  existingSha,
-  message = "refresh public and saved inventory data",
-) {
-  const { token, owner, repo, branch, path } = getGitHubConfig();
+async function commitInventoryToGitHub(inventoryData, existingSha, message) {
+  const { owner, repo, branch, path } = getGitHubConfig();
 
-  if (!token) {
-    return {
-      saved: false,
-      reason: "GITHUB_TOKEN is not set",
-    };
+  if (!existingSha) {
+    throw new Error("SHA未確認のため保存を中止しました");
   }
 
-  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-
-  const content = Buffer.from(
-    JSON.stringify(inventoryData, null, 2),
-    "utf8",
-  ).toString("base64");
-
-  async function put(sha) {
-    const requestBody = {
-      message,
-      content,
-      branch,
-    };
-
-    if (sha) {
-      requestBody.sha = sha;
-    }
-
-    const { response, data } = await githubApi(apiUrl, {
+  const { response, data } = await githubApi(
+    `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
+    {
       method: "PUT",
-      body: JSON.stringify(requestBody),
-    });
-
-    return {
-      response,
-      data,
-      usedSha: sha || "",
-    };
-  }
-
-  let lastResult = null;
-
-  let lastSha = existingSha || null;
-
-  for (let attempt = 1; attempt <= GITHUB_SAVE_RETRIES; attempt += 1) {
-    const latest = await fetchGitHubInventoryFile();
-
-    lastSha = latest.sha || lastSha || null;
-
-    lastResult = await put(lastSha);
-
-    if (lastResult.response.ok) {
-      return {
-        saved: true,
-        status: lastResult.response.status,
-        path,
+      body: JSON.stringify({
+        message,
         branch,
-        attempt,
-        usedSha: lastResult.usedSha,
-        commit: lastResult.data.commit?.html_url || "",
-        commitSha: lastResult.data.commit?.sha || "",
-        contentSha: lastResult.data.content?.sha || "",
-        error: "",
-      };
-    }
-
-    const errorMessage = String(lastResult.data?.message || "").toLowerCase();
-
-    const conflict =
-      lastResult.response.status === 409 ||
-      lastResult.response.status === 422 ||
-      errorMessage.includes("sha") ||
-      errorMessage.includes("conflict") ||
-      errorMessage.includes("does not match");
-
-    if (!conflict) {
-      break;
-    }
-
-    await sleep(500 * attempt);
-  }
-
-  return {
-    saved: false,
-    status: lastResult?.response?.status || null,
-    path,
-    branch,
-    attempt: GITHUB_SAVE_RETRIES,
-    usedSha: lastResult?.usedSha || "",
-    commit: "",
-    commitSha: "",
-    contentSha: "",
-    error: lastResult?.data || {
-      message: "GitHub save failed",
+        sha: existingSha,
+        content: Buffer.from(
+          JSON.stringify(inventoryData, null, 2),
+          "utf8",
+        ).toString("base64"),
+      }),
     },
+  );
+
+  // 競合時に最新SHAだけ取り直して古い内容を上書きしない。
+  return {
+    saved: response.ok,
+    status: response.status,
+    contentSha: data.content?.sha || "",
+    commit: data.commit?.html_url || "",
+    error: response.ok ? "" : data.message || "GitHub save failed",
   };
 }
 
@@ -3065,7 +2964,6 @@ async function readUpdateLock() {
   }
 
   const refUrl = `https://api.github.com/repos/${owner}/${repo}/git/ref/${LOCK_REF_NAME}`;
-
   const { response, data } = await githubApi(refUrl);
 
   if (response.status === 404) {
@@ -3092,7 +2990,6 @@ async function readUpdateLock() {
 
   if (data.object?.type === "tag" && refSha) {
     const tagUrl = `https://api.github.com/repos/${owner}/${repo}/git/tags/${refSha}`;
-
     const tagResult = await githubApi(tagUrl);
 
     if (tagResult.response.ok) {
@@ -3100,9 +2997,7 @@ async function readUpdateLock() {
 
       try {
         const parsed = JSON.parse(tagResult.data.message || "{}");
-
         runId = parsed.runId || "";
-
         trigger = parsed.trigger || "";
       } catch {
         runId = "";
@@ -3111,7 +3006,6 @@ async function readUpdateLock() {
   }
 
   const createdTime = createdAt ? new Date(createdAt).getTime() : 0;
-
   const ageMs = createdTime ? Date.now() - createdTime : 0;
 
   return {
@@ -3129,7 +3023,6 @@ async function readUpdateLock() {
 
 async function deleteUpdateLock(expectedRefSha = "") {
   const { owner, repo } = getGitHubConfig();
-
   const current = await readUpdateLock();
 
   if (!current.locked) {
@@ -3171,6 +3064,14 @@ async function acquireUpdateLock(runId, trigger) {
 
   const current = await readUpdateLock();
 
+  if (!current.available) {
+    return {
+      acquired: false,
+      running: false,
+      error: current.error || "ロック確認失敗",
+    };
+  }
+
   if (current.locked && !current.stale) {
     return {
       acquired: false,
@@ -3209,7 +3110,6 @@ async function acquireUpdateLock(runId, trigger) {
   }
 
   const createdAt = new Date().toISOString();
-
   const tagObjectUrl = `https://api.github.com/repos/${owner}/${repo}/git/tags`;
 
   const tagResult = await githubApi(tagObjectUrl, {
@@ -3240,7 +3140,6 @@ async function acquireUpdateLock(runId, trigger) {
   }
 
   const tagObjectSha = tagResult.data.sha;
-
   const createRefUrl = `https://api.github.com/repos/${owner}/${repo}/git/refs`;
 
   const refResult = await githubApi(createRefUrl, {
@@ -3327,7 +3226,6 @@ function summarizeSavedDetailFields(vehicles) {
 
 function getTriggerLabel(request) {
   const url = new URL(request.url);
-
   const source = url.searchParams.get("source") || "";
 
   if (source === "github-actions") {
@@ -3335,7 +3233,6 @@ function getTriggerLabel(request) {
   }
 
   const cronHeader = request.headers.get("x-vercel-cron");
-
   const userAgent = request.headers.get("user-agent") || "";
 
   if (cronHeader || userAgent.toLowerCase().includes("vercel-cron")) {
@@ -3345,232 +3242,458 @@ function getTriggerLabel(request) {
   return "URL手動更新";
 }
 
-function buildFailureInventoryData(currentInventory, status) {
+function progressOf(state) {
+  if (!state) return null;
+
   return {
-    ...(currentInventory || {}),
-    lastFailedAt: status.finishedAt,
-    lastUpdateStatus: status,
+    cycleId: state.cycleId,
+    phase: state.phase,
+    total: state.total || 0,
+    completed: state.completed || 0,
+    remaining: state.queue?.length || 0,
+    failed: state.failed?.length || 0,
+    failedStockIds: (state.failed || []).map((item) => item.stockId),
+    savedPagesRead: state.nextSavedPage || 0,
+    finishedAt: state.finishedAt || "",
   };
 }
 
-async function runInventoryUpdate({ runId, trigger }) {
-  const startedAt = new Date();
+function inventoryWithProgress(
+  inventory,
+  state,
+  vehicles,
+  runId,
+  trigger,
+  startedAt,
+) {
+  const now = new Date().toISOString();
+  const finished = state.phase === "complete";
+  const failed = state.failed.length;
 
-  let current = {
-    sha: null,
-    inventory: {
-      vehicles: [],
+  const publicVehicles = vehicles.filter(
+    (v) => v.sourceStatus === "掲載在庫",
+  );
+
+  const savedVehicles = vehicles.filter(
+    (v) => v.sourceStatus === "一時保存",
+  );
+
+  return {
+    ...inventory,
+    codeVersion: CODE_VERSION,
+    source: "motorgate",
+    updateMode: "resumable-batch",
+    syncState: state,
+
+    // 一覧収集中は従来のデータ更新日時を維持する。
+    updatedAt: state.phase === "listing" ? inventory.updatedAt : now,
+
+    lastUpdateStatus: {
+      success: finished && !failed,
+      statusText: finished
+        ? failed
+          ? "更新終了・一部取得失敗"
+          : "全件更新完了"
+        : "分割更新中",
+      runId,
+      trigger,
+      startedAt,
+      finishedAt: now,
+      durationSeconds: Math.round(
+        (Date.now() - Date.parse(startedAt)) / 1000,
+      ),
+      error: failed
+        ? `${failed}台の詳細取得に失敗。既存情報を保持しています。`
+        : "",
+      timeout: false,
+      progress: progressOf(state),
+      typeFailed: summarizeTypeResults(vehicles).failed,
+      typeTimeout: summarizeTypeResults(vehicles).timeout,
     },
-    readStatus: null,
-    readError: "",
+
+    counts: {
+      publicVehicles: publicVehicles.length,
+      savedVehicles: savedVehicles.length,
+      vehicles: vehicles.length,
+      publicFoundRows: state.publicCount || 0,
+    },
+
+    checks: {
+      savedPages: state.pages,
+      typeResults: summarizeTypeResults(vehicles),
+      gradeExtraInfo: summarizeGradeExtraInfo(vehicles),
+      savedListFields: summarizeSavedListFields(vehicles),
+      savedDetailFields: summarizeSavedDetailFields(vehicles),
+    },
+
+    vehicles,
   };
+}
+
+async function runInventoryUpdate({
+  runId,
+  trigger,
+  requestStartedAt = Date.now(),
+}) {
+  const startedAt = new Date().toISOString();
+  const stopAt = requestStartedAt + WORK_BUDGET_MS;
+
+  let current = null;
+  let stage = "GitHub既存在庫読込";
+  let processed = 0;
+  let github = { saved: false };
+  let writeUncertain = false;
 
   try {
     current = await fetchCurrentInventoryFromGitHub();
 
-    const previousMap = new Map(
-      (current.inventory?.vehicles || [])
-        .filter((vehicle) => vehicle?.stockId)
-        .map((vehicle) => [vehicle.stockId, vehicle]),
-    );
+    let state = current.inventory.syncState;
+
+    if (!state || state.version !== 1 || state.phase === "complete") {
+      state = {
+        version: 1,
+        cycleId: runId,
+        startedAt,
+        phase: "listing",
+        publicLoaded: false,
+        publicCount: 0,
+        nextSavedPage: 0,
+        pages: [],
+        listed: [],
+        queue: [],
+        completed: 0,
+        total: 0,
+        failed: [],
+      };
+    } else {
+      state = structuredClone(state);
+    }
+
+    let vehicles = current.inventory.vehicles;
+
+    async function checkpoint() {
+      const next = structuredClone(
+        inventoryWithProgress(
+          current.inventory,
+          state,
+          vehicles,
+          runId,
+          trigger,
+          startedAt,
+        ),
+      );
+
+      stage = "GitHub途中保存";
+      writeUncertain = true;
+
+      github = await commitInventoryToGitHub(
+        next,
+        current.sha,
+        `在庫分割更新 ${state.completed}/${state.total} ${runId}`,
+      );
+
+      if (!github.saved || !github.contentSha) {
+        throw new Error(`保存失敗: ${github.status} ${github.error}`);
+      }
+
+      current = {
+        ...current,
+        sha: github.contentSha,
+        inventory: next,
+      };
+
+      writeUncertain = false;
+    }
+
+    stage = "MOTOR GATEログイン";
 
     const { jar, loginStatus } = await loginMotorgate();
 
-    const [publicResult, savedResult] = await Promise.all([
-      fetchPublicVehicles(jar, previousMap),
-      fetchSavedVehicles(jar, previousMap),
-    ]);
+    if (loginStatus !== 302) {
+      throw new Error(`ログイン異常: HTTP ${loginStatus}`);
+    }
 
-    const vehicles = mergeVehicles(publicResult.vehicles, savedResult.vehicles);
+    // 一覧もページ単位で確定保存。途中失敗時は同じページから再開。
+    while (state.phase === "listing" && Date.now() + 35000 < stopAt) {
+      if (!state.publicLoaded) {
+        stage = "掲載在庫一覧取得";
 
-    const finishedAt = new Date();
+        const result = await fetchPublicVehicles(jar);
 
-    const durationSeconds = Math.round(
-      (finishedAt.getTime() - startedAt.getTime()) / 1000,
-    );
+        state.listed = result.vehicles;
+        state.publicCount = result.vehicles.length;
+        state.publicLoaded = true;
+      } else {
+        stage = `一時保存一覧${state.nextSavedPage + 1}ページ取得`;
 
-    const typeResults = summarizeTypeResults(vehicles);
+        const pageUrl = SAVED_LIST_URLS[state.nextSavedPage];
 
-    const savedDetailFields = summarizeSavedDetailFields(vehicles);
+        if (!pageUrl) {
+          throw new Error(
+            "一時保存一覧のページ上限に到達しました。全件確認まで既存在庫を保持します。",
+          );
+        }
 
-    const savedListFields = summarizeSavedListFields(vehicles);
+        const page = await fetchSavedPage(jar, pageUrl);
 
-    const success =
-      loginStatus === 302 &&
-      publicResult.status === 200 &&
-      !publicResult.containsLoginForm &&
-      savedResult.pages.every(
-        (page) => page.status === 200 && !page.containsLoginForm,
-      ) &&
-      vehicles.length > 0;
+        const previousIds = new Set(
+          state.listed
+            .filter((v) => v.sourceStatus === "一時保存")
+            .map((v) => v.stockId),
+        );
 
-    const errors = [
-      loginStatus !== 302 ? `ログイン異常: ${loginStatus}` : "",
-      publicResult.status !== 200
-        ? `掲載在庫取得異常: ${publicResult.status}`
-        : "",
-      publicResult.containsLoginForm
-        ? "掲載在庫取得時にログインフォームが表示されました"
-        : "",
-      savedResult.pages.some((page) => page.status !== 200)
-        ? "一時保存一覧ページの取得に失敗しました"
-        : "",
-      savedResult.pages.some((page) => page.containsLoginForm)
-        ? "一時保存一覧取得時にログインフォームが表示されました"
-        : "",
-      vehicles.length === 0 ? "在庫取得件数が0件です" : "",
-    ].filter(Boolean);
+        const newVehicles = page.vehicles.filter(
+          (v) => !previousIds.has(v.stockId),
+        );
 
-    const lastUpdateStatus = {
-      success,
-      statusText: success ? "正常更新" : "更新確認が必要",
-      runId,
-      trigger,
-      startedAt: startedAt.toISOString(),
-      finishedAt: finishedAt.toISOString(),
-      durationSeconds,
-      error: errors.join(" / "),
-      timeout: false,
-      typeFailed: typeResults.failed,
-      typeTimeout: typeResults.timeout,
-      savedGradeNameMissing: savedDetailFields.gradeNameMissing,
-      savedYearMissing: savedDetailFields.yearMissing,
-      savedColorMissing: savedDetailFields.colorMissing,
-      savedMileageMissing: savedDetailFields.mileageMissing,
-      savedImageMissing: savedDetailFields.imageMissing,
-      savedDetailFetchFailed: savedDetailFields.detailFetchFailed,
-    };
+        if (
+          !page.count &&
+          state.nextSavedPage === 0 &&
+          vehicles.some((v) => v.sourceStatus === "一時保存")
+        ) {
+          throw new Error(
+            "一時保存が突然0件になりました。誤削除防止のため停止します。",
+          );
+        }
 
-    const inventoryData = {
-      codeVersion: CODE_VERSION,
-      updatedAt: finishedAt.toISOString(),
-      source: "motorgate",
-      updateMode: "full-public-and-saved-refresh",
-      lastUpdateStatus,
-      counts: {
-        publicVehicles: publicResult.vehicles.length,
-        savedVehicles: savedResult.vehicles.length,
-        vehicles: vehicles.length,
-        publicFoundRows: publicResult.foundRows,
-        publicImageMapCount: publicResult.imageMapCount,
-      },
-      checks: {
-        githubRead: {
-          status: current.readStatus,
-          shaFound: Boolean(current.sha),
-          sha: current.sha || "",
-          error: current.readError || "",
-        },
-        loginStatus,
-        publicListStatus: publicResult.status,
-        publicContainsLoginForm: publicResult.containsLoginForm,
-        savedPages: savedResult.pages,
-        typeResults,
-        gradeExtraInfo: summarizeGradeExtraInfo(vehicles),
-        savedListFields,
-        savedDetailFields,
-      },
-      vehicles,
-    };
+        // ページ範囲外で直前のページが返る現行サイトの挙動に対応。
+        const repeated = page.count > 0 && !newVehicles.length;
 
-    const github = await commitInventoryToGitHub(
-      inventoryData,
-      current.sha,
-      `refresh inventory with saved vehicle grades ${runId}`,
-    );
+        if (repeated) {
+          const previousPage = state.pages.at(-1);
+          const ids = page.vehicles
+            .map((v) => v.stockId)
+            .sort()
+            .join(",");
 
-    console.log(
-      JSON.stringify({
-        event: "inventory-update-finished",
-        runId,
-        trigger,
-        success,
-        githubSaved: github.saved,
-        counts: inventoryData.counts,
-        durationSeconds,
-      }),
-    );
+          if (
+            !previousPage ||
+            previousPage.count >= 25 ||
+            previousPage.ids !== ids
+          ) {
+            throw new Error(
+              "一時保存のページ送りを確認できません。誤削除防止のため停止します。",
+            );
+          }
+        }
+
+        state.pages.push({
+          pageUrl,
+          count: page.count,
+          newCount: newVehicles.length,
+          ids: page.vehicles
+            .map((v) => v.stockId)
+            .sort()
+            .join(","),
+        });
+
+        state.listed = mergeVehicles(state.listed, page.vehicles);
+        state.nextSavedPage += 1;
+
+        if (!page.count || repeated) {
+          const oldMap = new Map(
+            vehicles.map((v) => [v.stockId, v]),
+          );
+
+          // 両一覧が揃った時だけ消えた車を除外。
+          // 失敗ページではここに到達しない。
+          vehicles = state.listed.map((v) => {
+            const old = oldMap.get(v.stockId);
+
+            return {
+              ...old,
+              ...mergePreviousVehicle(v, old),
+              updatedAt: old?.updatedAt || null,
+              detailResult: old?.detailResult || null,
+              typeResult: old?.typeResult || null,
+              listUpdatedAt: new Date().toISOString(),
+            };
+          });
+
+          state.queue = state.listed.map((vehicle) => ({
+            vehicle,
+            attempts: 0,
+          }));
+
+          state.total = state.queue.length;
+          state.phase = state.queue.length ? "details" : "complete";
+
+          // 同じ一覧を二重保存しない。
+          state.listed = [];
+        }
+      }
+
+      await checkpoint();
+    }
+
+    // 今回の最大10台を固定。
+    // 失敗車は末尾へ回し、同じ呼出しでは再試行しない。
+    const batch =
+      state.phase === "details"
+        ? state.queue.slice(0, BATCH_SIZE)
+        : [];
+
+    for (
+      let offset = 0;
+      offset < batch.length;
+      offset += DETAIL_CONCURRENCY
+    ) {
+      if (Date.now() + VEHICLE_BUDGET_MS + 20000 >= stopAt) {
+        break;
+      }
+
+      const wave = batch.slice(offset, offset + DETAIL_CONCURRENCY);
+      stage = "車両詳細取得";
+
+      const oldMap = new Map(
+        vehicles.map((v) => [v.stockId, v]),
+      );
+
+      const results = await Promise.all(
+        wave.map(async (item) => {
+          try {
+            return await fetchVehicleDetail(
+              jar,
+              item.vehicle,
+              oldMap.get(item.vehicle.stockId),
+            );
+          } catch (error) {
+            return {
+              ...item.vehicle,
+              detailResult: {
+                success: false,
+                error: error.message,
+              },
+            };
+          }
+        }),
+      );
+
+      for (let i = 0; i < wave.length; i += 1) {
+        const item = wave[i];
+        const result = results[i];
+        const id = item.vehicle.stockId;
+
+        state.queue = state.queue.filter(
+          (queued) => queued.vehicle.stockId !== id,
+        );
+
+        // 過去の分類で成功扱いにしない。
+        // 今回のページから分類も取得できたか確認。
+        const ok =
+          result.detailResult?.success &&
+          result.detailResult?.freshTypes;
+
+        if (ok) {
+          oldMap.set(id, toInventoryVehicle(result));
+          state.completed += 1;
+        } else {
+          const attempts = item.attempts + 1;
+
+          const error =
+            result.typeResult?.error ||
+            result.detailResult?.error ||
+            "今回の詳細・分類を取得できませんでした";
+
+          if (attempts < MAX_DETAIL_ATTEMPTS) {
+            state.queue.push({
+              ...item,
+              attempts,
+              lastError: error,
+            });
+          } else {
+            state.failed.push({
+              stockId: id,
+              attempts,
+              error,
+            });
+          }
+        }
+
+        processed += 1;
+      }
+
+      vehicles = vehicles.map((v) => oldMap.get(v.stockId));
+
+      if (!state.queue.length) {
+        state.phase = "complete";
+        state.finishedAt = new Date().toISOString();
+      }
+
+      await checkpoint();
+    }
 
     return {
-      success: success && github.saved,
-      scrapingSuccess: success,
+      success: true,
       codeVersion: CODE_VERSION,
       runId,
       trigger,
+      processed,
+      batchLimit: BATCH_SIZE,
+      hasMore: state.phase !== "complete",
+      cycleSuccess:
+        state.phase === "complete" && !state.failed.length,
+      progress: progressOf(state),
       github,
-      counts: inventoryData.counts,
-      savedListFields,
-      savedDetailFields,
-      lastUpdateStatus,
+      counts: current.inventory.counts,
+      lastUpdateStatus: current.inventory.lastUpdateStatus,
+      message:
+        state.phase === "complete"
+          ? "今回の巡回終了"
+          : "続きは次の呼び出しで再開します",
     };
   } catch (error) {
-    const finishedAt = new Date();
-
-    const failureStatus = {
+    const failure = {
       success: false,
-      statusText: "更新失敗",
+      statusText: "更新失敗・保存済み分を保持",
       runId,
       trigger,
-      startedAt: startedAt.toISOString(),
-      finishedAt: finishedAt.toISOString(),
-      durationSeconds: Math.round(
-        (finishedAt.getTime() - startedAt.getTime()) / 1000,
-      ),
-      error: error.message || String(error),
+      startedAt,
+      finishedAt: new Date().toISOString(),
+      error: `${stage}: ${error.message || String(error)}`,
       timeout: isTimeoutError(error),
-      typeFailed: null,
-      typeTimeout: null,
-      savedGradeNameMissing: null,
-      savedYearMissing: null,
-      savedColorMissing: null,
-      savedMileageMissing: null,
-      savedImageMissing: null,
-      savedDetailFetchFailed: null,
     };
 
-    let github = {
-      saved: false,
-      reason: "failure status was not saved",
-    };
-
-    try {
-      github = await commitInventoryToGitHub(
-        buildFailureInventoryData(current.inventory, failureStatus),
-        current.sha,
-        `record failed inventory update ${runId}`,
-      );
-    } catch (commitError) {
-      github = {
-        saved: false,
-        reason: "failed to save failure status",
-        error: commitError.message || String(commitError),
-      };
+    // 保存結果が不明なとき・SHA競合時は書き戻さない。
+    // 成功済みデータの巻き戻しを防止する。
+    if (current && !writeUncertain) {
+      try {
+        github = await commitInventoryToGitHub(
+          {
+            ...current.inventory,
+            lastFailedAt: failure.finishedAt,
+            lastUpdateStatus: failure,
+          },
+          current.sha,
+          `在庫更新の通信失敗を記録 ${runId}`,
+        );
+      } catch {
+        // 次回はGitHubの確定済み内容から再開する。
+      }
     }
 
     console.error(
       JSON.stringify({
         event: "inventory-update-failed",
-        runId,
-        trigger,
-        error: error.message || String(error),
+        ...failure,
       }),
     );
 
     return {
       success: false,
+      hasMore: true,
       codeVersion: CODE_VERSION,
       runId,
-      trigger,
+      processed,
       github,
-      lastUpdateStatus: failureStatus,
-      error: error.message || String(error),
+      lastUpdateStatus: failure,
+      error: failure.error,
     };
   }
 }
 
 async function buildStatusResponse() {
   const current = await fetchCurrentInventoryFromGitHub();
-
   const lock = await readUpdateLock();
 
   const savedPriceSamples = (current.inventory?.vehicles || [])
@@ -3602,14 +3725,15 @@ async function buildStatusResponse() {
       counts: current.inventory?.counts || {},
       lastUpdateStatus: current.inventory?.lastUpdateStatus || null,
       checks: current.inventory?.checks || {},
+      progress: progressOf(current.inventory?.syncState),
       savedPriceSamples,
     },
   };
 }
 
 export async function GET(request) {
+  const requestStartedAt = Date.now();
   const url = new URL(request.url);
-
   const statusOnly = url.searchParams.get("status") === "1";
 
   if (statusOnly) {
@@ -3630,11 +3754,8 @@ export async function GET(request) {
   }
 
   const wait = url.searchParams.get("wait") === "1";
-
   const runId = createRunId();
-
   const trigger = getTriggerLabel(request);
-
   const lock = await acquireUpdateLock(runId, trigger);
 
   if (!lock.acquired && lock.running) {
@@ -3673,15 +3794,22 @@ export async function GET(request) {
       return await runInventoryUpdate({
         runId,
         trigger,
+        requestStartedAt,
       });
     } finally {
-      await deleteUpdateLock(lock.refSha);
+      try {
+        await deleteUpdateLock(lock.refSha);
+      } catch (error) {
+        console.error(
+          "ロック解除失敗（有効期限後に再試行）",
+          error.message,
+        );
+      }
     }
   };
 
   if (wait) {
     const result = await execute();
-
     return json(result, result.success ? 200 : 500);
   }
 
@@ -3697,7 +3825,8 @@ export async function GET(request) {
       codeVersion: CODE_VERSION,
       runId,
       trigger,
-      message: "在庫更新を開始しました。このページは閉じて構いません。",
+      message:
+        "最大10台の分割更新を開始しました。残りは次の更新呼び出しで再開します。",
       statusPath: "/api/inventory/update?status=1",
     },
     202,
