@@ -4,6 +4,11 @@ export const PROMISE_02 = {
   title: "商品化への約束",
   sections: [
     {
+      type: "image",
+      imageKey: "hero",
+    },
+    {
+      type: "text",
       heading: "次の人との時間を、気持ちよく始めるために。",
       text: `年月を重ねた車にも、
 手をかけることで
@@ -15,7 +20,13 @@ export const PROMISE_02 = {
 カーとぴあの商品化は、
 そこから始まります。`,
     },
+
     {
+      type: "image",
+      imageKey: "customer",
+    },
+    {
+      type: "text",
       heading: `どの一台にも、同じまなざしを。
 
 車の価格で、
@@ -30,7 +41,13 @@ export const PROMISE_02 = {
 大切な一台であることは、
 どの車も変わらないからです。`,
     },
+
     {
+      type: "image",
+      imageKey: "details",
+    },
+    {
+      type: "text",
       heading: `見えないところにこそ、丁寧さを。
 
 開ける。下げる。
@@ -49,7 +66,13 @@ export const PROMISE_02 = {
 乗り始めてから目にする場所にも、
 私たちの仕事は残ります。`,
     },
+
     {
+      type: "image",
+      imageKey: "polishing",
+    },
+    {
+      type: "text",
       heading: `美しさを、整える。
 
 手をかけたことが、
@@ -71,7 +94,13 @@ export const PROMISE_02 = {
 手の届きやすさにも、
 心を配りながら。`,
     },
+
     {
+      type: "image",
+      imageKey: "nextOwner",
+    },
+    {
+      type: "text",
       heading: `次の人へ、気持ちよく。
 
 「中古車じゃないみたい。」`,
@@ -86,7 +115,9 @@ export const PROMISE_02 = {
 私たちが仕上げたいのは、
 そんな一台です。`,
     },
+
     {
+      type: "text",
       heading: `「中古車だから」で、
 済ませない。
 
