@@ -17,15 +17,12 @@ const CARD = Object.freeze({
   imageAspectRatio: "16:9",
   imageHeight: "165px",
   titleHeight: "115px",
-  chapterRowHeight: "34px",
-  chapterNumberWidth: "86px",
+  chapterRowHeight: "65px",
   chapterFontSize: "13px",
   contentsPadding: "18px",
   buttonPadding: "18px",
 });
 
-// 冒頭の導入と最後の締めを除き、
-// 画像＋文章の組を1章として取得する。
 function getChapters(promiseId) {
   const sections =
     PROMISE_CONTENT[promiseId]?.sections ?? [];
@@ -73,8 +70,6 @@ function getChapters(promiseId) {
   return chapters;
 }
 
-// 最も章数が多い約束に合わせて
-// 全カードの目次領域の高さを統一する。
 function getMaximumChapterCount(promises) {
   return Math.max(
     0,
@@ -84,13 +79,14 @@ function getMaximumChapterCount(promises) {
   );
 }
 
+// CHAPTER番号の下に章タイトルを配置する。
 function makeChapterRow(chapterItem) {
   return {
     type: "box",
-    layout: "horizontal",
-    alignItems: "center",
+    layout: "vertical",
     height: CARD.chapterRowHeight,
-    spacing: "sm",
+    spacing: "xs",
+    justifyContent: "center",
     contents: [
       {
         type: "text",
@@ -100,8 +96,6 @@ function makeChapterRow(chapterItem) {
         size: "xxs",
         weight: "bold",
         color: COLORS.gold,
-        flex: 0,
-        gravity: "center",
       },
       {
         type: "text",
@@ -111,8 +105,6 @@ function makeChapterRow(chapterItem) {
         color: COLORS.text,
         wrap: true,
         maxLines: 2,
-        gravity: "center",
-        flex: 1,
       },
     ],
   };
@@ -159,7 +151,6 @@ function makeContentsBox(chapters, maximumChapterCount) {
         size: "xs",
         weight: "bold",
         color: COLORS.muted,
-        margin: "none",
       },
       {
         type: "separator",
@@ -259,7 +250,6 @@ function makePromiseBubble(
               chapters,
               maximumChapterCount
             ),
-
             {
               type: "box",
               layout: "vertical",
