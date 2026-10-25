@@ -17,15 +17,15 @@ const CARD = Object.freeze({
   imageAspectRatio: "16:9",
   imageHeight: "165px",
   titleHeight: "115px",
-  chapterRowHeight: "54px",
+  chapterRowHeight: "34px",
   chapterNumberWidth: "86px",
   chapterFontSize: "13px",
   contentsPadding: "18px",
   buttonPadding: "18px",
 });
 
+// 冒頭の導入と最後の締めを除き、
 // 画像＋文章の組を1章として取得する。
-// 冒頭の導入画像・導入文と、最後の締めは除外する。
 function getChapters(promiseId) {
   const sections =
     PROMISE_CONTENT[promiseId]?.sections ?? [];
@@ -35,15 +35,12 @@ function getChapters(promiseId) {
   }
 
   const chapters = [];
-
   let index = 0;
 
-  // 冒頭画像
   if (sections[index]?.type === "image") {
     index++;
   }
 
-  // 導入文
   if (sections[index]?.type === "text") {
     index++;
   }
@@ -76,8 +73,8 @@ function getChapters(promiseId) {
   return chapters;
 }
 
-// カード間で目次の高さを揃えるため、
-// 一覧内で最も章数が多い約束を基準にする。
+// 最も章数が多い約束に合わせて
+// 全カードの目次領域の高さを統一する。
 function getMaximumChapterCount(promises) {
   return Math.max(
     0,
@@ -124,7 +121,6 @@ function makeChapterRow(chapterItem) {
 function makeContentsBox(chapters, maximumChapterCount) {
   const rows = chapters.map(makeChapterRow);
 
-  // 章数が少ないカードは空白行で高さを統一する。
   for (
     let index = chapters.length;
     index < maximumChapterCount;
@@ -142,7 +138,6 @@ function makeContentsBox(chapters, maximumChapterCount) {
     });
   }
 
-  // LINE Flexのboxには最低1つのcontentsが必要。
   if (rows.length === 0) {
     rows.push({
       type: "text",
@@ -186,7 +181,6 @@ function makeHeroImage(promiseId) {
   const image = getPromiseImage(promiseId, "hero");
 
   if (!image?.url) {
-    // 未登録の約束も同じ画像領域を確保する。
     return {
       type: "box",
       layout: "vertical",
