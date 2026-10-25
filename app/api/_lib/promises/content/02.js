@@ -1,5 +1,5 @@
 
-export const promise02 = {
+export const PROMISE_02 = {
   id: "02",
   title: "商品化への約束",
   sections: [
@@ -101,4 +101,4 @@ export const promise02 = {
   ],
 };
 
-export default promise02;
+export default PROMISE_02;
