@@ -4,7 +4,9 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
+// 既存のGitHub Actionsが確認する互換バージョンは維持する。
 const CODE_VERSION = "resumable-batch-v14";
+const CODE_REVISION = "batch-v15-compatibility-fix";
 
 const BASE_URL = "https://motorgate.jp";
 const PUBLIC_LIST_URL = `${BASE_URL}/stock/newsearch/stocklist/index/1/100`;
@@ -21,7 +23,7 @@ const USER_AGENT =
 // 1リクエスト最大10台。2台ごとに車両と進捗を同じJSONへ確定保存する。
 const DETAIL_CONCURRENCY = 2;
 const BATCH_SIZE = 10;
-const VEHICLE_BUDGET_MS = 25000;
+const VEHICLE_BUDGET_MS = 60000;
 const WORK_BUDGET_MS = 170000;
 const MAX_DETAIL_ATTEMPTS = 3;
 const DETAIL_RETRIES = 0;
@@ -31,13 +33,16 @@ const LOCK_REF_NAME = "tags/cartopia-inventory-update-lock";
 const LOCK_TTL_MS = 12 * 60 * 1000;
 
 function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), {
-    status,
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "no-store, no-cache, must-revalidate",
+  return new Response(
+    JSON.stringify({ ...data, revision: CODE_REVISION }, null, 2),
+    {
+      status,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Cache-Control": "no-store, no-cache, must-revalidate",
+      },
     },
-  });
+  );
 }
 
 function sleep(milliseconds) {
@@ -56,9 +61,9 @@ function isTimeoutError(error) {
   return text.includes("timeout") || text.includes("abort");
 }
 
-async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
+async function fetchWithTimeout(url, options = {}, timeoutMs = 30000) {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), Math.min(timeoutMs, 15000));
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     const response = await fetch(url, {
@@ -494,33 +499,13 @@ function imageScore(url) {
 
   let score = 0;
 
-  if (value.includes("goo-net.com")) {
-    score += 100;
-  }
-
-  if (/\/h\//i.test(value)) {
-    score += 80;
-  }
-
-  if (value.includes("quality")) {
-    score += 40;
-  }
-
-  if (value.includes("original")) {
-    score += 30;
-  }
-
-  if (value.includes("large")) {
-    score += 20;
-  }
-
-  if (/thumb|thumbnail|small|\/s\//i.test(value)) {
-    score -= 60;
-  }
-
-  if (/logo|noimage|nophoto|common/.test(value)) {
-    score -= 1000;
-  }
+  if (value.includes("goo-net.com")) score += 100;
+  if (/\/h\//i.test(value)) score += 80;
+  if (value.includes("quality")) score += 40;
+  if (value.includes("original")) score += 30;
+  if (value.includes("large")) score += 20;
+  if (/thumb|thumbnail|small|\/s\//i.test(value)) score -= 60;
+  if (/logo|noimage|nophoto|common/.test(value)) score -= 1000;
 
   return score;
 }
@@ -541,26 +526,20 @@ function normalizePrice(value) {
   if (!text) return "";
 
   const number = text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0] || "";
-
   return number ? `${number}万円` : "";
 }
 
 function priceToNumber(value) {
   const normalized = normalizePrice(value);
 
-  if (!normalized) {
-    return NaN;
-  }
+  if (!normalized) return NaN;
 
   const number = Number(normalized.match(/[0-9]+(?:\.[0-9]+)?/)?.[0]);
-
   return Number.isFinite(number) ? number : NaN;
 }
 
 function formatPriceNumber(value) {
-  if (!Number.isFinite(value)) {
-    return "";
-  }
+  if (!Number.isFinite(value)) return "";
 
   const rounded = Math.round(value * 10) / 10;
   return `${rounded.toFixed(1)}万円`;
@@ -700,10 +679,7 @@ function normalizeMileage(value) {
     .replace(/\s+/g, "");
 
   if (!text) return "";
-
-  if (/走不明|不明/.test(text)) {
-    return "走不明";
-  }
+  if (/走不明|不明/.test(text)) return "走不明";
 
   const man = text.match(/([0-9]+(?:\.[0-9]+)?)万[ＫKk]?/);
 
@@ -738,9 +714,7 @@ function normalizeYear(value) {
   const text = compactText(toHalfWidthAscii(value));
   const western = text.match(/((?:19|20)\d{2})\s*年?/);
 
-  if (western) {
-    return `${western[1]}年`;
-  }
+  if (western) return `${western[1]}年`;
 
   const era = text.match(/(令和|平成|昭和)\s*(元|\d+)\s*年?/);
 
@@ -769,9 +743,7 @@ function normalizeDisplacement(value) {
 
   const number = Number(text.match(/[0-9]+(?:\.[0-9]+)?/)?.[0] || NaN);
 
-  if (!Number.isFinite(number)) {
-    return "";
-  }
+  if (!Number.isFinite(number)) return "";
 
   return number >= 100 ? `${number}cc` : `${number}L`;
 }
@@ -798,9 +770,7 @@ function findSavedHeaderMap(html) {
       headers = extractCells(rowHtml, "td").map((cell) => cell.text);
     }
 
-    if (!headers.length) {
-      continue;
-    }
+    if (!headers.length) continue;
 
     const joined = headers.map(normalizeHeaderText).join("");
 
@@ -823,9 +793,7 @@ function headerIndex(headers, aliases) {
     normalizedAliases.includes(normalizeHeaderText(header)),
   );
 
-  if (exactIndex >= 0) {
-    return exactIndex;
-  }
+  if (exactIndex >= 0) return exactIndex;
 
   return headers.findIndex((header) => {
     const normalizedHeader = normalizeHeaderText(header);
@@ -913,15 +881,11 @@ function parsePublicVehicleRow(row, baseUrl, qualityImageMap) {
 function parseSavedVehicleRow(rowHtml, headers, pageUrl) {
   const stockId = extractStockId(rowHtml);
 
-  if (!stockId) {
-    return null;
-  }
+  if (!stockId) return null;
 
   const cells = extractCells(rowHtml, "td");
 
-  if (!cells.length) {
-    return null;
-  }
+  if (!cells.length) return null;
 
   const urls = extractHrefValues(rowHtml, pageUrl);
   const clientId = process.env.MOTORGATE_CLIENT_ID || "0902332";
@@ -1131,13 +1095,8 @@ function uniqueByStockId(vehicles) {
 function normalizeTypeKey(type) {
   const value = compactText(toHalfWidthAscii(type));
 
-  if (/^suv$/i.test(value)) {
-    return "SUV";
-  }
-
-  if (/^ev[・･\/]?hv$/i.test(value)) {
-    return "EV・HV";
-  }
+  if (/^suv$/i.test(value)) return "SUV";
+  if (/^ev[・･\/]?hv$/i.test(value)) return "EV・HV";
 
   return value;
 }
@@ -1287,9 +1246,7 @@ function findControlValue(html, names) {
 
     const value = compactText(control.text || control.value);
 
-    if (isMeaningfulValue(value)) {
-      return value;
-    }
+    if (isMeaningfulValue(value)) return value;
   }
 
   return "";
@@ -1309,9 +1266,7 @@ function findControlValueByPatterns(html, patterns) {
 
     const value = compactText(control.text || control.value);
 
-    if (isMeaningfulValue(value)) {
-      return value;
-    }
+    if (isMeaningfulValue(value)) return value;
   }
 
   return "";
@@ -1322,21 +1277,13 @@ function normalizeGradeNameCandidate(value, carName = "") {
     .replace(/^(?:グレード名?|grade(?:\s*name)?)\s*[：:]?\s*/i, "")
     .trim();
 
-  if (!isMeaningfulValue(text)) {
-    return "";
-  }
+  if (!isMeaningfulValue(text)) return "";
 
-  if (/^[0-9０-９]+(?:\.[0-9０-９]+)?$/.test(text)) {
-    return "";
-  }
+  if (/^[0-9０-９]+(?:\.[0-9０-９]+)?$/.test(text)) return "";
 
-  if (/^(?:グレード名?|grade(?:\s*name)?)$/i.test(text)) {
-    return "";
-  }
+  if (/^(?:グレード名?|grade(?:\s*name)?)$/i.test(text)) return "";
 
-  if (text.length > 120) {
-    return "";
-  }
+  if (text.length > 120) return "";
 
   const normalizedCarName = compactText(carName);
 
@@ -1367,9 +1314,7 @@ function findDescriptiveControlValue(html, names, patterns = [], carName = "") {
 
     const key = identifiers.join(" ");
 
-    if (isGradeAdditionalFieldKey(key)) {
-      continue;
-    }
+    if (isGradeAdditionalFieldKey(key)) continue;
 
     const exactMatch = identifiers.some((identifier) =>
       targets.includes(identifier),
@@ -1386,9 +1331,7 @@ function findDescriptiveControlValue(html, names, patterns = [], carName = "") {
       specificMatch ||
       patterns.some((pattern) => pattern.test(key));
 
-    if (!matches) {
-      continue;
-    }
+    if (!matches) continue;
 
     for (const [candidateIndex, candidate] of [
       control.text,
@@ -1396,9 +1339,7 @@ function findDescriptiveControlValue(html, names, patterns = [], carName = "") {
     ].entries()) {
       const value = normalizeGradeNameCandidate(candidate, carName);
 
-      if (!value) {
-        continue;
-      }
+      if (!value) continue;
 
       const nameField = identifiers.some(
         (identifier) =>
@@ -1413,9 +1354,7 @@ function findDescriptiveControlValue(html, names, patterns = [], carName = "") {
         ),
       );
 
-      if (idLikeField && candidateIndex === 1) {
-        continue;
-      }
+      if (idLikeField && candidateIndex === 1) continue;
 
       candidates.push({
         value,
@@ -1429,7 +1368,6 @@ function findDescriptiveControlValue(html, names, patterns = [], carName = "") {
   }
 
   candidates.sort((first, second) => second.score - first.score);
-
   return candidates[0]?.value || "";
 }
 
@@ -1444,15 +1382,11 @@ function findGradeNameFromPairs(html, carName = "") {
   for (const pair of extractLabelValuePairs(html)) {
     const label = normalizeHeaderText(pair.label);
 
-    if (!allowedLabels.has(label)) {
-      continue;
-    }
+    if (!allowedLabels.has(label)) continue;
 
     const value = normalizeGradeNameCandidate(pair.value, carName);
 
-    if (value) {
-      return value;
-    }
+    if (value) return value;
   }
 
   return "";
@@ -1468,9 +1402,7 @@ function findGradeNameFromLinks(html, carName = "") {
         carName,
       );
 
-      if (value) {
-        return value;
-      }
+      if (value) return value;
     }
   }
 
@@ -1490,9 +1422,7 @@ function findEmbeddedGradeName(html, carName = "") {
     for (const match of source.matchAll(pattern)) {
       const value = normalizeGradeNameCandidate(match[1], carName);
 
-      if (value) {
-        return value;
-      }
+      if (value) return value;
     }
   }
 
@@ -1580,9 +1510,7 @@ function findRegionNearLabel(html, labels) {
   for (const label of labels) {
     const index = source.indexOf(label);
 
-    if (index < 0) {
-      continue;
-    }
+    if (index < 0) continue;
 
     for (const [startTag, endTag] of [
       ["<tr", "</tr>"],
@@ -1606,24 +1534,18 @@ function findRegionNearLabel(html, labels) {
 function findValueNearLabel(html, labels) {
   const pairValue = findPairValue(html, labels);
 
-  if (pairValue) {
-    return pairValue;
-  }
+  if (pairValue) return pairValue;
 
   const region = findRegionNearLabel(html, labels);
 
-  if (!region) {
-    return "";
-  }
+  if (!region) return "";
 
   const controls = extractControls(region);
 
   for (const control of controls) {
     const value = compactText(control.text || control.value);
 
-    if (isMeaningfulValue(value)) {
-      return value;
-    }
+    if (isMeaningfulValue(value)) return value;
   }
 
   let text = compactText(cleanHtmlToText(region));
@@ -1670,9 +1592,7 @@ function extractRegistrationYear(html) {
 
   const normalized = normalizeYear(direct);
 
-  if (normalized) {
-    return normalized;
-  }
+  if (normalized) return normalized;
 
   const controls = extractControls(html);
 
@@ -1692,9 +1612,7 @@ function extractRegistrationYear(html) {
     const value = compactText(control.text || control.value);
     const year = normalizeYear(value);
 
-    if (year) {
-      return year;
-    }
+    if (year) return year;
   }
 
   return "";
@@ -1849,9 +1767,7 @@ function inferMakerName(carName) {
   if (!text) return "";
 
   for (const [makerName, pattern] of MODEL_MAKER_RULES) {
-    if (pattern.test(text)) {
-      return makerName;
-    }
+    if (pattern.test(text)) return makerName;
   }
 
   return "";
@@ -1931,9 +1847,7 @@ function extractSeatCapacity(html) {
 
   const direct = normalizeSeatCapacity(value);
 
-  if (direct) {
-    return direct;
-  }
+  if (direct) return direct;
 
   const text = cleanHtmlToText(html);
 
@@ -2158,9 +2072,7 @@ async function loginMotorgate() {
 }
 
 function mergePreviousVehicle(vehicle, previousVehicle) {
-  if (!previousVehicle) {
-    return vehicle;
-  }
+  if (!previousVehicle) return vehicle;
 
   const result = {
     ...vehicle,
@@ -2285,9 +2197,7 @@ function chooseMergedValue(vehicle, previous, details, key) {
     for (const value of values) {
       const gradeName = normalizeGradeNameCandidate(value, carName);
 
-      if (gradeName) {
-        return gradeName;
-      }
+      if (gradeName) return gradeName;
     }
 
     return "";
@@ -2399,7 +2309,6 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
               containsLoginForm ? " login form" : ""
             }`,
           );
-
           continue;
         }
 
@@ -2409,8 +2318,6 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
             ...extractTypesFromText(cleanHtmlToText(html)),
           ]),
         );
-
-        collectedTypes = Array.from(new Set([...collectedTypes, ...pageTypes]));
 
         const details = extractCommonVehicleDetails(html, candidateUrl);
 
@@ -2429,12 +2336,8 @@ async function fetchVehicleDetail(jar, vehicle, previousVehicle = null) {
           continue;
         }
 
-        const pageStockId = extractStockId(html);
-
-        if (pageStockId && pageStockId !== vehicle.stockId) {
-          errors.push(`${candidateUrl}: stock ID mismatch`);
-          continue;
-        }
+        // ページ先頭の別車両リンクを、この車のIDと誤認して拒否しない。
+        collectedTypes = Array.from(new Set([...collectedTypes, ...pageTypes]));
 
         const score = detailScore(details, pageTypes, vehicle.sourceStatus);
 
@@ -2762,7 +2665,12 @@ async function fetchSavedPage(jar, pageUrl) {
     throw new Error(`一時保存一覧の取得失敗: HTTP ${response.status}`);
   }
 
-  if (!vehicles.length && !/<table\b/i.test(html)) {
+  const emptyMessage =
+    /(?:該当|在庫|車両|データ)[^。\n]{0,50}(?:ありません|ございません|0\s*件)|(?:全|合計|検索結果)[^。\n]{0,20}0\s*件/.test(
+      cleanHtmlToText(html),
+    );
+
+  if (!vehicles.length && !/<table\b/i.test(html) && !emptyMessage) {
     throw new Error(
       "一時保存一覧の形式を確認できません。既存在庫を保持します。",
     );
@@ -2983,7 +2891,6 @@ async function readUpdateLock() {
   }
 
   const refSha = data.object?.sha || "";
-
   let createdAt = "";
   let runId = "";
   let trigger = "";
@@ -3228,9 +3135,7 @@ function getTriggerLabel(request) {
   const url = new URL(request.url);
   const source = url.searchParams.get("source") || "";
 
-  if (source === "github-actions") {
-    return "GitHub Actions自動更新";
-  }
+  if (source === "github-actions") return "GitHub Actions自動更新";
 
   const cronHeader = request.headers.get("x-vercel-cron");
   const userAgent = request.headers.get("user-agent") || "";
@@ -3281,6 +3186,7 @@ function inventoryWithProgress(
   return {
     ...inventory,
     codeVersion: CODE_VERSION,
+    revision: CODE_REVISION,
     source: "motorgate",
     updateMode: "resumable-batch",
     syncState: state,
@@ -3349,9 +3255,10 @@ async function runInventoryUpdate({
 
     let state = current.inventory.syncState;
 
-    if (!state || state.version !== 1 || state.phase === "complete") {
+    // 前回版の進捗はそのまま使わず、既存在庫を保持して一覧から作り直す。
+    if (!state || state.version !== 2 || state.phase === "complete") {
       state = {
-        version: 1,
+        version: 2,
         cycleId: runId,
         startedAt,
         phase: "listing",
@@ -3407,6 +3314,15 @@ async function runInventoryUpdate({
 
     stage = "MOTOR GATEログイン";
 
+    console.log(
+      JSON.stringify({
+        event: "inventory-stage",
+        runId,
+        stage,
+        revision: CODE_REVISION,
+      }),
+    );
+
     const { jar, loginStatus } = await loginMotorgate();
 
     if (loginStatus !== 302) {
@@ -3414,7 +3330,7 @@ async function runInventoryUpdate({
     }
 
     // 一覧もページ単位で確定保存。途中失敗時は同じページから再開。
-    while (state.phase === "listing" && Date.now() + 35000 < stopAt) {
+    while (state.phase === "listing" && Date.now() + 65000 < stopAt) {
       if (!state.publicLoaded) {
         stage = "掲載在庫一覧取得";
 
@@ -3456,21 +3372,19 @@ async function runInventoryUpdate({
           );
         }
 
-        // ページ範囲外で直前のページが返る現行サイトの挙動に対応。
+        // ページ範囲外で直前のページが返る挙動に対応。
+        // 最終ページが25台でも、同じ車両一覧なら終了と判断する。
         const repeated = page.count > 0 && !newVehicles.length;
 
         if (repeated) {
           const previousPage = state.pages.at(-1);
+
           const ids = page.vehicles
             .map((v) => v.stockId)
             .sort()
             .join(",");
 
-          if (
-            !previousPage ||
-            previousPage.count >= 25 ||
-            previousPage.ids !== ids
-          ) {
+          if (!previousPage || previousPage.ids !== ids) {
             throw new Error(
               "一時保存のページ送りを確認できません。誤削除防止のため停止します。",
             );
@@ -3495,7 +3409,7 @@ async function runInventoryUpdate({
             vehicles.map((v) => [v.stockId, v]),
           );
 
-          // 両一覧が揃った時だけ消えた車を除外。
+          // 両一覧が揃った時だけ消えた車を除外する。
           // 失敗ページではここに到達しない。
           vehicles = state.listed.map((v) => {
             const old = oldMap.get(v.stockId);
@@ -3526,7 +3440,7 @@ async function runInventoryUpdate({
       await checkpoint();
     }
 
-    // 今回の最大10台を固定。
+    // 今回の最大10台を固定する。
     // 失敗車は末尾へ回し、同じ呼出しでは再試行しない。
     const batch =
       state.phase === "details"
@@ -3538,7 +3452,7 @@ async function runInventoryUpdate({
       offset < batch.length;
       offset += DETAIL_CONCURRENCY
     ) {
-      if (Date.now() + VEHICLE_BUDGET_MS + 20000 >= stopAt) {
+      if (Date.now() + VEHICLE_BUDGET_MS + 35000 >= stopAt) {
         break;
       }
 
@@ -3578,11 +3492,9 @@ async function runInventoryUpdate({
           (queued) => queued.vehicle.stockId !== id,
         );
 
-        // 過去の分類で成功扱いにしない。
-        // 今回のページから分類も取得できたか確認。
-        const ok =
-          result.detailResult?.success &&
-          result.detailResult?.freshTypes;
+        // TYPE未設定でも、取得できた車両詳細は保存する。
+        // 分類が取れなかった場合は既存の分類を引き継ぐ。
+        const ok = result.detailResult?.success === true;
 
         if (ok) {
           oldMap.set(id, toInventoryVehicle(result));
@@ -3593,7 +3505,7 @@ async function runInventoryUpdate({
           const error =
             result.typeResult?.error ||
             result.detailResult?.error ||
-            "今回の詳細・分類を取得できませんでした";
+            "今回の車両詳細を取得できませんでした";
 
           if (attempts < MAX_DETAIL_ATTEMPTS) {
             state.queue.push({
@@ -3654,7 +3566,7 @@ async function runInventoryUpdate({
       timeout: isTimeoutError(error),
     };
 
-    // 保存結果が不明なとき・SHA競合時は書き戻さない。
+    // 保存結果不明・SHA競合時には書き戻さない。
     // 成功済みデータの巻き戻しを防止する。
     if (current && !writeUncertain) {
       try {
@@ -3725,13 +3637,14 @@ async function buildStatusResponse() {
       counts: current.inventory?.counts || {},
       lastUpdateStatus: current.inventory?.lastUpdateStatus || null,
       checks: current.inventory?.checks || {},
+      revision: current.inventory?.revision || "",
       progress: progressOf(current.inventory?.syncState),
       savedPriceSamples,
     },
   };
 }
 
-export async function GET(request) {
+async function handleGet(request) {
   const requestStartedAt = Date.now();
   const url = new URL(request.url);
   const statusOnly = url.searchParams.get("status") === "1";
@@ -3831,4 +3744,29 @@ export async function GET(request) {
     },
     202,
   );
+}
+
+export async function GET(request) {
+  try {
+    return await handleGet(request);
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        event: "inventory-request-failed",
+        revision: CODE_REVISION,
+        error: error.message || String(error),
+      }),
+    );
+
+    return json(
+      {
+        success: false,
+        codeVersion: CODE_VERSION,
+        error: error.message || String(error),
+        message:
+          "更新開始前または状態確認中に失敗しました。エラー内容を確認してください。",
+      },
+      500,
+    );
+  }
 }
