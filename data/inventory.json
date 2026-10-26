@@ -6,10 +6,10 @@
   "lastUpdateStatus": {
     "success": false,
     "statusText": "更新失敗・保存済み分を保持",
-    "runId": "20261026122411261-38vto6na",
-    "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-10-26T12:24:12.545Z",
-    "finishedAt": "2026-10-26T12:24:23.019Z",
+    "runId": "20261026132259222-agnm9wj7",
+    "trigger": "URL手動更新",
+    "startedAt": "2026-10-26T13:23:00.537Z",
+    "finishedAt": "2026-10-26T13:23:11.019Z",
     "error": "MOTOR GATEログイン: motorgate.jp/login/index: fetch failed (UND_ERR_CONNECT_TIMEOUT)",
     "timeout": true
   },
@@ -4400,5 +4400,5 @@
       }
     }
   ],
-  "lastFailedAt": "2026-10-26T12:24:23.019Z"
+  "lastFailedAt": "2026-10-26T13:23:11.019Z"
 }
