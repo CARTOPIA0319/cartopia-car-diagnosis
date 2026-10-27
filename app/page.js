@@ -4,15 +4,13 @@ import Script from "next/script";
 import { useEffect, useMemo, useState } from "react";
 
 const LIFF_ID = process.env.NEXT_PUBLIC_LIFF_ID || "";
-
-const LAST_DIAGNOSIS_STORAGE_KEY =
-  "cartopia-perfect-diagnosis-result-v1";
+const LAST_DIAGNOSIS_STORAGE_KEY = "cartopia-perfect-diagnosis-result-v1";
 
 const LOADING_STEPS = [
-  "家族の人数と、日常の使い方を整理中。",
-  "希望条件に合う車種を、一台ずつ比較中。",
-  "数年後の暮らしまで見据えて、候補を再確認中。",
-  "マッチ度を確認し、最終候補を5台に絞り込み中。",
+  "乗車人数など、外せない条件を優先します。",
+  "年式やグレードごとに、仕様資料を確認します。",
+  "今の使い方と、3〜5年後の暮らしを考えます。",
+  "条件に合う候補が少ない場合、5台には水増ししません。",
 ];
 
 const MAX_PASSENGER_OPTIONS = [
@@ -169,14 +167,12 @@ function makeInitialForm() {
     maxPassengers: "",
     driverAges: [],
     passengerAges: [],
-
     hasOwnedCars: "",
     ownedCars: [makeOwnedCar()],
     purchasePlan: "",
     replacementTargetId: "",
     replacementReasons: [],
     replacementReasonMemo: "",
-
     avoidNone: false,
     avoidManufacturers: "",
     avoidModels: "",
@@ -184,11 +180,9 @@ function makeInitialForm() {
     avoidConditions: [],
     avoidManufacturerReason: "",
     avoidModelReason: "",
-
     desiredManufacturers: "",
     desiredBodyTypes: [],
     desiredConditions: [],
-
     otherRequest: "",
   };
 }
@@ -212,14 +206,11 @@ function ChoiceGrid({
       {options.map((option) => {
         const value =
           typeof option === "string" ? option : option.value ?? option.label;
-
         const label =
           typeof option === "string" ? option : option.label;
-
         const active = single
           ? selected === value
           : Array.isArray(selected) && selected.includes(value);
-
         const disabled = disabledValues.includes(value);
         const isWide = compact && String(label).length >= 9;
 
@@ -233,15 +224,12 @@ function ChoiceGrid({
             disabled={disabled}
             aria-pressed={active}
             onClick={() => {
-              if (!disabled) {
-                onToggle(value);
-              }
+              if (!disabled) onToggle(value);
             }}
           >
             <span className="check-box" aria-hidden="true">
               {active ? "✓" : ""}
             </span>
-
             <span className="choice-label">{label}</span>
           </button>
         );
@@ -269,7 +257,6 @@ function TypeChoiceGrid({
               <p>{group.title}</p>
               <span>{group.options.length}タイプ</span>
             </div>
-
             <ChoiceGrid
               options={group.options}
               selected={selected}
@@ -277,7 +264,6 @@ function TypeChoiceGrid({
               disabledValues={groupDisabledValues}
               columns="two"
             />
-
             {groupDisabledValues.length > 0 && disabledMessage ? (
               <p className="disabled-note">{disabledMessage}</p>
             ) : null}
@@ -303,32 +289,98 @@ function TypeChoiceGrid({
 }
 
 function QuestionHeader({ number, title, titleLines = [], note }) {
-  const lines =
-    titleLines.length > 0
-      ? titleLines
-      : [title];
+  const lines = titleLines.length > 0 ? titleLines : [title];
 
   return (
     <header className="question-header">
       <span className="question-number">質問 {number}</span>
-
       <h2>
         {lines.map((line, index) => (
-          <span
-            className="question-title-line"
-            key={`${line}-${index}`}
-          >
+          <span className="question-title-line" key={`${line}-${index}`}>
             {line}
           </span>
         ))}
       </h2>
-
       {note ? <p>{note}</p> : null}
     </header>
   );
 }
 
+function AdviceText({ text }) {
+  if (typeof text !== "string" || !text.trim()) return null;
+
+  return (
+    <div className="advice-text">
+      {text
+        .trim()
+        .split(/\n+/)
+        .filter(Boolean)
+        .map((paragraph, index) => (
+          <p key={index}>{paragraph}</p>
+        ))}
+    </div>
+  );
+}
+
+function getSourceLinks(sources) {
+  if (!Array.isArray(sources)) return [];
+
+  const seen = new Set();
+
+  return sources.flatMap((source) => {
+    try {
+      const url = new URL(source?.url);
+
+      if (
+        url.protocol !== "https:" ||
+        url.username ||
+        url.password ||
+        seen.has(url.href)
+      ) {
+        return [];
+      }
+
+      seen.add(url.href);
+
+      return [
+        {
+          url: url.href,
+          title:
+            typeof source.title === "string" && source.title.trim()
+              ? source.title
+              : "仕様の参照資料",
+          host: url.hostname,
+        },
+      ];
+    } catch {
+      return [];
+    }
+  });
+}
+
 function RecommendationCard({ recommendation }) {
+  const sources = getSourceLinks(recommendation.sources);
+  let caution =
+    typeof recommendation.caution === "string"
+      ? recommendation.caution
+      : "";
+
+  // リンクとして表示できる資料だけ、注意文末の重複URLを取り除く。
+  const marker = "仕様の参照資料：";
+  const markerIndex = caution.lastIndexOf(marker);
+
+  if (markerIndex >= 0) {
+    const rawUrl = caution.slice(markerIndex + marker.length).trim();
+
+    try {
+      if (sources.some((source) => source.url === new URL(rawUrl).href)) {
+        caution = caution.slice(0, markerIndex).trim();
+      }
+    } catch {
+      // URLを確認できない場合は元の注意文を保持する。
+    }
+  }
+
   return (
     <article className="recommendation-card">
       <div className="recommendation-top">
@@ -343,27 +395,47 @@ function RecommendationCard({ recommendation }) {
 
       <div className="tag-list">
         <span>{recommendation.typeKey}</span>
-
         {recommendation.maxSeats > 0 ? (
-          <span>最大{recommendation.maxSeats}人乗り</span>
+          <span>対象仕様：{recommendation.maxSeats}人乗り</span>
         ) : null}
       </div>
 
       <h4>おすすめ理由</h4>
-      <p>{recommendation.reason}</p>
+      <AdviceText text={recommendation.reason} />
 
       {recommendation.futureFit ? (
         <>
           <h4>これからの暮らし</h4>
-          <p>{recommendation.futureFit}</p>
+          <AdviceText text={recommendation.futureFit} />
         </>
       ) : null}
 
-      {recommendation.caution ? (
+      {caution ? (
         <aside className="caution-box">
           <strong>確認したい点</strong>
-          <p>{recommendation.caution}</p>
+          <AdviceText text={caution} />
         </aside>
+      ) : null}
+
+      {sources.length > 0 ? (
+        <div className="source-list">
+          <h4>仕様の参照資料</h4>
+          {sources.map((source) => (
+            <a
+              key={source.url}
+              href={source.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {source.title}
+              <small>{source.host} ／ 別画面で開く ↗</small>
+            </a>
+          ))}
+          <p>
+            同じ車種でも年式・グレードで定員や装備が異なります。
+            候補の仕様と資料を照らし合わせてください。
+          </p>
+        </div>
       ) : null}
     </article>
   );
@@ -372,6 +444,7 @@ function RecommendationCard({ recommendation }) {
 export default function Home() {
   const [form, setForm] = useState(makeInitialForm);
   const [diagnosis, setDiagnosis] = useState(null);
+  const [restoreNotice, setRestoreNotice] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [validationError, setValidationError] = useState("");
@@ -409,9 +482,7 @@ export default function Home() {
       : [];
 
   const rankedRecommendations = useMemo(() => {
-    const recommendations = Array.isArray(
-      diagnosis?.recommendations
-    )
+    const recommendations = Array.isArray(diagnosis?.recommendations)
       ? diagnosis.recommendations
       : [];
 
@@ -420,27 +491,16 @@ export default function Home() {
         ...recommendation,
         originalIndex,
         numericScore:
-          Number.parseFloat(
-            String(recommendation.score ?? 0)
-          ) || 0,
+          Number.parseFloat(String(recommendation.score ?? 0)) || 0,
       }))
       .sort(
         (first, second) =>
-          second.numericScore -
-            first.numericScore ||
-          first.originalIndex -
-            second.originalIndex
+          second.numericScore - first.numericScore ||
+          first.originalIndex - second.originalIndex
       )
       .slice(0, 5)
       .map(
-        (
-          {
-            originalIndex,
-            numericScore,
-            ...recommendation
-          },
-          index
-        ) => ({
+        ({ originalIndex, numericScore, ...recommendation }, index) => ({
           ...recommendation,
           rank: index + 1,
           score: numericScore,
@@ -455,11 +515,7 @@ export default function Home() {
     }
 
     const timer = window.setInterval(() => {
-      setLoadingStep(
-        (current) =>
-          (current + 1) %
-          LOADING_STEPS.length
-      );
+      setLoadingStep((current) => (current + 1) % LOADING_STEPS.length);
     }, 2400);
 
     return () => {
@@ -468,53 +524,40 @@ export default function Home() {
   }, [loading]);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
+    if (typeof window === "undefined") return;
 
-    const params =
-      new URLSearchParams(
-        window.location.search
-      );
-
-    if (params.get("restore") !== "1") {
-      return;
-    }
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("restore") !== "1") return;
 
     try {
-      const savedValue =
-        window.localStorage.getItem(
-          LAST_DIAGNOSIS_STORAGE_KEY
-        );
+      const savedValue = window.localStorage.getItem(
+        LAST_DIAGNOSIS_STORAGE_KEY
+      );
 
-      if (!savedValue) {
-        return;
-      }
+      if (!savedValue) return;
 
-      const saved =
-        JSON.parse(savedValue);
-
+      const saved = JSON.parse(savedValue);
       const isRecent =
-        Date.now() -
-          Number(saved.savedAt || 0) <
+        Date.now() - Number(saved.savedAt || 0) <
         24 * 60 * 60 * 1000;
 
-      if (
-        !isRecent ||
-        !saved.form ||
-        !saved.diagnosis
-      ) {
-        window.localStorage.removeItem(
-          LAST_DIAGNOSIS_STORAGE_KEY
-        );
+      if (!isRecent || !saved.form || !saved.diagnosis) {
+        window.localStorage.removeItem(LAST_DIAGNOSIS_STORAGE_KEY);
         return;
       }
 
-      setForm(saved.form);
-      setDiagnosis(saved.diagnosis);
+      setForm({ ...makeInitialForm(), ...saved.form });
+
+      if (saved.version === "perfect-diagnosis-v2") {
+        setDiagnosis(saved.diagnosis);
+      } else {
+        setRestoreNotice(
+          "以前の診断結果は、今回の仕様確認に対応していません。回答は復元しました。内容を確認して、もう一度診断してください。"
+        );
+      }
     } catch {
-      window.localStorage.removeItem(
-        LAST_DIAGNOSIS_STORAGE_KEY
+      setRestoreNotice(
+        "保存した診断結果を読み込めませんでした。もう一度回答してください。"
       );
     }
   }, []);
@@ -533,7 +576,7 @@ export default function Home() {
                 car.mainDriver ? `主に${car.mainDriver}` : "",
                 car.bodyType,
               ]
-                                 .filter(Boolean)
+                .filter(Boolean)
                 .join("／")
             )
             .join("、") || "所有あり";
@@ -562,9 +605,7 @@ export default function Home() {
           form.avoidManufacturerReason
             ? `メーカーを避けたい理由：${form.avoidManufacturerReason}`
             : "",
-          form.avoidModels
-            ? `車種：${form.avoidModels}`
-            : "",
+          form.avoidModels ? `車種：${form.avoidModels}` : "",
           form.avoidModelReason
             ? `車種を避けたい理由：${form.avoidModelReason}`
             : "",
@@ -605,24 +646,16 @@ export default function Home() {
   }, [form, replacementTarget]);
 
   function scrollTop() {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function updateField(key, value) {
-    setForm((current) => ({
-      ...current,
-      [key]: value,
-    }));
+    setForm((current) => ({ ...current, [key]: value }));
   }
 
   function setMaxPassengers(value) {
     const seats =
-      MAX_PASSENGER_OPTIONS.find(
-        (item) => item.label === value
-      )?.seats || 0;
+      MAX_PASSENGER_OPTIONS.find((item) => item.label === value)?.seats || 0;
 
     setForm((current) => ({
       ...current,
@@ -630,35 +663,22 @@ export default function Home() {
       desiredBodyTypes:
         seats >= 5
           ? current.desiredBodyTypes.filter(
-              (typeKey) =>
-                !LIGHT_TYPE_KEYS.includes(typeKey)
+              (typeKey) => !LIGHT_TYPE_KEYS.includes(typeKey)
             )
           : current.desiredBodyTypes,
     }));
   }
 
   async function initializeLiff() {
-    if (
-      typeof window === "undefined" ||
-      !window.liff ||
-            !LIFF_ID
-    ) {
-      return;
-    }
+    if (typeof window === "undefined" || !window.liff || !LIFF_ID) return;
 
     try {
-      await window.liff.init({
-        liffId: LIFF_ID,
-      });
-
+      await window.liff.init({ liffId: LIFF_ID });
       setLiffReady(true);
       setLiffError("");
     } catch (caughtError) {
       setLiffReady(false);
-      setLiffError(
-        caughtError.message ||
-          "LINE連携の初期化に失敗。"
-      );
+      setLiffError(caughtError.message || "LINE連携の初期化に失敗。");
     }
   }
 
@@ -666,77 +686,44 @@ export default function Home() {
     const diagnosisTypeKeys =
       rankedRecommendations
         .slice(0, 2)
-        .map(
-          (recommendation) =>
-            recommendation?.typeKey || ""
-        )
+        .map((recommendation) => recommendation?.typeKey || "")
         .filter(Boolean) || [];
 
-    const fallbackTypeKeys =
-      form.desiredBodyTypes.filter(
-        (typeKey) =>
-          typeKey !== "特にこだわらない"
-      );
+    const fallbackTypeKeys = form.desiredBodyTypes.filter(
+      (typeKey) => typeKey !== "特にこだわらない"
+    );
 
     const typeKeys = Array.from(
-      new Set([
-        ...diagnosisTypeKeys,
-        ...fallbackTypeKeys,
-      ])
+      new Set([...diagnosisTypeKeys, ...fallbackTypeKeys])
     ).slice(0, 2);
 
-    if (typeKeys.length > 0) {
-      return typeKeys;
-    }
+    if (typeKeys.length > 0) return typeKeys;
 
-    throw new Error(
-      "在庫検索に使う車のタイプを確定できない。"
-    );
+    throw new Error("在庫検索に使う車のタイプを確定できない。");
   }
 
-  function toggleArrayField(
-    key,
-    value,
-    exclusiveValue = ""
-  ) {
+  function toggleArrayField(key, value, exclusiveValue = "") {
     setForm((current) => {
       let currentValues = current[key];
 
-      if (
-        exclusiveValue &&
-        value === exclusiveValue
-      ) {
+      if (exclusiveValue && value === exclusiveValue) {
         return {
           ...current,
-          [key]: currentValues.includes(value)
-            ? []
-            : [value],
+          [key]: currentValues.includes(value) ? [] : [value],
         };
       }
 
       if (exclusiveValue) {
-        currentValues =
-          currentValues.filter(
-            (item) =>
-              item !== exclusiveValue
-          );
+        currentValues = currentValues.filter(
+          (item) => item !== exclusiveValue
+        );
       }
 
-      const nextValues =
-        currentValues.includes(value)
-          ? currentValues.filter(
-              (item) =>
-                item !== value
-            )
-          : [
-              ...currentValues,
-              value,
-            ];
+      const nextValues = currentValues.includes(value)
+        ? currentValues.filter((item) => item !== value)
+        : [...currentValues, value];
 
-      return {
-        ...current,
-        [key]: nextValues,
-      };
+      return { ...current, [key]: nextValues };
     });
   }
 
@@ -747,8 +734,7 @@ export default function Home() {
           ...current,
           hasOwnedCars: "no",
           ownedCars: [],
-          purchasePlan:
-            "増車・新規購入",
+          purchasePlan: "増車・新規購入",
           replacementTargetId: "",
           replacementReasons: [],
           replacementReasonMemo: "",
@@ -761,36 +747,19 @@ export default function Home() {
         ownedCars:
           current.ownedCars.length > 0
             ? current.ownedCars
-            : [
-                makeOwnedCar(
-                  `car-${Date.now()}`
-                ),
-              ],
+            : [makeOwnedCar(`car-${Date.now()}`)],
         purchasePlan:
-          current.hasOwnedCars === "no"
-            ? ""
-            : current.purchasePlan,
+          current.hasOwnedCars === "no" ? "" : current.purchasePlan,
       };
     });
   }
 
-  function updateOwnedCar(
-    id,
-    key,
-    value
-  ) {
+  function updateOwnedCar(id, key, value) {
     setForm((current) => ({
       ...current,
-      ownedCars:
-        current.ownedCars.map(
-          (car) =>
-            car.id === id
-              ? {
-                  ...car,
-                  [key]: value,
-                }
-              : car
-        ),
+      ownedCars: current.ownedCars.map((car) =>
+        car.id === id ? { ...car, [key]: value } : car
+      ),
     }));
   }
 
@@ -799,33 +768,21 @@ export default function Home() {
       ...current,
       ownedCars: [
         ...current.ownedCars,
-        makeOwnedCar(
-          `car-${Date.now()}-${
-            current.ownedCars.length + 1
-          }`
-        ),
+        makeOwnedCar(`car-${Date.now()}-${current.ownedCars.length + 1}`),
       ],
     }));
   }
 
   function removeOwnedCar(id) {
     setForm((current) => {
-      const nextCars =
-        current.ownedCars.filter(
-          (car) =>
-            car.id !== id
-        );
+      const nextCars = current.ownedCars.filter((car) => car.id !== id);
 
       return {
         ...current,
         ownedCars:
           nextCars.length > 0
             ? nextCars
-            : [
-                makeOwnedCar(
-                  `car-${Date.now()}`
-                ),
-              ],
+            : [makeOwnedCar(`car-${Date.now()}`)],
         replacementTargetId:
           current.replacementTargetId === id
             ? ""
@@ -839,37 +796,21 @@ export default function Home() {
       ...current,
       purchasePlan: value,
       ownedCars:
-        value === "乗り換え" &&
-        current.ownedCars.length === 0
-          ? [
-              makeOwnedCar(
-                `car-${Date.now()}`
-              ),
-            ]
+        value === "乗り換え" && current.ownedCars.length === 0
+          ? [makeOwnedCar(`car-${Date.now()}`)]
           : current.ownedCars,
       replacementTargetId:
-        value === "乗り換え"
-          ? current.replacementTargetId
-          : "",
+        value === "乗り換え" ? current.replacementTargetId : "",
       replacementReasons:
-        value === "乗り換え"
-          ? current.replacementReasons
-          : [],
+        value === "乗り換え" ? current.replacementReasons : [],
       replacementReasonMemo:
-        value === "乗り換え"
-          ? current.replacementReasonMemo
-          : "",
+        value === "乗り換え" ? current.replacementReasonMemo : "",
     }));
   }
 
   function setAvoidNone(value) {
     setForm((current) => {
-      if (!value) {
-        return {
-          ...current,
-          avoidNone: false,
-        };
-      }
+      if (!value) return { ...current, avoidNone: false };
 
       return {
         ...current,
@@ -888,52 +829,31 @@ export default function Home() {
     window.setTimeout(() => {
       document
         .getElementById(`question-${questionNumber}`)
-        ?.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 50);
   }
 
   function validateAllQuestions() {
     if (!form.maxPassengers) {
-      return {
-        message: "最大で乗る人数が未選択。",
-        question: 1,
-      };
+      return { message: "最大で乗る人数が未選択。", question: 1 };
     }
 
     if (form.driverAges.length === 0) {
-      return {
-        message: "運転する人の年齢が未選択。",
-        question: 1,
-      };
+      return { message: "運転する人の年齢が未選択。", question: 1 };
     }
 
     if (!form.hasOwnedCars) {
-      return {
-        message: "現在の所有車について未回答。",
-        question: 2,
-      };
+      return { message: "現在の所有車について未回答。", question: 2 };
     }
 
     if (!form.purchasePlan) {
-      return {
-        message: "今回の購入方法が未選択。",
-        question: 2,
-      };
+      return { message: "今回の購入方法が未選択。", question: 2 };
     }
 
     if (
       form.purchasePlan === "乗り換え" &&
-      (
-        form.ownedCars.length === 0 ||
-        form.ownedCars.some(
-          (car) =>
-            !car.model.trim() ||
-            !car.bodyType
-        )
-      )
+      (form.ownedCars.length === 0 ||
+        form.ownedCars.some((car) => !car.model.trim() || !car.bodyType))
     ) {
       return {
         message: "乗り換えの場合、現在の車種名とタイプが必要。",
@@ -941,28 +861,16 @@ export default function Home() {
       };
     }
 
-    if (
-      form.purchasePlan === "乗り換え" &&
-      !form.replacementTargetId
-    ) {
-      return {
-        message: "乗り換える予定の車が未選択。",
-        question: 2,
-      };
+    if (form.purchasePlan === "乗り換え" && !form.replacementTargetId) {
+      return { message: "乗り換える予定の車が未選択。", question: 2 };
     }
 
     if (form.desiredBodyTypes.length === 0) {
-      return {
-        message: "気になる車のタイプが未選択。",
-        question: 3,
-      };
+      return { message: "気になる車のタイプが未選択。", question: 3 };
     }
 
     if (form.desiredConditions.length === 0) {
-      return {
-        message: "気になる条件を1つ以上選択。",
-        question: 3,
-      };
+      return { message: "気になる条件を1つ以上選択。", question: 3 };
     }
 
     const hasAvoidInput =
@@ -973,10 +881,7 @@ export default function Home() {
       form.avoidManufacturerReason.trim() ||
       form.avoidModelReason.trim();
 
-    if (
-      !form.avoidNone &&
-      !hasAvoidInput
-    ) {
+    if (!form.avoidNone && !hasAvoidInput) {
       return {
         message: "避けたい車がない場合は「特になし」を選択。",
         question: 4,
@@ -987,39 +892,23 @@ export default function Home() {
   }
 
   async function getLiffAuthentication() {
-    if (
-      typeof window === "undefined" ||
-      !window.liff
-    ) {
-      throw new Error(
-        "LINE連携の準備中。少し待ってから再度操作。"
-      );
+    if (typeof window === "undefined" || !window.liff) {
+      throw new Error("LINE連携の準備中。少し待ってから再度操作。");
     }
 
     if (!liffReady) {
-      if (!LIFF_ID) {
-        throw new Error(
-          "LINEアプリ設定が未完了。"
-        );
-      }
+      if (!LIFF_ID) throw new Error("LINEアプリ設定が未完了。");
 
-      await window.liff.init({
-        liffId: LIFF_ID,
-      });
-
+      await window.liff.init({ liffId: LIFF_ID });
       setLiffReady(true);
     }
 
     if (!window.liff.isInClient()) {
-      throw new Error(
-        "LINE内の「ぴったり診断」から起動。"
-      );
+      throw new Error("LINE内の「ぴったり診断」から起動。");
     }
 
-    const accessToken =
-      window.liff.getAccessToken?.() || "";
-    const idToken =
-      window.liff.getIDToken?.() || "";
+    const accessToken = window.liff.getAccessToken?.() || "";
+    const idToken = window.liff.getIDToken?.() || "";
 
     if (!accessToken && !idToken) {
       throw new Error(
@@ -1027,128 +916,70 @@ export default function Home() {
       );
     }
 
-    return {
-      accessToken,
-      idToken,
-    };
+    return { accessToken, idToken };
   }
 
-  async function updateDiagnosisLimit(
-    action,
-    authentication
-  ) {
-    const response = await fetch(
-      "/api/diagnosis-limit",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type":
-            "application/json",
-        },
-        body: JSON.stringify({
-          action,
-          ...authentication,
-        }),
-      }
-    );
+  async function updateDiagnosisLimit(action, authentication) {
+    const response = await fetch("/api/diagnosis-limit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action, ...authentication }),
+    });
 
     const data = await response.json();
 
     if (!response.ok) {
       const limitError = new Error(
-        data.error ||
-          "診断回数を確認できない。"
+        data.error || "診断回数を確認できない。"
       );
-
       limitError.status = response.status;
       limitError.remaining = data.remaining;
       throw limitError;
     }
 
-    if (
-      typeof data.remaining === "number"
-          ) {
-      setRemainingDiagnoses(
-        data.remaining
-      );
+    if (typeof data.remaining === "number") {
+      setRemainingDiagnoses(data.remaining);
     }
 
     return data;
   }
 
   function makeWeightedPreferences() {
-    return form.desiredConditions.map(
-      (label) => {
-        const matchedOption =
-          WANTED_CONDITION_GROUPS
-            .flatMap(
-              (group) =>
-                group.options
-            )
-            .find(
-              (option) =>
-                option.label === label
-            );
+    return form.desiredConditions.map((label) => {
+      const matchedOption = WANTED_CONDITION_GROUPS.flatMap(
+        (group) => group.options
+      ).find((option) => option.label === label);
 
-        return {
-          label,
-          weight:
-            matchedOption?.weight || 50,
-        };
-      }
-    );
+      return { label, weight: matchedOption?.weight || 50 };
+    });
   }
 
   function buildDiagnosisInput() {
     const ownedCarsForDiagnosis =
-      form.purchasePlan === "乗り換え"
-        ? validOwnedCars
-        : [];
+      form.purchasePlan === "乗り換え" ? validOwnedCars : [];
 
     return {
       requiredSeats,
-      maximumPassengersLabel:
-        form.maxPassengers,
-      driverAges:
-        form.driverAges,
-      passengerAges:
-        form.passengerAges,
-
+      maximumPassengersLabel: form.maxPassengers,
+      driverAges: form.driverAges,
+      passengerAges: form.passengerAges,
       household: {
-        hasOwnedCars:
-          form.hasOwnedCars === "yes",
-        ownedCars:
-          ownedCarsForDiagnosis,
-        purchasePlan:
-          form.purchasePlan,
-        replacementTarget:
-          replacementTarget || null,
+        hasOwnedCars: form.hasOwnedCars === "yes",
+        ownedCars: ownedCarsForDiagnosis,
+        purchasePlan: form.purchasePlan,
+        replacementTarget: replacementTarget || null,
         retainedCars,
-        replacementReasons:
-          form.replacementReasons,
-        replacementReasonMemo:
-          form.replacementReasonMemo.trim(),
+        replacementReasons: form.replacementReasons,
+        replacementReasonMemo: form.replacementReasonMemo.trim(),
       },
-
       avoid: {
-        none:
-          form.avoidNone,
-        manufacturers:
-          splitTokens(
-            form.avoidManufacturers
-          ),
-        models:
-          splitTokens(
-            form.avoidModels
-          ),
-        typeKeys:
-          form.avoidBodyTypes,
-        conditions:
-          form.avoidConditions,
-        manufacturerReason:
-          form.avoidManufacturerReason.trim(),
-        modelReason:
-          form.avoidModelReason.trim(),
+        none: form.avoidNone,
+        manufacturers: splitTokens(form.avoidManufacturers),
+        models: splitTokens(form.avoidModels),
+        typeKeys: form.avoidBodyTypes,
+        conditions: form.avoidConditions,
+        manufacturerReason: form.avoidManufacturerReason.trim(),
+        modelReason: form.avoidModelReason.trim(),
         reason: [
           form.avoidManufacturerReason.trim()
             ? `避けたいメーカーの理由：${form.avoidManufacturerReason.trim()}`
@@ -1160,50 +991,31 @@ export default function Home() {
           .filter(Boolean)
           .join("／"),
       },
-
       desired: {
-        manufacturers:
-          splitTokens(
-            form.desiredManufacturers
-          ),
+        manufacturers: splitTokens(form.desiredManufacturers),
         typeKeys:
           requiredSeats >= 5
             ? form.desiredBodyTypes.filter(
-                (typeKey) =>
-                  !LIGHT_TYPE_KEYS.includes(
-                    typeKey
-                  )
+                (typeKey) => !LIGHT_TYPE_KEYS.includes(typeKey)
               )
             : form.desiredBodyTypes,
-        weightedPreferences:
-          makeWeightedPreferences(),
+        weightedPreferences: makeWeightedPreferences(),
       },
-
-      otherRequest:
-        form.otherRequest.trim(),
-
-      answerSummary:
-        answerSummary.map(
-          ([label, value]) => ({
-            label,
-            value,
-          })
-        ),
+      otherRequest: form.otherRequest.trim(),
+      answerSummary: answerSummary.map(([label, value]) => ({
+        label,
+        value,
+      })),
     };
   }
 
   async function runAiDiagnosis() {
-    const validation =
-      validateAllQuestions();
+    const validation = validateAllQuestions();
 
     if (validation) {
-      setValidationError(
-        validation.message
-      );
+      setValidationError(validation.message);
       setRateLimitError("");
-      scrollToQuestion(
-        validation.question
-      );
+      scrollToQuestion(validation.question);
       return;
     }
 
@@ -1211,6 +1023,7 @@ export default function Home() {
     let diagnosisSlotConsumed = false;
 
     setError("");
+    setRestoreNotice("");
     setRateLimitError("");
     setValidationError("");
     setInventoryError("");
@@ -1218,52 +1031,35 @@ export default function Home() {
     scrollTop();
 
     try {
-      authentication =
-        await getLiffAuthentication();
+      authentication = await getLiffAuthentication();
 
-      const limitResult =
-        await updateDiagnosisLimit(
-          "consume",
-          authentication
-        );
+      const limitResult = await updateDiagnosisLimit(
+        "consume",
+        authentication
+      );
 
       diagnosisSlotConsumed = true;
 
-      if (
-        typeof limitResult.remaining ===
-        "number"
-      ) {
-        setRemainingDiagnoses(
-          limitResult.remaining
-        );
+      if (typeof limitResult.remaining === "number") {
+        setRemainingDiagnoses(limitResult.remaining);
       }
     } catch (caughtError) {
       setRateLimitError(
-        caughtError.message ||
-          "今日の診断回数を確認できない。"
+        caughtError.message || "今日の診断回数を確認できない。"
       );
 
-      if (
-        typeof caughtError.remaining ===
-        "number"
-      ) {
-        setRemainingDiagnoses(
-          caughtError.remaining
-        );
+      if (typeof caughtError.remaining === "number") {
+        setRemainingDiagnoses(caughtError.remaining);
       }
 
       setLoading(false);
 
       window.setTimeout(() => {
         document
-          .getElementById(
-            "diagnosis-submit"
-          )
-          ?.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-          });
+          .getElementById("diagnosis-submit")
+          ?.scrollIntoView({ behavior: "smooth", block: "center" });
       }, 50);
+
       return;
     }
 
@@ -1271,91 +1067,66 @@ export default function Home() {
     setShowAnswers(false);
 
     try {
-      const response =
-        await fetch(
-          "/api/diagnose",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
-            body:
-              JSON.stringify({
-                mode: "perfect",
-                diagnosisInput:
-                  buildDiagnosisInput(),
-              }),
-          }
-        );
+      const response = await fetch("/api/diagnose", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mode: "perfect",
+          diagnosisInput: buildDiagnosisInput(),
+        }),
+      });
 
-      const data =
-        await response.json();
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(
-          data.error ||
-            "診断に失敗。"
-        );
+        throw new Error(data.error || "診断に失敗。");
       }
 
-      if (
-        !Array.isArray(
-          data.result?.recommendations
-        )
-      ) {
-        throw new Error(
-          "診断結果の形式が不正。"
-        );
+      if (!Array.isArray(data.result?.recommendations)) {
+        throw new Error("診断結果の形式が不正。");
       }
 
       setDiagnosis(data.result);
       diagnosisSlotConsumed = false;
 
-      if (
-        typeof window !== "undefined"
-      ) {
-        window.localStorage.setItem(
-          LAST_DIAGNOSIS_STORAGE_KEY,
-          JSON.stringify({
-            savedAt: Date.now(),
-            form,
-            diagnosis: data.result,
-          })
-        );
+      if (typeof window !== "undefined") {
+        try {
+          window.localStorage.setItem(
+            LAST_DIAGNOSIS_STORAGE_KEY,
+            JSON.stringify({
+              savedAt: Date.now(),
+              version: data.checks?.version || "",
+              form,
+              diagnosis: data.result,
+            })
+          );
+        } catch {
+          setRestoreNotice(
+            "診断は完了しましたが、この端末に結果を保存できませんでした。必要な結果は画面を閉じる前にスクリーンショットで残してください。"
+          );
+        }
       }
     } catch (caughtError) {
-      if (
-        diagnosisSlotConsumed &&
-        authentication
-      ) {
+      if (diagnosisSlotConsumed && authentication) {
         try {
-          await updateDiagnosisLimit(
-            "refund",
-            authentication
-          );
+          await updateDiagnosisLimit("refund", authentication);
         } catch {
           // 返却処理に失敗しても元のエラーを優先する。
         }
       }
 
-      setError(
-        caughtError.message ||
-          "エラーが発生。"
-      );
+      setError(caughtError.message || "エラーが発生。");
     } finally {
       setLoading(false);
     }
   }
 
   function buildDiagnosisReturnFlexMessage() {
-    const returnUrl =
-      `https://liff.line.me/${LIFF_ID}?restore=1`;
+    const returnUrl = `https://liff.line.me/${LIFF_ID}?restore=1`;
 
     return {
       type: "flex",
-      altText:
-        "ぴったり車種診断の結果を再表示",
+      altText: "ぴったり車種診断の結果を再表示",
       contents: {
         type: "bubble",
         size: "kilo",
@@ -1382,7 +1153,7 @@ export default function Home() {
             {
               type: "text",
               text: "在庫を見たあとも、下のボタンからすぐに戻れる。",
-                            color: "#667085",
+              color: "#667085",
               size: "sm",
               wrap: true,
             },
@@ -1406,12 +1177,8 @@ export default function Home() {
           ],
         },
         styles: {
-          body: {
-            backgroundColor: "#F8FAFC",
-          },
-          footer: {
-            backgroundColor: "#F8FAFC",
-          },
+          body: { backgroundColor: "#F8FAFC" },
+          footer: { backgroundColor: "#F8FAFC" },
         },
       },
     };
@@ -1422,55 +1189,35 @@ export default function Home() {
     setInventoryError("");
 
     try {
-      if (
-        typeof window === "undefined" ||
-        !window.liff
-      ) {
-        throw new Error(
-          "LINE連携の準備中。少し待ってから再度操作。"
-        );
+      if (typeof window === "undefined" || !window.liff) {
+        throw new Error("LINE連携の準備中。少し待ってから再度操作。");
       }
 
       if (!liffReady) {
-        if (!LIFF_ID) {
-          throw new Error(
-            "LINEアプリ設定が未完了。"
-          );
-        }
+        if (!LIFF_ID) throw new Error("LINEアプリ設定が未完了。");
 
-        await window.liff.init({
-          liffId: LIFF_ID,
-        });
-
+        await window.liff.init({ liffId: LIFF_ID });
         setLiffReady(true);
       }
 
-      if (
-        !window.liff.isInClient()
-      ) {
-        throw new Error(
-          "LINE内の「ぴったり診断」から起動。"
-        );
+      if (!window.liff.isInClient()) {
+        throw new Error("LINE内の「ぴったり診断」から起動。");
       }
 
-      const inventoryLineMessages =
-        buildInventoryLineMessages();
+      const inventoryLineMessages = buildInventoryLineMessages();
 
       await window.liff.sendMessages([
-        ...inventoryLineMessages.map(
-          (typeKey) => ({
-            type: "text",
-            text: typeKey,
-          })
-        ),
+        ...inventoryLineMessages.map((typeKey) => ({
+          type: "text",
+          text: typeKey,
+        })),
         buildDiagnosisReturnFlexMessage(),
       ]);
 
       window.liff.closeWindow();
     } catch (caughtError) {
       setInventoryError(
-        caughtError.message ||
-          "LINEへの在庫検索依頼の送信に失敗。"
+        caughtError.message || "LINEへの在庫検索依頼の送信に失敗。"
       );
     } finally {
       setInventoryLoading(false);
@@ -1489,6 +1236,7 @@ export default function Home() {
 
   function restart() {
     setForm(makeInitialForm());
+    setRestoreNotice("");
     setDiagnosis(null);
     setLoading(false);
     setError("");
@@ -1499,15 +1247,8 @@ export default function Home() {
     setRateLimitError("");
 
     if (typeof window !== "undefined") {
-      window.localStorage.removeItem(
-        LAST_DIAGNOSIS_STORAGE_KEY
-      );
-
-      window.history.replaceState(
-        {},
-        "",
-        window.location.pathname
-      );
+      window.localStorage.removeItem(LAST_DIAGNOSIS_STORAGE_KEY);
+      window.history.replaceState({}, "", window.location.pathname);
     }
 
     scrollTop();
@@ -1521,9 +1262,7 @@ export default function Home() {
         onLoad={initializeLiff}
         onError={() => {
           setLiffReady(false);
-          setLiffError(
-            "LINE連携用SDKの読み込みに失敗。"
-          );
+          setLiffError("LINE連携用SDKの読み込みに失敗。");
         }}
       />
 
@@ -1536,57 +1275,43 @@ export default function Home() {
 
         <div className="title-area">
           <h1>ぴったり車種診断</h1>
-
-          {!diagnosis &&
-          !loading &&
-          !error ? (
-            <div className="page-badge">
-              質問1〜5
-            </div>
+          {!diagnosis && !loading && !error ? (
+            <div className="page-badge">質問1〜5</div>
           ) : null}
         </div>
 
-        {validationError ? (
-          <div className="alert-box">
-            {validationError}
+        {restoreNotice ? (
+          <div className="info-strip" role="status">
+            {restoreNotice}
           </div>
         ) : null}
 
-        {!diagnosis &&
-        !loading &&
-        !error ? (
+        {validationError ? (
+          <div className="alert-box">{validationError}</div>
+        ) : null}
+
+        {!diagnosis && !loading && !error ? (
           <div className="page-stack">
-            <section id="question-1" className="question-card question-anchor">
+            <section
+              id="question-1"
+              className="question-card question-anchor"
+            >
               <QuestionHeader
                 number="1"
-                titleLines={[
-                  "この車に乗る",
-                  "最大人数",
-                ]}
+                titleLines={["この車に乗る", "最大人数"]}
                 note="年に数回でも乗る可能性がある最大人数を選択。"
               />
 
               <ChoiceGrid
-                options={MAX_PASSENGER_OPTIONS.map(
-                  (item) =>
-                    item.label
-                )}
-                selected={
-                  form.maxPassengers
-                }
+                options={MAX_PASSENGER_OPTIONS.map((item) => item.label)}
+                selected={form.maxPassengers}
                 single
-                onToggle={
-                  setMaxPassengers
-                }
+                onToggle={setMaxPassengers}
                 disabledValues={
                   hasLightTypeSelected
                     ? MAX_PASSENGER_OPTIONS.filter(
-                        (item) =>
-                          item.seats >= 5
-                      ).map(
-                        (item) =>
-                          item.label
-                      )
+                        (item) => item.seats >= 5
+                      ).map((item) => item.label)
                     : []
                 }
                 columns="two"
@@ -1601,27 +1326,14 @@ export default function Home() {
 
               <div className="field-block">
                 <div className="field-heading">
-                                    <p>
-                    運転する人の年齢
-                  </p>
-
-                  <span>
-                    複数選択可
-                  </span>
+                  <p>運転する人の年齢</p>
+                  <span>複数選択可</span>
                 </div>
-
                 <ChoiceGrid
-                  options={
-                    DRIVER_AGE_OPTIONS
-                  }
-                  selected={
-                    form.driverAges
-                  }
+                  options={DRIVER_AGE_OPTIONS}
+                  selected={form.driverAges}
                   onToggle={(value) =>
-                    toggleArrayField(
-                      "driverAges",
-                      value
-                    )
+                    toggleArrayField("driverAges", value)
                   }
                   columns="two"
                   compact
@@ -1630,13 +1342,8 @@ export default function Home() {
 
               <div className="field-block">
                 <div className="field-heading">
-                  <p>
-                    一緒に乗る人の年齢
-                  </p>
-
-                  <span>
-                    複数選択可
-                  </span>
+                  <p>一緒に乗る人の年齢</p>
+                  <span>複数選択可</span>
                 </div>
 
                 <p className="helper-text">
@@ -1644,17 +1351,10 @@ export default function Home() {
                 </p>
 
                 <ChoiceGrid
-                  options={
-                    PASSENGER_AGE_OPTIONS
-                  }
-                  selected={
-                    form.passengerAges
-                  }
+                  options={PASSENGER_AGE_OPTIONS}
+                  selected={form.passengerAges}
                   onToggle={(value) =>
-                    toggleArrayField(
-                      "passengerAges",
-                      value
-                    )
+                    toggleArrayField("passengerAges", value)
                   }
                   columns="three"
                   compact
@@ -1662,28 +1362,22 @@ export default function Home() {
               </div>
             </section>
 
-            <section id="question-2" className="question-card question-anchor">
+            <section
+              id="question-2"
+              className="question-card question-anchor"
+            >
               <QuestionHeader
                 number="2"
-                titleLines={[
-                  "現在の所有車と、",
-                  "今回の購入",
-                ]}
+                titleLines={["現在の所有車と、", "今回の購入"]}
                 note="現在の車の入力は、乗り換えの場合のみ。"
               />
 
               <div className="field-block first-field">
                 <div className="field-heading">
-                  <p>
-                    現在の所有状況
-                  </p>
+                  <p>現在の所有状況</p>
                 </div>
-
                 <ChoiceGrid
-                  options={[
-                    "所有している",
-                    "所有していない",
-                  ]}
+                  options={["所有している", "所有していない"]}
                   selected={
                     form.hasOwnedCars === "yes"
                       ? "所有している"
@@ -1694,200 +1388,121 @@ export default function Home() {
                   single
                   onToggle={(value) =>
                     setHasOwnedCars(
-                      value ===
-                      "所有している"
-                        ? "yes"
-                        : "no"
+                      value === "所有している" ? "yes" : "no"
                     )
                   }
                   columns="two"
                 />
               </div>
 
-              {form.hasOwnedCars ===
-              "yes" ? (
+              {form.hasOwnedCars === "yes" ? (
                 <div className="field-block">
                   <div className="field-heading">
-                    <p>
-                      今回の購入方法
-                    </p>
+                    <p>今回の購入方法</p>
                   </div>
-
                   <ChoiceGrid
-                    options={[
-                      "増車・新規購入",
-                      "乗り換え",
-                    ]}
-                    selected={
-                      form.purchasePlan
-                    }
+                    options={["増車・新規購入", "乗り換え"]}
+                    selected={form.purchasePlan}
                     single
-                    onToggle={
-                      setPurchasePlan
-                    }
+                    onToggle={setPurchasePlan}
                     columns="two"
                   />
                 </div>
               ) : null}
 
-              {form.hasOwnedCars ===
-              "no" ? (
+              {form.hasOwnedCars === "no" ? (
                 <div className="info-strip">
                   新規購入として診断。現在の車の入力は不要。
                 </div>
               ) : null}
 
-              {form.hasOwnedCars ===
-                "yes" &&
-              form.purchasePlan ===
-                "増車・新規購入" ? (
+              {form.hasOwnedCars === "yes" &&
+              form.purchasePlan === "増車・新規購入" ? (
                 <div className="info-strip">
                   増車なら、現在の車は入力不要。
                 </div>
               ) : null}
 
-              {form.hasOwnedCars ===
-                "yes" &&
-              form.purchasePlan ===
-                "乗り換え" ? (
+              {form.hasOwnedCars === "yes" &&
+              form.purchasePlan === "乗り換え" ? (
                 <div className="replacement-area">
                   <div className="field-heading replacement-title">
-                    <p>
-                      現在所有している車
-                    </p>
-
-                    <span>
-                      乗り換える車を入力
-                    </span>
+                    <p>現在所有している車</p>
+                    <span>乗り換える車を入力</span>
                   </div>
 
-                  {form.ownedCars.map(
-                    (car, index) => (
-                      <div
-                        className="owned-car-card"
-                        key={car.id}
-                      >
-                        <div className="owned-car-header">
-                          <strong>
-                            所有車 {index + 1}
-                          </strong>
-
-                          {form.ownedCars
-                            .length > 1 ? (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                removeOwnedCar(
-                                  car.id
-                                )
-                              }
-                            >
-                              削除
-                            </button>
-                          ) : null}
-                        </div>
-
-                        <label>
-                          <span>
-                            車種名
-                          </span>
-
-                          <input
-                            value={
-                              car.model
-                            }
-                            onChange={(
-                              event
-                            ) =>
-                              updateOwnedCar(
-                                car.id,
-                                "model",
-                                event
-                                  .target
-                                  .value
-                              )
-                            }
-                            placeholder="例：アルファード"
-                          />
-                        </label>
-
-                        <label>
-                          <span>
-                            主に乗る人（任意）
-                          </span>
-
-                          <input
-                            value={
-                              car.mainDriver
-                            }
-                            onChange={(
-                              event
-                            ) =>
-                              updateOwnedCar(
-                                car.id,
-                                "mainDriver",
-                                event
-                                  .target
-                                  .value
-                              )
-                            }
-                            placeholder="例：妻、夫、自分"
-                          />
-                        </label>
-
-                        <label>
-                          <span>
-                            車のタイプ
-                          </span>
-
-                          <select
-                            value={
-                              car.bodyType
-                            }
-                            onChange={(
-                              event
-                            ) =>
-                              updateOwnedCar(
-                                car.id,
-                                "bodyType",
-                                event
-                                  .target
-                                  .value
-                              )
-                            }
+                  {form.ownedCars.map((car, index) => (
+                    <div className="owned-car-card" key={car.id}>
+                      <div className="owned-car-header">
+                        <strong>所有車 {index + 1}</strong>
+                        {form.ownedCars.length > 1 ? (
+                          <button
+                            type="button"
+                            onClick={() => removeOwnedCar(car.id)}
                           >
-                            <option value="">
-                              選択
-                            </option>
-
-                            {ALL_TYPE_OPTIONS.map(
-                              (
-                                option
-                              ) => (
-                                <option
-                                  key={
-                                    option.value
-                                  }
-                                  value={
-                                    option.value
-                                  }
-                                >
-                                  {option.value.replace(
-                                    " ",
-                                    "・"
-                                  )}
-                                </option>
-                              )
-                            )}
-
-                            <option value="その他・分からない">
-                              その他・分からない
-                            </option>
-                          </select>
-                        </label>
+                            削除
+                          </button>
+                        ) : null}
                       </div>
-                    )
-                  )}
+
+                      <label>
+                        <span>車種名</span>
+                        <input
+                          value={car.model}
+                          onChange={(event) =>
+                            updateOwnedCar(
+                              car.id,
+                              "model",
+                              event.target.value
+                            )
+                          }
+                          placeholder="例：アルファード"
+                        />
+                      </label>
+
+                      <label>
+                        <span>主に乗る人（任意）</span>
+                        <input
+                          value={car.mainDriver}
+                          onChange={(event) =>
+                            updateOwnedCar(
+                              car.id,
+                              "mainDriver",
+                              event.target.value
+                            )
+                          }
+                          placeholder="例：妻、夫、自分"
+                        />
+                      </label>
+
+                      <label>
+                        <span>車のタイプ</span>
+                        <select
+                          value={car.bodyType}
+                          onChange={(event) =>
+                            updateOwnedCar(
+                              car.id,
+                              "bodyType",
+                              event.target.value
+                            )
+                          }
+                        >
+                          <option value="">選択</option>
+                          {ALL_TYPE_OPTIONS.map((option) => (
+                            <option
+                              key={option.value}
+                              value={option.value}
+                            >
+                              {option.value.replace(" ", "・")}
+                            </option>
+                          ))}
+                          <option value="その他・分からない">
+                            その他・分からない
+                          </option>
+                        </select>
+                      </label>
+                    </div>
+                  ))}
 
                   <button
                     type="button"
@@ -1898,72 +1513,35 @@ export default function Home() {
                   </button>
 
                   <label className="standalone-label">
-                    <span>
-                      乗り換える予定の車
-                    </span>
-
+                    <span>乗り換える予定の車</span>
                     <select
-                      value={
-                        form.replacementTargetId
-                      }
-                      onChange={(
-                        event
-                      ) =>
+                      value={form.replacementTargetId}
+                      onChange={(event) =>
                         updateField(
                           "replacementTargetId",
-                          event
-                            .target
-                            .value
+                          event.target.value
                         )
                       }
                     >
-                      <option value="">
-                        選択
-                      </option>
-
-                      {form.ownedCars.map(
-                        (car, index) => (
-                          <option
-                            key={
-                              car.id
-                            }
-                            value={
-                                                            car.id
-                            }
-                          >
-                            {car.model ||
-                              `所有車 ${
-                                index + 1
-                              }`}
-                          </option>
-                        )
-                      )}
+                      <option value="">選択</option>
+                      {form.ownedCars.map((car, index) => (
+                        <option key={car.id} value={car.id}>
+                          {car.model || `所有車 ${index + 1}`}
+                        </option>
+                      ))}
                     </select>
                   </label>
 
                   <div className="field-block">
                     <div className="field-heading">
-                      <p>
-                        乗り換えを考えた理由
-                      </p>
-
-                      <span>
-                        複数選択可
-                      </span>
+                      <p>乗り換えを考えた理由</p>
+                      <span>複数選択可</span>
                     </div>
-
                     <ChoiceGrid
-                      options={
-                        REPLACEMENT_REASON_OPTIONS
-                      }
-                      selected={
-                        form.replacementReasons
-                      }
+                      options={REPLACEMENT_REASON_OPTIONS}
+                      selected={form.replacementReasons}
                       onToggle={(value) =>
-                        toggleArrayField(
-                          "replacementReasons",
-                          value
-                        )
+                        toggleArrayField("replacementReasons", value)
                       }
                       columns="two"
                       compact
@@ -1971,22 +1549,13 @@ export default function Home() {
                   </div>
 
                   <label className="standalone-label">
-                    <span>
-                      乗り換え理由の詳細（任意）
-                    </span>
-
+                    <span>乗り換え理由の詳細（任意）</span>
                     <textarea
-                      value={
-                        form.replacementReasonMemo
-                      }
-                      onChange={(
-                        event
-                      ) =>
+                      value={form.replacementReasonMemo}
+                      onChange={(event) =>
                         updateField(
                           "replacementReasonMemo",
-                          event
-                            .target
-                            .value
+                          event.target.value
                         )
                       }
                       placeholder="例：修理中に車が使えない期間が困る"
@@ -1996,28 +1565,21 @@ export default function Home() {
               ) : null}
             </section>
 
-            <section id="question-3" className="question-card question-anchor">
+            <section
+              id="question-3"
+              className="question-card question-anchor"
+            >
               <QuestionHeader
                 number="3"
-                titleLines={[
-                  "気になる車や条件を",
-                  "選ぶ",
-                ]}
+                titleLines={["気になる車や条件を", "選ぶ"]}
                 note="候補を絞るため、気になるタイプや条件を選択。"
               />
 
               <label>
-                <span>
-                  気になるメーカー（任意）
-                </span>
-
+                <span>気になるメーカー（任意）</span>
                 <input
-                  value={
-                    form.desiredManufacturers
-                  }
-                  onChange={(
-                    event
-                  ) =>
+                  value={form.desiredManufacturers}
+                  onChange={(event) =>
                     updateField(
                       "desiredManufacturers",
                       event.target.value
@@ -2029,19 +1591,11 @@ export default function Home() {
 
               <div className="field-block">
                 <div className="field-heading">
-                  <p>
-                    気になる車のタイプ
-                  </p>
-
-                  <span>
-                    複数選択可
-                  </span>
+                  <p>気になる車のタイプ</p>
+                  <span>複数選択可</span>
                 </div>
-
                 <TypeChoiceGrid
-                  selected={
-                    form.desiredBodyTypes
-                  }
+                  selected={form.desiredBodyTypes}
                   onToggle={(value) =>
                     toggleArrayField(
                       "desiredBodyTypes",
@@ -2050,9 +1604,7 @@ export default function Home() {
                     )
                   }
                   disabledValues={
-                    requiredSeats >= 5
-                      ? LIGHT_TYPE_KEYS
-                      : []
+                    requiredSeats >= 5 ? LIGHT_TYPE_KEYS : []
                   }
                   disabledMessage={
                     requiredSeats >= 5
@@ -2063,85 +1615,50 @@ export default function Home() {
                 />
               </div>
 
-              {WANTED_CONDITION_GROUPS.map(
-                (group) => (
-                  <div
-                    className="field-block"
-                    key={group.title}
-                  >
-                    <div className="field-heading">
-                      <p>
-                        {group.title}
-                      </p>
-
-                      <span>
-                        複数選択可
-                      </span>
-                    </div>
-
-                    <ChoiceGrid
-                      options={group.options.map(
-                        (option) =>
-                          option.label
-                      )}
-                      selected={
-                        form.desiredConditions
-                      }
-                      onToggle={(value) =>
-                        toggleArrayField(
-                          "desiredConditions",
-                          value
-                        )
-                      }
-                      columns="two"
-                      compact
-                    />
+              {WANTED_CONDITION_GROUPS.map((group) => (
+                <div className="field-block" key={group.title}>
+                  <div className="field-heading">
+                    <p>{group.title}</p>
+                    <span>複数選択可</span>
                   </div>
-                )
-              )}
+                  <ChoiceGrid
+                    options={group.options.map((option) => option.label)}
+                    selected={form.desiredConditions}
+                    onToggle={(value) =>
+                      toggleArrayField("desiredConditions", value)
+                    }
+                    columns="two"
+                    compact
+                  />
+                </div>
+              ))}
             </section>
 
-            <section id="question-4" className="question-card question-anchor">
+            <section
+              id="question-4"
+              className="question-card question-anchor"
+            >
               <QuestionHeader
                 number="4"
-                titleLines={[
-                  "避けたい車や条件を",
-                  "選ぶ",
-                ]}
+                titleLines={["避けたい車や条件を", "選ぶ"]}
                 note="該当がなければ「特になし」を選択。"
               />
 
               <ChoiceGrid
-                options={[
-                  "特になし",
-                ]}
-                selected={
-                  form.avoidNone
-                    ? "特になし"
-                    : ""
-                }
+                options={["特になし"]}
+                selected={form.avoidNone ? "特になし" : ""}
                 single
-                onToggle={() =>
-                  setAvoidNone(
-                    !form.avoidNone
-                  )
-                }
+                onToggle={() => setAvoidNone(!form.avoidNone)}
                 columns="one"
               />
 
               {!form.avoidNone ? (
                 <div className="form-stack">
                   <label>
-                    <span>
-                      避けたいメーカー
-                    </span>
-                                      <input
-                      value={
-                        form.avoidManufacturers
-                      }
-                      onChange={(
-                        event
-                      ) =>
+                    <span>避けたいメーカー</span>
+                    <input
+                      value={form.avoidManufacturers}
+                      onChange={(event) =>
                         updateField(
                           "avoidManufacturers",
                           event.target.value
@@ -2152,17 +1669,10 @@ export default function Home() {
                   </label>
 
                   <label>
-                    <span>
-                      そのメーカーを避けたい理由（任意）
-                    </span>
-
+                    <span>そのメーカーを避けたい理由（任意）</span>
                     <textarea
-                      value={
-                        form.avoidManufacturerReason
-                      }
-                      onChange={(
-                        event
-                      ) =>
+                      value={form.avoidManufacturerReason}
+                      onChange={(event) =>
                         updateField(
                           "avoidManufacturerReason",
                           event.target.value
@@ -2173,38 +1683,21 @@ export default function Home() {
                   </label>
 
                   <label>
-                    <span>
-                      避けたい車種
-                    </span>
-
+                    <span>避けたい車種</span>
                     <input
-                      value={
-                        form.avoidModels
-                      }
-                      onChange={(
-                        event
-                      ) =>
-                        updateField(
-                          "avoidModels",
-                          event.target.value
-                        )
+                      value={form.avoidModels}
+                      onChange={(event) =>
+                        updateField("avoidModels", event.target.value)
                       }
                       placeholder="ここに車種名を入力"
                     />
                   </label>
 
                   <label>
-                    <span>
-                      その車種を避けたい理由（任意）
-                    </span>
-
+                    <span>その車種を避けたい理由（任意）</span>
                     <textarea
-                      value={
-                        form.avoidModelReason
-                      }
-                      onChange={(
-                        event
-                      ) =>
+                      value={form.avoidModelReason}
+                      onChange={(event) =>
                         updateField(
                           "avoidModelReason",
                           event.target.value
@@ -2216,51 +1709,27 @@ export default function Home() {
 
                   <div className="field-block">
                     <div className="field-heading">
-                      <p>
-                        避けたい車のタイプ
-                      </p>
-
-                      <span>
-                        複数選択可
-                      </span>
+                      <p>避けたい車のタイプ</p>
+                      <span>複数選択可</span>
                     </div>
-
                     <TypeChoiceGrid
-                      selected={
-                        form.avoidBodyTypes
-                      }
+                      selected={form.avoidBodyTypes}
                       onToggle={(value) =>
-                        toggleArrayField(
-                          "avoidBodyTypes",
-                          value
-                        )
+                        toggleArrayField("avoidBodyTypes", value)
                       }
                     />
                   </div>
 
                   <div className="field-block">
                     <div className="field-heading">
-                      <p>
-                        避けたい条件
-                      </p>
-
-                      <span>
-                        複数選択可
-                      </span>
+                      <p>避けたい条件</p>
+                      <span>複数選択可</span>
                     </div>
-
                     <ChoiceGrid
-                      options={
-                        AVOID_CONDITION_OPTIONS
-                      }
-                      selected={
-                        form.avoidConditions
-                      }
+                      options={AVOID_CONDITION_OPTIONS}
+                      selected={form.avoidConditions}
                       onToggle={(value) =>
-                        toggleArrayField(
-                          "avoidConditions",
-                          value
-                        )
+                        toggleArrayField("avoidConditions", value)
                       }
                       columns="two"
                       compact
@@ -2270,45 +1739,30 @@ export default function Home() {
               ) : null}
             </section>
 
-            <section id="question-5" className="question-card question-anchor">
+            <section
+              id="question-5"
+              className="question-card question-anchor"
+            >
               <QuestionHeader
                 number="5"
-                titleLines={[
-                  "その他の希望や",
-                  "気になること",
-                ]}
+                titleLines={["その他の希望や", "気になること"]}
                 note="選択肢にない希望があれば入力。空欄でも診断可能。"
               />
 
               <div className="tip-box">
-                <strong>
-                  入力例
-                </strong>
-
+                <strong>入力例</strong>
                 <span>
                   犬を乗せる／長距離が多い／家族も運転する／車中泊したい、など
                 </span>
               </div>
 
               <label>
-                <span>
-                  自由入力欄
-                </span>
-
+                <span>自由入力欄</span>
                 <textarea
                   className="large-textarea"
-                  value={
-                    form.otherRequest
-                  }
-                  onChange={(
-                    event
-                  ) =>
-                    updateField(
-                      "otherRequest",
-                      event
-                        .target
-                        .value
-                    )
+                  value={form.otherRequest}
+                  onChange={(event) =>
+                    updateField("otherRequest", event.target.value)
                   }
                   placeholder="希望や不安、今の車で気に入っている点などを入力"
                 />
@@ -2319,13 +1773,8 @@ export default function Home() {
               id="diagnosis-submit"
               className="diagnosis-submit-card"
             >
-              <strong>
-                回答内容から、候補車を選定
-              </strong>
-
-              <p>
-                AI診断は、1日に3回まで。
-              </p>
+              <strong>回答内容から、候補車を選定</strong>
+              <p>AI診断は、1日に3回まで。</p>
 
               {remainingDiagnoses !== null ? (
                 <div className="remaining-count">
@@ -2335,9 +1784,7 @@ export default function Home() {
               ) : null}
 
               {rateLimitError ? (
-                <div className="rate-limit-error">
-                  {rateLimitError}
-                </div>
+                <div className="rate-limit-error">{rateLimitError}</div>
               ) : null}
 
               <button
@@ -2353,19 +1800,13 @@ export default function Home() {
 
         {loading ? (
           <div className="loading-box loading-experience">
-            <div
-              className="loading-orbit"
-              aria-hidden="true"
-            >
+            <div className="loading-orbit" aria-hidden="true">
               <span />
               <span />
               <span />
             </div>
 
-            <strong>
-              カーとぴあが選定中
-            </strong>
-
+            <strong>カーとぴあが選定中</strong>
             <h2>
               条件を読み解きながら、
               <br />
@@ -2376,48 +1817,34 @@ export default function Home() {
               <span className="loading-step-number">
                 0{loadingStep + 1}
               </span>
-
-              <p key={loadingStep}>
-                {LOADING_STEPS[loadingStep]}
-              </p>
+              <p key={loadingStep}>{LOADING_STEPS[loadingStep]}</p>
             </div>
 
-            <div
-              className="loading-progress"
-              aria-hidden="true"
-            >
+            <div className="loading-progress" aria-hidden="true">
               <span key={loadingStep} />
             </div>
 
             <p className="loading-caption">
-              カーとぴあのスタッフ目線で、
-              候補車を一台ずつ比較中。
+              仕様資料の確認に時間がかかる場合があります。
               <br />
-              結果が出るまで、そのまま待機。
+              この画面を開いたままお待ちください。
+              <br />
+              上の案内は診断方針で、実際の進捗を表すものではありません。
             </p>
           </div>
         ) : null}
 
         {error ? (
           <div className="error-box">
-            <strong>
-              エラー
-            </strong>
-
-            <p>
-              {error}
-            </p>
-
+            <strong>エラー</strong>
+            <p>{error}</p>
             <button
               type="button"
               className="primary-button"
-              onClick={
-                runAiDiagnosis
-              }
+              onClick={runAiDiagnosis}
             >
               もう一度診断する
             </button>
-
             <button
               type="button"
               className="back-button full-button"
@@ -2431,55 +1858,55 @@ export default function Home() {
         {diagnosis ? (
           <div className="result-stack">
             <section className="result-intro">
-              <strong>
-                AI診断結果
-              </strong>
-
+              <strong>AI診断結果</strong>
               <h2>
-                あなたに合う車種TOP5
+                {rankedRecommendations.length > 0
+                  ? `あなたに合う候補 ${rankedRecommendations.length}台`
+                  : "条件に合う候補を確認できませんでした"}
               </h2>
+              <AdviceText text={diagnosis.overview} />
 
-              <p>
-                {diagnosis.overview}
-              </p>
+              {rankedRecommendations.length === 0 ? (
+                <p>
+                  条件を満たす車が存在しないと断定するものではありません。
+                  今回の診断で確認できた候補がないため、
+                  台数を埋めるためのおすすめは表示していません。
+                </p>
+              ) : (
+                <p className="result-note">
+                  マッチ度は希望との相性の目安です。
+                  仕様の正しさを保証する確率ではありません。
+                </p>
+              )}
             </section>
 
             <div className="recommendation-list">
-              {rankedRecommendations.map(
-                (
-                  recommendation,
-                  index
-                ) => (
-                  <RecommendationCard
-                    key={`${recommendation.maker}-${recommendation.model}-${index}`}
-                    recommendation={
-                      recommendation
-                    }
-                  />
-                )
-              )}
+              {rankedRecommendations.map((recommendation, index) => (
+                <RecommendationCard
+                  key={`${recommendation.maker}-${recommendation.model}-${index}`}
+                  recommendation={recommendation}
+                />
+              ))}
             </div>
 
             {diagnosis.currentAdvice ? (
               <section className="advice-box">
-                <strong>
-                  今の使い方から見ると
-                </strong>
-
-                <p>
-                  {diagnosis.currentAdvice}
-                </p>
+                <strong>今の使い方から見ると</strong>
+                <AdviceText text={diagnosis.currentAdvice} />
               </section>
             ) : null}
+
             {diagnosis.futureAdvice ? (
               <section className="advice-box">
-                <strong>
-                  3〜5年後を考えると
-                </strong>
+                <strong>3〜5年後を考えると</strong>
+                <AdviceText text={diagnosis.futureAdvice} />
+              </section>
+            ) : null}
 
-                <p>
-                  {diagnosis.futureAdvice}
-                </p>
+            {diagnosis.consultationText ? (
+              <section className="advice-box">
+                <strong>お店で相談するときに</strong>
+                <AdviceText text={diagnosis.consultationText} />
               </section>
             ) : null}
 
@@ -2487,12 +1914,7 @@ export default function Home() {
               <button
                 type="button"
                 className="toggle-button"
-                onClick={() =>
-                  setShowAnswers(
-                    (current) =>
-                      !current
-                  )
-                }
+                onClick={() => setShowAnswers((current) => !current)}
               >
                 {showAnswers
                   ? "質問と回答を閉じる ▲"
@@ -2501,71 +1923,47 @@ export default function Home() {
 
               {showAnswers ? (
                 <div className="answer-summary">
-                  {answerSummary.map(
-                    ([
-                      label,
-                      value,
-                    ]) => (
-                      <div key={label}>
-                        <strong>
-                          {label}
-                        </strong>
-
-                        <p>
-                          {value}
-                        </p>
-                      </div>
-                    )
-                  )}
+                  {answerSummary.map(([label, value]) => (
+                    <div key={label}>
+                      <strong>{label}</strong>
+                      <p>{value}</p>
+                    </div>
+                  ))}
                 </div>
               ) : null}
             </section>
 
             <section className="inventory-section">
-              <h2>
-                カーとぴあの在庫も確認する
-              </h2>
-
+              <h2>カーとぴあの在庫も確認する</h2>
               <p>
-                上のTOP5は、在庫に左右されず、車種全体から選んだ本命候補。
+                在庫は車のタイプをもとに検索します。
+                診断で指定した定員・年式・装備などをすべて満たすとは限らないため、
+                気になる車はスタッフに確認してください。
               </p>
 
               <button
                 type="button"
                 className="primary-button"
-                onClick={
-                  sendMatchedInventoryToLine
-                }
-                disabled={
-                  inventoryLoading
-                }
+                onClick={sendMatchedInventoryToLine}
+                disabled={inventoryLoading}
               >
                 {inventoryLoading
                   ? "LINEへ戻る準備中…"
                   : "LINEで条件に近い在庫を見る"}
               </button>
 
-              {inventoryError ||
-              liffError ? (
+              {inventoryError || liffError ? (
                 <div className="empty-box inventory-line-error">
-                  {inventoryError ||
-                    liffError}
+                  {inventoryError || liffError}
                 </div>
               ) : null}
             </section>
 
             <div className="edit-navigation">
-              <strong>
-                回答を修正する
-              </strong>
-
-              <button
-                type="button"
-                onClick={editAnswers}
-              >
+              <strong>回答を修正する</strong>
+              <button type="button" onClick={editAnswers}>
                 質問1〜5の回答を確認・修正する
               </button>
-
               <button
                 type="button"
                 className="back-button"
@@ -2583,1152 +1981,197 @@ export default function Home() {
       </section>
 
       <style jsx global>{`
-        :root {
-          color-scheme: dark;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-
-        html,
-        body {
-          margin: 0;
-          background: #06111f;
-        }
-
-        button,
-        input,
-        select,
-        textarea {
-          font: inherit;
-          -webkit-appearance: none;
-          appearance: none;
-        }
-
-        button {
-          -webkit-tap-highlight-color: transparent;
-        }
-
-        main {
-          min-height: 100vh;
-          background:
-            radial-gradient(
-              circle at 50% 0%,
-              rgba(35, 61, 92, 0.34),
-              transparent 34%
-            ),
-            #06111f;
-          color: #ffffff;
-          padding: 18px 12px 40px;
-          font-family:
-            -apple-system,
-            BlinkMacSystemFont,
-            "Helvetica Neue",
-            "Yu Gothic",
-            "Hiragino Kaku Gothic ProN",
-            sans-serif;
-        }
-
-        .shell {
-          width: min(100%, 720px);
-          margin: 0 auto;
-          border: 1px solid rgba(214, 181, 91, 0.24);
-          border-radius: 24px;
-          padding: 22px 16px 28px;
-          background: rgba(7, 18, 33, 0.94);
-          box-shadow: 0 22px 60px rgba(0, 0, 0, 0.28);
-        }
-
-        .logo {
-          display: block;
-          width: 220px;
-          max-width: 78%;
-          height: auto;
-          margin: 0 auto 13px;
-          border-radius: 12px;
-        }
-
-        .title-area {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 12px;
-          margin-bottom: 22px;
-        }
-
-        .title-area h1 {
-          margin: 0;
-          font-size: clamp(25px, 6vw, 32px);
-          line-height: 1.2;
-          font-weight: 900;
-          letter-spacing: 0.01em;
-        }
-
-        .page-badge {
-          flex: none;
-          border: 1px solid rgba(214, 181, 91, 0.58);
-                    border-radius: 999px;
-          padding: 5px 9px;
-          color: #efd477;
-          background: rgba(214, 181, 91, 0.08);
-          font-size: 12px;
-          font-weight: 900;
-        }
-
-        .page-stack,
-        .result-stack,
-        .recommendation-list,
-        .form-stack,
-        .type-groups {
-          display: grid;
-          gap: 16px;
-        }
-
-        .question-card {
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          border-radius: 20px;
-          padding: 20px 16px;
-          background: rgba(255, 255, 255, 0.035);
-        }
-
-        .question-header {
-          margin-bottom: 20px;
-        }
-
-        .question-number {
-          display: inline-flex;
-          align-items: center;
-          min-height: 28px;
-          border-radius: 999px;
-          padding: 5px 11px;
-          margin-bottom: 11px;
-          background: rgba(214, 181, 91, 0.14);
-          border: 1px solid rgba(214, 181, 91, 0.38);
-          color: #efd477;
-          font-size: 12px;
-          font-weight: 900;
-        }
-
-        .question-header h2 {
-          margin: 0 0 9px;
-          font-size: clamp(23px, 6vw, 30px);
-          line-height: 1.38;
-          font-weight: 900;
-          letter-spacing: 0.01em;
-        }
-
-        .question-title-line {
-          display: block;
-          text-wrap: balance;
-        }
-
-        .question-header p,
-        .helper-text {
-          margin: 0;
-          color: rgba(255, 255, 255, 0.68);
-          font-size: 13px;
-          line-height: 1.7;
-          font-weight: 650;
-        }
-
-        .field-block {
-          margin-top: 26px;
-        }
-
-        .first-field {
-          margin-top: 0;
-        }
-
-        .field-heading {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 10px;
-          margin-bottom: 11px;
-        }
-
-        .field-heading p {
-          margin: 0;
-          color: #f0d372;
-          font-size: 16px;
-          line-height: 1.5;
-          font-weight: 900;
-        }
-
-        .field-heading span {
-          flex: none;
-          border-radius: 999px;
-          padding: 4px 8px;
-          color: rgba(255, 255, 255, 0.72);
-          background: rgba(255, 255, 255, 0.07);
-          font-size: 10px;
-          font-weight: 800;
-        }
-
-        .helper-text {
-          margin: -2px 0 11px;
-          font-size: 12px;
-        }
-
-        .choice-grid {
-          display: grid;
-          gap: 10px;
-        }
-
-        .choice-grid-one {
-          grid-template-columns: 1fr;
-        }
-
-        .choice-grid-two {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
-        .choice-grid-three {
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-        }
-
-        .choice-button {
-          position: relative;
-          width: 100%;
-          min-height: 58px;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 14px;
-          padding: 12px 13px;
-          background: rgba(255, 255, 255, 0.065);
-          color: rgba(255, 255, 255, 0.94);
-          text-align: left;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          font-size: 14px;
-          font-weight: 800;
-          line-height: 1.35;
-          cursor: pointer;
-          transition:
-            background 0.15s ease,
-            border-color 0.15s ease,
-            color 0.15s ease,
-            transform 0.15s ease,
-            box-shadow 0.15s ease;
-        }
-
-        .choice-button:active {
-          transform: scale(0.985);
-        }
-
-        .choice-button.active {
-          border: 2px solid #f2d675;
-          background: linear-gradient(
-            135deg,
-            #f1d477,
-            #d4af4f
-          );
-          color: #07111f;
-          box-shadow:
-            0 0 0 3px rgba(214, 181, 91, 0.16),
-            0 8px 20px rgba(0, 0, 0, 0.24);
-        }
-
-        .choice-button.disabled,
-        .choice-button:disabled {
-          border-color: rgba(255, 255, 255, 0.08);
-          background: rgba(255, 255, 255, 0.025);
-          color: rgba(255, 255, 255, 0.3);
-          cursor: not-allowed;
-          box-shadow: none;
-          transform: none;
-        }
-
-        .check-box {
-          width: 23px;
-          height: 23px;
-          flex: none;
-          display: grid;
-          place-items: center;
-          border: 1.5px solid rgba(255, 255, 255, 0.42);
-          border-radius: 7px;
-          background: rgba(0, 0, 0, 0.08);
-          color: transparent;
-          font-size: 14px;
-          font-weight: 1000;
-        }
-
-        .choice-button.active .check-box {
-          border-color: #07111f;
-          background: #07111f;
-          color: #ffffff;
-        }
-
-        .choice-button.disabled .check-box,
-        .choice-button:disabled .check-box {
-          border-color: rgba(255, 255, 255, 0.18);
-          background: transparent;
-        }
-
-        .choice-label {
-          min-width: 0;
-          overflow-wrap: anywhere;
-        }
-
-        .choice-grid-compact .choice-button {
-          min-height: 49px;
-          padding: 9px 10px;
-          font-size: 13px;
-        }
-
-        .choice-grid-compact .check-box {
-          width: 20px;
-          height: 20px;
-          border-radius: 6px;
-          font-size: 12px;
-        }
-
-        .choice-grid-three .wide-option {
-          grid-column: span 2;
-        }
-
-        .passenger-grid .choice-button:last-child {
-          grid-column: span 2;
-        }
-
-        .type-groups {
-          gap: 12px;
-        }
-
-        .type-group {
-          border: 1px solid rgba(214, 181, 91, 0.23);
-          border-radius: 16px;
-          padding: 14px;
-          background: rgba(214, 181, 91, 0.045);
-        }
-
-        .type-group-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 10px;
-          margin-bottom: 11px;
-        }
-
-        .type-group-header p {
-          margin: 0;
-          color: #efd477;
-          font-size: 15px;
-          font-weight: 900;
-        }
-
-        .type-group-header span {
-          color: rgba(255, 255, 255, 0.45);
-          font-size: 10px;
-          font-weight: 800;
-        }
-
-        .disabled-note {
-          margin: 10px 0 0;
-          color: #ffd97c;
-          font-size: 12px;
-          line-height: 1.6;
-          font-weight: 800;
-        }
-
-        .passenger-disabled-note {
-          margin-top: 12px;
-        }
-
-        .alert-box {
-          border: 1px solid rgba(255, 116, 116, 0.72);
-          background: rgba(255, 80, 80, 0.11);
-          border-radius: 14px;
-          padding: 13px 14px;
-          margin-bottom: 16px;
-          font-size: 14px;
-          line-height: 1.6;
-          font-weight: 800;
-        }
-
-        label {
-          display: grid;
-          gap: 8px;
-          margin: 0;
-          color: rgba(255, 255, 255, 0.9);
-          font-size: 14px;
-          font-weight: 900;
-        }
-
-        label > span {
-          color: #efd477;
-        }
-
-        input,
-        select,
-        textarea {
-          width: 100%;
-          border: 1px solid rgba(255, 255, 255, 0.18);
-          border-radius: 14px;
-          background: #f8fafc;
-          color: #111827;
-          padding: 13px 14px;
-          font-size: 16px;
-          line-height: 1.5;
-          outline: none;
-        }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-          border-color: #e2c45f;
-          box-shadow: 0 0 0 3px rgba(214, 181, 91, 0.2);
-        }
-
-        input::placeholder,
-        textarea::placeholder {
-          color: #9ca3af;
-        }
-
-        select {
-          padding-right: 42px;
-          background-image:
-            linear-gradient(
-              45deg,
-              transparent 50%,
-              #111827 50%
-            ),
-            linear-gradient(
-              135deg,
-              #111827 50%,
-              transparent 50%
-            );
-          background-position:
-            calc(100% - 20px) 50%,
-            calc(100% - 14px) 50%;
-          background-size:
-            6px 6px,
-            6px 6px;
-          background-repeat: no-repeat;
-        }
-
-        textarea {
-          min-height: 112px;
-          line-height: 1.7;
-          resize: vertical;
-        }
-
-        .large-textarea {
-          min-height: 170px;
-        }
-
-        .form-stack {
-          margin-top: 22px;
-          gap: 20px;
-        }
-
-        .info-strip {
-          margin-top: 18px;
-          border-left: 3px solid #d6b55b;
-          border-radius: 0 12px 12px 0;
-          padding: 12px 13px;
-          background: rgba(214, 181, 91, 0.08);
-          color: rgba(255, 255, 255, 0.78);
-          font-size: 13px;
-          line-height: 1.65;
-          font-weight: 700;
-        }
-
-        .replacement-area {
-          margin-top: 22px;
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
-          padding-top: 22px;
-        }
-
-        .replacement-title {
-          margin-bottom: 12px;
-        }
-
-        .owned-car-card {
-          display: grid;
-          gap: 15px;
-          border: 1px solid rgba(214, 181, 91, 0.34);
-          border-radius: 17px;
-          padding: 15px;
-          margin-bottom: 13px;
-          background: rgba(255, 255, 255, 0.035);
-        }
-
-        .owned-car-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          color: #efd477;
-        }
-
-        .owned-car-header button {
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 9px;
-          background: transparent;
-          color: rgba(255, 255, 255, 0.8);
-          padding: 6px 10px;
-          cursor: pointer;
-        }
-
-        .add-button {
-          width: 100%;
-          border: 1px dashed rgba(214, 181, 91, 0.65);
-          border-radius: 13px;
-          background: rgba(214, 181, 91, 0.035);
-          color: #efd477;
-          padding: 13px;
-          font-weight: 900;
-          cursor: pointer;
-        }
-
-        .standalone-label {
-          margin-top: 20px;
-        }
-
-        .tip-box {
-          display: grid;
-          gap: 5px;
-          border: 1px solid rgba(214, 181, 91, 0.36);
-          border-radius: 14px;
-                    padding: 13px;
-          margin-bottom: 18px;
-          background: rgba(214, 181, 91, 0.07);
-        }
-
-        .tip-box strong {
-          color: #efd477;
-        }
-
-        .tip-box span {
-          color: rgba(255, 255, 255, 0.72);
-          font-size: 13px;
-          line-height: 1.65;
-        }
-
-        nav {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 11px;
-          margin-top: 2px;
-        }
-
-        .primary-button,
-        .back-button,
-        .toggle-button,
-        .edit-navigation button {
-          width: 100%;
-          min-height: 54px;
-          border-radius: 14px;
-          padding: 14px;
-          font-size: 14px;
-          font-weight: 900;
-          cursor: pointer;
-        }
-
-        .primary-button {
-          border: 1px solid #e8ca67;
-          background: linear-gradient(
-            135deg,
-            #efd477,
-            #d3ad49
-          );
-          color: #07111f;
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .primary-button:disabled {
-          opacity: 0.65;
-          cursor: wait;
-        }
-
-        .back-button {
-          border: 1px solid rgba(255, 255, 255, 0.22);
-          background: rgba(255, 255, 255, 0.035);
-          color: #ffffff;
-        }
-
-        .full-button {
-          margin-top: 11px;
-        }
-
-        .question-anchor {
-          scroll-margin-top: 24px;
-        }
-
-        .diagnosis-submit-card {
-          border: 1px solid rgba(214, 181, 91, 0.52);
-          border-radius: 20px;
-          padding: 22px 18px;
-          background:
-            radial-gradient(
-              circle at 50% 0%,
-              rgba(214, 181, 91, 0.14),
-              transparent 60%
-            ),
-            rgba(214, 181, 91, 0.055);
-          text-align: center;
-        }
-
-        .diagnosis-submit-card > strong {
-          display: block;
-          color: #f0d372;
-          font-size: 18px;
-          line-height: 1.55;
-        }
-
-        .diagnosis-submit-card > p {
-          margin: 10px 0 0;
-          color: rgba(255, 255, 255, 0.66);
-          font-size: 12px;
-          line-height: 1.7;
-        }
-
-        .remaining-count {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 5px;
-          margin-top: 15px;
-          color: rgba(255, 255, 255, 0.78);
-          font-size: 13px;
-        }
-
-        .remaining-count strong {
-          color: #f2d676;
-          font-size: 16px;
-        }
-
-        .rate-limit-error {
-          margin-top: 15px;
-          border: 1px solid rgba(255, 116, 116, 0.64);
-                    border-radius: 13px;
-          padding: 12px 13px;
-          background: rgba(255, 80, 80, 0.1);
-          color: #ffd4d4;
-          font-size: 13px;
-          line-height: 1.65;
-          font-weight: 800;
-          text-align: left;
-        }
-
-        .diagnosis-button {
-          margin-top: 18px;
-          min-height: 62px;
-          font-size: 17px;
-        }
-
-        .loading-box,
-        .error-box,
-        .result-intro,
-        .advice-box,
-        .inventory-section {
-          border: 1px solid rgba(214, 181, 91, 0.4);
-          border-radius: 18px;
-          padding: 18px;
-          background: rgba(214, 181, 91, 0.06);
-        }
-
-        .loading-box > strong,
-        .error-box > strong,
-        .result-intro > strong,
-        .advice-box > strong {
-          color: #efd477;
-        }
-
-        .loading-experience {
-          position: relative;
-          overflow: hidden;
-          padding: 28px 22px;
-          background:
-            radial-gradient(
-              circle at 50% 0%,
-              rgba(214, 181, 91, 0.16),
-              transparent 52%
-            ),
-            rgba(214, 181, 91, 0.055);
-        }
-
-        .loading-experience::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(
-            115deg,
-            transparent 20%,
-            rgba(255, 255, 255, 0.035) 45%,
-            transparent 70%
-          );
-          transform: translateX(-100%);
-          animation: loadingShine 3.2s ease-in-out infinite;
-          pointer-events: none;
-        }
-
-        .loading-orbit {
-          position: relative;
-          width: 92px;
-          height: 92px;
-          margin: 0 auto 22px;
-          border: 1px solid rgba(214, 181, 91, 0.28);
-          border-radius: 50%;
-        }
-
-        .loading-orbit::before,
-        .loading-orbit::after {
-          content: "";
-          position: absolute;
-          border-radius: 50%;
-        }
-
-        .loading-orbit::before {
-          inset: 12px;
-          border: 1px solid rgba(214, 181, 91, 0.42);
-          animation: orbitPulse 1.8s ease-in-out infinite;
-        }
-
-        .loading-orbit::after {
-          inset: 30px;
-          background: #d6b55b;
-          box-shadow:
-            0 0 0 8px rgba(214, 181, 91, 0.08),
-            0 0 28px rgba(214, 181, 91, 0.46);
-          animation: corePulse 1.45s ease-in-out infinite;
-        }
-
-        .loading-orbit span {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 9px;
-          height: 9px;
-          margin: -4.5px;
-          border-radius: 50%;
-          background: #f3d779;
-          transform-origin: 4.5px 4.5px;
-        }
-
-        .loading-orbit span:nth-child(1) {
-          animation: orbitOne 2.6s linear infinite;
-        }
-
-        .loading-orbit span:nth-child(2) {
-          opacity: 0.72;
-          animation: orbitTwo 3.4s linear infinite;
-        }
-
-        .loading-orbit span:nth-child(3) {
-          opacity: 0.46;
-          animation: orbitThree 4.2s linear infinite;
-        }
-
-        .loading-experience > strong {
-          display: block;
-          margin-bottom: 10px;
-          text-align: center;
-          letter-spacing: 0.08em;
-        }
-
-        .loading-box h2 {
-          margin: 0;
-          text-align: center;
-          font-size: 22px;
-          line-height: 1.65;
-        }
-
-        .loading-step-card {
-          display: grid;
-          grid-template-columns: 42px 1fr;
-          align-items: center;
-          gap: 12px;
-          min-height: 88px;
-          margin-top: 24px;
-          border: 1px solid rgba(214, 181, 91, 0.28);
-          border-radius: 15px;
-          padding: 14px;
-          background: rgba(7, 17, 31, 0.42);
-        }
-
-        .loading-step-number {
-          display: grid;
-          place-items: center;
-          width: 42px;
-          height: 42px;
-          border-radius: 50%;
-          background: rgba(214, 181, 91, 0.14);
-          color: #f0d372;
-          font-size: 13px;
-          font-weight: 900;
-        }
-
-        .loading-experience .loading-step-card p {
-          margin: 0;
-          color: rgba(255, 255, 255, 0.92);
-          font-size: 14px;
-          line-height: 1.65;
-          font-weight: 800;
-          animation: loadingTextIn 0.4s ease both;
-        }
-
-        .loading-progress {
-          height: 4px;
-          margin-top: 16px;
-          overflow: hidden;
-          border-radius: 999px;
-          background: rgba(255, 255, 255, 0.08);
-        }
-
-        .loading-progress span {
-          display: block;
-          width: 100%;
-          height: 100%;
-          border-radius: inherit;
-          background: linear-gradient(
-            90deg,
-            #a47f2f,
-            #f2d676
-          );
-          transform-origin: left;
-          animation: loadingProgress 2.4s linear both;
-        }
-
-        .loading-caption {
-          margin: 18px 0 0 !important;
-          text-align: center;
-          color: rgba(255, 255, 255, 0.64) !important;
-          font-size: 13px !important;
-          line-height: 1.8 !important;
-        }
+        .advice-text p { margin: 0 0 0.9em; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.9; color: rgba(255,255,255,.86); font-size: 14px; }
+        .advice-text p:last-child { margin-bottom: 0; }
+        .advice-box > .advice-text, .result-intro > .advice-text { margin-top: 14px; }
+        .source-list { margin-top: 18px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.15); }
+        .source-list a { display: block; margin-top: 8px; padding: 12px; border: 1px solid rgba(214,181,91,.4); border-radius: 10px; color: #efd477; overflow-wrap: anywhere; font-size: 14px; line-height: 1.6; text-underline-offset: 3px; }
+        .source-list small { display: block; color: rgba(255,255,255,.7); font-size: 11px; }
+        .source-list p, .result-intro .result-note { font-size: 12px; line-height: 1.7; color: rgba(255,255,255,.65); }
+        .recommendation-card h3 { overflow-wrap: anywhere; line-height: 1.5; }
+        .shell > .info-strip { margin-bottom: 16px; }
+        a:focus-visible, button:focus-visible { outline: 3px solid #efd477; outline-offset: 3px; }
+        :root { color-scheme: dark; }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; background: #06111f; }
+        button, input, select, textarea { font: inherit; -webkit-appearance: none; appearance: none; }
+        button { -webkit-tap-highlight-color: transparent; }
+        main { min-height: 100vh; background: radial-gradient(circle at 50% 0%, rgba(35,61,92,.34), transparent 34%), #06111f; color: #ffffff; padding: 18px 12px 40px; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif; }
+        .shell { width: min(100%,720px); margin: 0 auto; border: 1px solid rgba(214,181,91,.24); border-radius: 24px; padding: 22px 16px 28px; background: rgba(7,18,33,.94); box-shadow: 0 22px 60px rgba(0,0,0,.28); }
+        .logo { display: block; width: 220px; max-width: 78%; height: auto; margin: 0 auto 13px; border-radius: 12px; }
+        .title-area { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 22px; }
+        .title-area h1 { margin: 0; font-size: clamp(25px,6vw,32px); line-height: 1.2; font-weight: 900; letter-spacing: .01em; }
+        .page-badge { flex: none; border: 1px solid rgba(214,181,91,.58); border-radius: 999px; padding: 5px 9px; color: #efd477; background: rgba(214,181,91,.08); font-size: 12px; font-weight: 900; }
+        .page-stack, .result-stack, .recommendation-list, .form-stack, .type-groups { display: grid; gap: 16px; }
+        .question-card { border: 1px solid rgba(255,255,255,.12); border-radius: 20px; padding: 20px 16px; background: rgba(255,255,255,.035); }
+        .question-header { margin-bottom: 20px; }
+        .question-number { display: inline-flex; align-items: center; min-height: 28px; border-radius: 999px; padding: 5px 11px; margin-bottom: 11px; background: rgba(214,181,91,.14); border: 1px solid rgba(214,181,91,.38); color: #efd477; font-size: 12px; font-weight: 900; }
+        .question-header h2 { margin: 0 0 9px; font-size: clamp(23px,6vw,30px); line-height: 1.38; font-weight: 900; letter-spacing: .01em; }
+        .question-title-line { display: block; text-wrap: balance; }
+        .question-header p, .helper-text { margin: 0; color: rgba(255,255,255,.68); font-size: 13px; line-height: 1.7; font-weight: 650; }
+        .field-block { margin-top: 26px; }
+        .first-field { margin-top: 0; }
+        .field-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 11px; }
+        .field-heading p { margin: 0; color: #f0d372; font-size: 16px; line-height: 1.5; font-weight: 900; }
+        .field-heading span { flex: none; border-radius: 999px; padding: 4px 8px; color: rgba(255,255,255,.72); background: rgba(255,255,255,.07); font-size: 10px; font-weight: 800; }
+        .helper-text { margin: -2px 0 11px; font-size: 12px; }
+        .choice-grid { display: grid; gap: 10px; }
+        .choice-grid-one { grid-template-columns: 1fr; }
+        .choice-grid-two { grid-template-columns: repeat(2,minmax(0,1fr)); }
+        .choice-grid-three { grid-template-columns: repeat(3,minmax(0,1fr)); }
+        .choice-button { position: relative; width: 100%; min-height: 58px; border: 1px solid rgba(255,255,255,.2); border-radius: 14px; padding: 12px 13px; background: rgba(255,255,255,.065); color: rgba(255,255,255,.94); text-align: left; display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 800; line-height: 1.35; cursor: pointer; transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease, box-shadow .15s ease; }
+        .choice-button:active { transform: scale(.985); }
+        .choice-button.active { border: 2px solid #f2d675; background: linear-gradient(135deg,#f1d477,#d4af4f); color: #07111f; box-shadow: 0 0 0 3px rgba(214,181,91,.16), 0 8px 20px rgba(0,0,0,.24); }
+        .choice-button.disabled, .choice-button:disabled { border-color: rgba(255,255,255,.08); background: rgba(255,255,255,.025); color: rgba(255,255,255,.3); cursor: not-allowed; box-shadow: none; transform: none; }
+        .check-box { width: 23px; height: 23px; flex: none; display: grid; place-items: center; border: 1.5px solid rgba(255,255,255,.42); border-radius: 7px; background: rgba(0,0,0,.08); color: transparent; font-size: 14px; font-weight: 1000; }
+        .choice-button.active .check-box { border-color: #07111f; background: #07111f; color: #ffffff; }
+        .choice-button.disabled .check-box, .choice-button:disabled .check-box { border-color: rgba(255,255,255,.18); background: transparent; }
+        .choice-label { min-width: 0; overflow-wrap: anywhere; }
+        .choice-grid-compact .choice-button { min-height: 49px; padding: 9px 10px; font-size: 13px; }
+        .choice-grid-compact .check-box { width: 20px; height: 20px; border-radius: 6px; font-size: 12px; }
+        .choice-grid-three .wide-option { grid-column: span 2; }
+        .passenger-grid .choice-button:last-child { grid-column: span 2; }
+        .type-groups { gap: 12px; }
+        .type-group { border: 1px solid rgba(214,181,91,.23); border-radius: 16px; padding: 14px; background: rgba(214,181,91,.045); }
+        .type-group-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 11px; }
+        .type-group-header p { margin: 0; color: #efd477; font-size: 15px; font-weight: 900; }
+        .type-group-header span { color: rgba(255,255,255,.45); font-size: 10px; font-weight: 800; }
+        .disabled-note { margin: 10px 0 0; color: #ffd97c; font-size: 12px; line-height: 1.6; font-weight: 800; }
+        .passenger-disabled-note { margin-top: 12px; }
+        .alert-box { border: 1px solid rgba(255,116,116,.72); background: rgba(255,80,80,.11); border-radius: 14px; padding: 13px 14px; margin-bottom: 16px; font-size: 14px; line-height: 1.6; font-weight: 800; }
+        label { display: grid; gap: 8px; margin: 0; color: rgba(255,255,255,.9); font-size: 14px; font-weight: 900; }
+        label > span { color: #efd477; }
+        input, select, textarea { width: 100%; border: 1px solid rgba(255,255,255,.18); border-radius: 14px; background: #f8fafc; color: #111827; padding: 13px 14px; font-size: 16px; line-height: 1.5; outline: none; }
+        input:focus, select:focus, textarea:focus { border-color: #e2c45f; box-shadow: 0 0 0 3px rgba(214,181,91,.2); }
+        input::placeholder, textarea::placeholder { color: #9ca3af; }
+        select { padding-right: 42px; background-image: linear-gradient(45deg,transparent 50%,#111827 50%), linear-gradient(135deg,#111827 50%,transparent 50%); background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; }
+        textarea { min-height: 112px; line-height: 1.7; resize: vertical; }
+        .large-textarea { min-height: 170px; }
+        .form-stack { margin-top: 22px; gap: 20px; }
+        .info-strip { margin-top: 18px; border-left: 3px solid #d6b55b; border-radius: 0 12px 12px 0; padding: 12px 13px; background: rgba(214,181,91,.08); color: rgba(255,255,255,.78); font-size: 13px; line-height: 1.65; font-weight: 700; }
+        .replacement-area { margin-top: 22px; border-top: 1px solid rgba(255,255,255,.1); padding-top: 22px; }
+        .replacement-title { margin-bottom: 12px; }
+        .owned-car-card { display: grid; gap: 15px; border: 1px solid rgba(214,181,91,.34); border-radius: 17px; padding: 15px; margin-bottom: 13px; background: rgba(255,255,255,.035); }
+        .owned-car-header { display: flex; justify-content: space-between; align-items: center; color: #efd477; }
+        .owned-car-header button { border: 1px solid rgba(255,255,255,.2); border-radius: 9px; background: transparent; color: rgba(255,255,255,.8); padding: 6px 10px; cursor: pointer; }
+        .add-button { width: 100%; border: 1px dashed rgba(214,181,91,.65); border-radius: 13px; background: rgba(214,181,91,.035); color: #efd477; padding: 13px; font-weight: 900; cursor: pointer; }
+        .standalone-label { margin-top: 20px; }
+        .tip-box { display: grid; gap: 5px; border: 1px solid rgba(214,181,91,.36); border-radius: 14px; padding: 13px; margin-bottom: 18px; background: rgba(214,181,91,.07); }
+        .tip-box strong { color: #efd477; }
+        .tip-box span { color: rgba(255,255,255,.72); font-size: 13px; line-height: 1.65; }
+        nav { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-top: 2px; }
+        .primary-button, .back-button, .toggle-button, .edit-navigation button { width: 100%; min-height: 54px; border-radius: 14px; padding: 14px; font-size: 14px; font-weight: 900; cursor: pointer; }
+        .primary-button { border: 1px solid #e8ca67; background: linear-gradient(135deg,#efd477,#d3ad49); color: #07111f; box-shadow: 0 8px 20px rgba(0,0,0,.2); }
+        .primary-button:disabled { opacity: .65; cursor: wait; }
+        .back-button { border: 1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.035); color: #ffffff; }
+        .full-button { margin-top: 11px; }
+        .question-anchor { scroll-margin-top: 24px; }
+        .diagnosis-submit-card { border: 1px solid rgba(214,181,91,.52); border-radius: 20px; padding: 22px 18px; background: radial-gradient(circle at 50% 0%,rgba(214,181,91,.14),transparent 60%), rgba(214,181,91,.055); text-align: center; }
+        .diagnosis-submit-card > strong { display: block; color: #f0d372; font-size: 18px; line-height: 1.55; }
+        .diagnosis-submit-card > p { margin: 10px 0 0; color: rgba(255,255,255,.66); font-size: 12px; line-height: 1.7; }
+        .remaining-count { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 15px; color: rgba(255,255,255,.78); font-size: 13px; }
+        .remaining-count strong { color: #f2d676; font-size: 16px; }
+        .rate-limit-error { margin-top: 15px; border: 1px solid rgba(255,116,116,.64); border-radius: 13px; padding: 12px 13px; background: rgba(255,80,80,.1); color: #ffd4d4; font-size: 13px; line-height: 1.65; font-weight: 800; text-align: left; }
+        .diagnosis-button { margin-top: 18px; min-height: 62px; font-size: 17px; }
+        .loading-box, .error-box, .result-intro, .advice-box, .inventory-section { border: 1px solid rgba(214,181,91,.4); border-radius: 18px; padding: 18px; background: rgba(214,181,91,.06); }
+        .loading-box > strong, .error-box > strong, .result-intro > strong, .advice-box > strong { color: #efd477; }
+        .loading-experience { position: relative; overflow: hidden; padding: 28px 22px; background: radial-gradient(circle at 50% 0%,rgba(214,181,91,.16),transparent 52%), rgba(214,181,91,.055); }
+        .loading-experience::before { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg,transparent 20%,rgba(255,255,255,.035) 45%,transparent 70%); transform: translateX(-100%); animation: loadingShine 3.2s ease-in-out infinite; pointer-events: none; }
+        .loading-orbit { position: relative; width: 92px; height: 92px; margin: 0 auto 22px; border: 1px solid rgba(214,181,91,.28); border-radius: 50%; }
+        .loading-orbit::before, .loading-orbit::after { content: ""; position: absolute; border-radius: 50%; }
+        .loading-orbit::before { inset: 12px; border: 1px solid rgba(214,181,91,.42); animation: orbitPulse 1.8s ease-in-out infinite; }
+        .loading-orbit::after { inset: 30px; background: #d6b55b; box-shadow: 0 0 0 8px rgba(214,181,91,.08), 0 0 28px rgba(214,181,91,.46); animation: corePulse 1.45s ease-in-out infinite; }
+        .loading-orbit span { position: absolute; top: 50%; left: 50%; width: 9px; height: 9px; margin: -4.5px; border-radius: 50%; background: #f3d779; transform-origin: 4.5px 4.5px; }
+        .loading-orbit span:nth-child(1) { animation: orbitOne 2.6s linear infinite; }
+        .loading-orbit span:nth-child(2) { opacity: .72; animation: orbitTwo 3.4s linear infinite; }
+        .loading-orbit span:nth-child(3) { opacity: .46; animation: orbitThree 4.2s linear infinite; }
+        .loading-experience > strong { display: block; margin-bottom: 10px; text-align: center; letter-spacing: .08em; }
+        .loading-box h2 { margin: 0; text-align: center; font-size: 22px; line-height: 1.65; }
+        .loading-step-card { display: grid; grid-template-columns: 42px 1fr; align-items: center; gap: 12px; min-height: 88px; margin-top: 24px; border: 1px solid rgba(214,181,91,.28); border-radius: 15px; padding: 14px; background: rgba(7,17,31,.42); }
+        .loading-step-number { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: rgba(214,181,91,.14); color: #f0d372; font-size: 13px; font-weight: 900; }
+        .loading-experience .loading-step-card p { margin: 0; color: rgba(255,255,255,.92); font-size: 14px; line-height: 1.65; font-weight: 800; animation: loadingTextIn .4s ease both; }
+        .loading-progress { height: 4px; margin-top: 16px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.08); }
+        .loading-progress span { display: block; width: 100%; height: 100%; border-radius: inherit; background: linear-gradient(90deg,#a47f2f,#f2d676); transform-origin: left; animation: loadingProgress 2.4s linear both; }
+        .loading-caption { margin: 18px 0 0 !important; text-align: center; color: rgba(255,255,255,.64) !important; font-size: 13px !important; line-height: 1.8 !important; }
 
         @keyframes loadingShine {
-          0% {
-            transform: translateX(-100%);
-          }
-
-          55%,
-          100% {
-            transform: translateX(100%);
-          }
+          0% { transform: translateX(-100%); }
+          55%, 100% { transform: translateX(100%); }
         }
-
         @keyframes orbitPulse {
-          0%,
-          100% {
-            transform: scale(0.9);
-            opacity: 0.45;
-          }
-
-          50% {
-            transform: scale(1.05);
-            opacity: 1;
-          }
+          0%, 100% { transform: scale(.9); opacity: .45; }
+          50% { transform: scale(1.05); opacity: 1; }
         }
-
         @keyframes corePulse {
-          0%,
-          100% {
-            transform: scale(0.88);
-          }
-
-          50% {
-            transform: scale(1.08);
-          }
+          0%, 100% { transform: scale(.88); }
+          50% { transform: scale(1.08); }
         }
-
         @keyframes orbitOne {
-          from {
-            transform: rotate(0deg) translateX(44px);
-          }
-
-          to {
-            transform: rotate(360deg) translateX(44px);
-          }
+          from { transform: rotate(0deg) translateX(44px); }
+          to { transform: rotate(360deg) translateX(44px); }
         }
-
         @keyframes orbitTwo {
-          from {
-            transform: rotate(120deg) translateX(34px);
-          }
-
-          to {
-            transform: rotate(480deg) translateX(34px);
-          }
+          from { transform: rotate(120deg) translateX(34px); }
+          to { transform: rotate(480deg) translateX(34px); }
         }
-
         @keyframes orbitThree {
-          from {
-            transform: rotate(240deg) translateX(25px);
-          }
-
-          to {
-            transform: rotate(600deg) translateX(25px);
-          }
+          from { transform: rotate(240deg) translateX(25px); }
+          to { transform: rotate(600deg) translateX(25px); }
         }
-
         @keyframes loadingTextIn {
-          from {
-            opacity: 0;
-            transform: translateY(5px);
-          }
-
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(5px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes loadingProgress {
-          from {
-            transform: scaleX(0);
-          }
-
-          to {
-            transform: scaleX(1);
-          }
+          from { transform: scaleX(0); }
+          to { transform: scaleX(1); }
         }
 
-        .loading-box p,
-        .error-box p,
-        .result-intro p,
-        .advice-box p,
-        .inventory-section p {
-          color: rgba(255, 255, 255, 0.82);
-          font-size: 14px;
-          line-height: 1.75;
-        }
-
-        .result-intro h2,
-        .inventory-section h2 {
-          margin: 5px 0 8px;
-        }
-
-        .recommendation-list {
-          gap: 14px;
-        }
-
-        .recommendation-card {
-          border: 1px solid rgba(255, 255, 255, 0.13);
-          border-radius: 18px;
-          padding: 17px;
-          background: rgba(255, 255, 255, 0.045);
-          box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
-        }
-
-        .recommendation-top {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .rank-badge {
-          background: #d6b55b;
-          color: #07111f;
-          border-radius: 999px;
-          padding: 6px 11px;
-          font-weight: 900;
-        }
-
-        .score-badge {
-          border: 1px solid rgba(214, 181, 91, 0.42);
-          border-radius: 999px;
-          color: #efd477;
-          padding: 6px 10px;
-          font-size: 13px;
-          font-weight: 900;
-        }
-
-        .maker-name {
-          margin: 12px 0 0;
-          color: rgba(255, 255, 255, 0.58);
-          font-size: 12px;
-        }
-
-        .recommendation-card h3 {
-          margin: 3px 0 11px;
-          font-size: 23px;
-        }
-
-        .tag-list {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-        }
-
-        .tag-list span {
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          border-radius: 999px;
-          background: rgba(255, 255, 255, 0.07);
-          padding: 5px 8px;
-          font-size: 11px;
-        }
-
-        .recommendation-card h4 {
-          margin: 13px 0 5px;
-          color: #efd477;
-          font-size: 12px;
-        }
-
-        .recommendation-card > p {
-          margin: 0;
-          color: rgba(255, 255, 255, 0.86);
-          font-size: 14px;
-          line-height: 1.72;
-        }
-
-        .caution-box {
-          margin-top: 13px;
-          border-left: 3px solid rgba(255, 210, 118, 0.8);
-          padding: 9px 11px;
-          background: rgba(255, 210, 118, 0.06);
-        }
-
-        .caution-box strong {
-          color: #ffd276;
-          font-size: 12px;
-        }
-
-        .caution-box p {
-          margin: 4px 0 0;
-          font-size: 13px;
-          line-height: 1.65;
-        }
-
-        .toggle-button {
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          background: rgba(255, 255, 255, 0.045);
-          color: #ffffff;
-        }
-
-        .answer-summary {
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          border-radius: 15px;
-          padding: 14px;
-          background: rgba(0, 0, 0, 0.12);
-          margin-top: 10px;
-        }
-
-        .answer-summary > div {
-          border-bottom: 1px solid rgba(255, 255, 255, 0.09);
-          padding: 8px 0;
-        }
-
-        .answer-summary > div:last-child {
-          border-bottom: 0;
-        }
-
-        .answer-summary strong {
-          color: #efd477;
-          font-size: 12px;
-        }
-
-        .answer-summary p {
-          margin: 4px 0 0;
-          font-size: 13px;
-          line-height: 1.65;
-        }
-
-        .inventory-line-error {
-          margin-top: 14px;
-          color: #ffd1d1;
-          border-color: rgba(255, 116, 116, 0.55);
-          background: rgba(255, 80, 80, 0.09);
-        }
-
-        .empty-box {
-          border: 1px solid rgba(255, 255, 255, 0.14);
-          border-radius: 14px;
-          padding: 15px;
-          background: rgba(7, 17, 31, 0.42);
-        }
-
-        .edit-navigation {
-          display: grid;
-          gap: 10px;
-          border-top: 1px solid rgba(255, 255, 255, 0.13);
-          padding-top: 20px;
-        }
-
-        .edit-navigation > strong {
-          color: #efd477;
-        }
-
-        .edit-navigation > button:not(.back-button) {
-          border: 1px solid rgba(214, 181, 91, 0.48);
-          background: rgba(214, 181, 91, 0.065);
-          color: #ffffff;
-        }
-
-        .small-note {
-          margin: 22px 2px 0;
-          color: rgba(255, 255, 255, 0.46);
-          font-size: 11px;
-          line-height: 1.7;
-        }
+        .loading-box p, .error-box p, .result-intro p, .advice-box p, .inventory-section p { color: rgba(255,255,255,.82); font-size: 14px; line-height: 1.75; }
+        .result-intro h2, .inventory-section h2 { margin: 5px 0 8px; }
+        .recommendation-list { gap: 14px; }
+        .recommendation-card { border: 1px solid rgba(255,255,255,.13); border-radius: 18px; padding: 17px; background: rgba(255,255,255,.045); box-shadow: 0 12px 28px rgba(0,0,0,.16); }
+        .recommendation-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        .rank-badge { background: #d6b55b; color: #07111f; border-radius: 999px; padding: 6px 11px; font-weight: 900; }
+        .score-badge { border: 1px solid rgba(214,181,91,.42); border-radius: 999px; color: #efd477; padding: 6px 10px; font-size: 13px; font-weight: 900; }
+        .maker-name { margin: 12px 0 0; color: rgba(255,255,255,.58); font-size: 12px; }
+        .recommendation-card h3 { margin: 3px 0 11px; font-size: 23px; }
+        .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tag-list span { border: 1px solid rgba(255,255,255,.12); border-radius: 999px; background: rgba(255,255,255,.07); padding: 5px 8px; font-size: 11px; }
+        .recommendation-card h4 { margin: 13px 0 5px; color: #efd477; font-size: 12px; }
+        .recommendation-card > p { margin: 0; color: rgba(255,255,255,.86); font-size: 14px; line-height: 1.72; }
+        .caution-box { margin-top: 13px; border-left: 3px solid rgba(255,210,118,.8); padding: 9px 11px; background: rgba(255,210,118,.06); }
+        .caution-box strong { color: #ffd276; font-size: 12px; }
+        .caution-box p { margin: 4px 0 0; font-size: 13px; line-height: 1.65; }
+        .toggle-button { border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.045); color: #ffffff; }
+        .answer-summary { border: 1px solid rgba(255,255,255,.12); border-radius: 15px; padding: 14px; background: rgba(0,0,0,.12); margin-top: 10px; }
+        .answer-summary > div { border-bottom: 1px solid rgba(255,255,255,.09); padding: 8px 0; }
+        .answer-summary > div:last-child { border-bottom: 0; }
+        .answer-summary strong { color: #efd477; font-size: 12px; }
+        .answer-summary p { margin: 4px 0 0; font-size: 13px; line-height: 1.65; }
+        .inventory-line-error { margin-top: 14px; color: #ffd1d1; border-color: rgba(255,116,116,.55); background: rgba(255,80,80,.09); }
+        .empty-box { border: 1px solid rgba(255,255,255,.14); border-radius: 14px; padding: 15px; background: rgba(7,17,31,.42); }
+        .edit-navigation { display: grid; gap: 10px; border-top: 1px solid rgba(255,255,255,.13); padding-top: 20px; }
+        .edit-navigation > strong { color: #efd477; }
+        .edit-navigation > button:not(.back-button) { border: 1px solid rgba(214,181,91,.48); background: rgba(214,181,91,.065); color: #ffffff; }
+        .small-note { margin: 22px 2px 0; color: rgba(255,255,255,.46); font-size: 11px; line-height: 1.7; }
 
         @media (max-width: 460px) {
-          main {
-            padding: 10px 0 32px;
-          }
-
-          .shell {
-            border-left: 0;
-            border-right: 0;
-            border-radius: 0;
-            padding: 18px 14px 24px;
-          }
-
-          .question-card {
-            padding: 18px 14px;
-          }
-
-          .question-header h2 {
-            font-size: clamp(22px, 7vw, 28px);
-          }
-
-          .loading-experience {
-            margin: 0 14px;
-            padding: 26px 18px;
-          }
-
-          .loading-box h2 {
-            font-size: 20px;
-          }
-
-          .choice-grid-three {
-            grid-template-columns: repeat(
-              3,
-              minmax(0, 1fr)
-            );
-          }
-
-          .choice-grid-three .choice-button {
-            min-height: 46px;
-            padding: 8px 7px;
-            gap: 7px;
-            font-size: 12px;
-          }
-
-          .choice-grid-three .check-box {
-            width: 18px;
-            height: 18px;
-          }
+          main { padding: 10px 0 32px; }
+          .shell { border-left: 0; border-right: 0; border-radius: 0; padding: 18px 14px 24px; }
+          .question-card { padding: 18px 14px; }
+          .question-header h2 { font-size: clamp(22px,7vw,28px); }
+          .loading-experience { margin: 0 14px; padding: 26px 18px; }
+          .loading-box h2 { font-size: 20px; }
+          .choice-grid-three { grid-template-columns: repeat(3,minmax(0,1fr)); }
+          .choice-grid-three .choice-button { min-height: 46px; padding: 8px 7px; gap: 7px; font-size: 12px; }
+          .choice-grid-three .check-box { width: 18px; height: 18px; }
         }
 
         @media (max-width: 360px) {
-          .choice-grid-three {
-            grid-template-columns: repeat(
-              2,
-              minmax(0, 1fr)
-            );
-          }
-
-          .choice-grid-three .wide-option {
-            grid-column: span 2;
-          }
-
-          nav {
-            grid-template-columns: 1fr;
-          }
+          .choice-grid-three { grid-template-columns: repeat(2,minmax(0,1fr)); }
+          .choice-grid-three .wide-option { grid-column: span 2; }
+          nav { grid-template-columns: 1fr; }
         }
       `}</style>
     </main>
