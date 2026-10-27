@@ -1,30 +1,30 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-10-27T05:16:03.652Z",
+  "updatedAt": "2026-10-27T05:16:17.580Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
     "success": false,
     "statusText": "分割更新中",
-    "runId": "20261027051537117-11x3bkj2",
+    "runId": "20261027051611874-v5ex2iu6",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-10-27T05:15:38.707Z",
-    "finishedAt": "2026-10-27T05:16:03.652Z",
-    "durationSeconds": 25,
+    "startedAt": "2026-10-27T05:16:13.631Z",
+    "finishedAt": "2026-10-27T05:16:17.580Z",
+    "durationSeconds": 4,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261027041241669-bjipl3ud",
       "phase": "details",
       "total": 64,
-      "completed": 40,
-      "remaining": 24,
+      "completed": 42,
+      "remaining": 22,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 3,
       "finishedAt": ""
     },
-    "typeFailed": 11,
+    "typeFailed": 9,
     "typeTimeout": 0
   },
   "counts": {
@@ -55,13 +55,13 @@
       }
     ],
     "typeResults": {
-      "success": 53,
-      "failed": 11,
+      "success": 55,
+      "failed": 9,
       "timeout": 0
     },
     "gradeExtraInfo": {
-      "found": 61,
-      "missing": 3
+      "found": 63,
+      "missing": 1
     },
     "savedListFields": {
       "total": 26,
@@ -77,8 +77,8 @@
     },
     "savedDetailFields": {
       "total": 26,
-      "gradeNameFound": 23,
-      "gradeNameMissing": 3,
+      "gradeNameFound": 25,
+      "gradeNameMissing": 1,
       "yearFound": 26,
       "yearMissing": 0,
       "colorFound": 26,
@@ -2749,34 +2749,46 @@
     },
     {
       "stockId": "0902332A30261018W003",
-      "title": "エクストレイル",
+      "title": "エクストレイル モード・プレミア ハイブリッド",
       "description": "エクストレイル",
       "carName": "エクストレイル",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "makerName": "",
-      "seatCapacity": null,
+      "gradeName": "モード・プレミア ハイブリッド",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "makerName": "日産",
+      "seatCapacity": 1,
       "year": "2017年",
       "mileage": "5万K",
-      "color": "2.0",
-      "inspection": "",
+      "color": "ＯＰブリリアントホワイトパール",
+      "inspection": "00330002",
       "displacement": "2017cc",
       "bodyPrice": "188.9万円",
       "totalPrice": "196.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261018/H/70009023323026101800300.jpg?1793074367",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261018/H/70009023323026101800300.jpg?1793078175",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261018W003&ScreenId=SIH_001",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W003&ScreenId=SIH_001",
       "editUrls": [
         "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W003&ScreenId=SIH_001",
         "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W003&ScreenId=SIH_001",
         "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261018W003&StockStatus=00180002&ScreenId=CB101GR"
       ],
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
-      "types": [],
-      "typeKeys": [],
+      "types": [
+        "普通…",
+        "普通車",
+        "SUV",
+        "ステーションワゴン",
+        "EV・HV"
+      ],
+      "typeKeys": [
+        "普通…",
+        "普通車",
+        "SUV",
+        "ステーションワゴン",
+        "EV・HV"
+      ],
       "listResult": {
         "carName": true,
         "gradeName": false,
@@ -2792,41 +2804,68 @@
           "188.9万円"
         ]
       },
-      "updatedAt": null,
-      "detailResult": null,
-      "typeResult": null,
-      "listUpdatedAt": "2026-10-27T04:12:50.316Z"
+      "updatedAt": "2026-10-27T05:16:17.580Z",
+      "typeResult": {
+        "status": 200,
+        "success": true,
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "freshTypes": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W003&ScreenId=SIH_001",
+        "attempts": 1,
+        "makerName": true,
+        "seatCapacity": true,
+        "gradeName": true,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
+      }
     },
     {
       "stockId": "0902332A30261018W004",
-      "title": "ワゴンＲ",
+      "title": "ワゴンＲ ＦＸ－Ｅ",
       "description": "ワゴンＲ",
       "carName": "ワゴンＲ",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "makerName": "",
-      "seatCapacity": null,
+      "gradeName": "ＦＸ－Ｅ",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "makerName": "スズキ",
+      "seatCapacity": 1,
       "year": "2014年",
       "mileage": "5.4万K",
-      "color": "660",
-      "inspection": "",
+      "color": "シルキーシルバーメタリック",
+      "inspection": "00330002",
       "displacement": "2014cc",
       "bodyPrice": "48.3万円",
       "totalPrice": "52.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261018/H/70009023323026101800400.jpg?1793074367",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261018/H/70009023323026101800400.jpg?1793078175",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261018W004&ScreenId=SIH_001",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W004&ScreenId=SIH_001",
       "editUrls": [
         "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W004&ScreenId=SIH_001",
         "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W004&ScreenId=SIH_001",
         "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261018W004&StockStatus=00180002&ScreenId=CB101GR"
       ],
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist",
-      "types": [],
-      "typeKeys": [],
+      "types": [
+        "軽自…",
+        "軽自動車",
+        "スタンダード",
+        "特にこだわりはない"
+      ],
+      "typeKeys": [
+        "軽自…",
+        "軽自動車",
+        "スタンダード",
+        "特にこだわりはない"
+      ],
       "listResult": {
         "carName": true,
         "gradeName": false,
@@ -2842,10 +2881,27 @@
           "48.3万円"
         ]
       },
-      "updatedAt": null,
-      "detailResult": null,
-      "typeResult": null,
-      "listUpdatedAt": "2026-10-27T04:12:50.316Z"
+      "updatedAt": "2026-10-27T05:16:17.580Z",
+      "typeResult": {
+        "status": 200,
+        "success": true,
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "freshTypes": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W004&ScreenId=SIH_001",
+        "attempts": 1,
+        "makerName": true,
+        "seatCapacity": true,
+        "gradeName": true,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
+      }
     },
     {
       "stockId": "0902332A30261014W001",
@@ -4511,104 +4567,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261018W003",
-          "title": "エクストレイル",
-          "description": "エクストレイル",
-          "carName": "エクストレイル",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2017年",
-          "mileage": "5万K",
-          "color": "2.0",
-          "inspection": "",
-          "displacement": "2017cc",
-          "bodyPrice": "188.9万円",
-          "totalPrice": "196.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261018/H/70009023323026101800300.jpg?1793074367",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261018W003&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W003&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261018W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "196.2万円",
-              "188.9万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261018W004",
-          "title": "ワゴンＲ",
-          "description": "ワゴンＲ",
-          "carName": "ワゴンＲ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2014年",
-          "mileage": "5.4万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2014cc",
-          "bodyPrice": "48.3万円",
-          "totalPrice": "52.3万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261018/H/70009023323026101800400.jpg?1793074367",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261018W004&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W004&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W004&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W004&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261018W004&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "52.3万円",
-              "48.3万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261014W001",
           "title": "パジェロミニ",
           "description": "パジェロミニ",
@@ -5686,7 +5644,7 @@
         "attempts": 0
       }
     ],
-    "completed": 40,
+    "completed": 42,
     "total": 64,
     "failed": []
   }
