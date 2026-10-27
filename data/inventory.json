@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-10-27T20:47:41.619Z",
+  "updatedAt": "2026-10-27T20:47:46.997Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261027204730504-y3iob79u",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-10-27T20:47:32.111Z",
-    "finishedAt": "2026-10-27T20:47:41.619Z",
-    "durationSeconds": 10,
+    "finishedAt": "2026-10-27T20:47:46.997Z",
+    "durationSeconds": 15,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261027204603582-82j2gg10",
       "phase": "details",
       "total": 64,
-      "completed": 24,
-      "remaining": 40,
+      "completed": 26,
+      "remaining": 38,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -1670,7 +1670,7 @@
       "displacement": "660cc",
       "bodyPrice": "140.5万円",
       "totalPrice": "144.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260907/H/70009023323026090700100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260907/H/70009023323026090700100.jpg?1793134064",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260907W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260907001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1695,7 +1695,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-10-27T16:04:25.398Z",
+      "updatedAt": "2026-10-27T20:47:46.997Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1715,8 +1715,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-27T20:46:14.606Z"
+      }
     },
     {
       "stockId": "0902332A30260820W001",
@@ -1735,7 +1734,7 @@
       "displacement": "1.5L",
       "bodyPrice": "207.8万円",
       "totalPrice": "212.6万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260820/H/70009023323026082000100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260820/H/70009023323026082000100.jpg?1793134064",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260820W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260820001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1764,7 +1763,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-10-27T16:04:25.398Z",
+      "updatedAt": "2026-10-27T20:47:46.997Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1784,8 +1783,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-27T20:46:14.606Z"
+      }
     },
     {
       "stockId": "0902332A30260902W001",
@@ -4695,78 +4693,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260907W001",
-          "title": "ミニキャブトラック ダンプ",
-          "description": "ミニキャブトラック ダンプ 切替式４ＷＤ 電動式ダンプ 走行距離７０００キロ台 下廻り防錆処理施工済 社外１２インチアルミホイール フォグ エアコン パワーウィンドウ パワステ",
-          "carName": "ミニキャブトラック",
-          "gradeName": "ダンプ",
-          "gradeExtraInfo": "",
-          "classificationName": "DS16T",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2016年",
-          "mileage": "0.8万K",
-          "color": "スペリアホワイト",
-          "inspection": "車検整備付",
-          "displacement": "660cc",
-          "bodyPrice": "140.5万円",
-          "totalPrice": "144.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260907/H/70009023323026090700100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260907W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260907W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260907W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260907W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260907W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260907W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260907001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260820W001",
-          "title": "ヤリス ハイブリッドＺ",
-          "description": "ヤリス ハイブリッドＺ ４ＷＤ モデリスタアルミホイール 新品サマータイヤ組替済み スタットレスアルミ組付属 純正コネクトナビ ＴＶ バックカメラ ＬＥＤヘッドライト／フォグ 前席シートヒーター クルーズコントロール ＨＵＤ",
-          "carName": "ヤリス",
-          "gradeName": "ハイブリッドＺ",
-          "gradeExtraInfo": "",
-          "classificationName": "MXPH15",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2020年",
-          "mileage": "2.7万K",
-          "color": "ブラック",
-          "inspection": "検2027年10月",
-          "displacement": "1.5L",
-          "bodyPrice": "207.8万円",
-          "totalPrice": "212.6万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260820/H/70009023323026082000100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260820W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260820W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260820W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260820W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260820W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260820W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260820001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260902W001",
           "title": "ヤリスクロス ハイブリッドＺ",
           "description": "ヤリスクロス ハイブリッドＺ ４ＷＤ 中古スタットレス純正アルミ組付属 純正コネクトナビ フルセグＴＶ スマホ連携 パノラミックビューモニター 純正エンジンスターター ＥＴＣ２．０ ＬＥＤヘッドライト／フォグ ハーフレザーシート",
@@ -6459,7 +6385,7 @@
         "attempts": 0
       }
     ],
-    "completed": 24,
+    "completed": 26,
     "total": 64,
     "failed": []
   }
