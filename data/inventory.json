@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-10-27T05:16:57.582Z",
+  "updatedAt": "2026-10-27T05:17:01.876Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261027051644209-797xnzzz",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-10-27T05:16:45.819Z",
-    "finishedAt": "2026-10-27T05:16:57.582Z",
-    "durationSeconds": 12,
+    "finishedAt": "2026-10-27T05:17:01.876Z",
+    "durationSeconds": 16,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261027041241669-bjipl3ud",
       "phase": "details",
       "total": 64,
-      "completed": 56,
-      "remaining": 8,
+      "completed": 58,
+      "remaining": 6,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 3,
@@ -4019,7 +4019,7 @@
     },
     {
       "stockId": "0902332A30260709W003",
-      "title": "Ｎ－ＢＯＸカスタム",
+      "title": "Ｎ－ＢＯＸカスタム Ｌ",
       "description": "Ｎ－ＢＯＸカスタム",
       "carName": "Ｎ－ＢＯＸカスタム",
       "gradeName": "Ｌ",
@@ -4029,12 +4029,12 @@
       "seatCapacity": 1,
       "year": "2022年",
       "mileage": "5.3万K",
-      "color": "660",
+      "color": "プレミアムベルベットパープルパール",
       "inspection": "00330002",
       "displacement": "2022cc",
       "bodyPrice": "151.8万円",
       "totalPrice": "155.7万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260709/H/70009023323026070900300.jpg?1793074367",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260709/H/70009023323026070900300.jpg?1793078219",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260709W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -4072,7 +4072,7 @@
           "151.8万円"
         ]
       },
-      "updatedAt": "2026-10-16T12:21:53.367Z",
+      "updatedAt": "2026-10-27T05:17:01.876Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -4082,6 +4082,7 @@
       },
       "detailResult": {
         "success": true,
+        "freshTypes": true,
         "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W003&ScreenId=SIH_001",
         "attempts": 1,
         "makerName": true,
@@ -4091,12 +4092,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-27T04:12:50.316Z"
+      }
     },
     {
       "stockId": "0902332A30260907W002",
-      "title": "レガシィアウトバック",
+      "title": "レガシィアウトバック リミテッド",
       "description": "レガシィアウトバック",
       "carName": "レガシィアウトバック",
       "gradeName": "リミテッド",
@@ -4106,12 +4106,12 @@
       "seatCapacity": 1,
       "year": "2017年",
       "mileage": "8.1万K",
-      "color": "2.5",
+      "color": "クリスタルホワイトパール",
       "inspection": "00330002",
       "displacement": "2017cc",
       "bodyPrice": "169.7万円",
       "totalPrice": "179.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260907/H/70009023323026090700200.jpg?1793074367",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260907/H/70009023323026090700200.jpg?1793078219",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260907W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -4151,7 +4151,7 @@
           "169.7万円"
         ]
       },
-      "updatedAt": "2026-10-16T12:21:53.367Z",
+      "updatedAt": "2026-10-27T05:17:01.876Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -4161,6 +4161,7 @@
       },
       "detailResult": {
         "success": true,
+        "freshTypes": true,
         "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260907W002&ScreenId=SIH_001",
         "attempts": 1,
         "makerName": true,
@@ -4170,8 +4171,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-27T04:12:50.316Z"
+      }
     },
     {
       "stockId": "0902332A30260912W002",
@@ -4680,104 +4680,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260709W003",
-          "title": "Ｎ－ＢＯＸカスタム",
-          "description": "Ｎ－ＢＯＸカスタム",
-          "carName": "Ｎ－ＢＯＸカスタム",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2022年",
-          "mileage": "5.3万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2022cc",
-          "bodyPrice": "151.8万円",
-          "totalPrice": "155.7万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260709/H/70009023323026070900300.jpg?1793074367",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260709W003&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W003&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260709W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260709W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "155.7万円",
-              "151.8万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260907W002",
-          "title": "レガシィアウトバック",
-          "description": "レガシィアウトバック",
-          "carName": "レガシィアウトバック",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2017年",
-          "mileage": "8.1万K",
-          "color": "2.5",
-          "inspection": "",
-          "displacement": "2017cc",
-          "bodyPrice": "169.7万円",
-          "totalPrice": "179.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260907/H/70009023323026090700200.jpg?1793074367",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260907W002&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260907W002&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260907W002&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260907W002&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260907W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "179.2万円",
-              "169.7万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260912W002",
           "title": "ルーミー",
           "description": "ルーミー",
@@ -5071,7 +4973,7 @@
         "attempts": 0
       }
     ],
-    "completed": 56,
+    "completed": 58,
     "total": 64,
     "failed": []
   }
