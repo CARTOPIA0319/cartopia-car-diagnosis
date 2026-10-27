@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-10-27T10:43:58.586Z",
+  "updatedAt": "2026-10-27T10:44:03.852Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261027104342522-fx3omorc",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-10-27T10:43:44.144Z",
-    "finishedAt": "2026-10-27T10:43:58.586Z",
-    "durationSeconds": 14,
+    "finishedAt": "2026-10-27T10:44:03.852Z",
+    "durationSeconds": 20,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261027071808246-7vvvr9wa",
       "phase": "details",
       "total": 64,
-      "completed": 36,
-      "remaining": 28,
+      "completed": 38,
+      "remaining": 26,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2464,7 +2464,7 @@
       "displacement": "1.8L",
       "bodyPrice": "239万円",
       "totalPrice": "248.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260818/H/70009023323026081800100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260818/H/70009023323026081800100.jpg?1793097841",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260818W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260818001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2493,7 +2493,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-10-27T05:15:54.267Z",
+      "updatedAt": "2026-10-27T10:44:03.852Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2513,8 +2513,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-27T07:18:16.458Z"
+      }
     },
     {
       "stockId": "0902332A30260926W001",
@@ -2533,7 +2532,7 @@
       "displacement": "660cc",
       "bodyPrice": "92.7万円",
       "totalPrice": "96.7万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260926/H/70009023323026092600100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260926/H/70009023323026092600100.jpg?1793097841",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260926W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260926001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2558,7 +2557,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-10-27T05:15:59.321Z",
+      "updatedAt": "2026-10-27T10:44:03.852Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2578,8 +2577,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-27T07:18:16.458Z"
+      }
     },
     {
       "stockId": "0902332A30260421W001",
@@ -4683,78 +4681,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260818W001",
-          "title": "レヴォーグ ＳＴＩスポーツ ＥＸ",
-          "description": "レヴォーグ ＳＴＩスポーツ ＥＸ ４ＷＤ アイサイト ＳＴＩ本革シート スバルスターリンクナビ パワーバックドア メモリーパワーシート エンジンスターター ＥＴＣ ４席シートヒーター ＬＥＤヘッドライト／フォグ／デイライト リアフォグ",
-          "carName": "レヴォーグ",
-          "gradeName": "ＳＴＩスポーツ ＥＸ",
-          "gradeExtraInfo": "",
-          "classificationName": "VN5",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2021年",
-          "mileage": "7.5万K",
-          "color": "クリスタルホワイトパール",
-          "inspection": "車検整備付",
-          "displacement": "1.8L",
-          "bodyPrice": "239万円",
-          "totalPrice": "248.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260818/H/70009023323026081800100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260818W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260818W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260818W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260818W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260818W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260818W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260818001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260926W001",
-          "title": "ワゴンＲ ハイブリッドＦＺ",
-          "description": "ワゴンＲ ハイブリッドＦＺ ハイブリッド ４ＷＤ フルセグＴＶ Ｂｌｕｅｔｏｏｔｈ オプションカラー 前２席シートヒーター ヘッドアップディスプレイ ミラーヒーター 衝突軽減装置 アイドリンストップ 車線逸脱防止警報",
-          "carName": "ワゴンＲ",
-          "gradeName": "ハイブリッドＦＺ",
-          "gradeExtraInfo": "",
-          "classificationName": "MH55S",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2017年",
-          "mileage": "6.9万K",
-          "color": "ＯＰスチールシルバーメタリック",
-          "inspection": "車検整備付",
-          "displacement": "660cc",
-          "bodyPrice": "92.7万円",
-          "totalPrice": "96.7万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260926/H/70009023323026092600100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260926W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260926001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260421W001",
           "title": "ヴォクシー ＺＳ 煌ＩＩ",
           "description": "ヴォクシー ＺＳ 煌ＩＩ ４ＷＤ 純正１０インチナビ フリップダウンモニター 純正エンジンスターター ＴＶキット 両側電動スライドドア クルコン フルセグ Ｂｌｕｅｔｏｏｔｈ ＵＳＢポート シートバックテーブル 車線逸脱防止",
@@ -6015,7 +5941,7 @@
         "attempts": 0
       }
     ],
-    "completed": 36,
+    "completed": 38,
     "total": 64,
     "failed": []
   }
