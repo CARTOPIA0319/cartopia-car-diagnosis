@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-10-27T05:16:30.726Z",
+  "updatedAt": "2026-10-27T05:16:35.916Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,22 +9,22 @@
     "runId": "20261027051611874-v5ex2iu6",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-10-27T05:16:13.631Z",
-    "finishedAt": "2026-10-27T05:16:30.726Z",
-    "durationSeconds": 17,
+    "finishedAt": "2026-10-27T05:16:35.916Z",
+    "durationSeconds": 22,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261027041241669-bjipl3ud",
       "phase": "details",
       "total": 64,
-      "completed": 48,
-      "remaining": 16,
+      "completed": 50,
+      "remaining": 14,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 3,
       "finishedAt": ""
     },
-    "typeFailed": 4,
+    "typeFailed": 3,
     "typeTimeout": 0
   },
   "counts": {
@@ -55,8 +55,8 @@
       }
     ],
     "typeResults": {
-      "success": 60,
-      "failed": 4,
+      "success": 61,
+      "failed": 3,
       "timeout": 0
     },
     "gradeExtraInfo": {
@@ -3385,7 +3385,7 @@
     },
     {
       "stockId": "0902332A30260930W001",
-      "title": "ハイエースバン",
+      "title": "ハイエースバン スーパーＧＬ ダークプライムＩＩ",
       "description": "ハイエースバン",
       "carName": "ハイエースバン",
       "gradeName": "スーパーＧＬ ダークプライムＩＩ",
@@ -3395,12 +3395,12 @@
       "seatCapacity": 1,
       "year": "2022年",
       "mileage": "6.9万K",
-      "color": "2.8",
+      "color": "ＯＰホワイトパールクリスタルシャイン",
       "inspection": "00330002",
       "displacement": "2022cc",
       "bodyPrice": "397.1万円",
       "totalPrice": "402.7万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260930/H/70009023323026093000100.jpg?1793074367",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260930/H/70009023323026093000100.jpg?1793078192",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260930W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3442,7 +3442,7 @@
           "397.1万円"
         ]
       },
-      "updatedAt": "2026-10-16T12:21:53.367Z",
+      "updatedAt": "2026-10-27T05:16:35.916Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3452,6 +3452,7 @@
       },
       "detailResult": {
         "success": true,
+        "freshTypes": true,
         "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260930W001&ScreenId=SIH_001",
         "attempts": 1,
         "makerName": true,
@@ -3461,12 +3462,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-27T04:12:50.316Z"
+      }
     },
     {
       "stockId": "0902332A30261013W003",
-      "title": "セレナ",
+      "title": "セレナ ハイウェイスター Ｖセレクション",
       "description": "セレナ",
       "carName": "セレナ",
       "gradeName": "ハイウェイスター Ｖセレクション",
@@ -3476,12 +3476,12 @@
       "seatCapacity": 1,
       "year": "2017年",
       "mileage": "8.3万K",
-      "color": "2.0",
+      "color": "ＯＰカシミヤグレージュ（ＴＰＭ）／インペリアルアンバー（Ｐ）",
       "inspection": "00330002",
       "displacement": "2017cc",
       "bodyPrice": "169.6万円",
       "totalPrice": "178.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261013/H/70009023323026101300300.jpg?1793074367",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261013/H/70009023323026101300300.jpg?1793078192",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261013W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3492,8 +3492,20 @@
         "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261013W003&ScreenId=SIH_001",
         "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261013W003&StockStatus=00180002&ScreenId=CB101GR"
       ],
-      "types": [],
-      "typeKeys": [],
+      "types": [
+        "普通…",
+        "普通車",
+        "ミニバン",
+        "ステーションワゴン",
+        "EV・HV"
+      ],
+      "typeKeys": [
+        "普通…",
+        "普通車",
+        "ミニバン",
+        "ステーションワゴン",
+        "EV・HV"
+      ],
       "listResult": {
         "carName": true,
         "gradeName": false,
@@ -3509,18 +3521,19 @@
           "169.6万円"
         ]
       },
-      "updatedAt": "2026-10-16T12:21:53.367Z",
+      "updatedAt": "2026-10-27T05:16:35.916Z",
       "typeResult": {
         "status": 200,
-        "success": false,
+        "success": true,
         "containsFatalError": false,
         "timeout": false,
         "error": ""
       },
       "detailResult": {
         "success": true,
+        "freshTypes": true,
         "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261013W003&ScreenId=SIH_001",
-        "attempts": 4,
+        "attempts": 1,
         "makerName": true,
         "seatCapacity": true,
         "gradeName": true,
@@ -3528,8 +3541,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-27T04:12:50.316Z"
+      }
     },
     {
       "stockId": "0902332A30261016W001",
@@ -4631,104 +4643,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260930W001",
-          "title": "ハイエースバン",
-          "description": "ハイエースバン",
-          "carName": "ハイエースバン",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2022年",
-          "mileage": "6.9万K",
-          "color": "2.8",
-          "inspection": "",
-          "displacement": "2022cc",
-          "bodyPrice": "397.1万円",
-          "totalPrice": "402.7万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260930/H/70009023323026093000100.jpg?1793074367",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260930W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260930W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260930W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260930W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260930W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "402.7万円",
-              "397.1万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261013W003",
-          "title": "セレナ",
-          "description": "セレナ",
-          "carName": "セレナ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2017年",
-          "mileage": "8.3万K",
-          "color": "2.0",
-          "inspection": "",
-          "displacement": "2017cc",
-          "bodyPrice": "169.6万円",
-          "totalPrice": "178.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261013/H/70009023323026101300300.jpg?1793074367",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261013W003&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261013W003&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261013W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261013W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261013W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "178.2万円",
-              "169.6万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261016W001",
           "title": "Ｎ－ＢＯＸカスタム",
           "description": "Ｎ－ＢＯＸカスタム",
@@ -5414,7 +5328,7 @@
         "attempts": 0
       }
     ],
-    "completed": 48,
+    "completed": 50,
     "total": 64,
     "failed": []
   }
