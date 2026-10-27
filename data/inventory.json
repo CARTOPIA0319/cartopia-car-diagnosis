@@ -1,24 +1,24 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-10-27T16:05:12.444Z",
+  "updatedAt": "2026-10-27T16:05:26.907Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
     "success": false,
     "statusText": "分割更新中",
-    "runId": "20261027160444973-3w7a96an",
+    "runId": "20261027160521264-6y0fr5b9",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-10-27T16:04:47.804Z",
-    "finishedAt": "2026-10-27T16:05:12.444Z",
-    "durationSeconds": 25,
+    "startedAt": "2026-10-27T16:05:23.159Z",
+    "finishedAt": "2026-10-27T16:05:26.907Z",
+    "durationSeconds": 4,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261027132729055-3w40bhfg",
       "phase": "details",
       "total": 64,
-      "completed": 40,
-      "remaining": 24,
+      "completed": 42,
+      "remaining": 22,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2726,7 +2726,7 @@
     },
     {
       "stockId": "0902332A30261022W001",
-      "title": "プリウス",
+      "title": "プリウス Ａ",
       "description": "プリウス",
       "carName": "プリウス",
       "gradeName": "Ａ",
@@ -2736,12 +2736,12 @@
       "seatCapacity": 1,
       "year": "2016年",
       "mileage": "8.5万K",
-      "color": "1.8",
+      "color": "アティチュードブラックマイカ",
       "inspection": "2027",
       "displacement": "2016cc",
       "bodyPrice": "162.8万円",
       "totalPrice": "167.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261022/H/70009023323026102200100.jpg?1793107658",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261022/H/70009023323026102200100.jpg?1793117124",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261022W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2785,7 +2785,7 @@
           "162.8万円"
         ]
       },
-      "updatedAt": "2026-10-27T10:44:21.968Z",
+      "updatedAt": "2026-10-27T16:05:26.907Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2805,12 +2805,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-27T13:27:39.069Z"
+      }
     },
     {
       "stockId": "0902332A30261018W003",
-      "title": "エクストレイル",
+      "title": "エクストレイル モード・プレミア ハイブリッド",
       "description": "エクストレイル",
       "carName": "エクストレイル",
       "gradeName": "モード・プレミア ハイブリッド",
@@ -2820,12 +2819,12 @@
       "seatCapacity": 1,
       "year": "2017年",
       "mileage": "5万K",
-      "color": "2.0",
+      "color": "ＯＰブリリアントホワイトパール",
       "inspection": "00330002",
       "displacement": "2017cc",
       "bodyPrice": "188.9万円",
       "totalPrice": "196.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261018/H/70009023323026101800300.jpg?1793107658",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261018/H/70009023323026101800300.jpg?1793117124",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261018W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2865,7 +2864,7 @@
           "188.9万円"
         ]
       },
-      "updatedAt": "2026-10-27T10:44:21.968Z",
+      "updatedAt": "2026-10-27T16:05:26.907Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2885,8 +2884,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-27T13:27:39.069Z"
+      }
     },
     {
       "stockId": "0902332A30261018W004",
@@ -4679,104 +4677,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261022W001",
-          "title": "プリウス",
-          "description": "プリウス",
-          "carName": "プリウス",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2016年",
-          "mileage": "8.5万K",
-          "color": "1.8",
-          "inspection": "",
-          "displacement": "2016cc",
-          "bodyPrice": "162.8万円",
-          "totalPrice": "167.3万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261022/H/70009023323026102200100.jpg?1793107658",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261022W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261022W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261022W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261022W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261022W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "167.3万円",
-              "162.8万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261018W003",
-          "title": "エクストレイル",
-          "description": "エクストレイル",
-          "carName": "エクストレイル",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2017年",
-          "mileage": "5万K",
-          "color": "2.0",
-          "inspection": "",
-          "displacement": "2017cc",
-          "bodyPrice": "188.9万円",
-          "totalPrice": "196.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261018/H/70009023323026101800300.jpg?1793107658",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261018W003&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W003&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261018W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "196.2万円",
-              "188.9万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261018W004",
           "title": "ワゴンＲ",
           "description": "ワゴンＲ",
@@ -5854,7 +5754,7 @@
         "attempts": 0
       }
     ],
-    "completed": 40,
+    "completed": 42,
     "total": 64,
     "failed": []
   }
