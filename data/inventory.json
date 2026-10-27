@@ -9,8 +9,8 @@
     "runId": "20261027041241669-bjipl3ud",
     "trigger": "URL手動更新",
     "startedAt": "2026-10-27T04:12:43.464Z",
-    "finishedAt": "2026-10-27T04:12:47.275Z",
-    "durationSeconds": 4,
+    "finishedAt": "2026-10-27T04:12:48.608Z",
+    "durationSeconds": 5,
     "error": "",
     "timeout": false,
     "progress": {
@@ -21,7 +21,7 @@
       "remaining": 0,
       "failed": 0,
       "failedStockIds": [],
-      "savedPagesRead": 1,
+      "savedPagesRead": 2,
       "finishedAt": ""
     },
     "typeFailed": 10,
@@ -40,6 +40,12 @@
         "count": 25,
         "newCount": 25,
         "ids": "0902332A30260709W003,0902332A30260803W001,0902332A30260809W003,0902332A30260819W003,0902332A30260824W004,0902332A30260824W005,0902332A30260907W002,0902332A30260912W002,0902332A30260930W001,0902332A30261001W002,0902332A30261001W003,0902332A30261002W001,0902332A30261005W001,0902332A30261013W001,0902332A30261013W002,0902332A30261013W003,0902332A30261014W001,0902332A30261015W003,0902332A30261016W001,0902332A30261016W002,0902332A30261018W001,0902332A30261018W003,0902332A30261018W004,0902332A30261020W001,0902332A30261022W001"
+      },
+      {
+        "pageUrl": "https://motorgate.jp/stock/savelist/index/2",
+        "count": 1,
+        "newCount": 1,
+        "ids": "0902332A30260310W001"
       }
     ],
     "typeResults": {
@@ -4362,13 +4368,19 @@
     "phase": "listing",
     "publicLoaded": true,
     "publicCount": 38,
-    "nextSavedPage": 1,
+    "nextSavedPage": 2,
     "pages": [
       {
         "pageUrl": "https://motorgate.jp/stock/savelist",
         "count": 25,
         "newCount": 25,
         "ids": "0902332A30260709W003,0902332A30260803W001,0902332A30260809W003,0902332A30260819W003,0902332A30260824W004,0902332A30260824W005,0902332A30260907W002,0902332A30260912W002,0902332A30260930W001,0902332A30261001W002,0902332A30261001W003,0902332A30261002W001,0902332A30261005W001,0902332A30261013W001,0902332A30261013W002,0902332A30261013W003,0902332A30261014W001,0902332A30261015W003,0902332A30261016W001,0902332A30261016W002,0902332A30261018W001,0902332A30261018W003,0902332A30261018W004,0902332A30261020W001,0902332A30261022W001"
+      },
+      {
+        "pageUrl": "https://motorgate.jp/stock/savelist/index/2",
+        "count": 1,
+        "newCount": 1,
+        "ids": "0902332A30260310W001"
       }
     ],
     "listed": [
@@ -6773,6 +6785,52 @@
           "priceCandidates": [
             "72.3万円",
             "68.2万円"
+          ]
+        }
+      },
+      {
+        "stockId": "0902332A30260310W001",
+        "title": "ムーヴ",
+        "description": "ムーヴ",
+        "carName": "ムーヴ",
+        "gradeName": "",
+        "gradeExtraInfo": "",
+        "classificationName": "",
+        "makerName": "",
+        "seatCapacity": null,
+        "year": "2015年",
+        "mileage": "19.7万K",
+        "color": "660",
+        "inspection": "",
+        "displacement": "2015cc",
+        "bodyPrice": "40.9万円",
+        "totalPrice": "44.3万円",
+        "imageUrl": "https://picture1.goo-net.com/7000902332/30260310/H/70009023323026031000100.jpg?1793074368",
+        "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260310W001&ScreenId=SIH_001",
+        "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260310W001&ScreenId=SIH_001",
+        "editUrls": [
+          "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260310W001&ScreenId=SIH_001",
+          "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260310W001&ScreenId=SIH_001",
+          "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260310W001&StockStatus=00180002&ScreenId=CB101GR"
+        ],
+        "gooUrl": "",
+        "sourceStatus": "一時保存",
+        "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
+        "types": [],
+        "typeKeys": [],
+        "listResult": {
+          "carName": true,
+          "gradeName": false,
+          "year": true,
+          "displacement": true,
+          "color": true,
+          "mileage": true,
+          "bodyPrice": true,
+          "totalPrice": true,
+          "imageUrl": true,
+          "priceCandidates": [
+            "44.3万円",
+            "40.9万円"
           ]
         }
       }
