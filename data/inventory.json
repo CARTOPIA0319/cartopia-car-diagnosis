@@ -1,28 +1,28 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-10-28T13:14:32.983Z",
+  "updatedAt": "2026-10-28T13:14:37.488Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
-    "success": false,
-    "statusText": "分割更新中",
+    "success": true,
+    "statusText": "全件更新完了",
     "runId": "20261028131414242-m4lbtn09",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-10-28T13:14:16.111Z",
-    "finishedAt": "2026-10-28T13:14:32.983Z",
-    "durationSeconds": 17,
+    "finishedAt": "2026-10-28T13:14:37.488Z",
+    "durationSeconds": 21,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261028131102912-bd7g8zm6",
-      "phase": "details",
+      "phase": "complete",
       "total": 60,
-      "completed": 58,
-      "remaining": 2,
+      "completed": 60,
+      "remaining": 0,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
-      "finishedAt": ""
+      "finishedAt": "2026-10-28T13:14:37.488Z"
     },
     "typeFailed": 1,
     "typeTimeout": 0
@@ -4190,7 +4190,7 @@
     },
     {
       "stockId": "0902332A30260824W005",
-      "title": "Ｎ－ＢＯＸカスタム",
+      "title": "Ｎ－ＢＯＸカスタム Ｇ・Ｌパッケージ",
       "description": "Ｎ－ＢＯＸカスタム",
       "carName": "Ｎ－ＢＯＸカスタム",
       "gradeName": "Ｇ・Ｌパッケージ",
@@ -4200,7 +4200,7 @@
       "seatCapacity": 1,
       "year": "2013年",
       "mileage": "5.7万K",
-      "color": "660",
+      "color": "クリスタルブラックパール",
       "inspection": "00330002",
       "displacement": "2013cc",
       "bodyPrice": "68.2万円",
@@ -4243,7 +4243,7 @@
           "68.2万円"
         ]
       },
-      "updatedAt": "2026-10-28T05:58:13.558Z",
+      "updatedAt": "2026-10-28T13:14:37.488Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -4263,12 +4263,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-28T13:11:14.552Z"
+      }
     },
     {
       "stockId": "0902332A30260310W001",
-      "title": "ムーヴ",
+      "title": "ムーヴ カスタム ＲＳ ハイパーＳＡ",
       "description": "ムーヴ",
       "carName": "ムーヴ",
       "gradeName": "カスタム ＲＳ ハイパーＳＡ",
@@ -4278,12 +4277,12 @@
       "seatCapacity": 1,
       "year": "2015年",
       "mileage": "19.7万K",
-      "color": "660",
+      "color": "ナイトシャドーパープルクリスタルメタリック",
       "inspection": "2028",
       "displacement": "2015cc",
       "bodyPrice": "40.9万円",
       "totalPrice": "44.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260310/H/70009023323026031000100.jpg?1793193074",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260310/H/70009023323026031000100.jpg?1793193275",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260310W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -4323,7 +4322,7 @@
           "40.9万円"
         ]
       },
-      "updatedAt": "2026-10-28T05:58:13.559Z",
+      "updatedAt": "2026-10-28T13:14:37.488Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -4343,8 +4342,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-28T13:11:14.552Z"
+      }
     }
   ],
   "lastFailedAt": "2026-10-27T00:07:43.240Z",
@@ -4353,7 +4351,7 @@
     "version": 2,
     "cycleId": "20261028131102912-bd7g8zm6",
     "startedAt": "2026-10-28T13:11:04.617Z",
-    "phase": "details",
+    "phase": "complete",
     "publicLoaded": true,
     "publicCount": 37,
     "nextSavedPage": 2,
@@ -4372,108 +4370,10 @@
       }
     ],
     "listed": [],
-    "queue": [
-      {
-        "vehicle": {
-          "stockId": "0902332A30260824W005",
-          "title": "Ｎ－ＢＯＸカスタム",
-          "description": "Ｎ－ＢＯＸカスタム",
-          "carName": "Ｎ－ＢＯＸカスタム",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2013年",
-          "mileage": "5.7万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2013cc",
-          "bodyPrice": "68.2万円",
-          "totalPrice": "72.3万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026082400500.jpg?1793193074",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260824W005&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260824W005&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260824W005&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260824W005&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260824W005&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "72.3万円",
-              "68.2万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260310W001",
-          "title": "ムーヴ",
-          "description": "ムーヴ",
-          "carName": "ムーヴ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2015年",
-          "mileage": "19.7万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2015cc",
-          "bodyPrice": "40.9万円",
-          "totalPrice": "44.3万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260310/H/70009023323026031000100.jpg?1793193074",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260310W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260310W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260310W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260310W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260310W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "44.3万円",
-              "40.9万円"
-            ]
-          }
-        },
-        "attempts": 0
-      }
-    ],
-    "completed": 58,
+    "queue": [],
+    "completed": 60,
     "total": 60,
-    "failed": []
+    "failed": [],
+    "finishedAt": "2026-10-28T13:14:37.488Z"
   }
 }
