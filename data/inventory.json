@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-10-28T05:57:34.457Z",
+  "updatedAt": "2026-10-28T05:57:39.206Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261028055729256-kr7v70mp",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-10-28T05:57:31.020Z",
-    "finishedAt": "2026-10-28T05:57:34.457Z",
-    "durationSeconds": 3,
+    "finishedAt": "2026-10-28T05:57:39.206Z",
+    "durationSeconds": 8,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261028055409605-wcsfxjem",
       "phase": "details",
       "total": 64,
-      "completed": 52,
-      "remaining": 12,
+      "completed": 54,
+      "remaining": 10,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -3682,7 +3682,7 @@
     },
     {
       "stockId": "0902332A30261018W001",
-      "title": "Ｎ－ＢＯＸ",
+      "title": "Ｎ－ＢＯＸ Ｇホンダセンシング",
       "description": "Ｎ－ＢＯＸ",
       "carName": "Ｎ－ＢＯＸ",
       "gradeName": "Ｇホンダセンシング",
@@ -3692,7 +3692,7 @@
       "seatCapacity": 1,
       "year": "2019年",
       "mileage": "6.4万K",
-      "color": "660",
+      "color": "ＯＰプレミアムイエローパール",
       "inspection": "2028",
       "displacement": "2019cc",
       "bodyPrice": "101.3万円",
@@ -3735,7 +3735,7 @@
           "101.3万円"
         ]
       },
-      "updatedAt": "2026-10-28T00:08:56.852Z",
+      "updatedAt": "2026-10-28T05:57:39.206Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3755,12 +3755,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-28T05:54:18.413Z"
+      }
     },
     {
       "stockId": "0902332A30261002W001",
-      "title": "ハスラー",
+      "title": "ハスラー Ｊスタイル",
       "description": "ハスラー",
       "carName": "ハスラー",
       "gradeName": "Ｊスタイル",
@@ -3770,12 +3769,12 @@
       "seatCapacity": 1,
       "year": "2022年",
       "mileage": "2.4万K",
-      "color": "660",
+      "color": "ベージュ",
       "inspection": "2027",
       "displacement": "2022cc",
       "bodyPrice": "178.7万円",
       "totalPrice": "181.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261002/H/70009023323026100200100.jpg?1793166858",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261002/H/70009023323026100200100.jpg?1793167056",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261002W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3815,7 +3814,7 @@
           "178.7万円"
         ]
       },
-      "updatedAt": "2026-10-28T00:08:56.852Z",
+      "updatedAt": "2026-10-28T05:57:39.206Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3835,8 +3834,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-28T05:54:18.413Z"
+      }
     },
     {
       "stockId": "0902332A30261005W001",
@@ -4667,104 +4665,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261018W001",
-          "title": "Ｎ－ＢＯＸ",
-          "description": "Ｎ－ＢＯＸ",
-          "carName": "Ｎ－ＢＯＸ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2019年",
-          "mileage": "6.4万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2019cc",
-          "bodyPrice": "101.3万円",
-          "totalPrice": "104.3万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026101800100.jpg?1793166858",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261018W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261018W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "104.3万円",
-              "101.3万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261002W001",
-          "title": "ハスラー",
-          "description": "ハスラー",
-          "carName": "ハスラー",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2022年",
-          "mileage": "2.4万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2022cc",
-          "bodyPrice": "178.7万円",
-          "totalPrice": "181.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261002/H/70009023323026100200100.jpg?1793166858",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261002W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261002W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261002W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261002W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261002W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "181.2万円",
-              "178.7万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261005W001",
           "title": "ハイエースバン",
           "description": "ハイエースバン",
@@ -5254,7 +5154,7 @@
         "attempts": 0
       }
     ],
-    "completed": 52,
+    "completed": 54,
     "total": 64,
     "failed": []
   }
