@@ -1,7 +1,9 @@
 export const runtime = "nodejs";
 export const maxDuration = 300;
 
+// 画面側の保存・復元との互換性を維持する。
 const VERSION = "perfect-diagnosis-v2";
+const REVISION = "openai-request-compat-v1";
 const MODEL = "gpt-4.1-mini";
 
 const TYPES = [
@@ -108,9 +110,7 @@ function sourceUrl(value) {
         url.hostname.endsWith(`.${domain}`)
     );
 
-    if (!allowed) {
-      return "";
-    }
+    if (!allowed) return "";
 
     url.hash = "";
     return url.href;
@@ -142,6 +142,165 @@ function readOutput(data) {
   }
 }
 
+// APIキーなどがログに混ざらないようにする。
+function safeDetail(value) {
+  let text = str(value);
+  const key = process.env.OPENAI_API_KEY;
+
+  if (key) {
+    text = text.split(key).join("[REDACTED]");
+  }
+
+  return text
+    .replace(/Bearer\s+\S+/gi, "Bearer [REDACTED]")
+    .replace(/sk-[A-Za-z0-9_-]+/g, "[REDACTED]")
+    .slice(0, 1500);
+}
+
+function errorDetails(error) {
+  return {
+    message: safeDetail(error?.message),
+    httpStatus: error?.httpStatus || null,
+    openaiType: safeDetail(error?.openaiType),
+    openaiCode: safeDetail(error?.openaiCode),
+    openaiParam: safeDetail(error?.openaiParam),
+    openaiMessage: safeDetail(error?.openaiMessage),
+    requestId: safeDetail(error?.requestId),
+  };
+}
+
+async function sendOpenAI(body, signal) {
+  const response = await fetch(
+    "https://api.openai.com/v1/responses",
+    {
+      method: "POST",
+      headers: {
+        Authorization:
+          `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+      signal,
+    }
+  );
+
+  const raw = await response.text();
+  let data = null;
+
+  try {
+    data = JSON.parse(raw);
+  } catch {
+    // JSONを読み取れなくてもHTTP状態は保持する。
+  }
+
+  if (!response.ok) {
+    const detail = data?.error || {};
+    const error = new Error(
+      `OPENAI_HTTP_${response.status}`
+    );
+
+    error.httpStatus = response.status;
+    error.openaiType = str(detail.type);
+    error.openaiCode = str(detail.code);
+    error.openaiParam = str(detail.param);
+    error.openaiMessage =
+      str(detail.message) ||
+      "JSON形式のエラー詳細がありません。";
+    error.requestId =
+      response.headers.get("x-request-id") || "";
+
+    throw error;
+  }
+
+  if (
+    !data ||
+    typeof data !== "object" ||
+    Array.isArray(data)
+  ) {
+    throw new Error("OPENAI_RESPONSE_INVALID");
+  }
+
+  return data;
+}
+
+// 検索設定の非対応が400の本文で明示された場合だけ変更する。
+// 認証・残高・利用上限・通信エラーでは再送しない。
+function adaptSearchRequest(body, error) {
+  if (error.httpStatus !== 400) return "";
+
+  const param = str(error.openaiParam).toLowerCase();
+  const message = str(error.openaiMessage).toLowerCase();
+  const code = str(error.openaiCode).toLowerCase();
+
+  const unsupported =
+    /not supported|unsupported|unknown parameter|unrecognized|not allowed|only supported/.test(
+      message
+    ) ||
+    /unsupported|unknown_parameter/.test(code);
+
+  if (!unsupported) return "";
+
+  const tool = body.tools?.[0];
+  if (!tool) return "";
+
+  if (
+    (
+      /filters|allowed_domains/.test(param) ||
+      /filters|allowed_domains/.test(message)
+    ) &&
+    tool.filters
+  ) {
+    delete tool.filters;
+
+    // 出力後の公式ドメイン検証は引き続き行う。
+    return "REMOVE_UNSUPPORTED_SEARCH_FILTER";
+  }
+
+  if (
+    (
+      param.startsWith("include") ||
+      /web_search_call\.action\.sources/.test(message)
+    ) &&
+    body.include
+  ) {
+    delete body.include;
+
+    // 出力のurl_citationを使って参照資料を検証する。
+    return "USE_CITATIONS_FOR_SOURCES";
+  }
+
+  if (
+    (
+      param.startsWith("tool_choice") ||
+      /tool_choice/.test(message)
+    ) &&
+    body.tool_choice !== "auto"
+  ) {
+    body.tool_choice = "auto";
+
+    // autoでも検索実行と公式資料の根拠が必須。
+    return "USE_AUTO_AND_REQUIRE_SEARCH_EVIDENCE";
+  }
+
+  if (
+    tool.type === "web_search" &&
+    /web_search/.test(message) &&
+    (
+      /^tools(?:\[0\]|\.0)?(?:\.type)?$/.test(param) ||
+      /tool|web_search/.test(message)
+    )
+  ) {
+    tool.type = "web_search_preview";
+
+    // previewではfiltersを指定しない。
+    delete tool.filters;
+
+    return "USE_LEGACY_SEARCH_TOOL";
+  }
+
+  return "";
+}
+
 async function ask(
   instructions,
   payload,
@@ -157,6 +316,9 @@ async function ask(
   };
 
   if (search) {
+    body.instructions +=
+      `\n検索では次の公式ドメインだけを根拠に使うこと：${DOMAINS.join(", ")}。必ずweb検索を実行すること。`;
+
     body.tools = [
       {
         type: "web_search",
@@ -178,27 +340,41 @@ async function ask(
     };
   }
 
-  const response = await fetch(
-    "https://api.openai.com/v1/responses",
-    {
-      method: "POST",
-      headers: {
-        Authorization:
-          `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-      signal,
-    }
-  );
+  // 検索設定の調整は最大4回。成功したリクエストは繰り返さない。
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    try {
+      return await sendOpenAI(body, signal);
+    } catch (error) {
+      if (
+        !search ||
+        signal.aborted ||
+        attempt === 4
+      ) {
+        throw error;
+      }
 
-  if (!response.ok) {
-    throw new Error(
-      `OPENAI_HTTP_${response.status}`
-    );
+      const adjustment = adaptSearchRequest(
+        body,
+        error
+      );
+
+      if (!adjustment) throw error;
+
+      console.warn(
+        "DIAGNOSE_API_COMPATIBILITY",
+        {
+          version: VERSION,
+          revision: REVISION,
+          model: MODEL,
+          attempt: attempt + 1,
+          adjustment,
+          ...errorDetails(error),
+        }
+      );
+    }
   }
 
-  return response.json();
+  throw new Error("OPENAI_RETRY_EXHAUSTED");
 }
 
 function sourcesFrom(data) {
@@ -215,9 +391,7 @@ function sourcesFrom(data) {
       for (const source of list(output.action?.sources)) {
         const url = sourceUrl(source.url);
 
-        if (url) {
-          urls.add(url);
-        }
+        if (url) urls.add(url);
       }
     }
 
@@ -229,13 +403,12 @@ function sourcesFrom(data) {
 
         const url = sourceUrl(annotation.url);
 
-        if (url) {
-          urls.add(url);
-        }
+        if (url) urls.add(url);
       }
     }
   }
 
+  // 検索なしの生成結果は採用しない。
   if (!searched || !urls.size) {
     throw new Error("SEARCH_EVIDENCE_MISSING");
   }
@@ -243,7 +416,7 @@ function sourcesFrom(data) {
   return urls;
 }
 
-// 今回確認された誤りは、検索結果の解釈を誤っても通さない。
+// 過去に発生した定員の誤りをプログラムでも除外する。
 function conflictsWithKnownFacts(candidate) {
   const model = norm(candidate.model);
 
@@ -295,6 +468,9 @@ function filterCandidates(items, input, visited) {
     ),
   ]);
 
+  const wanted = list(input.desired?.typeKeys)
+    .filter((type) => TYPES.includes(type));
+
   const noSlide = list(avoided.conditions).some(
     (condition) =>
       str(condition).includes("スライドドア")
@@ -314,7 +490,11 @@ function filterCandidates(items, input, visited) {
 
       if (
         !TYPES.includes(candidate.typeKey) ||
-        excludedTypes.has(candidate.typeKey)
+        excludedTypes.has(candidate.typeKey) ||
+        (
+          wanted.length > 0 &&
+          !wanted.includes(candidate.typeKey)
+        )
       ) {
         return false;
       }
@@ -393,9 +573,7 @@ function filterCandidates(items, input, visited) {
         `${makerName(candidate.maker)}${candidate.model}`
       );
 
-      if (seen.has(key)) {
-        return false;
-      }
+      if (seen.has(key)) return false;
 
       seen.add(key);
       return true;
@@ -641,6 +819,7 @@ export async function POST(request) {
   let stage = "input";
 
   const controller = new AbortController();
+
   const timer = setTimeout(
     () => controller.abort(),
     240000
@@ -777,19 +956,15 @@ export async function POST(request) {
         return {
           rank: index + 1,
           maker: candidate.maker,
-
           model:
             `${candidate.model}（${candidate.generation}・${candidate.variant}）`,
-
           score: candidate.score,
           maxSeats: candidate.seats,
           typeKey: candidate.typeKey,
           reason: str(text.reason),
           futureFit: str(text.futureFit),
-
           caution:
             `${str(text.caution)} 仕様の参照資料：${candidate.sourceUrl}`,
-
           sources: [
             {
               url: candidate.sourceUrl,
@@ -806,7 +981,6 @@ export async function POST(request) {
         overview: recommendations.length
           ? `必要人数と除外条件に照らし、資料で仕様を確認した候補を${recommendations.length}件紹介します。点数は回答との相性の目安です。対象年式・仕様を指定して比較してください。`
           : "今回の条件で、仕様の根拠を確認できる候補を確定できませんでした。該当車が存在しないという意味ではありません。以下の相談内容をもとに条件を整理できます。",
-
         recommendations,
         currentAdvice: str(
           narrative.currentAdvice
@@ -821,6 +995,7 @@ export async function POST(request) {
 
       checks: {
         version: VERSION,
+        revision: REVISION,
         generatedCandidates:
           facts.candidates.length,
         displayedCandidates:
@@ -839,8 +1014,10 @@ export async function POST(request) {
       "DIAGNOSE_API_ERROR",
       {
         version: VERSION,
+        revision: REVISION,
         stage,
-        message: error.message,
+        model: MODEL,
+        ...errorDetails(error),
       }
     );
 
@@ -849,12 +1026,10 @@ export async function POST(request) {
         error: controller.signal.aborted
           ? "資料確認に時間がかかったため診断を中断しました。未確認の車は表示していません。時間を置いてもう一度お試しください。"
           : "車両資料の確認または診断文の作成に失敗しました。未確認の結果は表示していません。時間を置いて再度お試しください。",
-
         code: `${VERSION}:${stage}`,
+        revision: REVISION,
       },
-      controller.signal.aborted
-        ? 504
-        : 502
+      controller.signal.aborted ? 504 : 502
     );
   } finally {
     clearTimeout(timer);
