@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-10-28T05:54:39.402Z",
+  "updatedAt": "2026-10-28T05:54:44.551Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261028055409605-wcsfxjem",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-10-28T05:54:11.357Z",
-    "finishedAt": "2026-10-28T05:54:39.402Z",
-    "durationSeconds": 28,
+    "finishedAt": "2026-10-28T05:54:44.551Z",
+    "durationSeconds": 33,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261028055409605-wcsfxjem",
       "phase": "details",
       "total": 64,
-      "completed": 8,
-      "remaining": 56,
+      "completed": 10,
+      "remaining": 54,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -622,7 +622,7 @@
       "displacement": "2.0L",
       "bodyPrice": "99.7万円",
       "totalPrice": "108.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900100.jpg?1793166882",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260819W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260819001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -651,7 +651,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-10-28T00:06:20.440Z",
+      "updatedAt": "2026-10-28T05:54:44.551Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -671,8 +671,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-28T05:54:18.412Z"
+      }
     },
     {
       "stockId": "0902332A30260616W001",
@@ -691,7 +690,7 @@
       "displacement": "2.0L",
       "bodyPrice": "332.5万円",
       "totalPrice": "343.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260616/H/70009023323026061600100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260616/H/70009023323026061600100.jpg?1793166881",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260616W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260616001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -714,7 +713,7 @@
         "SUV"
       ],
       "listResult": null,
-      "updatedAt": "2026-10-28T00:06:20.440Z",
+      "updatedAt": "2026-10-28T05:54:44.551Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -734,8 +733,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-28T05:54:18.412Z"
+      }
     },
     {
       "stockId": "0902332A30260323W002",
@@ -4711,78 +4709,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260819W001",
-          "title": "インプレッサスポーツ ２．０ｉ－Ｓアイサイト",
-          "description": "インプレッサスポーツ ２．０ｉ－Ｓアイサイト ４ＷＤ 前席パワーシート ＬＥＤヘッドライト／デイライト 純正フルセグナビ Ｂｌｕｅｔｏｏｔｈ バックカメラ ＥＴＣ２．０ ＢＳＭ パドルシフト アダプティブクルーズコントロール 革巻ステアリング",
-          "carName": "インプレッサスポーツ",
-          "gradeName": "２．０ｉ－Ｓアイサイト",
-          "gradeExtraInfo": "",
-          "classificationName": "GT7",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2016年",
-          "mileage": "7.2万K",
-          "color": "アイスシルバーメタリック",
-          "inspection": "車検整備付",
-          "displacement": "2.0L",
-          "bodyPrice": "99.7万円",
-          "totalPrice": "108.3万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260819W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260819001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260616W001",
-          "title": "クライスラージープ ラングラーアンリミテッド スポーツ",
-          "description": "クライスラージープ ラングラーアンリミテッド スポーツ ４ＷＤ スタッドレス＋アルミ組セット バックカメラ クルーズコントロール パーキングソナー 純正ディスプレイオーディオ ＥＴＣ 純正１７インチアルミホイール ステアリングスイッチ フォグ",
-          "carName": "クライスラージープ ラングラーアンリミテッド",
-          "gradeName": "スポーツ",
-          "gradeExtraInfo": "",
-          "classificationName": "JL20L",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2019年",
-          "mileage": "7.5万K",
-          "color": "グラナイトクリスタルメタリッククリアコート",
-          "inspection": "車検整備付",
-          "displacement": "2.0L",
-          "bodyPrice": "332.5万円",
-          "totalPrice": "343.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260616/H/70009023323026061600100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260616W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260616W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260616W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260616W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260616W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260616W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260616001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260323W002",
           "title": "クラウンスポーツ Ｚ",
           "description": "クラウンスポーツ Ｚ ４ＷＤ ＨＶ アップルカープレイ 置くだけ充電 パノラマモター パワーバックドア デジタルインナーミラー シートヒーター ベンチレーション 純正２１インチＡＷ パーキングソナー ＥＴＣ ＯＰカラー",
@@ -7051,7 +6977,7 @@
         "attempts": 0
       }
     ],
-    "completed": 8,
+    "completed": 10,
     "total": 64,
     "failed": []
   }
