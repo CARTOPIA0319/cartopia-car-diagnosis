@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-10-28T13:13:22.236Z",
+  "updatedAt": "2026-10-28T13:13:27.075Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261028131305744-gbm5xcbm",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-10-28T13:13:07.384Z",
-    "finishedAt": "2026-10-28T13:13:22.236Z",
-    "durationSeconds": 15,
+    "finishedAt": "2026-10-28T13:13:27.075Z",
+    "durationSeconds": 20,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261028131102912-bd7g8zm6",
       "phase": "details",
       "total": 60,
-      "completed": 36,
-      "remaining": 24,
+      "completed": 38,
+      "remaining": 22,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2470,7 +2470,7 @@
       "displacement": "2.0L",
       "bodyPrice": "218.8万円",
       "totalPrice": "229.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100100.jpg?1793193204",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260421001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2493,7 +2493,7 @@
         "ミニバン"
       ],
       "listResult": null,
-      "updatedAt": "2026-10-28T05:56:31.053Z",
+      "updatedAt": "2026-10-28T13:13:27.075Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2513,12 +2513,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-28T13:11:14.552Z"
+      }
     },
     {
       "stockId": "0902332A30261020W001",
-      "title": "クロストレック",
+      "title": "クロストレック リミテッド",
       "description": "クロストレック",
       "carName": "クロストレック",
       "gradeName": "リミテッド",
@@ -2528,12 +2527,12 @@
       "seatCapacity": 1,
       "year": "2023年",
       "mileage": "2.9万K",
-      "color": "2.0",
+      "color": "クリスタルブラックシリカ",
       "inspection": "00330002",
       "displacement": "2023cc",
       "bodyPrice": "309.5万円",
       "totalPrice": "318.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261020/H/70009023323026102000100.jpg?1793193074",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261020/H/70009023323026102000100.jpg?1793193204",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261020W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2577,7 +2576,7 @@
           "309.5万円"
         ]
       },
-      "updatedAt": "2026-10-28T05:56:31.053Z",
+      "updatedAt": "2026-10-28T13:13:27.075Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2597,8 +2596,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-28T13:11:14.552Z"
+      }
     },
     {
       "stockId": "0902332A30261022W001",
@@ -4397,91 +4395,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260421W001",
-          "title": "ヴォクシー ＺＳ 煌ＩＩ",
-          "description": "ヴォクシー ＺＳ 煌ＩＩ ４ＷＤ 純正１０インチナビ フリップダウンモニター 純正エンジンスターター ＴＶキット 両側電動スライドドア クルコン フルセグ Ｂｌｕｅｔｏｏｔｈ ＵＳＢポート シートバックテーブル 車線逸脱防止",
-          "carName": "ヴォクシー",
-          "gradeName": "ＺＳ 煌ＩＩ",
-          "gradeExtraInfo": "",
-          "classificationName": "ZRR85W",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2019年",
-          "mileage": "9.5万K",
-          "color": "ホワイトパールクリスタルシャイン",
-          "inspection": "車検整備付",
-          "displacement": "2.0L",
-          "bodyPrice": "218.8万円",
-          "totalPrice": "229.3万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260421001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261020W001",
-          "title": "クロストレック",
-          "description": "クロストレック",
-          "carName": "クロストレック",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2023年",
-          "mileage": "2.9万K",
-          "color": "2.0",
-          "inspection": "",
-          "displacement": "2023cc",
-          "bodyPrice": "309.5万円",
-          "totalPrice": "318.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261020/H/70009023323026102000100.jpg?1793193074",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261020W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261020W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261020W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261020W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261020W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "318.2万円",
-              "309.5万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261022W001",
           "title": "プリウス",
           "description": "プリウス",
@@ -5559,7 +5472,7 @@
         "attempts": 0
       }
     ],
-    "completed": 36,
+    "completed": 38,
     "total": 60,
     "failed": []
   }
