@@ -1,4 +1,3 @@
-
 import {
   getPromiseById,
   getNextPromise,
@@ -19,8 +18,8 @@ const {
 } = PROMISE_THEME;
 
 // 全約束共通の自動改行設定。
-// 文字数は日本語の全角文字を基準とした目安。
-// LINEの端末差による表示幅までは保証できない。
+// 日本語の全角文字を基準とした目安。
+// 端末ごとの表示幅には差がある。
 const LINE_BREAK = Object.freeze({
   chapterTitle: 11,
   heading: 15,
@@ -31,7 +30,7 @@ const LINE_BREAK = Object.freeze({
   minLastLine: 4,
 });
 
-// 句読点や助詞など、自然な区切りを優先する。
+// 自然な位置で改行するための優先度
 function getBreakPriority(text, position) {
   const previous = text.slice(0, position);
   const last = previous.slice(-1);
@@ -59,8 +58,7 @@ function getBreakPriority(text, position) {
   return 0;
 }
 
-// 文字の表示幅を簡易的に見積もる。
-// 半角英数字は全角文字より狭いものとして扱う。
+// 半角・全角を考慮した文字幅
 function getTextWidth(text) {
   let width = 0;
 
@@ -84,37 +82,55 @@ function chooseBreakPosition(text, limit, minLastLine) {
 
   const candidates = [];
 
-  for (let position = 1; position < characters.length; position++) {
-    const left = characters.slice(0, position).join("");
-    const right = characters.slice(position).join("");
+  for (
+    let position = 1;
+    position < characters.length;
+    position++
+  ) {
+    const left = characters
+      .slice(0, position)
+      .join("");
+
+    const right = characters
+      .slice(position)
+      .join("");
 
     const leftWidth = getTextWidth(left);
+    const rightWidth = getTextWidth(right);
 
     if (leftWidth > limit) {
       break;
     }
 
-    const rightLength = Array.from(right).length;
-
-    // 句読点を次の行の先頭に残さない。
+    // 句読点を行頭に置かない
     if (/^[、。！？!?）)」』]/.test(right)) {
       continue;
     }
 
-    const priority = getBreakPriority(left, position);
+    // 最終行が短くなりすぎる候補を避ける
+    if (rightWidth < minLastLine) {
+      continue;
+    }
 
-    // 行末近くの自然な区切りを優先する。
+    const priority = getBreakPriority(
+      left,
+      position
+    );
+
     const fillRatio = leftWidth / limit;
 
     let score = priority + fillRatio * 25;
 
-    if (rightLength < minLastLine) {
-      score -= 100;
+    // 2行に収まる場合は長さの偏りを抑える
+    if (rightWidth <= limit) {
+      score -= Math.abs(
+        leftWidth - rightWidth
+      ) * 3;
     }
 
-    // あまりに短い行を避ける。
+    // 極端に短い行を避ける
     if (fillRatio < 0.45) {
-      score -= 50;
+      score -= 80;
     }
 
     candidates.push({
@@ -129,7 +145,9 @@ function chooseBreakPosition(text, limit, minLastLine) {
     while (
       position < characters.length &&
       getTextWidth(
-        characters.slice(0, position + 1).join("")
+        characters
+          .slice(0, position + 1)
+          .join("")
       ) <= limit
     ) {
       position++;
@@ -138,27 +156,36 @@ function chooseBreakPosition(text, limit, minLastLine) {
     return position;
   }
 
-  candidates.sort((a, b) => b.score - a.score);
+  candidates.sort(
+    (a, b) => b.score - a.score
+  );
 
   return candidates[0].position;
 }
 
 function wrapLine(line, limit) {
-  if (!line || getTextWidth(line) <= limit) {
+  if (
+    !line ||
+    getTextWidth(line) <= limit
+  ) {
     return line;
   }
 
   const result = [];
   let remaining = line;
 
-  while (getTextWidth(remaining) > limit) {
+  while (
+    getTextWidth(remaining) > limit
+  ) {
     const position = chooseBreakPosition(
       remaining,
       limit,
       LINE_BREAK.minLastLine
     );
 
-    const characters = Array.from(remaining);
+    const characters = Array.from(
+      remaining
+    );
 
     if (
       position <= 0 ||
@@ -168,10 +195,14 @@ function wrapLine(line, limit) {
     }
 
     result.push(
-      characters.slice(0, position).join("")
+      characters
+        .slice(0, position)
+        .join("")
     );
 
-    remaining = characters.slice(position).join("");
+    remaining = characters
+      .slice(position)
+      .join("");
   }
 
   if (remaining) {
@@ -182,14 +213,19 @@ function wrapLine(line, limit) {
 }
 
 function autoWrap(text, limit) {
-  if (typeof text !== "string" || !text) {
+  if (
+    typeof text !== "string" ||
+    !text
+  ) {
     return text;
   }
 
-  // 元の改行と空行は維持する。
+  // 原稿の改行と空行は維持
   return text
     .split("\n")
-    .map((line) => wrapLine(line, limit))
+    .map((line) =>
+      wrapLine(line, limit)
+    )
     .join("\n");
 }
 
@@ -236,7 +272,10 @@ function makeNavigationButton(label, data) {
 }
 
 function makeStandardSection(section) {
-  if (!section || section.type !== "text") {
+  if (
+    !section ||
+    section.type !== "text"
+  ) {
     return null;
   }
 
@@ -285,13 +324,19 @@ function makeStandardSection(section) {
 }
 
 function makeSection(section, promiseId) {
-  if (!section || typeof section !== "object") {
+  if (
+    !section ||
+    typeof section !== "object"
+  ) {
     return null;
   }
 
   if (section.type === "image") {
     return makeImage(
-      getPromiseImage(promiseId, section.imageKey)
+      getPromiseImage(
+        promiseId,
+        section.imageKey
+      )
     );
   }
 
@@ -303,16 +348,25 @@ function makeSection(section, promiseId) {
 }
 
 function splitHeading(heading) {
-  const parts = String(heading || "").split("\n\n");
+  const parts = String(
+    heading || ""
+  ).split("\n\n");
 
   return {
     title: parts[0] || "",
-    phrase: parts.slice(1).join("\n\n"),
+    phrase: parts
+      .slice(1)
+      .join("\n\n"),
   };
 }
 
-function makeChapterHeader(section, chapterNumber) {
-  const { title } = splitHeading(section.heading);
+function makeChapterHeader(
+  section,
+  chapterNumber
+) {
+  const { title } = splitHeading(
+    section.heading
+  );
 
   return {
     type: "box",
@@ -322,7 +376,9 @@ function makeChapterHeader(section, chapterNumber) {
     spacing: chapter.spacing,
     contents: [
       makeText(
-        `${chapter.prefix} ${String(chapterNumber).padStart(
+        `${chapter.prefix} ${String(
+          chapterNumber
+        ).padStart(
           chapter.numberDigits,
           "0"
         )}`,
@@ -340,7 +396,9 @@ function makeChapterHeader(section, chapterNumber) {
 }
 
 function makeChapterPhrase(section) {
-  const { phrase } = splitHeading(section.heading);
+  const { phrase } = splitHeading(
+    section.heading
+  );
 
   if (!phrase) {
     return null;
@@ -360,7 +418,10 @@ function makeChapterBody(section) {
     return null;
   }
 
-  const paragraphs = section.text.split("\n\n");
+  const paragraphs = section.text.split(
+    "\n\n"
+  );
+
   const lastParagraph = paragraphs.pop();
 
   const contents = [];
@@ -417,7 +478,10 @@ function makeChapter(
   chapterNumber
 ) {
   const contents = [
-    makeChapterHeader(textSection, chapterNumber),
+    makeChapterHeader(
+      textSection,
+      chapterNumber
+    ),
   ];
 
   const image = makeImage(
@@ -431,13 +495,17 @@ function makeChapter(
     contents.push(image);
   }
 
-  const phrase = makeChapterPhrase(textSection);
+  const phrase = makeChapterPhrase(
+    textSection
+  );
 
   if (phrase) {
     contents.push(phrase);
   }
 
-  const body = makeChapterBody(textSection);
+  const body = makeChapterBody(
+    textSection
+  );
 
   if (body) {
     contents.push(body);
@@ -501,7 +569,10 @@ function makeFinalSection(section) {
 // 章数は固定しない。
 // 約束番号による特別処理も行わない。
 
-function makePromiseSections(sections, promiseId) {
+function makePromiseSections(
+  sections,
+  promiseId
+) {
   if (!Array.isArray(sections)) {
     return [];
   }
@@ -516,7 +587,9 @@ function makePromiseSections(sections, promiseId) {
   let chapterNumber = 0;
 
   // 冒頭画像
-  if (sections[index]?.type === "image") {
+  if (
+    sections[index]?.type === "image"
+  ) {
     const image = makeSection(
       sections[index],
       promiseId
@@ -530,7 +603,9 @@ function makePromiseSections(sections, promiseId) {
   }
 
   // 導入文
-  if (sections[index]?.type === "text") {
+  if (
+    sections[index]?.type === "text"
+  ) {
     const introduction = makeSection(
       sections[index],
       promiseId
@@ -568,12 +643,14 @@ function makePromiseSections(sections, promiseId) {
       continue;
     }
 
-    // 最後に単独で置かれた文章は締め
+    // 最後の単独文章は締め
     if (
       current?.type === "text" &&
       index === sections.length - 1
     ) {
-      const closing = makeFinalSection(current);
+      const closing = makeFinalSection(
+        current
+      );
 
       if (closing) {
         result.push(closing);
@@ -611,10 +688,11 @@ export function makePromiseDetailFlex(id) {
   const sections =
     PROMISE_CONTENT[id]?.sections || [];
 
-  const sectionComponents = makePromiseSections(
-    sections,
-    id
-  );
+  const sectionComponents =
+    makePromiseSections(
+      sections,
+      id
+    );
 
   const buttons = [];
 
