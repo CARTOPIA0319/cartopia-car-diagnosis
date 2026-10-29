@@ -43,7 +43,7 @@ export const PROMISE_IMAGES = Object.freeze({
       url: "https://cartopia-car-diagnosis.vercel.app/promises/03/B994547B-1F9F-4B3E-900D-143DE8140814.png",
     }),
     chapter01: Object.freeze({
-      url: "https://cartopia-car-diagnosis.vercel.app/promises/03/BDBDD4B7-0EDB-4814-AFAA-06560288AD1A.png",
+      url: "https://cartopia-car-diagnosis.vercel.app/promises/03/4CA5D26E-8CB1-4350-A9DE-135967DF3504.png",
     }),
     chapter02: Object.freeze({
       url: "https://cartopia-car-diagnosis.vercel.app/promises/03/F2AFFDAC-9802-4BF0-8693-11CA1FE5827B.png",
