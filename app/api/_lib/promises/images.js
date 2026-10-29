@@ -40,19 +40,19 @@ export const PROMISE_IMAGES = Object.freeze({
 
   "03": Object.freeze({
     hero: Object.freeze({
-      url: "https://cartopia-car-diagnosis.vercel.app/promises/03/B994547B-1F9F-4B3E-900D-143DE8140814.jpeg",
+      url: "https://cartopia-car-diagnosis.vercel.app/promises/03/B994547B-1F9F-4B3E-900D-143DE8140814.png",
     }),
     chapter01: Object.freeze({
-      url: "https://cartopia-car-diagnosis.vercel.app/promises/03/BDBDD4B7-0EDB-4814-AFAA-06560288AD1A.jpeg",
+      url: "https://cartopia-car-diagnosis.vercel.app/promises/03/BDBDD4B7-0EDB-4814-AFAA-06560288AD1A.png",
     }),
     chapter02: Object.freeze({
-      url: "https://cartopia-car-diagnosis.vercel.app/promises/03/F2AFFDAC-9802-4BF0-8693-11CA1FE5827B.jpeg",
+      url: "https://cartopia-car-diagnosis.vercel.app/promises/03/F2AFFDAC-9802-4BF0-8693-11CA1FE5827B.png",
     }),
     chapter03: Object.freeze({
-      url: "https://cartopia-car-diagnosis.vercel.app/promises/03/79B4568F-3F69-44BA-BC61-9E27D9EEA998.jpeg",
+      url: "https://cartopia-car-diagnosis.vercel.app/promises/03/79B4568F-3F69-44BA-BC61-9E27D9EEA998.png",
     }),
     chapter04: Object.freeze({
-      url: "https://cartopia-car-diagnosis.vercel.app/promises/03/3B2F0DED-7E50-44A8-AD3F-3F8A68D43BE5.jpeg",
+      url: "https://cartopia-car-diagnosis.vercel.app/promises/03/3B2F0DED-7E50-44A8-AD3F-3F8A68D43BE5.png",
     }),
   }),
 
