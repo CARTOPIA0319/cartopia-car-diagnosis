@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-10-29T10:11:00.055Z",
+  "updatedAt": "2026-10-29T10:11:07.912Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261029101030119-n5xrgmhz",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-10-29T10:10:32.080Z",
-    "finishedAt": "2026-10-29T10:11:00.055Z",
-    "durationSeconds": 28,
+    "finishedAt": "2026-10-29T10:11:07.912Z",
+    "durationSeconds": 36,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261029101030119-n5xrgmhz",
       "phase": "details",
       "total": 62,
-      "completed": 8,
-      "remaining": 54,
+      "completed": 10,
+      "remaining": 52,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -54,8 +54,8 @@
       "timeout": 0
     },
     "gradeExtraInfo": {
-      "found": 59,
-      "missing": 3
+      "found": 60,
+      "missing": 2
     },
     "savedListFields": {
       "total": 23,
@@ -622,7 +622,7 @@
       "displacement": "2.0L",
       "bodyPrice": "99.7万円",
       "totalPrice": "108.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900100.jpg?1793268664",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260819W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260819001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -651,7 +651,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-10-29T02:56:24.191Z",
+      "updatedAt": "2026-10-29T10:11:07.912Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -671,8 +671,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-29T10:10:39.062Z"
+      }
     },
     {
       "stockId": "0902332A30261029W002",
@@ -680,10 +679,10 @@
       "description": "エブリイ Ｊリミテッド ４ＷＤ ターボ 専用サイドデカール 前後ブラックバンパー 両側パワースライドドア ＬＥＤヘッドライト 純正ディスプレイオーディオ バックカメラ クリアランスソナー 衝突被害軽減ブレーキ ＵＳＢポート",
       "carName": "エブリイ",
       "gradeName": "Ｊリミテッド",
-      "gradeExtraInfo": "",
+      "gradeExtraInfo": "1",
       "classificationName": "DA17V",
-      "makerName": "",
-      "seatCapacity": null,
+      "makerName": "スズキ",
+      "seatCapacity": 1,
       "year": "2025年",
       "mileage": "0.5万K",
       "color": "モスグレーメタリック／ブラック",
@@ -691,8 +690,11 @@
       "displacement": "660cc",
       "bodyPrice": "200.6万円",
       "totalPrice": "203.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900200.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900200.jpg?1793268663",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W002",
+      "gooUrl": "",
+      "sourceStatus": "掲載在庫",
+      "sourcePageUrl": "",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W002&StockStatus=00180002&ScreenId=CB101GR",
       "editUrls": [
         "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W002&StockStatus=00180002&ScreenId=CB101GR",
@@ -700,16 +702,30 @@
         "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W002&StockStatus=00180002&ScreenId=CB101GR",
         "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W002&StockStatus=00180002&ScreenId=CB101GR"
       ],
-      "gooUrl": "",
-      "sourceStatus": "掲載在庫",
-      "sourcePageUrl": "",
       "types": [],
       "typeKeys": [],
       "listResult": null,
-      "updatedAt": null,
-      "detailResult": null,
-      "typeResult": null,
-      "listUpdatedAt": "2026-10-29T10:10:39.062Z"
+      "updatedAt": "2026-10-29T10:11:07.912Z",
+      "typeResult": {
+        "status": 200,
+        "success": false,
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "freshTypes": false,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W002&StockStatus=00180002&ScreenId=CB101GR",
+        "attempts": 2,
+        "makerName": true,
+        "seatCapacity": true,
+        "gradeName": true,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
+      }
     },
     {
       "stockId": "0902332A30260323W002",
@@ -4463,78 +4479,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260819W001",
-          "title": "インプレッサスポーツ ２．０ｉ－Ｓアイサイト",
-          "description": "インプレッサスポーツ ２．０ｉ－Ｓアイサイト ４ＷＤ 前席パワーシート ＬＥＤヘッドライト／デイライト 純正フルセグナビ Ｂｌｕｅｔｏｏｔｈ バックカメラ ＥＴＣ２．０ ＢＳＭ パドルシフト アダプティブクルーズコントロール 革巻ステアリング",
-          "carName": "インプレッサスポーツ",
-          "gradeName": "２．０ｉ－Ｓアイサイト",
-          "gradeExtraInfo": "",
-          "classificationName": "GT7",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2016年",
-          "mileage": "7.2万K",
-          "color": "アイスシルバーメタリック",
-          "inspection": "車検整備付",
-          "displacement": "2.0L",
-          "bodyPrice": "99.7万円",
-          "totalPrice": "108.3万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260819W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260819001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261029W002",
-          "title": "エブリイ Ｊリミテッド",
-          "description": "エブリイ Ｊリミテッド ４ＷＤ ターボ 専用サイドデカール 前後ブラックバンパー 両側パワースライドドア ＬＥＤヘッドライト 純正ディスプレイオーディオ バックカメラ クリアランスソナー 衝突被害軽減ブレーキ ＵＳＢポート",
-          "carName": "エブリイ",
-          "gradeName": "Ｊリミテッド",
-          "gradeExtraInfo": "",
-          "classificationName": "DA17V",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2025年",
-          "mileage": "0.5万K",
-          "color": "モスグレーメタリック／ブラック",
-          "inspection": "検2027年10月",
-          "displacement": "660cc",
-          "bodyPrice": "200.6万円",
-          "totalPrice": "203.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900200.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W002",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W002&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260323W002",
           "title": "クラウンスポーツ Ｚ",
           "description": "クラウンスポーツ Ｚ ４ＷＤ ＨＶ アップルカープレイ 置くだけ充電 パノラマモター パワーバックドア デジタルインナーミラー シートヒーター ベンチレーション 純正２１インチＡＷ パーキングソナー ＥＴＣ ＯＰカラー",
@@ -6699,7 +6643,7 @@
         "attempts": 0
       }
     ],
-    "completed": 8,
+    "completed": 10,
     "total": 62,
     "failed": []
   }
