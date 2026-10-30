@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-10-30T02:00:41.292Z",
+  "updatedAt": "2026-10-30T02:00:46.010Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261030020017191-nerfa58n",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-10-30T02:00:18.900Z",
-    "finishedAt": "2026-10-30T02:00:41.292Z",
-    "durationSeconds": 22,
+    "finishedAt": "2026-10-30T02:00:46.010Z",
+    "durationSeconds": 27,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261030020017191-nerfa58n",
       "phase": "details",
       "total": 62,
-      "completed": 6,
-      "remaining": 56,
+      "completed": 8,
+      "remaining": 54,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -490,7 +490,7 @@
       "displacement": "660cc",
       "bodyPrice": "148.5万円",
       "totalPrice": "152.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900200.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900200.jpg?1793325643",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260819W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260819002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -519,7 +519,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-10-29T21:52:28.466Z",
+      "updatedAt": "2026-10-30T02:00:46.010Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -539,8 +539,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-30T02:00:25.798Z"
+      }
     },
     {
       "stockId": "0902332A30260422W002",
@@ -559,7 +558,7 @@
       "displacement": "2.5L",
       "bodyPrice": "424.1万円",
       "totalPrice": "432.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260422/H/70009023323026042200200.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260422/H/70009023323026042200200.jpg?1793325643",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260422W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260422002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -584,7 +583,7 @@
         "EV・HV"
       ],
       "listResult": null,
-      "updatedAt": "2026-10-29T21:52:28.466Z",
+      "updatedAt": "2026-10-30T02:00:46.010Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -604,8 +603,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-30T02:00:25.798Z"
+      }
     },
     {
       "stockId": "0902332A30260819W001",
@@ -4519,78 +4517,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260819W002",
-          "title": "ｅＫクロススペース Ｇ プラスエディション",
-          "description": "ｅＫクロススペース Ｇ プラスエディション ４ＷＤ ハイブリッド機能 マイパイロット 両側ハンズフリースライドドア ナビ 全方位カメラ ヒルディセントコントロール 前後ドラレコ ＥＴＣ ブレーキホールド ＬＥＤヘッドライト 前席シートヒーター",
-          "carName": "ｅＫクロススペース",
-          "gradeName": "Ｇ プラスエディション",
-          "gradeExtraInfo": "",
-          "classificationName": "B37A",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2022年",
-          "mileage": "3.7万K",
-          "color": "ホワイトパール",
-          "inspection": "車検整備付",
-          "displacement": "660cc",
-          "bodyPrice": "148.5万円",
-          "totalPrice": "152.3万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900200.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260819W002",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W002&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260819002&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260422W002",
-          "title": "アルファードハイブリッド Ｓ タイプゴールド",
-          "description": "アルファードハイブリッド Ｓ タイプゴールド ４ＷＤ ＯＰパノラミックビューモニター（ガッツミラーなし） シーケンシャルウィンカー ＪＢＬ フリップダウンＭ Ｐバックドア パーキングアシスト ＡＣ１００Ｖ１５００Ｗ ＨＤＭＩ ＥＴＣ 両側Ｐスラ",
-          "carName": "アルファードハイブリッド",
-          "gradeName": "Ｓ タイプゴールド",
-          "gradeExtraInfo": "",
-          "classificationName": "AYH30W",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2021年",
-          "mileage": "5.1万K",
-          "color": "ラグジュアリーホワイトパールクリスタルシャインガラスフレーク",
-          "inspection": "車検整備付",
-          "displacement": "2.5L",
-          "bodyPrice": "424.1万円",
-          "totalPrice": "432.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260422/H/70009023323026042200200.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260422W002",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W002&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260422W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260422002&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260819W001",
           "title": "インプレッサスポーツ ２．０ｉ－Ｓアイサイト",
           "description": "インプレッサスポーツ ２．０ｉ－Ｓアイサイト ４ＷＤ 前席パワーシート ＬＥＤヘッドライト／デイライト 純正フルセグナビ Ｂｌｕｅｔｏｏｔｈ バックカメラ ＥＴＣ２．０ ＢＳＭ パドルシフト アダプティブクルーズコントロール 革巻ステアリング",
@@ -6827,7 +6753,7 @@
         "attempts": 0
       }
     ],
-    "completed": 6,
+    "completed": 8,
     "total": 62,
     "failed": []
   }
