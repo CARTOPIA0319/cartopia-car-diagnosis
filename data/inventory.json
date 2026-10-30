@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-10-30T15:26:03.464Z",
+  "updatedAt": "2026-10-30T15:26:08.521Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261030152537880-e6lb6euv",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-10-30T15:25:39.652Z",
-    "finishedAt": "2026-10-30T15:26:03.464Z",
-    "durationSeconds": 24,
+    "finishedAt": "2026-10-30T15:26:08.521Z",
+    "durationSeconds": 29,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261030152301054-poe0uezs",
       "phase": "details",
       "total": 62,
-      "completed": 48,
-      "remaining": 14,
+      "completed": 50,
+      "remaining": 12,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -3326,7 +3326,7 @@
     },
     {
       "stockId": "0902332A30261001W002",
-      "title": "デリカミニ",
+      "title": "デリカミニ Ｇ",
       "description": "デリカミニ",
       "carName": "デリカミニ",
       "gradeName": "Ｇ",
@@ -3336,12 +3336,12 @@
       "seatCapacity": 1,
       "year": "2024年",
       "mileage": "3.7万K",
-      "color": "660",
+      "color": "ナチュラルアイボリーメタリック",
       "inspection": "2027",
       "displacement": "2024cc",
       "bodyPrice": "178.7万円",
       "totalPrice": "181.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261001/H/70009023323026100100200.jpg?1793373789",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261001/H/70009023323026100100200.jpg?1793373966",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261001W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3383,7 +3383,7 @@
           "178.7万円"
         ]
       },
-      "updatedAt": "2026-10-30T08:49:09.634Z",
+      "updatedAt": "2026-10-30T15:26:08.521Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3403,12 +3403,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-30T15:23:09.509Z"
+      }
     },
     {
       "stockId": "0902332A30261015W003",
-      "title": "ＸＶ",
+      "title": "ＸＶ アドバンス",
       "description": "ＸＶ",
       "carName": "ＸＶ",
       "gradeName": "アドバンス",
@@ -3418,12 +3417,12 @@
       "seatCapacity": 1,
       "year": "2021年",
       "mileage": "5.3万K",
-      "color": "2.0",
+      "color": "クリスタルホワイトパール",
       "inspection": "00330002",
       "displacement": "2021cc",
       "bodyPrice": "213.7万円",
       "totalPrice": "222.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261015/H/70009023323026101500300.jpg?1793373789",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261015/H/70009023323026101500300.jpg?1793373966",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261015W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3467,7 +3466,7 @@
           "213.7万円"
         ]
       },
-      "updatedAt": "2026-10-30T08:49:09.634Z",
+      "updatedAt": "2026-10-30T15:26:08.521Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3487,8 +3486,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-30T15:23:09.509Z"
+      }
     },
     {
       "stockId": "0902332A30260930W001",
@@ -4477,104 +4475,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261001W002",
-          "title": "デリカミニ",
-          "description": "デリカミニ",
-          "carName": "デリカミニ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2024年",
-          "mileage": "3.7万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2024cc",
-          "bodyPrice": "178.7万円",
-          "totalPrice": "181.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261001/H/70009023323026100100200.jpg?1793373789",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261001W002&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261001W002&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261001W002&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261001W002&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261001W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "181.2万円",
-              "178.7万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261015W003",
-          "title": "ＸＶ",
-          "description": "ＸＶ",
-          "carName": "ＸＶ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2021年",
-          "mileage": "5.3万K",
-          "color": "2.0",
-          "inspection": "",
-          "displacement": "2021cc",
-          "bodyPrice": "213.7万円",
-          "totalPrice": "222.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261015/H/70009023323026101500300.jpg?1793373789",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261015W003&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261015W003&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261015W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261015W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261015W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "222.2万円",
-              "213.7万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260930W001",
           "title": "ハイエースバン",
           "description": "ハイエースバン",
@@ -5162,7 +5062,7 @@
         "attempts": 0
       }
     ],
-    "completed": 48,
+    "completed": 50,
     "total": 62,
     "failed": []
   }
