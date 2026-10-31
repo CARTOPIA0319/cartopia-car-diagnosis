@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-10-31T17:25:57.740Z",
+  "updatedAt": "2026-10-31T17:26:02.589Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261031172546753-7ftwkgqf",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-10-31T17:25:48.331Z",
-    "finishedAt": "2026-10-31T17:25:57.740Z",
-    "durationSeconds": 9,
+    "finishedAt": "2026-10-31T17:26:02.589Z",
+    "durationSeconds": 14,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261031172351417-h86ck3of",
       "phase": "details",
       "total": 62,
-      "completed": 34,
-      "remaining": 28,
+      "completed": 36,
+      "remaining": 26,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2326,7 +2326,7 @@
       "displacement": "2.8L",
       "bodyPrice": "383万円",
       "totalPrice": "388.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260910/H/70009023323026091000100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260910/H/70009023323026091000100.jpg?1793467560",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260910W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260910001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2353,7 +2353,7 @@
         "バン・トラック"
       ],
       "listResult": null,
-      "updatedAt": "2026-10-31T12:48:51.298Z",
+      "updatedAt": "2026-10-31T17:26:02.589Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2373,8 +2373,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-31T17:23:59.662Z"
+      }
     },
     {
       "stockId": "0902332A30260824W004",
@@ -2393,7 +2392,7 @@
       "displacement": "1.8L",
       "bodyPrice": "291.2万円",
       "totalPrice": "297.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260824/H/70009023323026082400400.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260824/H/70009023323026082400400.jpg?1793467560",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260824W004",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260824004&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2422,7 +2421,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-10-31T12:48:51.298Z",
+      "updatedAt": "2026-10-31T17:26:02.589Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2442,8 +2441,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-31T17:23:59.662Z"
+      }
     },
     {
       "stockId": "0902332A30260818W001",
@@ -4491,78 +4489,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260910W001",
-          "title": "レジアスエースバン スーパーＧＬ ダークプライムＩＩ",
-          "description": "レジアスエースバン スーパーＧＬ ダークプライムＩＩ ４ＷＤ 純正車高戻し／社外サスペンション車内積込み ベッドキット フローティングナビ フリップダウンモニター バックカメラ プリクラッシュセーフティ ハーフレザーシート ＥＴＣ ＡＣ１００Ｖ",
-          "carName": "レジアスエースバン",
-          "gradeName": "スーパーＧＬ ダークプライムＩＩ",
-          "gradeExtraInfo": "",
-          "classificationName": "GDH206V",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2020年",
-          "mileage": "6.4万K",
-          "color": "ホワイトパールクリスタルシャイン",
-          "inspection": "車検整備付",
-          "displacement": "2.8L",
-          "bodyPrice": "383万円",
-          "totalPrice": "388.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260910/H/70009023323026091000100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260910W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260910W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260910W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260910W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260910W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260910W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260910001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260824W004",
-          "title": "レヴォーグ ＧＴ－Ｈ ＥＸ",
-          "description": "レヴォーグ ＧＴ－Ｈ ＥＸ ４ＷＤ ターボ 純正ＥＧスターター＋スターターキーアップグレード パワーバックドア シートヒーター パワーシート 中古スタッドレスアルミ組付属 パドルシフト フルセグＴＶ バックカメラ サイドカメラ",
-          "carName": "レヴォーグ",
-          "gradeName": "ＧＴ－Ｈ ＥＸ",
-          "gradeExtraInfo": "",
-          "classificationName": "VN5",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2023年",
-          "mileage": "2.6万K",
-          "color": "クリスタルホワイトパール",
-          "inspection": "検2028年04月",
-          "displacement": "1.8L",
-          "bodyPrice": "291.2万円",
-          "totalPrice": "297.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260824/H/70009023323026082400400.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260824W004",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260824W004&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260824W004&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260824W004&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260824W004&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260824W004&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260824004&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260818W001",
           "title": "レヴォーグ ＳＴＩスポーツ ＥＸ",
           "description": "レヴォーグ ＳＴＩスポーツ ＥＸ ４ＷＤ アイサイト ＳＴＩ本革シート スバルスターリンクナビ パワーバックドア メモリーパワーシート エンジンスターター ＥＴＣ ４席シートヒーター ＬＥＤヘッドライト／フォグ／デイライト リアフォグ",
@@ -5791,7 +5717,7 @@
         "attempts": 0
       }
     ],
-    "completed": 34,
+    "completed": 36,
     "total": 62,
     "failed": []
   }
