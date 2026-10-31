@@ -1,24 +1,24 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-10-31T05:57:43.496Z",
+  "updatedAt": "2026-10-31T05:58:03.430Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
     "success": false,
     "statusText": "分割更新中",
-    "runId": "20261031055711038-kqurhfgo",
+    "runId": "20261031055752197-zdz727y6",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-10-31T05:57:12.613Z",
-    "finishedAt": "2026-10-31T05:57:43.496Z",
-    "durationSeconds": 31,
+    "startedAt": "2026-10-31T05:57:53.799Z",
+    "finishedAt": "2026-10-31T05:58:03.430Z",
+    "durationSeconds": 10,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261031055515744-n82qzva3",
       "phase": "details",
       "total": 62,
-      "completed": 40,
-      "remaining": 22,
+      "completed": 42,
+      "remaining": 20,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2703,7 +2703,7 @@
     },
     {
       "stockId": "0902332A30261029W001",
-      "title": "エルグランド",
+      "title": "エルグランド ２５０ハイウェイスタープレミアムアーバンクロム",
       "description": "エルグランド",
       "carName": "エルグランド",
       "gradeName": "２５０ハイウェイスタープレミアムアーバンクロム",
@@ -2713,12 +2713,12 @@
       "seatCapacity": 1,
       "year": "2020年",
       "mileage": "32.0万K",
-      "color": "2.5",
+      "color": "パールホワイト",
       "inspection": "2027",
       "displacement": "2020cc",
       "bodyPrice": "1万円",
       "totalPrice": "",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026102900100.jpg?1793426124",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30261029W00179.jpg?1793426274",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2743,7 +2743,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-10-30T23:56:19.195Z",
+      "updatedAt": "2026-10-31T05:58:03.430Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2763,12 +2763,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-31T05:55:24.136Z"
+      }
     },
     {
       "stockId": "0902332A30261020W001",
-      "title": "クロストレック",
+      "title": "クロストレック リミテッド",
       "description": "クロストレック",
       "carName": "クロストレック",
       "gradeName": "リミテッド",
@@ -2778,12 +2777,12 @@
       "seatCapacity": 1,
       "year": "2023年",
       "mileage": "2.9万K",
-      "color": "2.0",
+      "color": "クリスタルブラックシリカ",
       "inspection": "00330002",
       "displacement": "2023cc",
       "bodyPrice": "309.5万円",
       "totalPrice": "318.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261020/H/70009023323026102000100.jpg?1793426124",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261020/H/70009023323026102000100.jpg?1793426274",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261020W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2827,7 +2826,7 @@
           "309.5万円"
         ]
       },
-      "updatedAt": "2026-10-30T23:56:19.195Z",
+      "updatedAt": "2026-10-31T05:58:03.430Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2847,8 +2846,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-31T05:55:24.136Z"
+      }
     },
     {
       "stockId": "0902332A30261022W001",
@@ -4485,101 +4483,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261029W001",
-          "title": "エルグランド",
-          "description": "エルグランド",
-          "carName": "エルグランド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2020年",
-          "mileage": "",
-          "color": "2.5",
-          "inspection": "",
-          "displacement": "2020cc",
-          "bodyPrice": "",
-          "totalPrice": "",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026102900100.jpg?1793426124",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": false,
-            "bodyPrice": false,
-            "totalPrice": false,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261020W001",
-          "title": "クロストレック",
-          "description": "クロストレック",
-          "carName": "クロストレック",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2023年",
-          "mileage": "2.9万K",
-          "color": "2.0",
-          "inspection": "",
-          "displacement": "2023cc",
-          "bodyPrice": "309.5万円",
-          "totalPrice": "318.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261020/H/70009023323026102000100.jpg?1793426124",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261020W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261020W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261020W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261020W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261020W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "318.2万円",
-              "309.5万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261022W001",
           "title": "プリウス",
           "description": "プリウス",
@@ -5559,7 +5462,7 @@
         "attempts": 0
       }
     ],
-    "completed": 40,
+    "completed": 42,
     "total": 62,
     "failed": []
   }
