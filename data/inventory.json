@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-10-31T05:58:49.296Z",
+  "updatedAt": "2026-10-31T05:58:54.928Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261031055829491-bx99t3c9",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-10-31T05:58:31.044Z",
-    "finishedAt": "2026-10-31T05:58:49.296Z",
-    "durationSeconds": 18,
+    "finishedAt": "2026-10-31T05:58:54.928Z",
+    "durationSeconds": 24,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261031055515744-n82qzva3",
       "phase": "details",
       "total": 62,
-      "completed": 58,
-      "remaining": 4,
+      "completed": 60,
+      "remaining": 2,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -4124,7 +4124,7 @@
     },
     {
       "stockId": "0902332A30260809W003",
-      "title": "スペイド",
+      "title": "スペイド Ｘ",
       "description": "スペイド",
       "carName": "スペイド",
       "gradeName": "Ｘ",
@@ -4134,12 +4134,12 @@
       "seatCapacity": 1,
       "year": "2014年",
       "mileage": "2.1万K",
-      "color": "1.5",
+      "color": "ワインＭ",
       "inspection": "00330002",
       "displacement": "2014cc",
       "bodyPrice": "85.7万円",
       "totalPrice": "92.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900300.jpg?1793426124",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900300.jpg?1793426332",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260809W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -4179,7 +4179,7 @@
           "85.7万円"
         ]
       },
-      "updatedAt": "2026-10-30T23:57:08.084Z",
+      "updatedAt": "2026-10-31T05:58:54.928Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -4199,12 +4199,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-31T05:55:24.136Z"
+      }
     },
     {
       "stockId": "0902332A30260819W003",
-      "title": "デイズ",
+      "title": "デイズ Ｓ エマージェンシーブレーキ・レス",
       "description": "デイズ",
       "carName": "デイズ",
       "gradeName": "Ｓ エマージェンシーブレーキ・レス",
@@ -4214,12 +4213,12 @@
       "seatCapacity": 1,
       "year": "2018年",
       "mileage": "9.6万K",
-      "color": "660",
+      "color": "ブラックＰ",
       "inspection": "2027",
       "displacement": "2018cc",
       "bodyPrice": "40.7万円",
       "totalPrice": "43.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900300.jpg?1793426124",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900300.jpg?1793426332",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260819W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -4257,7 +4256,7 @@
           "40.7万円"
         ]
       },
-      "updatedAt": "2026-10-30T23:57:08.084Z",
+      "updatedAt": "2026-10-31T05:58:54.928Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -4277,8 +4276,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-10-31T05:55:24.136Z"
+      }
     },
     {
       "stockId": "0902332A30260824W005",
@@ -4467,104 +4465,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260809W003",
-          "title": "スペイド",
-          "description": "スペイド",
-          "carName": "スペイド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2014年",
-          "mileage": "2.1万K",
-          "color": "1.5",
-          "inspection": "",
-          "displacement": "2014cc",
-          "bodyPrice": "85.7万円",
-          "totalPrice": "92.3万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900300.jpg?1793426124",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260809W003&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260809W003&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260809W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260809W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260809W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "92.3万円",
-              "85.7万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260819W003",
-          "title": "デイズ",
-          "description": "デイズ",
-          "carName": "デイズ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2018年",
-          "mileage": "9.6万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2018cc",
-          "bodyPrice": "40.7万円",
-          "totalPrice": "43.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900300.jpg?1793426124",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260819W003&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260819W003&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260819W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260819W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "43.2万円",
-              "40.7万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260824W005",
           "title": "Ｎ－ＢＯＸカスタム",
           "description": "Ｎ－ＢＯＸカスタム",
@@ -4662,7 +4562,7 @@
         "attempts": 0
       }
     ],
-    "completed": 58,
+    "completed": 60,
     "total": 62,
     "failed": []
   }
