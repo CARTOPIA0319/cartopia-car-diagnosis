@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-02T10:05:19.968Z",
+  "updatedAt": "2026-11-02T10:05:24.763Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261102100507919-z1j94bju",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-02T10:05:09.653Z",
-    "finishedAt": "2026-11-02T10:05:19.968Z",
-    "durationSeconds": 10,
+    "finishedAt": "2026-11-02T10:05:24.763Z",
+    "durationSeconds": 15,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261102100420929-9wx3zx2h",
       "phase": "details",
       "total": 54,
-      "completed": 14,
-      "remaining": 40,
+      "completed": 16,
+      "remaining": 38,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -1000,7 +1000,7 @@
       "displacement": "660cc",
       "bodyPrice": "145.4万円",
       "totalPrice": "149.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261013/H/70009023323026101300200.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261013/H/70009023323026101300200.jpg?1793613922",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261013W002",
       "gooUrl": "",
       "sourceStatus": "掲載在庫",
@@ -1027,7 +1027,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-02T02:37:44.818Z",
+      "updatedAt": "2026-11-02T10:05:24.763Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1038,7 +1038,7 @@
       "detailResult": {
         "success": true,
         "freshTypes": true,
-        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261013W002&ScreenId=SIH_001",
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261013W002&StockStatus=00180002&ScreenId=CB101GR",
         "attempts": 1,
         "makerName": true,
         "seatCapacity": true,
@@ -1047,8 +1047,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-02T10:04:30.824Z"
+      }
     },
     {
       "stockId": "0902332A30260809W002",
@@ -1067,7 +1066,7 @@
       "displacement": "660cc",
       "bodyPrice": "133万円",
       "totalPrice": "135.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900200.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900200.jpg?1793613922",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260809W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260809002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1092,7 +1091,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-02T02:36:33.478Z",
+      "updatedAt": "2026-11-02T10:05:24.763Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1112,8 +1111,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-02T10:04:30.824Z"
+      }
     },
     {
       "stockId": "0902332A30261015W002",
@@ -3903,78 +3901,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261013W002",
-          "title": "ハイゼットトラック ジャンボエクストラ",
-          "description": "ハイゼットトラック ジャンボエクストラ ４ＷＤ ＳＡＩＩＩｔ ナビ フルセグＴＶ Ｂｌｕｅｔｏｏｔｈ ＥＴＣ ＬＥＤヘッドライト／フォグ 天井収納 鍵付き収納ボックス ＬＥＤ作業灯 クリアランスソナー 電動格納ミラー プッシュスタート",
-          "carName": "ハイゼットトラック",
-          "gradeName": "ジャンボエクストラ",
-          "gradeExtraInfo": "",
-          "classificationName": "S510P",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2021年",
-          "mileage": "3.5万K",
-          "color": "ＯＰブラックマイカメタリック",
-          "inspection": "車検整備付",
-          "displacement": "660cc",
-          "bodyPrice": "145.4万円",
-          "totalPrice": "149.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261013/H/70009023323026101300200.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261013W002",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261013W002&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261013W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261013W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261013W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261013W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260809W002",
-          "title": "ハイゼットトラック ジャンボＳＡＩＩＩｔ",
-          "description": "ハイゼットトラック ジャンボＳＡＩＩＩｔ 切替式４ＷＤ ＬＥＤヘッドライト／フォグランプ 天井収納 アオリガード アオリチェーン 衝突軽減ブレーキ 横滑り防止装置 キーレスキー オーディオ エアコン パワーウィンドウ",
-          "carName": "ハイゼットトラック",
-          "gradeName": "ジャンボＳＡＩＩＩｔ",
-          "gradeExtraInfo": "",
-          "classificationName": "S510P",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2019年",
-          "mileage": "2.4万K",
-          "color": "トニコオレンジメタリック",
-          "inspection": "検2027年06月",
-          "displacement": "660cc",
-          "bodyPrice": "133万円",
-          "totalPrice": "135.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900200.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260809W002",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260809W002&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260809W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260809W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260809W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260809W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260809002&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261015W002",
           "title": "ハイゼットトラック ジャンボＳＡＩＩＩｔ",
           "description": "ハイゼットトラック ジャンボＳＡＩＩＩｔ 切替式４ＷＤ 純正ナビ Ｂｌｕｅｔｏｏｔｈ ＵＳＢポート ＬＥＤヘッドライト／フォグ マッドガード 荷台ゴムマット キーレスキー 衝突回避支援ブレーキ ペダル踏み間違い加速抑制 ＩＲ＆ＵＶカットガラス",
@@ -5593,7 +5519,7 @@
         "attempts": 0
       }
     ],
-    "completed": 14,
+    "completed": 16,
     "total": 54,
     "failed": []
   }
