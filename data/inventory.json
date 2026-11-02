@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-02T20:26:40.438Z",
+  "updatedAt": "2026-11-02T20:26:51.993Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261102202615566-tsnlzgn2",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-02T20:26:17.188Z",
-    "finishedAt": "2026-11-02T20:26:40.438Z",
-    "durationSeconds": 23,
+    "finishedAt": "2026-11-02T20:26:51.993Z",
+    "durationSeconds": 35,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261102202420101-ethgaj52",
       "phase": "details",
       "total": 54,
-      "completed": 36,
-      "remaining": 18,
+      "completed": 38,
+      "remaining": 16,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2437,7 +2437,7 @@
     },
     {
       "stockId": "0902332A30261029W003",
-      "title": "エクストレイル",
+      "title": "エクストレイル ２０Ｘ",
       "description": "エクストレイル",
       "carName": "エクストレイル",
       "gradeName": "２０Ｘ",
@@ -2447,12 +2447,12 @@
       "seatCapacity": 1,
       "year": "2017年",
       "mileage": "6.9万K",
-      "color": "2.0",
+      "color": "パールホワイト",
       "inspection": "2028",
       "displacement": "2017cc",
       "bodyPrice": "6.9万円",
       "totalPrice": "6.9万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900300.jpg?1793651067",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900300.jpg?1793651202",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2477,7 +2477,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-11-02T10:06:54.019Z",
+      "updatedAt": "2026-11-02T20:26:51.993Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2497,12 +2497,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-02T20:24:28.005Z"
+      }
     },
     {
       "stockId": "0902332A30261020W001",
-      "title": "クロストレック",
+      "title": "クロストレック リミテッド",
       "description": "クロストレック",
       "carName": "クロストレック",
       "gradeName": "リミテッド",
@@ -2512,12 +2511,12 @@
       "seatCapacity": 1,
       "year": "2023年",
       "mileage": "2.9万K",
-      "color": "2.0",
+      "color": "クリスタルブラックシリカ",
       "inspection": "00330002",
       "displacement": "2023cc",
       "bodyPrice": "309.5万円",
       "totalPrice": "318.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261020/H/70009023323026102000100.jpg?1793651067",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261020/H/70009023323026102000100.jpg?1793651202",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261020W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2561,7 +2560,7 @@
           "309.5万円"
         ]
       },
-      "updatedAt": "2026-11-02T10:06:54.019Z",
+      "updatedAt": "2026-11-02T20:26:51.993Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2581,8 +2580,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-02T20:24:28.005Z"
+      }
     },
     {
       "stockId": "0902332A30261022W001",
@@ -3899,101 +3897,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261029W003",
-          "title": "エクストレイル",
-          "description": "エクストレイル",
-          "carName": "エクストレイル",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2017年",
-          "mileage": "6.9万K",
-          "color": "2.0",
-          "inspection": "",
-          "displacement": "2017cc",
-          "bodyPrice": "6.9万円",
-          "totalPrice": "6.9万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900300.jpg?1793651067",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W003&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W003&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261020W001",
-          "title": "クロストレック",
-          "description": "クロストレック",
-          "carName": "クロストレック",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2023年",
-          "mileage": "2.9万K",
-          "color": "2.0",
-          "inspection": "",
-          "displacement": "2023cc",
-          "bodyPrice": "309.5万円",
-          "totalPrice": "318.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261020/H/70009023323026102000100.jpg?1793651067",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261020W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261020W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261020W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261020W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261020W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "318.2万円",
-              "309.5万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261022W001",
           "title": "プリウス",
           "description": "プリウス",
@@ -4777,7 +4680,7 @@
         "attempts": 0
       }
     ],
-    "completed": 36,
+    "completed": 38,
     "total": 54,
     "failed": []
   }
