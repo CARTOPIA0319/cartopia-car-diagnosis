@@ -1,24 +1,24 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-02T20:26:56.245Z",
+  "updatedAt": "2026-11-02T20:27:10.579Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
     "success": false,
     "statusText": "分割更新中",
-    "runId": "20261102202615566-tsnlzgn2",
+    "runId": "20261102202704850-u715t6uy",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-11-02T20:26:17.188Z",
-    "finishedAt": "2026-11-02T20:26:56.245Z",
-    "durationSeconds": 39,
+    "startedAt": "2026-11-02T20:27:06.794Z",
+    "finishedAt": "2026-11-02T20:27:10.579Z",
+    "durationSeconds": 4,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261102202420101-ethgaj52",
       "phase": "details",
       "total": 54,
-      "completed": 40,
-      "remaining": 14,
+      "completed": 42,
+      "remaining": 12,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2744,7 +2744,7 @@
     },
     {
       "stockId": "0902332A30261014W001",
-      "title": "パジェロミニ",
+      "title": "パジェロミニ エクシード",
       "description": "パジェロミニ",
       "carName": "パジェロミニ",
       "gradeName": "エクシード",
@@ -2754,12 +2754,12 @@
       "seatCapacity": 1,
       "year": "2012年",
       "mileage": "5.8万K",
-      "color": "660",
+      "color": "クールシルバーメタリック／ラズベリーレッドパール",
       "inspection": "00330002",
       "displacement": "2012cc",
       "bodyPrice": "84.6万円",
       "totalPrice": "88.8万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261014/H/70009023323026101400100.jpg?1793651067",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261014/H/70009023323026101400100.jpg?1793651228",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261014W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2801,7 +2801,7 @@
           "84.6万円"
         ]
       },
-      "updatedAt": "2026-11-02T10:07:11.626Z",
+      "updatedAt": "2026-11-02T20:27:10.578Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2821,12 +2821,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-02T20:24:28.005Z"
+      }
     },
     {
       "stockId": "0902332A30261013W001",
-      "title": "ｅＫクロススペース",
+      "title": "ｅＫクロススペース Ｔ",
       "description": "ｅＫクロススペース",
       "carName": "ｅＫクロススペース",
       "gradeName": "Ｔ",
@@ -2836,12 +2835,12 @@
       "seatCapacity": 1,
       "year": "2021年",
       "mileage": "8.5万K",
-      "color": "660",
+      "color": "ナチュラルアイボリーメタリック／オレンジ",
       "inspection": "00330002",
       "displacement": "2021cc",
       "bodyPrice": "118.4万円",
       "totalPrice": "122.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261013/H/70009023323026101300100.jpg?1793651067",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261013/H/70009023323026101300100.jpg?1793651228",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261013W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2881,7 +2880,7 @@
           "118.4万円"
         ]
       },
-      "updatedAt": "2026-11-02T10:07:11.626Z",
+      "updatedAt": "2026-11-02T20:27:10.578Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2901,8 +2900,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-02T20:24:28.005Z"
+      }
     },
     {
       "stockId": "0902332A30261015W003",
@@ -3895,104 +3893,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261014W001",
-          "title": "パジェロミニ",
-          "description": "パジェロミニ",
-          "carName": "パジェロミニ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2012年",
-          "mileage": "5.8万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2012cc",
-          "bodyPrice": "84.6万円",
-          "totalPrice": "88.8万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261014/H/70009023323026101400100.jpg?1793651067",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261014W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261014W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261014W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261014W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261014W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "88.8万円",
-              "84.6万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261013W001",
-          "title": "ｅＫクロススペース",
-          "description": "ｅＫクロススペース",
-          "carName": "ｅＫクロススペース",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2021年",
-          "mileage": "8.5万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2021cc",
-          "bodyPrice": "118.4万円",
-          "totalPrice": "122.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261013/H/70009023323026101300100.jpg?1793651067",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261013W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261013W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261013W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261013W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261013W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "122.2万円",
-              "118.4万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261015W003",
           "title": "ＸＶ",
           "description": "ＸＶ",
@@ -4580,7 +4480,7 @@
         "attempts": 0
       }
     ],
-    "completed": 40,
+    "completed": 42,
     "total": 54,
     "failed": []
   }
