@@ -1,24 +1,24 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-03T17:57:12.700Z",
+  "updatedAt": "2026-11-03T17:57:27.432Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
     "success": false,
     "statusText": "分割更新中",
-    "runId": "20261103175651009-tgvz9ml1",
+    "runId": "20261103175721348-bo95cgxp",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-11-03T17:56:52.751Z",
-    "finishedAt": "2026-11-03T17:57:12.700Z",
-    "durationSeconds": 20,
+    "startedAt": "2026-11-03T17:57:23.190Z",
+    "finishedAt": "2026-11-03T17:57:27.432Z",
+    "durationSeconds": 4,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261103175404758-idq0u2po",
       "phase": "details",
       "total": 54,
-      "completed": 50,
-      "remaining": 4,
+      "completed": 52,
+      "remaining": 2,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -3503,7 +3503,7 @@
     },
     {
       "stockId": "0902332A30260912W002",
-      "title": "ルーミー",
+      "title": "ルーミー カスタムＧ",
       "description": "ルーミー",
       "carName": "ルーミー",
       "gradeName": "カスタムＧ",
@@ -3513,12 +3513,12 @@
       "seatCapacity": 1,
       "year": "2025年",
       "mileage": "0.5万K",
-      "color": "1.0",
+      "color": "ＯＰパールホワイトＩＩＩ",
       "inspection": "2028",
       "displacement": "2025cc",
       "bodyPrice": "227.5万円",
       "totalPrice": "232.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260912/H/70009023323026091200200.jpg?1793728453",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260912/H/70009023323026091200200.jpg?1793728644",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260912W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3558,7 +3558,7 @@
           "227.5万円"
         ]
       },
-      "updatedAt": "2026-11-03T10:11:37.924Z",
+      "updatedAt": "2026-11-03T17:57:27.432Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3578,12 +3578,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-03T17:54:13.527Z"
+      }
     },
     {
       "stockId": "0902332A30260809W003",
-      "title": "スペイド",
+      "title": "スペイド Ｘ",
       "description": "スペイド",
       "carName": "スペイド",
       "gradeName": "Ｘ",
@@ -3593,12 +3592,12 @@
       "seatCapacity": 1,
       "year": "2014年",
       "mileage": "2.1万K",
-      "color": "1.5",
+      "color": "ワインＭ",
       "inspection": "00330002",
       "displacement": "2014cc",
       "bodyPrice": "85.7万円",
       "totalPrice": "92.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900300.jpg?1793728453",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900300.jpg?1793728644",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260809W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3638,7 +3637,7 @@
           "85.7万円"
         ]
       },
-      "updatedAt": "2026-11-03T10:11:37.924Z",
+      "updatedAt": "2026-11-03T17:57:27.432Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3658,8 +3657,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-03T17:54:13.527Z"
+      }
     },
     {
       "stockId": "0902332A30260819W003",
@@ -3846,104 +3844,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260912W002",
-          "title": "ルーミー",
-          "description": "ルーミー",
-          "carName": "ルーミー",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2025年",
-          "mileage": "0.5万K",
-          "color": "1.0",
-          "inspection": "",
-          "displacement": "2025cc",
-          "bodyPrice": "227.5万円",
-          "totalPrice": "232.3万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260912/H/70009023323026091200200.jpg?1793728453",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260912W002&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260912W002&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260912W002&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260912W002&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260912W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "232.3万円",
-              "227.5万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260809W003",
-          "title": "スペイド",
-          "description": "スペイド",
-          "carName": "スペイド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2014年",
-          "mileage": "2.1万K",
-          "color": "1.5",
-          "inspection": "",
-          "displacement": "2014cc",
-          "bodyPrice": "85.7万円",
-          "totalPrice": "92.3万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900300.jpg?1793728453",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260809W003&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260809W003&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260809W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260809W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260809W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "92.3万円",
-              "85.7万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260819W003",
           "title": "デイズ",
           "description": "デイズ",
@@ -4041,7 +3941,7 @@
         "attempts": 0
       }
     ],
-    "completed": 50,
+    "completed": 52,
     "total": 54,
     "failed": []
   }
