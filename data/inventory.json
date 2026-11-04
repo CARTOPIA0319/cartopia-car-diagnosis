@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-04T03:24:34.789Z",
+  "updatedAt": "2026-11-04T03:24:46.775Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261104032418159-wuq6k5dy",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-04T03:24:19.846Z",
-    "finishedAt": "2026-11-04T03:24:34.789Z",
-    "durationSeconds": 15,
+    "finishedAt": "2026-11-04T03:24:46.775Z",
+    "durationSeconds": 27,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261104032225456-1q5vdosl",
       "phase": "details",
       "total": 54,
-      "completed": 36,
-      "remaining": 18,
+      "completed": 38,
+      "remaining": 16,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2458,7 +2458,7 @@
       "displacement": "660cc",
       "bodyPrice": "92.7万円",
       "totalPrice": "96.7万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260926/H/70009023323026092600100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260926/H/70009023323026092600100.jpg?1793762677",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260926W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260926001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2483,7 +2483,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-03T23:31:41.847Z",
+      "updatedAt": "2026-11-04T03:24:46.775Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2503,12 +2503,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-04T03:22:33.403Z"
+      }
     },
     {
       "stockId": "0902332A30261102W001",
-      "title": "Ｎ－ＶＡＮ＋スタイル",
+      "title": "Ｎ－ＶＡＮ＋スタイル ファン・ターボ",
       "description": "Ｎ－ＶＡＮ＋スタイル",
       "carName": "Ｎ－ＶＡＮ＋スタイル",
       "gradeName": "ファン・ターボ",
@@ -2518,12 +2517,12 @@
       "seatCapacity": 1,
       "year": "2022年",
       "mileage": "7万K",
-      "color": "660",
+      "color": "ブラック",
       "inspection": "00330002",
       "displacement": "2022cc",
       "bodyPrice": "7.0万円",
       "totalPrice": "7.0万円",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026110200100.jpg?1793762553",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30261102W00179.jpg?1793762676",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261102W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2548,7 +2547,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-11-03T23:31:41.847Z",
+      "updatedAt": "2026-11-04T03:24:46.775Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2568,8 +2567,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-04T03:22:33.403Z"
+      }
     },
     {
       "stockId": "0902332A30261029W001",
@@ -3860,88 +3858,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260926W001",
-          "title": "ワゴンＲ ハイブリッドＦＺ",
-          "description": "ワゴンＲ ハイブリッドＦＺ ハイブリッド ４ＷＤ フルセグＴＶ Ｂｌｕｅｔｏｏｔｈ オプションカラー 前２席シートヒーター ヘッドアップディスプレイ ミラーヒーター 衝突軽減装置 アイドリンストップ 車線逸脱防止警報",
-          "carName": "ワゴンＲ",
-          "gradeName": "ハイブリッドＦＺ",
-          "gradeExtraInfo": "",
-          "classificationName": "MH55S",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2017年",
-          "mileage": "6.9万K",
-          "color": "ＯＰスチールシルバーメタリック",
-          "inspection": "車検整備付",
-          "displacement": "660cc",
-          "bodyPrice": "92.7万円",
-          "totalPrice": "96.7万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260926/H/70009023323026092600100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260926W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260926001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261102W001",
-          "title": "Ｎ－ＶＡＮ＋スタイル",
-          "description": "Ｎ－ＶＡＮ＋スタイル",
-          "carName": "Ｎ－ＶＡＮ＋スタイル",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2022年",
-          "mileage": "7万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2022cc",
-          "bodyPrice": "7.0万円",
-          "totalPrice": "7.0万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026110200100.jpg?1793762553",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261102W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261102W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261102W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261102W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261102W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261029W001",
           "title": "エルグランド",
           "description": "エルグランド",
@@ -4719,7 +4635,7 @@
         "attempts": 0
       }
     ],
-    "completed": 36,
+    "completed": 38,
     "total": 54,
     "failed": []
   }
