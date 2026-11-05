@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-05T15:53:43.183Z",
+  "updatedAt": "2026-11-05T15:53:49.188Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261105155317776-9zvzlpyr",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-05T15:53:19.507Z",
-    "finishedAt": "2026-11-05T15:53:43.183Z",
-    "durationSeconds": 24,
+    "finishedAt": "2026-11-05T15:53:49.188Z",
+    "durationSeconds": 30,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261105155037305-m6ic4wvq",
       "phase": "details",
       "total": 55,
-      "completed": 48,
-      "remaining": 7,
+      "completed": 50,
+      "remaining": 5,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -3317,7 +3317,7 @@
     },
     {
       "stockId": "0902332A30261016W001",
-      "title": "Ｎ－ＢＯＸカスタム",
+      "title": "Ｎ－ＢＯＸカスタム Ｌ コーディネートスタイル",
       "description": "Ｎ－ＢＯＸカスタム",
       "carName": "Ｎ－ＢＯＸカスタム",
       "gradeName": "Ｌ コーディネートスタイル",
@@ -3327,12 +3327,12 @@
       "seatCapacity": 1,
       "year": "2022年",
       "mileage": "2.3万K",
-      "color": "660",
+      "color": "プラチナホワイトパール／ブラック",
       "inspection": "2027",
       "displacement": "2022cc",
       "bodyPrice": "181.6万円",
       "totalPrice": "184.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261016/H/70009023323026101600100.jpg?1793893845",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261016/H/70009023323026101600100.jpg?1793894025",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261016W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3370,7 +3370,7 @@
           "181.6万円"
         ]
       },
-      "updatedAt": "2026-11-05T07:30:56.891Z",
+      "updatedAt": "2026-11-05T15:53:49.188Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3390,12 +3390,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-05T15:50:45.860Z"
+      }
     },
     {
       "stockId": "0902332A30261001W003",
-      "title": "タント",
+      "title": "タント Ｘ",
       "description": "タント",
       "carName": "タント",
       "gradeName": "Ｘ",
@@ -3405,12 +3404,12 @@
       "seatCapacity": 1,
       "year": "2016年",
       "mileage": "8.6万K",
-      "color": "660",
+      "color": "ファイアークォーツレッドメタリック",
       "inspection": "2027",
       "displacement": "2016cc",
       "bodyPrice": "67.3万円",
       "totalPrice": "69.8万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261001/H/70009023323026100100300.jpg?1793893845",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261001/H/70009023323026100100300.jpg?1793894025",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261001W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3448,7 +3447,7 @@
           "67.3万円"
         ]
       },
-      "updatedAt": "2026-11-05T07:30:56.892Z",
+      "updatedAt": "2026-11-05T15:53:49.188Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3468,8 +3467,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-05T15:50:45.861Z"
+      }
     },
     {
       "stockId": "0902332A30260803W001",
@@ -3900,104 +3898,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261016W001",
-          "title": "Ｎ－ＢＯＸカスタム",
-          "description": "Ｎ－ＢＯＸカスタム",
-          "carName": "Ｎ－ＢＯＸカスタム",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2022年",
-          "mileage": "2.3万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2022cc",
-          "bodyPrice": "181.6万円",
-          "totalPrice": "184.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261016/H/70009023323026101600100.jpg?1793893845",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261016W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261016W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261016W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261016W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261016W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "184.2万円",
-              "181.6万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261001W003",
-          "title": "タント",
-          "description": "タント",
-          "carName": "タント",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2016年",
-          "mileage": "8.6万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2016cc",
-          "bodyPrice": "67.3万円",
-          "totalPrice": "69.8万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261001/H/70009023323026100100300.jpg?1793893845",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261001W003&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261001W003&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261001W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261001W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261001W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "69.8万円",
-              "67.3万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260803W001",
           "title": "ＸＶ",
           "description": "ＸＶ",
@@ -4242,7 +4142,7 @@
         "attempts": 0
       }
     ],
-    "completed": 48,
+    "completed": 50,
     "total": 55,
     "failed": []
   }
