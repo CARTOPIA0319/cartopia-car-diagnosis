@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-06T09:59:21.688Z",
+  "updatedAt": "2026-11-06T09:59:26.513Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261106095852276-1eisc1g1",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-06T09:58:53.948Z",
-    "finishedAt": "2026-11-06T09:59:21.688Z",
-    "durationSeconds": 28,
+    "finishedAt": "2026-11-06T09:59:26.513Z",
+    "durationSeconds": 33,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261106095617626-hfrobeb5",
       "phase": "details",
       "total": 55,
-      "completed": 46,
-      "remaining": 9,
+      "completed": 48,
+      "remaining": 7,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -3138,7 +3138,7 @@
     },
     {
       "stockId": "0902332A30261013W001",
-      "title": "ｅＫクロススペース",
+      "title": "ｅＫクロススペース Ｔ",
       "description": "ｅＫクロススペース",
       "carName": "ｅＫクロススペース",
       "gradeName": "Ｔ",
@@ -3148,12 +3148,12 @@
       "seatCapacity": 1,
       "year": "2021年",
       "mileage": "8.5万K",
-      "color": "660",
+      "color": "ナチュラルアイボリーメタリック／オレンジ",
       "inspection": "00330002",
       "displacement": "2021cc",
       "bodyPrice": "118.4万円",
       "totalPrice": "122.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261013/H/70009023323026101300100.jpg?1793958984",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261013/H/70009023323026101300100.jpg?1793959164",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261013W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3193,7 +3193,7 @@
           "118.4万円"
         ]
       },
-      "updatedAt": "2026-11-06T02:36:29.161Z",
+      "updatedAt": "2026-11-06T09:59:26.513Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3213,12 +3213,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-06T09:56:24.953Z"
+      }
     },
     {
       "stockId": "0902332A30261015W003",
-      "title": "ＸＶ",
+      "title": "ＸＶ アドバンス",
       "description": "ＸＶ",
       "carName": "ＸＶ",
       "gradeName": "アドバンス",
@@ -3228,12 +3227,12 @@
       "seatCapacity": 1,
       "year": "2021年",
       "mileage": "5.3万K",
-      "color": "2.0",
+      "color": "クリスタルホワイトパール",
       "inspection": "00330002",
       "displacement": "2021cc",
       "bodyPrice": "213.7万円",
       "totalPrice": "222.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261015/H/70009023323026101500300.jpg?1793958984",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261015/H/70009023323026101500300.jpg?1793959164",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261015W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3277,7 +3276,7 @@
           "213.7万円"
         ]
       },
-      "updatedAt": "2026-11-06T02:36:33.044Z",
+      "updatedAt": "2026-11-06T09:59:26.513Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3297,8 +3296,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-06T09:56:24.953Z"
+      }
     },
     {
       "stockId": "0902332A30260930W001",
@@ -3889,104 +3887,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261013W001",
-          "title": "ｅＫクロススペース",
-          "description": "ｅＫクロススペース",
-          "carName": "ｅＫクロススペース",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2021年",
-          "mileage": "8.5万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2021cc",
-          "bodyPrice": "118.4万円",
-          "totalPrice": "122.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261013/H/70009023323026101300100.jpg?1793958984",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261013W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261013W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261013W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261013W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261013W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "122.2万円",
-              "118.4万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261015W003",
-          "title": "ＸＶ",
-          "description": "ＸＶ",
-          "carName": "ＸＶ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2021年",
-          "mileage": "5.3万K",
-          "color": "2.0",
-          "inspection": "",
-          "displacement": "2021cc",
-          "bodyPrice": "213.7万円",
-          "totalPrice": "222.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261015/H/70009023323026101500300.jpg?1793958984",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261015W003&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261015W003&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261015W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261015W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261015W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "222.2万円",
-              "213.7万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260930W001",
           "title": "ハイエースバン",
           "description": "ハイエースバン",
@@ -4329,7 +4229,7 @@
         "attempts": 0
       }
     ],
-    "completed": 46,
+    "completed": 48,
     "total": 55,
     "failed": []
   }
