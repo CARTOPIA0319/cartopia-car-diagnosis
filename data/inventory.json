@@ -1,24 +1,24 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-07T02:27:10.851Z",
+  "updatedAt": "2026-11-07T02:27:32.474Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
     "success": false,
     "statusText": "分割更新中",
-    "runId": "20261107022637364-0en531y9",
+    "runId": "20261107022719532-vxdtg0ar",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-11-07T02:26:38.884Z",
-    "finishedAt": "2026-11-07T02:27:10.851Z",
-    "durationSeconds": 32,
+    "startedAt": "2026-11-07T02:27:21.147Z",
+    "finishedAt": "2026-11-07T02:27:32.474Z",
+    "durationSeconds": 11,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261107022443576-zgfi0aqe",
       "phase": "details",
       "total": 55,
-      "completed": 40,
-      "remaining": 15,
+      "completed": 42,
+      "remaining": 13,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2705,7 +2705,7 @@
     },
     {
       "stockId": "0902332A30261102W001",
-      "title": "Ｎ－ＶＡＮ＋スタイル",
+      "title": "Ｎ－ＶＡＮ＋スタイル ファン・ターボ",
       "description": "Ｎ－ＶＡＮ＋スタイル",
       "carName": "Ｎ－ＶＡＮ＋スタイル",
       "gradeName": "ファン・ターボ",
@@ -2715,12 +2715,12 @@
       "seatCapacity": 1,
       "year": "2022年",
       "mileage": "7万K",
-      "color": "660",
+      "color": "ブラック",
       "inspection": "00330002",
       "displacement": "2022cc",
       "bodyPrice": "7.0万円",
       "totalPrice": "7.0万円",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026110200100.jpg?1794018291",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30261102W00179.jpg?1794018443",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261102W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2745,7 +2745,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-11-06T22:28:56.608Z",
+      "updatedAt": "2026-11-07T02:27:32.473Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2765,12 +2765,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-07T02:24:51.902Z"
+      }
     },
     {
       "stockId": "0902332A30261029W001",
-      "title": "エルグランド",
+      "title": "エルグランド ２５０ハイウェイスタープレミアムアーバンクロム",
       "description": "エルグランド",
       "carName": "エルグランド",
       "gradeName": "２５０ハイウェイスタープレミアムアーバンクロム",
@@ -2780,12 +2779,12 @@
       "seatCapacity": 1,
       "year": "2020年",
       "mileage": "32.0万K",
-      "color": "2.5",
+      "color": "パールホワイト",
       "inspection": "2027",
       "displacement": "2020cc",
       "bodyPrice": "1万円",
       "totalPrice": "",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900100.jpg?1794018291",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900100.jpg?1794018443",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2810,7 +2809,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-11-06T22:28:56.608Z",
+      "updatedAt": "2026-11-07T02:27:32.474Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2830,8 +2829,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-07T02:24:51.902Z"
+      }
     },
     {
       "stockId": "0902332A30261029W003",
@@ -3895,98 +3893,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261102W001",
-          "title": "Ｎ－ＶＡＮ＋スタイル",
-          "description": "Ｎ－ＶＡＮ＋スタイル",
-          "carName": "Ｎ－ＶＡＮ＋スタイル",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2022年",
-          "mileage": "7万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2022cc",
-          "bodyPrice": "7.0万円",
-          "totalPrice": "7.0万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026110200100.jpg?1794018291",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261102W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261102W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261102W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261102W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261102W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261029W001",
-          "title": "エルグランド",
-          "description": "エルグランド",
-          "carName": "エルグランド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2020年",
-          "mileage": "",
-          "color": "2.5",
-          "inspection": "",
-          "displacement": "2020cc",
-          "bodyPrice": "",
-          "totalPrice": "",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900100.jpg?1794018291",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": false,
-            "bodyPrice": false,
-            "totalPrice": false,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261029W003",
           "title": "エクストレイル",
           "description": "エクストレイル",
@@ -4620,7 +4526,7 @@
         "attempts": 0
       }
     ],
-    "completed": 40,
+    "completed": 42,
     "total": 55,
     "failed": []
   }
