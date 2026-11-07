@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-07T02:25:30.225Z",
+  "updatedAt": "2026-11-07T02:25:35.139Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261107022524427-3f083qs0",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-07T02:25:26.024Z",
-    "finishedAt": "2026-11-07T02:25:30.225Z",
-    "durationSeconds": 4,
+    "finishedAt": "2026-11-07T02:25:35.139Z",
+    "durationSeconds": 9,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261107022443576-zgfi0aqe",
       "phase": "details",
       "total": 55,
-      "completed": 12,
-      "remaining": 43,
+      "completed": 14,
+      "remaining": 41,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -876,7 +876,7 @@
       "displacement": "2.0L",
       "bodyPrice": "169.6万円",
       "totalPrice": "178.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261013/H/70009023323026101300300.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261013/H/70009023323026101300300.jpg?1794018332",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261013W003",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261013003&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -903,7 +903,7 @@
         "EV・HV"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-06T22:27:02.796Z",
+      "updatedAt": "2026-11-07T02:25:35.139Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -923,8 +923,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-07T02:24:51.902Z"
+      }
     },
     {
       "stockId": "0902332A30260403W001",
@@ -943,7 +942,7 @@
       "displacement": "1.0L",
       "bodyPrice": "150.6万円",
       "totalPrice": "158.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260403/H/70009023323026040300100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260403/H/70009023323026040300100.jpg?1794018332",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260403W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260403001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -966,7 +965,7 @@
         "コンパクトカー"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-06T22:27:02.796Z",
+      "updatedAt": "2026-11-07T02:25:35.139Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -986,8 +985,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-07T02:24:51.902Z"
+      }
     },
     {
       "stockId": "0902332A30260319W002",
@@ -3923,78 +3921,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261013W003",
-          "title": "セレナ ハイウェイスター Ｖセレクション",
-          "description": "セレナ ハイウェイスター Ｖセレクション ４ＷＤ アラウンドビューモニター 純正ナビ フルセグＴＶ Ｂｌｕｅｔｏｏｔｈ クルーズコントロール パーキングソナー 両側パワースライドドア エマージェンシーブレーキ ステアリングスイッチ ＥＴＣ",
-          "carName": "セレナ",
-          "gradeName": "ハイウェイスター Ｖセレクション",
-          "gradeExtraInfo": "",
-          "classificationName": "GFNC27",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2017年",
-          "mileage": "8.3万K",
-          "color": "ＯＰカシミヤグレージュ（ＴＰＭ）／インペリアルアンバー（Ｐ）",
-          "inspection": "車検整備付",
-          "displacement": "2.0L",
-          "bodyPrice": "169.6万円",
-          "totalPrice": "178.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261013/H/70009023323026101300300.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261013W003",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261013W003&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261013W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261013W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261013W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261013W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261013003&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260403W001",
-          "title": "タンク カスタムＧ",
-          "description": "タンク カスタムＧ ４ＷＤ オプションツートンカラー 両側電動スライドドア ＬＥＤヘッドライト／フォグ 純正フルセグナビ Ｂｌｕｅｔｏｏｔｈ パノラミックビューモニター プリクラッシュセースティ シートヒーター ＥＴＣ",
-          "carName": "タンク",
-          "gradeName": "カスタムＧ",
-          "gradeExtraInfo": "",
-          "classificationName": "M910A",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2020年",
-          "mileage": "6.7万K",
-          "color": "パールホワイトＩＩＩ ／ブラックマイカメタリック",
-          "inspection": "車検整備付",
-          "displacement": "1.0L",
-          "bodyPrice": "150.6万円",
-          "totalPrice": "158.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260403/H/70009023323026040300100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260403W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260403W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260403W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260403W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260403W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260403W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260403001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260319W002",
           "title": "デリカＤ：５ アーバンギア Ｇ パワーパッケージ",
           "description": "デリカＤ：５ アーバンギア Ｇ パワーパッケージ 切替式４ＷＤ ワンオーナー ７人乗り 冬タイヤ＋ＡＷセット アルパイン製１１．５インチリアモニター 純正１０．１型ナビ 純正ＥＧスターター 前後ドラレコ パワーバックドア パドルシフト 両側パワスラ",
@@ -5676,7 +5602,7 @@
         "attempts": 0
       }
     ],
-    "completed": 12,
+    "completed": 14,
     "total": 55,
     "failed": []
   }
