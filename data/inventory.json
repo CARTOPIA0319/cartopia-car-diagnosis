@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-08T06:19:23.798Z",
+  "updatedAt": "2026-11-08T06:19:34.378Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261108061856753-y26nm3el",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-08T06:18:58.264Z",
-    "finishedAt": "2026-11-08T06:19:23.798Z",
-    "durationSeconds": 26,
+    "finishedAt": "2026-11-08T06:19:34.378Z",
+    "durationSeconds": 36,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261108061701448-mj6folm8",
       "phase": "details",
       "total": 53,
-      "completed": 38,
-      "remaining": 15,
+      "completed": 40,
+      "remaining": 13,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2588,7 +2588,7 @@
     },
     {
       "stockId": "0902332A30261105W001",
-      "title": "オーラ",
+      "title": "オーラ Ｇ ＦＯＵＲ",
       "description": "オーラ",
       "carName": "オーラ",
       "gradeName": "Ｇ ＦＯＵＲ",
@@ -2598,12 +2598,12 @@
       "seatCapacity": 1,
       "year": "2022年",
       "mileage": "5.7万K",
-      "color": "1.2",
+      "color": "ピンクII",
       "inspection": "00330002",
       "displacement": "2022cc",
       "bodyPrice": "5.7万円",
       "totalPrice": "5.7万円",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026110500100.jpg?1794118631",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30261105W00179.jpg?1794118765",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261105W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2628,7 +2628,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-11-08T00:02:43.293Z",
+      "updatedAt": "2026-11-08T06:19:34.378Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2648,12 +2648,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-08T06:17:11.918Z"
+      }
     },
     {
       "stockId": "0902332A30261102W001",
-      "title": "Ｎ－ＶＡＮ＋スタイル",
+      "title": "Ｎ－ＶＡＮ＋スタイル ファン・ターボ",
       "description": "Ｎ－ＶＡＮ＋スタイル",
       "carName": "Ｎ－ＶＡＮ＋スタイル",
       "gradeName": "ファン・ターボ",
@@ -2663,12 +2662,12 @@
       "seatCapacity": 1,
       "year": "2022年",
       "mileage": "7万K",
-      "color": "660",
+      "color": "ブラック",
       "inspection": "00330002",
       "displacement": "2022cc",
       "bodyPrice": "7.0万円",
       "totalPrice": "7.0万円",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026110200100.jpg?1794118631",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30261102W00179.jpg?1794118765",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261102W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2693,7 +2692,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-11-08T00:02:53.975Z",
+      "updatedAt": "2026-11-08T06:19:34.378Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2713,8 +2712,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-08T06:17:11.918Z"
+      }
     },
     {
       "stockId": "0902332A30261029W001",
@@ -3763,98 +3761,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261105W001",
-          "title": "オーラ",
-          "description": "オーラ",
-          "carName": "オーラ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2022年",
-          "mileage": "5.7万K",
-          "color": "1.2",
-          "inspection": "",
-          "displacement": "2022cc",
-          "bodyPrice": "5.7万円",
-          "totalPrice": "5.7万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026110500100.jpg?1794118631",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261105W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261105W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261105W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261105W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261105W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261102W001",
-          "title": "Ｎ－ＶＡＮ＋スタイル",
-          "description": "Ｎ－ＶＡＮ＋スタイル",
-          "carName": "Ｎ－ＶＡＮ＋スタイル",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2022年",
-          "mileage": "7万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2022cc",
-          "bodyPrice": "7.0万円",
-          "totalPrice": "7.0万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026110200100.jpg?1794118631",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261102W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261102W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261102W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261102W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261102W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261029W001",
           "title": "エルグランド",
           "description": "エルグランド",
@@ -4485,7 +4391,7 @@
         "attempts": 0
       }
     ],
-    "completed": 38,
+    "completed": 40,
     "total": 53,
     "failed": []
   }
