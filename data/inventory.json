@@ -1,28 +1,28 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-08T00:03:44.251Z",
+  "updatedAt": "2026-11-08T00:03:48.365Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
-    "success": false,
-    "statusText": "分割更新中",
+    "success": true,
+    "statusText": "全件更新完了",
     "runId": "20261108000339678-c2d9giz1",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-08T00:03:41.197Z",
-    "finishedAt": "2026-11-08T00:03:44.251Z",
-    "durationSeconds": 3,
+    "finishedAt": "2026-11-08T00:03:48.365Z",
+    "durationSeconds": 7,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261108000026658-6t4p3idb",
-      "phase": "details",
+      "phase": "complete",
       "total": 53,
-      "completed": 52,
-      "remaining": 1,
+      "completed": 53,
+      "remaining": 0,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
-      "finishedAt": ""
+      "finishedAt": "2026-11-08T00:03:48.365Z"
     },
     "typeFailed": 7,
     "typeTimeout": 0
@@ -3644,7 +3644,7 @@
     },
     {
       "stockId": "0902332A30260824W005",
-      "title": "Ｎ－ＢＯＸカスタム",
+      "title": "Ｎ－ＢＯＸカスタム Ｇ・Ｌパッケージ",
       "description": "Ｎ－ＢＯＸカスタム",
       "carName": "Ｎ－ＢＯＸカスタム",
       "gradeName": "Ｇ・Ｌパッケージ",
@@ -3654,7 +3654,7 @@
       "seatCapacity": 1,
       "year": "2013年",
       "mileage": "5.7万K",
-      "color": "660",
+      "color": "クリスタルブラックパール",
       "inspection": "00330002",
       "displacement": "2013cc",
       "bodyPrice": "68.2万円",
@@ -3697,7 +3697,7 @@
           "68.2万円"
         ]
       },
-      "updatedAt": "2026-11-07T20:22:01.802Z",
+      "updatedAt": "2026-11-08T00:03:48.365Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3717,8 +3717,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-08T00:00:34.363Z"
+      }
     }
   ],
   "lastFailedAt": "2026-10-27T00:07:43.240Z",
@@ -3727,7 +3726,7 @@
     "version": 2,
     "cycleId": "20261108000026658-6t4p3idb",
     "startedAt": "2026-11-08T00:00:28.362Z",
-    "phase": "details",
+    "phase": "complete",
     "publicLoaded": true,
     "publicCount": 36,
     "nextSavedPage": 2,
@@ -3746,59 +3745,10 @@
       }
     ],
     "listed": [],
-    "queue": [
-      {
-        "vehicle": {
-          "stockId": "0902332A30260824W005",
-          "title": "Ｎ－ＢＯＸカスタム",
-          "description": "Ｎ－ＢＯＸカスタム",
-          "carName": "Ｎ－ＢＯＸカスタム",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2013年",
-          "mileage": "5.7万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2013cc",
-          "bodyPrice": "68.2万円",
-          "totalPrice": "72.3万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026082400500.jpg?1794096034",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260824W005&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260824W005&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260824W005&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260824W005&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260824W005&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "72.3万円",
-              "68.2万円"
-            ]
-          }
-        },
-        "attempts": 0
-      }
-    ],
-    "completed": 52,
+    "queue": [],
+    "completed": 53,
     "total": 53,
-    "failed": []
+    "failed": [],
+    "finishedAt": "2026-11-08T00:03:48.365Z"
   }
 }
