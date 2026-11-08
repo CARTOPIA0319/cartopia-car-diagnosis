@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-08T22:32:25.391Z",
+  "updatedAt": "2026-11-08T22:32:30.276Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261108223211716-rb346b55",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-08T22:32:13.412Z",
-    "finishedAt": "2026-11-08T22:32:25.391Z",
-    "durationSeconds": 12,
+    "finishedAt": "2026-11-08T22:32:30.276Z",
+    "durationSeconds": 17,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261108223129933-rdfgnqzy",
       "phase": "details",
       "total": 53,
-      "completed": 14,
-      "remaining": 39,
+      "completed": 16,
+      "remaining": 37,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -1004,7 +1004,7 @@
       "displacement": "2.2L",
       "bodyPrice": "381.2万円",
       "totalPrice": "387.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260319/H/70009023323026031900200.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260319/H/70009023323026031900200.jpg?1794177147",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260319W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260319002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1029,7 +1029,7 @@
         "SUV"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-08T18:33:03.520Z",
+      "updatedAt": "2026-11-08T22:32:30.276Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1049,8 +1049,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-08T22:31:38.624Z"
+      }
     },
     {
       "stockId": "0902332A30261005W001",
@@ -1069,7 +1068,7 @@
       "displacement": "2.8L",
       "bodyPrice": "371.8万円",
       "totalPrice": "377.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261005/H/70009023323026100500100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261005/H/70009023323026100500100.jpg?1794177147",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261005W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261005001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1098,7 +1097,7 @@
         "バン・トラック"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-08T18:33:03.520Z",
+      "updatedAt": "2026-11-08T22:32:30.276Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1118,8 +1117,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-08T22:31:38.624Z"
+      }
     },
     {
       "stockId": "0902332A30260827W003",
@@ -3774,78 +3772,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260319W002",
-          "title": "デリカＤ：５ アーバンギア Ｇ パワーパッケージ",
-          "description": "デリカＤ：５ アーバンギア Ｇ パワーパッケージ 切替式４ＷＤ ワンオーナー ７人乗り 冬タイヤ＋ＡＷセット アルパイン製１１．５インチリアモニター 純正１０．１型ナビ 純正ＥＧスターター 前後ドラレコ パワーバックドア パドルシフト 両側パワスラ",
-          "carName": "デリカＤ：５",
-          "gradeName": "アーバンギア Ｇ パワーパッケージ",
-          "gradeExtraInfo": "",
-          "classificationName": "CV1W",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2019年",
-          "mileage": "1.4万K",
-          "color": "ダイヤモンドブラックマイカ",
-          "inspection": "検2026年12月",
-          "displacement": "2.2L",
-          "bodyPrice": "381.2万円",
-          "totalPrice": "387.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260319/H/70009023323026031900200.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260319W002",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260319W002&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260319W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260319W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260319W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260319W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260319002&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261005W001",
-          "title": "ハイエースバン スーパーＧＬ ダークプライムＩＩ",
-          "description": "ハイエースバン スーパーＧＬ ダークプライムＩＩ ４ＷＤ ディーゼルターボ フルセグＴＶ バックカメラ Ｂｌｕｅｔｏｏｔｈ ウッドコンビ革巻ステアリング パーキングソナー ハーフレザー ＡＣ１００Ｖ電源 プリクラッシュセーフティ オートハイビーム",
-          "carName": "ハイエースバン",
-          "gradeName": "スーパーＧＬ ダークプライムＩＩ",
-          "gradeExtraInfo": "",
-          "classificationName": "GDH206V",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2018年",
-          "mileage": "6万K",
-          "color": "ブラックマイカ",
-          "inspection": "車検整備付",
-          "displacement": "2.8L",
-          "bodyPrice": "371.8万円",
-          "totalPrice": "377.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261005/H/70009023323026100500100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261005W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261005W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261005W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261005W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261005W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261005W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261005001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260827W003",
           "title": "ハイエースワゴン ＧＬファインテックツアラー",
           "description": "ハイエースワゴン ＧＬファインテックツアラー ４ＷＤ 両側Ｐスライドドア パノラミックビューモニター フリップダウンモニター２個 フルセグＴＶ 純正ホイール付きスタッドレスタイヤ付属 ハヤシレーシングＡＷ２列目上部社外スピーカー ステアリングＳＷ",
@@ -5370,7 +5296,7 @@
         "attempts": 0
       }
     ],
-    "completed": 14,
+    "completed": 16,
     "total": 53,
     "failed": []
   }
