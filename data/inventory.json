@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-09T20:52:34.111Z",
+  "updatedAt": "2026-11-09T20:52:44.906Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261109205218648-wzuv6k3c",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-09T20:52:20.373Z",
-    "finishedAt": "2026-11-09T20:52:34.111Z",
-    "durationSeconds": 14,
+    "finishedAt": "2026-11-09T20:52:44.906Z",
+    "durationSeconds": 25,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261109205017488-j5i4xkf2",
       "phase": "details",
       "total": 54,
-      "completed": 36,
-      "remaining": 18,
+      "completed": 38,
+      "remaining": 16,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -54,8 +54,8 @@
       "timeout": 0
     },
     "gradeExtraInfo": {
-      "found": 53,
-      "missing": 1
+      "found": 54,
+      "missing": 0
     },
     "savedListFields": {
       "total": 17,
@@ -71,17 +71,17 @@
     },
     "savedDetailFields": {
       "total": 17,
-      "gradeNameFound": 16,
-      "gradeNameMissing": 1,
+      "gradeNameFound": 17,
+      "gradeNameMissing": 0,
       "yearFound": 17,
       "yearMissing": 0,
       "colorFound": 17,
       "colorMissing": 0,
-      "mileageFound": 16,
-      "mileageMissing": 1,
+      "mileageFound": 17,
+      "mileageMissing": 0,
       "imageFound": 17,
       "imageMissing": 0,
-      "bodyPriceFound": 16,
+      "bodyPriceFound": 17,
       "totalPriceFound": 15,
       "detailFetchFailed": 0
     }
@@ -2462,7 +2462,7 @@
       "displacement": "660cc",
       "bodyPrice": "92.7万円",
       "totalPrice": "96.7万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260926/H/70009023323026092600100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260926/H/70009023323026092600100.jpg?1794257556",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260926W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260926001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2487,7 +2487,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-09T09:57:59.154Z",
+      "updatedAt": "2026-11-09T20:52:44.906Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2507,37 +2507,36 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-09T20:50:26.462Z"
+      }
     },
     {
       "stockId": "0902332A30261109W001",
-      "title": "ヴォクシー",
+      "title": "ヴォクシー ハイブリッドＳ－Ｚ",
       "description": "ヴォクシー",
       "carName": "ヴォクシー",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "makerName": "",
-      "seatCapacity": null,
+      "gradeName": "ハイブリッドＳ－Ｚ",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "makerName": "トヨタ",
+      "seatCapacity": 1,
       "year": "2026年",
-      "mileage": "",
-      "color": "1.8",
-      "inspection": "",
+      "mileage": "32.0万K",
+      "color": "カタログカラー 検索",
+      "inspection": "00330002",
       "displacement": "2026cc",
-      "bodyPrice": "",
+      "bodyPrice": "1万円",
       "totalPrice": "",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026110900100.jpg?1794257426",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30261109W00179.jpg?1794257556",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261109W001&ScreenId=SIH_001",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261109W001&ScreenId=SIH_001",
       "editUrls": [
         "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261109W001&ScreenId=SIH_001",
         "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261109W001&ScreenId=SIH_001",
         "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR"
       ],
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
       "types": [],
       "typeKeys": [],
       "listResult": {
@@ -2552,10 +2551,27 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": null,
-      "detailResult": null,
-      "typeResult": null,
-      "listUpdatedAt": "2026-11-09T20:50:26.462Z"
+      "updatedAt": "2026-11-09T20:52:44.906Z",
+      "typeResult": {
+        "status": 200,
+        "success": false,
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "freshTypes": false,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261109W001&ScreenId=SIH_001",
+        "attempts": 4,
+        "makerName": true,
+        "seatCapacity": true,
+        "gradeName": true,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
+      }
     },
     {
       "stockId": "0902332A30261106W001",
@@ -3799,88 +3815,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260926W001",
-          "title": "ワゴンＲ ハイブリッドＦＺ",
-          "description": "ワゴンＲ ハイブリッドＦＺ ハイブリッド ４ＷＤ フルセグＴＶ Ｂｌｕｅｔｏｏｔｈ オプションカラー 前２席シートヒーター ヘッドアップディスプレイ ミラーヒーター 衝突軽減装置 アイドリンストップ 車線逸脱防止警報",
-          "carName": "ワゴンＲ",
-          "gradeName": "ハイブリッドＦＺ",
-          "gradeExtraInfo": "",
-          "classificationName": "MH55S",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2017年",
-          "mileage": "6.9万K",
-          "color": "ＯＰスチールシルバーメタリック",
-          "inspection": "車検整備付",
-          "displacement": "660cc",
-          "bodyPrice": "92.7万円",
-          "totalPrice": "96.7万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260926/H/70009023323026092600100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260926W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260926001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261109W001",
-          "title": "ヴォクシー",
-          "description": "ヴォクシー",
-          "carName": "ヴォクシー",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2026年",
-          "mileage": "",
-          "color": "1.8",
-          "inspection": "",
-          "displacement": "2026cc",
-          "bodyPrice": "",
-          "totalPrice": "",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026110900100.jpg?1794257426",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261109W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261109W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261109W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261109W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": false,
-            "bodyPrice": false,
-            "totalPrice": false,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261106W001",
           "title": "フォレスター",
           "description": "フォレスター",
@@ -4649,7 +4583,7 @@
         "attempts": 0
       }
     ],
-    "completed": 36,
+    "completed": 38,
     "total": 54,
     "failed": []
   }
