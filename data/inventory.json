@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-11T22:20:42.205Z",
+  "updatedAt": "2026-11-11T22:20:47.242Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261111222029096-6sek8g07",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-11T22:20:30.956Z",
-    "finishedAt": "2026-11-11T22:20:42.205Z",
-    "durationSeconds": 11,
+    "finishedAt": "2026-11-11T22:20:47.242Z",
+    "durationSeconds": 16,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261111221909303-lj63qs03",
       "phase": "details",
       "total": 50,
-      "completed": 24,
-      "remaining": 26,
+      "completed": 26,
+      "remaining": 24,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -1696,7 +1696,7 @@
       "displacement": "660cc",
       "bodyPrice": "95.1万円",
       "totalPrice": "98.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260313/H/70009023323026031300100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260313/H/70009023323026031300100.jpg?1794435644",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260313W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260313001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1723,7 +1723,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-11T15:28:37.329Z",
+      "updatedAt": "2026-11-11T22:20:47.241Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1743,8 +1743,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-11T22:19:19.190Z"
+      }
     },
     {
       "stockId": "0902332A30260731W001",
@@ -1763,7 +1762,7 @@
       "displacement": "1.0L",
       "bodyPrice": "95.7万円",
       "totalPrice": "99.8万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260731/H/70009023323026073100100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260731/H/70009023323026073100100.jpg?1794435644",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260731W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260731001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1790,7 +1789,7 @@
         "EV・HV"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-11T15:28:37.329Z",
+      "updatedAt": "2026-11-11T22:20:47.242Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1810,8 +1809,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-11T22:19:19.190Z"
+      }
     },
     {
       "stockId": "0902332A30260907W001",
@@ -3554,78 +3552,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260313W001",
-          "title": "ハスラー ハイブリッドＧ",
-          "description": "ハスラー ハイブリッドＧ ４ＷＤ デュアルカメラブレーキサポート オプションツートンカラー フルセグナビ エンジンスターター パーキングソナー 前席シートヒーター グリップコントロール ヒルディセントコントロール スノーモード",
-          "carName": "ハスラー",
-          "gradeName": "ハイブリッドＧ",
-          "gradeExtraInfo": "",
-          "classificationName": "MR92S",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2020年",
-          "mileage": "10.3万K",
-          "color": "デニムブルーメタリックＩＩ／ガンメタリック",
-          "inspection": "検2028年04月",
-          "displacement": "660cc",
-          "bodyPrice": "95.1万円",
-          "totalPrice": "98.3万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260313/H/70009023323026031300100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260313W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260313W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260313W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260313W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260313W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260313W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260313001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260731W001",
-          "title": "パッソ モーダ",
-          "description": "パッソ モーダ ４ＷＤ スマートアシスト ＬＥＤヘッドライト／フォグ 純正ナビ バックカメラ クリアランスソナー オートハイビーム ＥＴＣ ステアリングスイッチ オプションカラー アイドリングストップ 横滑り防止",
-          "carName": "パッソ",
-          "gradeName": "モーダ",
-          "gradeExtraInfo": "",
-          "classificationName": "M710A",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2019年",
-          "mileage": "8万K",
-          "color": "パールホワイトＩＩＩ",
-          "inspection": "検2028年04月",
-          "displacement": "1.0L",
-          "bodyPrice": "95.7万円",
-          "totalPrice": "99.8万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260731/H/70009023323026073100100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260731W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260731W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260731W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260731W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260731W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260731W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260731001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260907W001",
           "title": "ミニキャブトラック ダンプ",
           "description": "ミニキャブトラック ダンプ 切替式４ＷＤ 電動式ダンプ 走行距離７０００キロ台 下廻り防錆処理施工済 社外１２インチアルミホイール フォグ エアコン パワーウィンドウ パワステ",
@@ -4623,7 +4549,7 @@
         "attempts": 0
       }
     ],
-    "completed": 24,
+    "completed": 26,
     "total": 50,
     "failed": []
   }
