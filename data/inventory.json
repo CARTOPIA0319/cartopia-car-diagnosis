@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-11T22:21:27.070Z",
+  "updatedAt": "2026-11-11T22:21:37.670Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261111222105696-hmo8vn36",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-11T22:21:07.606Z",
-    "finishedAt": "2026-11-11T22:21:27.070Z",
-    "durationSeconds": 19,
+    "finishedAt": "2026-11-11T22:21:37.670Z",
+    "durationSeconds": 30,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261111221909303-lj63qs03",
       "phase": "details",
       "total": 50,
-      "completed": 38,
-      "remaining": 12,
+      "completed": 40,
+      "remaining": 10,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2626,7 +2626,7 @@
       "displacement": "1.8L",
       "bodyPrice": "443.8万円",
       "totalPrice": "451.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261109/H/70009023323026110900100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261109/H/70009023323026110900100.jpg?1794435689",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261109W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261109001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2651,7 +2651,7 @@
         "EV・HV"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-11T15:29:29.628Z",
+      "updatedAt": "2026-11-11T22:21:37.670Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2671,12 +2671,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-11T22:19:19.190Z"
+      }
     },
     {
       "stockId": "0902332A30261106W001",
-      "title": "フォレスター",
+      "title": "フォレスター Ｓ－リミテッド",
       "description": "フォレスター",
       "carName": "フォレスター",
       "gradeName": "Ｓ－リミテッド",
@@ -2686,12 +2685,12 @@
       "seatCapacity": 1,
       "year": "2015年",
       "mileage": "6.5万K",
-      "color": "2.0",
+      "color": "パールホワイト",
       "inspection": "00330002",
       "displacement": "2015cc",
       "bodyPrice": "6.5万円",
       "totalPrice": "6.5万円",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026110600100.jpg?1794435559",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30261106W00179.jpg?1794435689",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261106W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2716,7 +2715,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-11-11T15:29:29.628Z",
+      "updatedAt": "2026-11-11T22:21:37.670Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2736,8 +2735,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-11T22:19:19.190Z"
+      }
     },
     {
       "stockId": "0902332A30261029W001",
@@ -3540,88 +3538,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261109W001",
-          "title": "ヴォクシー ハイブリッドＳ－Ｚ",
-          "description": "ヴォクシー ハイブリッドＳ－Ｚ ４ＷＤ 最上級グレード Ｐバックドア 両側パワースライドドア スペアキー有 パノラミックビューモニター ステアリングヒーター シートヒーター Ｆワイパーデアイサー ＡＣ１００Ｖ電源 オートハイビーム",
-          "carName": "ヴォクシー",
-          "gradeName": "ハイブリッドＳ－Ｚ",
-          "gradeExtraInfo": "",
-          "classificationName": "ZWR95W",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2026年",
-          "mileage": "0.4万K",
-          "color": "ＯＰプラチナホワイトパールマイカ",
-          "inspection": "車検整備付",
-          "displacement": "1.8L",
-          "bodyPrice": "443.8万円",
-          "totalPrice": "451.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261109/H/70009023323026110900100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261109W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261109001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261106W001",
-          "title": "フォレスター",
-          "description": "フォレスター",
-          "carName": "フォレスター",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2015年",
-          "mileage": "6.5万K",
-          "color": "2.0",
-          "inspection": "",
-          "displacement": "2015cc",
-          "bodyPrice": "6.5万円",
-          "totalPrice": "6.5万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026110600100.jpg?1794435559",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261106W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261106W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261106W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261106W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261106W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261029W001",
           "title": "エルグランド",
           "description": "エルグランド",
@@ -4105,7 +4021,7 @@
         "attempts": 0
       }
     ],
-    "completed": 38,
+    "completed": 40,
     "total": 50,
     "failed": []
   }
