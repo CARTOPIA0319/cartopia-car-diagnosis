@@ -1,24 +1,24 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-12T20:08:06.688Z",
+  "updatedAt": "2026-11-12T20:08:26.234Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
     "success": false,
     "statusText": "分割更新中",
-    "runId": "20261112200734336-rvda7g4z",
+    "runId": "20261112200814767-phnq1va5",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-11-12T20:07:35.891Z",
-    "finishedAt": "2026-11-12T20:08:06.688Z",
-    "durationSeconds": 31,
+    "startedAt": "2026-11-12T20:08:16.430Z",
+    "finishedAt": "2026-11-12T20:08:26.234Z",
+    "durationSeconds": 10,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261112200542179-2yhqbk17",
       "phase": "details",
       "total": 55,
-      "completed": 40,
-      "remaining": 15,
+      "completed": 42,
+      "remaining": 13,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2739,7 +2739,7 @@
     },
     {
       "stockId": "0902332A30261112W004",
-      "title": "アルファードハイブリッド",
+      "title": "アルファードハイブリッド ＳＲ",
       "description": "アルファードハイブリッド",
       "carName": "アルファードハイブリッド",
       "gradeName": "ＳＲ",
@@ -2749,12 +2749,12 @@
       "seatCapacity": 1,
       "year": "2019年",
       "mileage": "2.9万K",
-      "color": "2.5",
+      "color": "パールホワイト",
       "inspection": "00330002",
       "displacement": "2019cc",
       "bodyPrice": "2.9万円",
       "totalPrice": "2.9万円",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200400.jpg?1794513950",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30261112W00479.jpg?1794514097",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W004&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2779,7 +2779,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-11-12T11:58:10.269Z",
+      "updatedAt": "2026-11-12T20:08:26.234Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2799,12 +2799,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-12T20:05:50.421Z"
+      }
     },
     {
       "stockId": "0902332A30261112W003",
-      "title": "フィットハイブリッド",
+      "title": "フィットハイブリッド Ｆパッケージ",
       "description": "フィットハイブリッド",
       "carName": "フィットハイブリッド",
       "gradeName": "Ｆパッケージ",
@@ -2814,12 +2813,12 @@
       "seatCapacity": 1,
       "year": "2014年",
       "mileage": "5.6万K",
-      "color": "1.5",
+      "color": "シルバーＭ",
       "inspection": "2027",
       "displacement": "2014cc",
       "bodyPrice": "5.6万円",
       "totalPrice": "5.6万円",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200300.jpg?1794513950",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30261112W00379.jpg?1794514097",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2844,7 +2843,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-11-12T11:58:10.269Z",
+      "updatedAt": "2026-11-12T20:08:26.234Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2864,8 +2863,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-12T20:05:50.421Z"
+      }
     },
     {
       "stockId": "0902332A30261112W002",
@@ -3863,98 +3861,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261112W004",
-          "title": "アルファードハイブリッド",
-          "description": "アルファードハイブリッド",
-          "carName": "アルファードハイブリッド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2019年",
-          "mileage": "2.9万K",
-          "color": "2.5",
-          "inspection": "",
-          "displacement": "2019cc",
-          "bodyPrice": "2.9万円",
-          "totalPrice": "2.9万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200400.jpg?1794513950",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W004&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W004&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W004&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W004&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W004&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261112W003",
-          "title": "フィットハイブリッド",
-          "description": "フィットハイブリッド",
-          "carName": "フィットハイブリッド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2014年",
-          "mileage": "5.6万K",
-          "color": "1.5",
-          "inspection": "",
-          "displacement": "2014cc",
-          "bodyPrice": "5.6万円",
-          "totalPrice": "5.6万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200300.jpg?1794513950",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W003&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W003&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261112W002",
           "title": "デリカミニ",
           "description": "デリカミニ",
@@ -4576,7 +4482,7 @@
         "attempts": 0
       }
     ],
-    "completed": 40,
+    "completed": 42,
     "total": 55,
     "failed": []
   }
