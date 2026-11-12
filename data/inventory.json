@@ -1,24 +1,24 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-12T11:57:07.335Z",
+  "updatedAt": "2026-11-12T11:57:21.732Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
     "success": false,
     "statusText": "分割更新中",
-    "runId": "20261112115641201-zq5kdq8k",
+    "runId": "20261112115715837-3qlfn8lp",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-11-12T11:56:42.876Z",
-    "finishedAt": "2026-11-12T11:57:07.335Z",
-    "durationSeconds": 24,
+    "startedAt": "2026-11-12T11:57:17.396Z",
+    "finishedAt": "2026-11-12T11:57:21.732Z",
+    "durationSeconds": 4,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261112115523029-wih9egf6",
       "phase": "details",
       "total": 55,
-      "completed": 30,
-      "remaining": 25,
+      "completed": 32,
+      "remaining": 23,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2100,7 +2100,7 @@
       "displacement": "660cc",
       "bodyPrice": "166.5万円",
       "totalPrice": "169.5万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260723/H/70009023323026072300300.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260723/H/70009023323026072300300.jpg?1794484639",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260723W003",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260723003&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2127,7 +2127,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-12T03:27:48.318Z",
+      "updatedAt": "2026-11-12T11:57:21.732Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2147,8 +2147,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-12T11:55:30.983Z"
+      }
     },
     {
       "stockId": "0902332A30260515W003",
@@ -2167,7 +2166,7 @@
       "displacement": "660cc",
       "bodyPrice": "114.5万円",
       "totalPrice": "118.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260515/H/70009023323026051500300.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260515/H/70009023323026051500300.jpg?1794484638",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260515W003",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260515003&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2192,7 +2191,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-12T03:27:48.318Z",
+      "updatedAt": "2026-11-12T11:57:21.732Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2212,8 +2211,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-12T11:55:30.983Z"
+      }
     },
     {
       "stockId": "0902332A30260912W002",
@@ -3783,78 +3781,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260723W003",
-          "title": "ルークス ハイウェイスター Ｇターボ",
-          "description": "ルークス ハイウェイスター Ｇターボ ４ＷＤ ハイブリッド オプションツートンカラー エマージェンシーブレーキ ナビ Ｂｌｕｅｔｏｏｔｈ アラウンドビューモニター 純正エンジンスターター ＬＥＤヘッドライト／フォグ 前席シートヒーター",
-          "carName": "ルークス",
-          "gradeName": "ハイウェイスター Ｇターボ",
-          "gradeExtraInfo": "",
-          "classificationName": "B48A",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2021年",
-          "mileage": "2万K",
-          "color": "ホワイトパール／チタニウムグレー",
-          "inspection": "検2028年06月",
-          "displacement": "660cc",
-          "bodyPrice": "166.5万円",
-          "totalPrice": "169.5万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260723/H/70009023323026072300300.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260723W003",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260723W003&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260723W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260723W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260723W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260723W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260723003&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260515W003",
-          "title": "ルークス ハイウェイスター Ｘ",
-          "description": "ルークス ハイウェイスター Ｘ ４ＷＤ Ｓハイブリッド 純正９インチＯＰナビ アラウンドビューモニター Ｂｌｕｅｔｏｏｔｈ フルセグＴＶ ハンズフリー左パワースライドドア アイドリングストップ セーフティシールド ＬＥＤヘッドライト",
-          "carName": "ルークス",
-          "gradeName": "ハイウェイスター Ｘ",
-          "gradeExtraInfo": "",
-          "classificationName": "B47A",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2021年",
-          "mileage": "8.9万K",
-          "color": "フローズンバニラパールＭ",
-          "inspection": "車検整備付",
-          "displacement": "660cc",
-          "bodyPrice": "114.5万円",
-          "totalPrice": "118.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260515/H/70009023323026051500300.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260515W003",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260515W003&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260515W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260515W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260515W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260515W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260515003&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260912W002",
           "title": "ルーミー カスタムＧ",
           "description": "ルーミー カスタムＧ ４ＷＤ 純正９インチフルセグナビ 予約機能付両側パワースライドドア アダプティブクルーズコントロール バックカメラ Ｂｌｕｅｔｏｏｔｈ ワイパーデアイサー パーキングソナー ＨＤＭＩ 純正切削ＡＷ",
@@ -4866,7 +4792,7 @@
         "attempts": 0
       }
     ],
-    "completed": 30,
+    "completed": 32,
     "total": 55,
     "failed": []
   }
