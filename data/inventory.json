@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-12T20:05:50.421Z",
+  "updatedAt": "2026-11-12T20:05:55.485Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261112200542179-2yhqbk17",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-12T20:05:43.932Z",
-    "finishedAt": "2026-11-12T20:05:50.421Z",
-    "durationSeconds": 6,
+    "finishedAt": "2026-11-12T20:05:55.485Z",
+    "durationSeconds": 12,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261112200542179-2yhqbk17",
       "phase": "details",
       "total": 55,
-      "completed": 0,
-      "remaining": 55,
+      "completed": 2,
+      "remaining": 53,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -104,7 +104,7 @@
       "displacement": "2.5L",
       "bodyPrice": "282.2万円",
       "totalPrice": "291.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261005/H/70009023323026100500300.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261005/H/70009023323026100500300.jpg?1794513952",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261005W003",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261005003&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -131,7 +131,7 @@
         "EV・HV"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-12T11:55:37.178Z",
+      "updatedAt": "2026-11-12T20:05:55.485Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -151,8 +151,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-12T20:05:50.420Z"
+      }
     },
     {
       "stockId": "0902332A30260729W002",
@@ -171,7 +170,7 @@
       "displacement": "2.5L",
       "bodyPrice": "226万円",
       "totalPrice": "237.5万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260729/H/70009023323026072900200.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260729/H/70009023323026072900200.jpg?1794513952",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260729W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260729002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -198,7 +197,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-12T11:55:37.178Z",
+      "updatedAt": "2026-11-12T20:05:55.485Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -218,8 +217,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-12T20:05:50.420Z"
+      }
     },
     {
       "stockId": "0902332A30261018W001",
@@ -3903,78 +3901,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261005W003",
-          "title": "ＣＸ－５ ２５Ｓ エクスクルーシブモード",
-          "description": "ＣＸ－５ ２５Ｓ エクスクルーシブモード ４ＷＤ 中古スタットレスアルミ組付属 本革シート ＢＯＳＥプレミアムサウンド ４席シートヒーター パワーシート 純正ナビ 全方位カメラ 純正エンジンスターター パワーバックドア ＥＴＣ 前後ドラレコ",
-          "carName": "ＣＸ－５",
-          "gradeName": "２５Ｓ エクスクルーシブモード",
-          "gradeExtraInfo": "",
-          "classificationName": "KF5P",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2022年",
-          "mileage": "4万K",
-          "color": "ジェットブラックマイカ",
-          "inspection": "検2027年02月",
-          "displacement": "2.5L",
-          "bodyPrice": "282.2万円",
-          "totalPrice": "291.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261005/H/70009023323026100500300.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261005W003",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261005W003&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261005W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261005W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261005W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261005W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261005003&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260729W002",
-          "title": "ＩＳ ＩＳ２５０",
-          "description": "ＩＳ ＩＳ２５０ ４ＷＤ 純正ナビ バックモニター パドルシフト 純正ＡＷ組スタッドレスセット 走行モード切替 ハーフレザー 寒冷地仕様 シートヒーター ＥＴＣ 本革巻きステアリング クルーズコントロール ソナー",
-          "carName": "ＩＳ",
-          "gradeName": "ＩＳ２５０",
-          "gradeExtraInfo": "",
-          "classificationName": "GSE35",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2014年",
-          "mileage": "2.5万K",
-          "color": "スターライトブラックガラスフレーク",
-          "inspection": "車検整備付",
-          "displacement": "2.5L",
-          "bodyPrice": "226万円",
-          "totalPrice": "237.5万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260729/H/70009023323026072900200.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260729W002",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260729W002&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260729W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260729W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260729W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260729W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260729002&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261018W001",
           "title": "Ｎ－ＢＯＸ Ｇホンダセンシング",
           "description": "Ｎ－ＢＯＸ Ｇホンダセンシング ４ＷＤ ＥＴＣ ＬＥＤヘッドライト 純正ＥＧスターター バックカメラ Ｂｌｕｅｔｏｏｔｈ 追従式クルーズコントロール ＵＳＢポート ホンダセンシング ディスプレイオーディオ",
@@ -6066,7 +5992,7 @@
         "attempts": 0
       }
     ],
-    "completed": 0,
+    "completed": 2,
     "total": 55,
     "failed": []
   }
