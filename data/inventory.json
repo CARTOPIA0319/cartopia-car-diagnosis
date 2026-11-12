@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-12T11:57:36.980Z",
+  "updatedAt": "2026-11-12T11:57:49.298Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261112115715837-3qlfn8lp",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-12T11:57:17.396Z",
-    "finishedAt": "2026-11-12T11:57:36.980Z",
-    "durationSeconds": 20,
+    "finishedAt": "2026-11-12T11:57:49.298Z",
+    "durationSeconds": 32,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261112115523029-wih9egf6",
       "phase": "details",
       "total": 55,
-      "completed": 38,
-      "remaining": 17,
+      "completed": 40,
+      "remaining": 15,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -54,8 +54,8 @@
       "timeout": 0
     },
     "gradeExtraInfo": {
-      "found": 50,
-      "missing": 5
+      "found": 51,
+      "missing": 4
     },
     "savedListFields": {
       "total": 16,
@@ -71,8 +71,8 @@
     },
     "savedDetailFields": {
       "total": 16,
-      "gradeNameFound": 11,
-      "gradeNameMissing": 5,
+      "gradeNameFound": 12,
+      "gradeNameMissing": 4,
       "yearFound": 16,
       "yearMissing": 0,
       "colorFound": 16,
@@ -2626,7 +2626,7 @@
       "displacement": "1.8L",
       "bodyPrice": "443.8万円",
       "totalPrice": "451.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261109/H/70009023323026110900100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261109/H/70009023323026110900100.jpg?1794484659",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261109W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261109001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2651,7 +2651,7 @@
         "EV・HV"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-12T03:28:15.228Z",
+      "updatedAt": "2026-11-12T11:57:49.298Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2671,37 +2671,36 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-12T11:55:30.983Z"
+      }
     },
     {
       "stockId": "0902332A30261112W005",
-      "title": "クラウンハイブリッド",
+      "title": "クラウンハイブリッド Ｇ Ｆｏｕｒ",
       "description": "クラウンハイブリッド",
       "carName": "クラウンハイブリッド",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "makerName": "",
-      "seatCapacity": null,
+      "gradeName": "Ｇ Ｆｏｕｒ",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "makerName": "トヨタ",
+      "seatCapacity": 1,
       "year": "2018年",
       "mileage": "3.9万K",
-      "color": "2.5",
-      "inspection": "",
+      "color": "カタログカラー ホワイトパールクリスタルシャイン｜10 ダークレッドマイカメタリック｜37 紅リッチレッドクリスタルシャインガラスフレーク｜15 夜霞ボルドーマイカメタリック｜37 天空ピュアブルーメ",
+      "inspection": "00330002",
       "displacement": "2018cc",
       "bodyPrice": "3.9万円",
       "totalPrice": "3.9万円",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200500.jpg?1794484530",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30261112W00579.jpg?1794484659",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W005&ScreenId=SIH_001",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
       "editUrls": [
         "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
         "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
         "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W005&StockStatus=00180002&ScreenId=CB101GR"
       ],
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
       "types": [],
       "typeKeys": [],
       "listResult": {
@@ -2716,10 +2715,27 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": null,
-      "detailResult": null,
-      "typeResult": null,
-      "listUpdatedAt": "2026-11-12T11:55:30.983Z"
+      "updatedAt": "2026-11-12T11:57:49.298Z",
+      "typeResult": {
+        "status": 200,
+        "success": false,
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "freshTypes": false,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
+        "attempts": 4,
+        "makerName": true,
+        "seatCapacity": true,
+        "gradeName": true,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
+      }
     },
     {
       "stockId": "0902332A30261112W004",
@@ -3775,88 +3791,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261109W001",
-          "title": "ヴォクシー ハイブリッドＳ－Ｚ",
-          "description": "ヴォクシー ハイブリッドＳ－Ｚ ４ＷＤ 最上級グレード Ｐバックドア 両側パワースライドドア スペアキー有 パノラミックビューモニター ステアリングヒーター シートヒーター Ｆワイパーデアイサー ＡＣ１００Ｖ電源 オートハイビーム",
-          "carName": "ヴォクシー",
-          "gradeName": "ハイブリッドＳ－Ｚ",
-          "gradeExtraInfo": "",
-          "classificationName": "ZWR95W",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2026年",
-          "mileage": "0.4万K",
-          "color": "ＯＰプラチナホワイトパールマイカ",
-          "inspection": "車検整備付",
-          "displacement": "1.8L",
-          "bodyPrice": "443.8万円",
-          "totalPrice": "451.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261109/H/70009023323026110900100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261109W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261112W005",
-          "title": "クラウンハイブリッド",
-          "description": "クラウンハイブリッド",
-          "carName": "クラウンハイブリッド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2018年",
-          "mileage": "3.9万K",
-          "color": "2.5",
-          "inspection": "",
-          "displacement": "2018cc",
-          "bodyPrice": "3.9万円",
-          "totalPrice": "3.9万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200500.jpg?1794484530",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W005&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W005&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261112W004",
           "title": "アルファードハイブリッド",
           "description": "アルファードハイブリッド",
@@ -4570,7 +4504,7 @@
         "attempts": 0
       }
     ],
-    "completed": 38,
+    "completed": 40,
     "total": 55,
     "failed": []
   }
