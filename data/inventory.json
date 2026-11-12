@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-12T11:58:10.269Z",
+  "updatedAt": "2026-11-12T11:58:23.370Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261112115757532-8rgjp87j",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-12T11:57:59.437Z",
-    "finishedAt": "2026-11-12T11:58:10.269Z",
-    "durationSeconds": 11,
+    "finishedAt": "2026-11-12T11:58:23.370Z",
+    "durationSeconds": 24,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261112115523029-wih9egf6",
       "phase": "details",
       "total": 55,
-      "completed": 42,
-      "remaining": 13,
+      "completed": 44,
+      "remaining": 11,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -54,8 +54,8 @@
       "timeout": 0
     },
     "gradeExtraInfo": {
-      "found": 53,
-      "missing": 2
+      "found": 55,
+      "missing": 0
     },
     "savedListFields": {
       "total": 16,
@@ -71,17 +71,17 @@
     },
     "savedDetailFields": {
       "total": 16,
-      "gradeNameFound": 14,
-      "gradeNameMissing": 2,
+      "gradeNameFound": 16,
+      "gradeNameMissing": 0,
       "yearFound": 16,
       "yearMissing": 0,
       "colorFound": 16,
       "colorMissing": 0,
-      "mileageFound": 14,
-      "mileageMissing": 2,
+      "mileageFound": 16,
+      "mileageMissing": 0,
       "imageFound": 16,
       "imageMissing": 0,
-      "bodyPriceFound": 14,
+      "bodyPriceFound": 16,
       "totalPriceFound": 13,
       "detailFetchFailed": 0
     }
@@ -2867,32 +2867,32 @@
     },
     {
       "stockId": "0902332A30261112W002",
-      "title": "デリカミニ",
+      "title": "デリカミニ Ｔ プレミアム",
       "description": "デリカミニ",
       "carName": "デリカミニ",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "makerName": "",
-      "seatCapacity": null,
+      "gradeName": "Ｔ プレミアム",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "makerName": "三菱",
+      "seatCapacity": 1,
       "year": "2023年",
-      "mileage": "",
-      "color": "660",
-      "inspection": "",
+      "mileage": "32.0万K",
+      "color": "カタログカラー ホワイトパール｜10 ホワイトパールⅡ｜10 レッドメタリックⅡ｜15 ミストブルーパール｜20 ライトニングブルーマイカⅡ｜20 アッシュグリーンメタリック｜25 アッシュグリーンメ",
+      "inspection": "00330002",
       "displacement": "2023cc",
-      "bodyPrice": "",
+      "bodyPrice": "1万円",
       "totalPrice": "",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200200.jpg?1794484530",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30261112W00279.jpg?1794484693",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W002&ScreenId=SIH_001",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W002&ScreenId=SIH_001",
       "editUrls": [
         "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W002&ScreenId=SIH_001",
         "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W002&ScreenId=SIH_001",
         "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W002&StockStatus=00180002&ScreenId=CB101GR"
       ],
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
       "types": [],
       "typeKeys": [],
       "listResult": {
@@ -2907,39 +2907,56 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": null,
-      "detailResult": null,
-      "typeResult": null,
-      "listUpdatedAt": "2026-11-12T11:55:30.983Z"
+      "updatedAt": "2026-11-12T11:58:23.370Z",
+      "typeResult": {
+        "status": 200,
+        "success": false,
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "freshTypes": false,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W002&ScreenId=SIH_001",
+        "attempts": 4,
+        "makerName": true,
+        "seatCapacity": true,
+        "gradeName": true,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
+      }
     },
     {
       "stockId": "0902332A30261112W001",
-      "title": "オーラ",
+      "title": "オーラ Ｇ ＦＯＵＲ レザーエディション",
       "description": "オーラ",
       "carName": "オーラ",
-      "gradeName": "",
-      "gradeExtraInfo": "",
-      "classificationName": "",
-      "makerName": "",
-      "seatCapacity": null,
+      "gradeName": "Ｇ ＦＯＵＲ レザーエディション",
+      "gradeExtraInfo": "1",
+      "classificationName": "型式指定番号（5桁） 類別区分番号（4桁） 検索",
+      "makerName": "日産",
+      "seatCapacity": 1,
       "year": "2021年",
-      "mileage": "",
-      "color": "1.2",
-      "inspection": "",
+      "mileage": "32.0万K",
+      "color": "カタログカラー ピュアホワイトパール｜10 ピュアホワイトパールⅡ｜10 ガーネットレッドⅡ｜15 オーロラフレアブルーパール｜20 ビビッドブルーＭⅡ｜20 オリーブグリーン｜25 スーパーブラック",
+      "inspection": "00330002",
       "displacement": "2021cc",
-      "bodyPrice": "",
+      "bodyPrice": "1万円",
       "totalPrice": "",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200100.jpg?1794484530",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30261112W00179.jpg?1794484692",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W001&ScreenId=SIH_001",
+      "gooUrl": "",
+      "sourceStatus": "一時保存",
+      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
       "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W001&ScreenId=SIH_001",
       "editUrls": [
         "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W001&ScreenId=SIH_001",
         "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W001&ScreenId=SIH_001",
         "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W001&StockStatus=00180002&ScreenId=CB101GR"
       ],
-      "gooUrl": "",
-      "sourceStatus": "一時保存",
-      "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
       "types": [],
       "typeKeys": [],
       "listResult": {
@@ -2954,10 +2971,27 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": null,
-      "detailResult": null,
-      "typeResult": null,
-      "listUpdatedAt": "2026-11-12T11:55:30.983Z"
+      "updatedAt": "2026-11-12T11:58:23.370Z",
+      "typeResult": {
+        "status": 200,
+        "success": false,
+        "containsFatalError": false,
+        "timeout": false,
+        "error": ""
+      },
+      "detailResult": {
+        "success": true,
+        "freshTypes": false,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W001&ScreenId=SIH_001",
+        "attempts": 4,
+        "makerName": true,
+        "seatCapacity": true,
+        "gradeName": true,
+        "year": false,
+        "mileage": true,
+        "color": true,
+        "imageUrl": true
+      }
     },
     {
       "stockId": "0902332A30261106W001",
@@ -3825,98 +3859,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261112W002",
-          "title": "デリカミニ",
-          "description": "デリカミニ",
-          "carName": "デリカミニ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2023年",
-          "mileage": "",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2023cc",
-          "bodyPrice": "",
-          "totalPrice": "",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200200.jpg?1794484530",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W002&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W002&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W002&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W002&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": false,
-            "bodyPrice": false,
-            "totalPrice": false,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261112W001",
-          "title": "オーラ",
-          "description": "オーラ",
-          "carName": "オーラ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2021年",
-          "mileage": "",
-          "color": "1.2",
-          "inspection": "",
-          "displacement": "2021cc",
-          "bodyPrice": "",
-          "totalPrice": "",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200100.jpg?1794484530",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": false,
-            "bodyPrice": false,
-            "totalPrice": false,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261106W001",
           "title": "フォレスター",
           "description": "フォレスター",
@@ -4446,7 +4388,7 @@
         "attempts": 0
       }
     ],
-    "completed": 42,
+    "completed": 44,
     "total": 55,
     "failed": []
   }
