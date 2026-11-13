@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-13T01:11:59.423Z",
+  "updatedAt": "2026-11-13T01:12:04.514Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261113011146192-2w7aij85",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-13T01:11:47.729Z",
-    "finishedAt": "2026-11-13T01:11:59.423Z",
-    "durationSeconds": 12,
+    "finishedAt": "2026-11-13T01:12:04.514Z",
+    "durationSeconds": 17,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261113011146192-2w7aij85",
       "phase": "details",
       "total": 55,
-      "completed": 2,
-      "remaining": 53,
+      "completed": 4,
+      "remaining": 51,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -236,7 +236,7 @@
       "displacement": "660cc",
       "bodyPrice": "101.4万円",
       "totalPrice": "104.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261018/H/70009023323026101800100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261018/H/70009023323026101800100.jpg?1794532322",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261018W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261018001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -261,7 +261,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-12T20:06:00.530Z",
+      "updatedAt": "2026-11-13T01:12:04.514Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -281,8 +281,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-13T01:11:53.882Z"
+      }
     },
     {
       "stockId": "0902332A30261016W002",
@@ -301,7 +300,7 @@
       "displacement": "660cc",
       "bodyPrice": "177.0万円",
       "totalPrice": "179.6万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261016/H/70009023323026101600200.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261016/H/70009023323026101600200.jpg?1794532322",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261016W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261016002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -326,7 +325,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-12T20:06:00.530Z",
+      "updatedAt": "2026-11-13T01:12:04.514Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -346,8 +345,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-13T01:11:53.882Z"
+      }
     },
     {
       "stockId": "0902332A30260731W002",
@@ -3901,78 +3899,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261018W001",
-          "title": "Ｎ－ＢＯＸ Ｇホンダセンシング",
-          "description": "Ｎ－ＢＯＸ Ｇホンダセンシング ４ＷＤ ＥＴＣ ＬＥＤヘッドライト 純正ＥＧスターター バックカメラ Ｂｌｕｅｔｏｏｔｈ 追従式クルーズコントロール ＵＳＢポート ホンダセンシング ディスプレイオーディオ",
-          "carName": "Ｎ－ＢＯＸ",
-          "gradeName": "Ｇホンダセンシング",
-          "gradeExtraInfo": "",
-          "classificationName": "JF4",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2019年",
-          "mileage": "6.4万K",
-          "color": "ＯＰプレミアムイエローパール",
-          "inspection": "検2028年06月",
-          "displacement": "660cc",
-          "bodyPrice": "101.4万円",
-          "totalPrice": "104.3万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261018/H/70009023323026101800100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261018W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261018W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261018W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261018W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261018W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261018W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261018001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261016W002",
-          "title": "Ｎ－ＢＯＸカスタム Ｌ",
-          "description": "Ｎ－ＢＯＸカスタム Ｌ ４ＷＤ アダプティブクルーズコントロール 調整機能付き前席シートヒーター パーキングソナー 純正切削アルミホイール 純正ナビ バックカメラ ＵＳＢポート シートバックテーブル 後席ロールサンシェード",
-          "carName": "Ｎ－ＢＯＸカスタム",
-          "gradeName": "Ｌ",
-          "gradeExtraInfo": "",
-          "classificationName": "JF4",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2022年",
-          "mileage": "1.9万K",
-          "color": "クリスタルブラックパール",
-          "inspection": "検2027年10月",
-          "displacement": "660cc",
-          "bodyPrice": "177.0万円",
-          "totalPrice": "179.6万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261016/H/70009023323026101600200.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261016W002",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261016W002&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261016W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261016W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261016W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261016W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261016002&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260731W002",
           "title": "Ｎ－ＢＯＸジョイ ターボ",
           "description": "Ｎ－ＢＯＸジョイ ターボ ４ＷＤ ターボ パドルシフト ２トーンカラー 両側Ｐスライド 純正ナビ アップルカープレイ アンドロイドオート Ｂカメラ 専用クラシックホイールカバー ドライブレコーダー ＥＴＣ 電動パーキングＢ",
@@ -5992,7 +5918,7 @@
         "attempts": 0
       }
     ],
-    "completed": 2,
+    "completed": 4,
     "total": 55,
     "failed": []
   }
