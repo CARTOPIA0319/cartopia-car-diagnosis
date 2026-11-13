@@ -1,24 +1,24 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-13T22:17:06.940Z",
+  "updatedAt": "2026-11-13T22:17:28.495Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
     "success": false,
     "statusText": "分割更新中",
-    "runId": "20261113221633544-bjthb5xn",
+    "runId": "20261113221715196-y5nnu6ab",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-11-13T22:16:35.166Z",
-    "finishedAt": "2026-11-13T22:17:06.940Z",
-    "durationSeconds": 32,
+    "startedAt": "2026-11-13T22:17:16.787Z",
+    "finishedAt": "2026-11-13T22:17:28.495Z",
+    "durationSeconds": 12,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261113221439600-ojk7872a",
       "phase": "details",
       "total": 55,
-      "completed": 40,
-      "remaining": 15,
+      "completed": 42,
+      "remaining": 13,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2739,7 +2739,7 @@
     },
     {
       "stockId": "0902332A30261112W004",
-      "title": "アルファードハイブリッド",
+      "title": "アルファードハイブリッド ＳＲ",
       "description": "アルファードハイブリッド",
       "carName": "アルファードハイブリッド",
       "gradeName": "ＳＲ",
@@ -2749,12 +2749,12 @@
       "seatCapacity": 1,
       "year": "2019年",
       "mileage": "2.9万K",
-      "color": "2.5",
+      "color": "パールホワイト",
       "inspection": "00330002",
       "displacement": "2019cc",
       "bodyPrice": "2.9万円",
       "totalPrice": "2.9万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261112/H/70009023323026111200400.jpg?1794608090",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261112/H/70009023323026111200400.jpg?1794608239",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W004&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2779,7 +2779,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-11-13T16:35:01.293Z",
+      "updatedAt": "2026-11-13T22:17:28.495Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2799,12 +2799,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-13T22:14:50.127Z"
+      }
     },
     {
       "stockId": "0902332A30261112W005",
-      "title": "クラウンハイブリッド",
+      "title": "クラウンハイブリッド Ｇ Ｆｏｕｒ",
       "description": "クラウンハイブリッド",
       "carName": "クラウンハイブリッド",
       "gradeName": "Ｇ Ｆｏｕｒ",
@@ -2814,12 +2813,12 @@
       "seatCapacity": 1,
       "year": "2018年",
       "mileage": "3.9万K",
-      "color": "2.5",
+      "color": "カタログカラー ホワイトパールクリスタルシャイン｜10 ダークレッドマイカメタリック｜37 紅リッチレッドクリスタルシャインガラスフレーク｜15 夜霞ボルドーマイカメタリック｜37 天空ピュアブルーメ",
       "inspection": "00330002",
       "displacement": "2018cc",
       "bodyPrice": "3.9万円",
       "totalPrice": "3.9万円",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200500.jpg?1794608090",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30261112W00579.jpg?1794608239",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W005&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2844,7 +2843,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-11-13T16:35:01.293Z",
+      "updatedAt": "2026-11-13T22:17:28.495Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2864,8 +2863,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-13T22:14:50.127Z"
+      }
     },
     {
       "stockId": "0902332A30261112W003",
@@ -3863,98 +3861,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261112W004",
-          "title": "アルファードハイブリッド",
-          "description": "アルファードハイブリッド",
-          "carName": "アルファードハイブリッド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2019年",
-          "mileage": "2.9万K",
-          "color": "2.5",
-          "inspection": "",
-          "displacement": "2019cc",
-          "bodyPrice": "2.9万円",
-          "totalPrice": "2.9万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261112/H/70009023323026111200400.jpg?1794608090",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W004&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W004&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W004&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W004&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W004&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261112W005",
-          "title": "クラウンハイブリッド",
-          "description": "クラウンハイブリッド",
-          "carName": "クラウンハイブリッド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2018年",
-          "mileage": "3.9万K",
-          "color": "2.5",
-          "inspection": "",
-          "displacement": "2018cc",
-          "bodyPrice": "3.9万円",
-          "totalPrice": "3.9万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200500.jpg?1794608090",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W005&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W005&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261112W003",
           "title": "フィットハイブリッド",
           "description": "フィットハイブリッド",
@@ -4576,7 +4482,7 @@
         "attempts": 0
       }
     ],
-    "completed": 40,
+    "completed": 42,
     "total": 55,
     "failed": []
   }
