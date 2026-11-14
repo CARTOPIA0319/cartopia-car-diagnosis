@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-14T02:34:32.502Z",
+  "updatedAt": "2026-11-14T02:34:43.880Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261114023421492-ulb4enzf",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-14T02:34:23.070Z",
-    "finishedAt": "2026-11-14T02:34:32.502Z",
-    "durationSeconds": 9,
+    "finishedAt": "2026-11-14T02:34:43.880Z",
+    "durationSeconds": 21,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261114023121364-fo0hzr34",
       "phase": "details",
       "total": 55,
-      "completed": 42,
-      "remaining": 13,
+      "completed": 44,
+      "remaining": 11,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2867,7 +2867,7 @@
     },
     {
       "stockId": "0902332A30261112W003",
-      "title": "フィットハイブリッド",
+      "title": "フィットハイブリッド Ｆパッケージ",
       "description": "フィットハイブリッド",
       "carName": "フィットハイブリッド",
       "gradeName": "Ｆパッケージ",
@@ -2877,12 +2877,12 @@
       "seatCapacity": 1,
       "year": "2014年",
       "mileage": "5.6万K",
-      "color": "1.5",
+      "color": "シルバーＭ",
       "inspection": "2027",
       "displacement": "2014cc",
       "bodyPrice": "5.6万円",
       "totalPrice": "5.6万円",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200300.jpg?1794623489",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30261112W00379.jpg?1794623674",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2907,7 +2907,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-11-13T22:17:39.177Z",
+      "updatedAt": "2026-11-14T02:34:43.880Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2927,12 +2927,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-14T02:31:29.363Z"
+      }
     },
     {
       "stockId": "0902332A30261112W002",
-      "title": "デリカミニ",
+      "title": "デリカミニ Ｔ プレミアム",
       "description": "デリカミニ",
       "carName": "デリカミニ",
       "gradeName": "Ｔ プレミアム",
@@ -2942,12 +2941,12 @@
       "seatCapacity": 1,
       "year": "2023年",
       "mileage": "32.0万K",
-      "color": "660",
+      "color": "カタログカラー ホワイトパール｜10 ホワイトパールⅡ｜10 レッドメタリックⅡ｜15 ミストブルーパール｜20 ライトニングブルーマイカⅡ｜20 アッシュグリーンメタリック｜25 アッシュグリーンメ",
       "inspection": "00330002",
       "displacement": "2023cc",
       "bodyPrice": "1万円",
       "totalPrice": "",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200200.jpg?1794623489",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30261112W00279.jpg?1794623674",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W002&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2972,7 +2971,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-11-13T22:17:39.177Z",
+      "updatedAt": "2026-11-14T02:34:43.880Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2992,8 +2991,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-14T02:31:29.363Z"
+      }
     },
     {
       "stockId": "0902332A30261112W001",
@@ -3861,98 +3859,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261112W003",
-          "title": "フィットハイブリッド",
-          "description": "フィットハイブリッド",
-          "carName": "フィットハイブリッド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2014年",
-          "mileage": "5.6万K",
-          "color": "1.5",
-          "inspection": "",
-          "displacement": "2014cc",
-          "bodyPrice": "5.6万円",
-          "totalPrice": "5.6万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200300.jpg?1794623489",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W003&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W003&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261112W002",
-          "title": "デリカミニ",
-          "description": "デリカミニ",
-          "carName": "デリカミニ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2023年",
-          "mileage": "",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2023cc",
-          "bodyPrice": "",
-          "totalPrice": "",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200200.jpg?1794623489",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W002&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W002&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W002&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W002&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": false,
-            "bodyPrice": false,
-            "totalPrice": false,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261112W001",
           "title": "オーラ",
           "description": "オーラ",
@@ -4482,7 +4388,7 @@
         "attempts": 0
       }
     ],
-    "completed": 42,
+    "completed": 44,
     "total": 55,
     "failed": []
   }
