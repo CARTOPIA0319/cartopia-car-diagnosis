@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-14T16:12:57.215Z",
+  "updatedAt": "2026-11-14T16:13:07.580Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261114161220158-8vtsq93s",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-14T16:12:21.996Z",
-    "finishedAt": "2026-11-14T16:12:57.215Z",
-    "durationSeconds": 35,
+    "finishedAt": "2026-11-14T16:13:07.580Z",
+    "durationSeconds": 46,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261114160954181-9asqi5q7",
       "phase": "details",
       "total": 55,
-      "completed": 46,
-      "remaining": 9,
+      "completed": 48,
+      "remaining": 7,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -3123,7 +3123,7 @@
     },
     {
       "stockId": "0902332A30261029W001",
-      "title": "エルグランド",
+      "title": "エルグランド ２５０ハイウェイスタープレミアムアーバンクロム",
       "description": "エルグランド",
       "carName": "エルグランド",
       "gradeName": "２５０ハイウェイスタープレミアムアーバンクロム",
@@ -3133,12 +3133,12 @@
       "seatCapacity": 1,
       "year": "2020年",
       "mileage": "32.0万K",
-      "color": "2.5",
+      "color": "パールホワイト",
       "inspection": "2027",
       "displacement": "2020cc",
       "bodyPrice": "1万円",
       "totalPrice": "",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900100.jpg?1794672602",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900100.jpg?1794672779",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3163,7 +3163,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-11-14T09:33:57.251Z",
+      "updatedAt": "2026-11-14T16:13:07.580Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -3183,12 +3183,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-14T16:10:02.402Z"
+      }
     },
     {
       "stockId": "0902332A30261022W001",
-      "title": "プリウス",
+      "title": "プリウス Ａ",
       "description": "プリウス",
       "carName": "プリウス",
       "gradeName": "Ａ",
@@ -3198,12 +3197,12 @@
       "seatCapacity": 1,
       "year": "2016年",
       "mileage": "8.5万K",
-      "color": "1.8",
+      "color": "アティチュードブラックマイカ",
       "inspection": "2027",
       "displacement": "2016cc",
       "bodyPrice": "162.8万円",
       "totalPrice": "167.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261022/H/70009023323026102200100.jpg?1794672602",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261022/H/70009023323026102200100.jpg?1794672779",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261022W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3247,7 +3246,7 @@
           "162.8万円"
         ]
       },
-      "updatedAt": "2026-11-14T09:33:57.251Z",
+      "updatedAt": "2026-11-14T16:13:07.580Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3267,8 +3266,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-14T16:10:02.402Z"
+      }
     },
     {
       "stockId": "0902332A30261018W004",
@@ -3857,101 +3855,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261029W001",
-          "title": "エルグランド",
-          "description": "エルグランド",
-          "carName": "エルグランド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2020年",
-          "mileage": "",
-          "color": "2.5",
-          "inspection": "",
-          "displacement": "2020cc",
-          "bodyPrice": "",
-          "totalPrice": "",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900100.jpg?1794672602",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": false,
-            "bodyPrice": false,
-            "totalPrice": false,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261022W001",
-          "title": "プリウス",
-          "description": "プリウス",
-          "carName": "プリウス",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2016年",
-          "mileage": "8.5万K",
-          "color": "1.8",
-          "inspection": "",
-          "displacement": "2016cc",
-          "bodyPrice": "162.8万円",
-          "totalPrice": "167.3万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261022/H/70009023323026102200100.jpg?1794672602",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261022W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261022W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261022W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261022W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261022W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "167.3万円",
-              "162.8万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261018W004",
           "title": "ワゴンＲ",
           "description": "ワゴンＲ",
@@ -4294,7 +4197,7 @@
         "attempts": 0
       }
     ],
-    "completed": 46,
+    "completed": 48,
     "total": 55,
     "failed": []
   }
