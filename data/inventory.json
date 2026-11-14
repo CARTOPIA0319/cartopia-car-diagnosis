@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-14T09:30:52.543Z",
+  "updatedAt": "2026-11-14T09:31:12.757Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261114093024759-qitseud4",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-14T09:30:26.289Z",
-    "finishedAt": "2026-11-14T09:30:52.543Z",
-    "durationSeconds": 26,
+    "finishedAt": "2026-11-14T09:31:12.757Z",
+    "durationSeconds": 46,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261114093024759-qitseud4",
       "phase": "details",
       "total": 55,
-      "completed": 8,
-      "remaining": 47,
+      "completed": 10,
+      "remaining": 45,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -634,7 +634,7 @@
       "displacement": "660cc",
       "bodyPrice": "125.3万円",
       "totalPrice": "129.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100200.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100200.jpg?1794648655",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260421002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -661,7 +661,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-14T02:31:56.305Z",
+      "updatedAt": "2026-11-14T09:31:12.757Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -681,8 +681,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-14T09:30:33.171Z"
+      }
     },
     {
       "stockId": "0902332A30260414W002",
@@ -690,7 +689,7 @@
       "description": "ｅＫクロス Ｔ ４ＷＤ ハイブリッド ターボ ツートーンカラー ハーフレザーシート 新品サマータイヤ組替済み 純正１５インチ切削アルミホイール 前席シートヒーター クリアランスソナー ＬＥＤヘッドライト フォグ",
       "carName": "ｅＫクロス",
       "gradeName": "Ｔ",
-      "gradeExtraInfo": "1",
+      "gradeExtraInfo": "Ｔ",
       "classificationName": "B38W",
       "makerName": "三菱",
       "seatCapacity": 1,
@@ -728,28 +727,27 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-14T02:31:56.306Z",
+      "updatedAt": "2026-11-14T09:31:12.757Z",
       "typeResult": {
         "status": 200,
         "success": true,
         "containsFatalError": false,
         "timeout": false,
-        "error": ""
+        "error": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR: motorgate.jp/car/edit/new: timeout"
       },
       "detailResult": {
         "success": true,
-        "freshTypes": true,
-        "url": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR",
-        "attempts": 1,
+        "freshTypes": false,
+        "url": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260414W002",
+        "attempts": 2,
         "makerName": true,
-        "seatCapacity": true,
+        "seatCapacity": false,
         "gradeName": true,
-        "year": false,
+        "year": true,
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-14T09:30:33.171Z"
+      }
     },
     {
       "stockId": "0902332A30261029W003",
@@ -3895,78 +3893,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260421W002",
-          "title": "ｅＫクロス Ｔ",
-          "description": "ｅＫクロス Ｔ ４ＷＤ ハイブリッド ターボ 純正９インチナビ デジタルインナーミラー アラウンドビューモニター 前席シートヒーター セーフティシールド 純正１５インチアルミ フルセグ Ｂｌｕｅｔｏｏｔｈ フォグ",
-          "carName": "ｅＫクロス",
-          "gradeName": "Ｔ",
-          "gradeExtraInfo": "",
-          "classificationName": "B38W",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2019年",
-          "mileage": "5.2万K",
-          "color": "ホワイトパール",
-          "inspection": "車検整備付",
-          "displacement": "660cc",
-          "bodyPrice": "125.3万円",
-          "totalPrice": "129.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100200.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W002",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260421002&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260414W002",
-          "title": "ｅＫクロス Ｔ",
-          "description": "ｅＫクロス Ｔ ４ＷＤ ハイブリッド ターボ ツートーンカラー ハーフレザーシート 新品サマータイヤ組替済み 純正１５インチ切削アルミホイール 前席シートヒーター クリアランスソナー ＬＥＤヘッドライト フォグ",
-          "carName": "ｅＫクロス",
-          "gradeName": "Ｔ",
-          "gradeExtraInfo": "",
-          "classificationName": "B38W",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2019年",
-          "mileage": "6万K",
-          "color": "ナチュラルアイボリーメタリックＩＩ",
-          "inspection": "車検整備付",
-          "displacement": "660cc",
-          "bodyPrice": "122.3万円",
-          "totalPrice": "126.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260414/H/70009023323026041400200.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260414W002",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260414002&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261029W003",
           "title": "エクストレイル ２０Ｘ",
           "description": "エクストレイル ２０Ｘ 切替式４ＷＤ プロパイロット メーカーＯＰナビ パーキングアシスト デジタルインナーミラー 純正ドラレコ ＴＶキット パワーバックドア アラウンドビューモニター 純正１８インチ切削アルミ ＥＴＣ",
@@ -5760,7 +5686,7 @@
         "attempts": 0
       }
     ],
-    "completed": 8,
+    "completed": 10,
     "total": 55,
     "failed": []
   }
