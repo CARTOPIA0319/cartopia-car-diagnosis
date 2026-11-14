@@ -1,30 +1,30 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-14T02:31:56.306Z",
+  "updatedAt": "2026-11-14T02:32:09.967Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
     "success": false,
     "statusText": "分割更新中",
-    "runId": "20261114023121364-fo0hzr34",
+    "runId": "20261114023204455-iqld33uz",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-11-14T02:31:22.964Z",
-    "finishedAt": "2026-11-14T02:31:56.306Z",
-    "durationSeconds": 33,
+    "startedAt": "2026-11-14T02:32:06.008Z",
+    "finishedAt": "2026-11-14T02:32:09.967Z",
+    "durationSeconds": 4,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261114023121364-fo0hzr34",
       "phase": "details",
       "total": 55,
-      "completed": 10,
-      "remaining": 45,
+      "completed": 12,
+      "remaining": 43,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
       "finishedAt": ""
     },
-    "typeFailed": 8,
+    "typeFailed": 7,
     "typeTimeout": 0
   },
   "counts": {
@@ -49,8 +49,8 @@
       }
     ],
     "typeResults": {
-      "success": 47,
-      "failed": 8,
+      "success": 48,
+      "failed": 7,
       "timeout": 0
     },
     "gradeExtraInfo": {
@@ -766,7 +766,7 @@
       "displacement": "2.0L",
       "bodyPrice": "157万円",
       "totalPrice": "162.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900300.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900300.jpg?1794623527",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W003",
       "gooUrl": "",
       "sourceStatus": "掲載在庫",
@@ -778,22 +778,32 @@
         "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W003&StockStatus=00180002&ScreenId=CB101GR",
         "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W003&StockStatus=00180002&ScreenId=CB101GR"
       ],
-      "types": [],
-      "typeKeys": [],
+      "types": [
+        "普通…",
+        "普通車",
+        "SUV",
+        "スポーティ"
+      ],
+      "typeKeys": [
+        "普通…",
+        "普通車",
+        "SUV",
+        "スポーティ"
+      ],
       "listResult": null,
-      "updatedAt": "2026-11-13T22:17:06.940Z",
+      "updatedAt": "2026-11-14T02:32:09.967Z",
       "typeResult": {
         "status": 200,
-        "success": false,
+        "success": true,
         "containsFatalError": false,
         "timeout": false,
         "error": ""
       },
       "detailResult": {
         "success": true,
-        "freshTypes": false,
-        "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W003&ScreenId=SIH_001",
-        "attempts": 4,
+        "freshTypes": true,
+        "url": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W003&StockStatus=00180002&ScreenId=CB101GR",
+        "attempts": 1,
         "makerName": true,
         "seatCapacity": true,
         "gradeName": true,
@@ -801,8 +811,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-14T02:31:29.363Z"
+      }
     },
     {
       "stockId": "0902332A30261029W002",
@@ -821,7 +830,7 @@
       "displacement": "660cc",
       "bodyPrice": "200.6万円",
       "totalPrice": "203.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900200.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900200.jpg?1794623527",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261029002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -850,7 +859,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-13T22:15:29.759Z",
+      "updatedAt": "2026-11-14T02:32:09.967Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -870,8 +879,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-14T02:31:29.363Z"
+      }
     },
     {
       "stockId": "0902332A30261105W001",
@@ -3883,78 +3891,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261029W003",
-          "title": "エクストレイル ２０Ｘ",
-          "description": "エクストレイル ２０Ｘ 切替式４ＷＤ プロパイロット メーカーＯＰナビ パーキングアシスト デジタルインナーミラー 純正ドラレコ ＴＶキット パワーバックドア アラウンドビューモニター 純正１８インチ切削アルミ ＥＴＣ",
-          "carName": "エクストレイル",
-          "gradeName": "２０Ｘ",
-          "gradeExtraInfo": "",
-          "classificationName": "NT32",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2017年",
-          "mileage": "6.9万K",
-          "color": "パールホワイト",
-          "inspection": "検2028年09月",
-          "displacement": "2.0L",
-          "bodyPrice": "157万円",
-          "totalPrice": "162.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900300.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W003",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W003&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261029W002",
-          "title": "エブリイ Ｊリミテッド",
-          "description": "エブリイ Ｊリミテッド ４ＷＤ ターボ 専用サイドデカール 前後ブラックバンパー 両側パワースライドドア ＬＥＤヘッドライト 純正ディスプレイオーディオ バックカメラ クリアランスソナー 衝突被害軽減ブレーキ ＵＳＢポート",
-          "carName": "エブリイ",
-          "gradeName": "Ｊリミテッド",
-          "gradeExtraInfo": "",
-          "classificationName": "DA17V",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2025年",
-          "mileage": "0.5万K",
-          "color": "モスグレーメタリック／ブラック",
-          "inspection": "検2027年10月",
-          "displacement": "660cc",
-          "bodyPrice": "200.6万円",
-          "totalPrice": "203.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900200.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W002",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W002&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261029002&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261105W001",
           "title": "オーラ Ｇ ＦＯＵＲ",
           "description": "オーラ Ｇ ＦＯＵＲ ４ＷＤ オプションツートンカラー 純正ナビ アラウンドビューモニター ハーフレザーシート 前席シートヒーター ハンドルヒーター ＥＴＣ エマージェンシーブレーキ パーキングソナー ブレーキホールド",
@@ -5676,7 +5612,7 @@
         "attempts": 0
       }
     ],
-    "completed": 10,
+    "completed": 12,
     "total": 55,
     "failed": []
   }
