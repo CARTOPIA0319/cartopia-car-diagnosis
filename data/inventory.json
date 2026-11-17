@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-17T09:21:00.031Z",
+  "updatedAt": "2026-11-17T09:21:04.260Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,22 +9,22 @@
     "runId": "20261117092050075-y40z8zuv",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-17T09:20:51.749Z",
-    "finishedAt": "2026-11-17T09:21:00.031Z",
-    "durationSeconds": 8,
+    "finishedAt": "2026-11-17T09:21:04.260Z",
+    "durationSeconds": 13,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261117091821532-uv3ws57k",
       "phase": "details",
       "total": 57,
-      "completed": 44,
-      "remaining": 13,
+      "completed": 46,
+      "remaining": 11,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
       "finishedAt": ""
     },
-    "typeFailed": 5,
+    "typeFailed": 3,
     "typeTimeout": 0
   },
   "counts": {
@@ -49,8 +49,8 @@
       }
     ],
     "typeResults": {
-      "success": 52,
-      "failed": 5,
+      "success": 54,
+      "failed": 3,
       "timeout": 0
     },
     "gradeExtraInfo": {
@@ -3042,7 +3042,7 @@
     },
     {
       "stockId": "0902332A30261112W001",
-      "title": "オーラ",
+      "title": "オーラ Ｇ ＦＯＵＲ レザーエディション",
       "description": "オーラ",
       "carName": "オーラ",
       "gradeName": "Ｇ ＦＯＵＲ レザーエディション",
@@ -3052,7 +3052,7 @@
       "seatCapacity": 1,
       "year": "2021年",
       "mileage": "7.6万K",
-      "color": "1.2",
+      "color": "ＯＰピュアホワイトパール／ブラック（３Ｐ）",
       "inspection": "00330002",
       "displacement": "2021cc",
       "bodyPrice": "188.0万円",
@@ -3068,8 +3068,22 @@
         "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W001&ScreenId=SIH_001",
         "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W001&StockStatus=00180002&ScreenId=CB101GR"
       ],
-      "types": [],
-      "typeKeys": [],
+      "types": [
+        "普通…",
+        "普通車",
+        "コンパクトカー",
+        "ステーションワゴン",
+        "EV・HV",
+        "スポーティ"
+      ],
+      "typeKeys": [
+        "普通…",
+        "普通車",
+        "コンパクトカー",
+        "ステーションワゴン",
+        "EV・HV",
+        "スポーティ"
+      ],
       "listResult": {
         "carName": true,
         "gradeName": false,
@@ -3085,19 +3099,19 @@
           "188.0万円"
         ]
       },
-      "updatedAt": "2026-11-17T01:09:55.380Z",
+      "updatedAt": "2026-11-17T09:21:04.260Z",
       "typeResult": {
         "status": 200,
-        "success": false,
+        "success": true,
         "containsFatalError": false,
         "timeout": false,
         "error": ""
       },
       "detailResult": {
         "success": true,
-        "freshTypes": false,
+        "freshTypes": true,
         "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W001&ScreenId=SIH_001",
-        "attempts": 4,
+        "attempts": 1,
         "makerName": true,
         "seatCapacity": true,
         "gradeName": true,
@@ -3105,12 +3119,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-17T09:18:29.996Z"
+      }
     },
     {
       "stockId": "0902332A30261112W004",
-      "title": "アルファードハイブリッド",
+      "title": "アルファードハイブリッド ＳＲ",
       "description": "アルファードハイブリッド",
       "carName": "アルファードハイブリッド",
       "gradeName": "ＳＲ",
@@ -3120,12 +3133,12 @@
       "seatCapacity": 1,
       "year": "2019年",
       "mileage": "2.9万K",
-      "color": "2.5",
+      "color": "ＯＰホワイトパールクリスタルシャイン",
       "inspection": "00330002",
       "displacement": "2019cc",
       "bodyPrice": "442.9万円",
       "totalPrice": "451.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261112/H/70009023323026111200400.jpg?1794907109",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261112/H/70009023323026111200400.jpg?1794907262",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W004&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3136,8 +3149,22 @@
         "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W004&ScreenId=SIH_001",
         "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W004&StockStatus=00180002&ScreenId=CB101GR"
       ],
-      "types": [],
-      "typeKeys": [],
+      "types": [
+        "普通…",
+        "普通車",
+        "ミニバン",
+        "ステーションワゴン",
+        "EV・HV",
+        "スポーティ"
+      ],
+      "typeKeys": [
+        "普通…",
+        "普通車",
+        "ミニバン",
+        "ステーションワゴン",
+        "EV・HV",
+        "スポーティ"
+      ],
       "listResult": {
         "carName": true,
         "gradeName": false,
@@ -3153,19 +3180,19 @@
           "442.9万円"
         ]
       },
-      "updatedAt": "2026-11-17T01:09:32.807Z",
+      "updatedAt": "2026-11-17T09:21:04.260Z",
       "typeResult": {
         "status": 200,
-        "success": false,
+        "success": true,
         "containsFatalError": false,
         "timeout": false,
         "error": ""
       },
       "detailResult": {
         "success": true,
-        "freshTypes": false,
+        "freshTypes": true,
         "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W004&ScreenId=SIH_001",
-        "attempts": 4,
+        "attempts": 1,
         "makerName": true,
         "seatCapacity": true,
         "gradeName": true,
@@ -3173,8 +3200,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-17T09:18:29.996Z"
+      }
     },
     {
       "stockId": "0902332A30261029W001",
@@ -4051,104 +4077,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261112W001",
-          "title": "オーラ",
-          "description": "オーラ",
-          "carName": "オーラ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2021年",
-          "mileage": "7.6万K",
-          "color": "1.2",
-          "inspection": "",
-          "displacement": "2021cc",
-          "bodyPrice": "188.0万円",
-          "totalPrice": "194.2万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200100.jpg?1794907109",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "194.2万円",
-              "188.0万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261112W004",
-          "title": "アルファードハイブリッド",
-          "description": "アルファードハイブリッド",
-          "carName": "アルファードハイブリッド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2019年",
-          "mileage": "2.9万K",
-          "color": "2.5",
-          "inspection": "",
-          "displacement": "2019cc",
-          "bodyPrice": "442.9万円",
-          "totalPrice": "451.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261112/H/70009023323026111200400.jpg?1794907109",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W004&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W004&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W004&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W004&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W004&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "451.2万円",
-              "442.9万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261029W001",
           "title": "エルグランド",
           "description": "エルグランド",
@@ -4687,7 +4615,7 @@
         "attempts": 0
       }
     ],
-    "completed": 44,
+    "completed": 46,
     "total": 57,
     "failed": []
   }
