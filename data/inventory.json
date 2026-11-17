@@ -1,24 +1,24 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-17T01:09:13.229Z",
+  "updatedAt": "2026-11-17T01:09:32.807Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
     "success": false,
     "statusText": "分割更新中",
-    "runId": "20261117010846445-f12sti86",
+    "runId": "20261117010920761-fa47dh31",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-11-17T01:08:47.966Z",
-    "finishedAt": "2026-11-17T01:09:13.229Z",
-    "durationSeconds": 25,
+    "startedAt": "2026-11-17T01:09:22.362Z",
+    "finishedAt": "2026-11-17T01:09:32.807Z",
+    "durationSeconds": 10,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261117010655688-kzqg45re",
       "phase": "details",
       "total": 56,
-      "completed": 40,
-      "remaining": 16,
+      "completed": 42,
+      "remaining": 14,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2739,7 +2739,7 @@
     },
     {
       "stockId": "0902332A30261116W001",
-      "title": "タント",
+      "title": "タント Ｌ ＳＡＩＩＩ",
       "description": "タント",
       "carName": "タント",
       "gradeName": "Ｌ ＳＡＩＩＩ",
@@ -2749,12 +2749,12 @@
       "seatCapacity": 1,
       "year": "2017年",
       "mileage": "5.4万K",
-      "color": "660",
+      "color": "カタログカラー パールホワイトⅢ｜10 ホワイト｜10 ファイアークォーツレッドメタリック｜15 シルキーブルーパール｜20 ディープブルークリスタルマイカ｜20 ホワイトⅡ｜20 メテオライトグレー",
       "inspection": "2028",
       "displacement": "2017cc",
       "bodyPrice": "5.4万円",
       "totalPrice": "5.4万円",
-      "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111600100.jpg?1794877623",
+      "imageUrl": "https://picture1.goo-net.com/090/0902332/H/0902332A30261116W00179.jpg?1794877763",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261116W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2779,7 +2779,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-11-16T17:32:37.866Z",
+      "updatedAt": "2026-11-17T01:09:32.807Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2799,12 +2799,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-17T01:07:03.398Z"
+      }
     },
     {
       "stockId": "0902332A30261112W004",
-      "title": "アルファードハイブリッド",
+      "title": "アルファードハイブリッド ＳＲ",
       "description": "アルファードハイブリッド",
       "carName": "アルファードハイブリッド",
       "gradeName": "ＳＲ",
@@ -2814,12 +2813,12 @@
       "seatCapacity": 1,
       "year": "2019年",
       "mileage": "2.9万K",
-      "color": "2.5",
+      "color": "パールホワイト",
       "inspection": "00330002",
       "displacement": "2019cc",
       "bodyPrice": "2.9万円",
       "totalPrice": "2.9万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261112/H/70009023323026111200400.jpg?1794877623",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261112/H/70009023323026111200400.jpg?1794877763",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W004&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -2844,7 +2843,7 @@
         "imageUrl": true,
         "priceCandidates": []
       },
-      "updatedAt": "2026-11-16T17:32:37.866Z",
+      "updatedAt": "2026-11-17T01:09:32.807Z",
       "typeResult": {
         "status": 200,
         "success": false,
@@ -2864,8 +2863,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-17T01:07:03.398Z"
+      }
     },
     {
       "stockId": "0902332A30261112W005",
@@ -3928,98 +3926,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261116W001",
-          "title": "タント",
-          "description": "タント",
-          "carName": "タント",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2017年",
-          "mileage": "5.4万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2017cc",
-          "bodyPrice": "5.4万円",
-          "totalPrice": "5.4万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111600100.jpg?1794877623",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261116W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261116W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261116W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261116W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261116W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261112W004",
-          "title": "アルファードハイブリッド",
-          "description": "アルファードハイブリッド",
-          "carName": "アルファードハイブリッド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2019年",
-          "mileage": "2.9万K",
-          "color": "2.5",
-          "inspection": "",
-          "displacement": "2019cc",
-          "bodyPrice": "2.9万円",
-          "totalPrice": "2.9万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261112/H/70009023323026111200400.jpg?1794877623",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W004&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W004&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W004&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W004&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W004&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": []
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261112W005",
           "title": "クラウンハイブリッド",
           "description": "クラウンハイブリッド",
@@ -4687,7 +4593,7 @@
         "attempts": 0
       }
     ],
-    "completed": 40,
+    "completed": 42,
     "total": 56,
     "failed": []
   }
