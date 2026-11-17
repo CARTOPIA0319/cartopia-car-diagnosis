@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-17T09:21:04.260Z",
+  "updatedAt": "2026-11-17T09:21:08.713Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,22 +9,22 @@
     "runId": "20261117092050075-y40z8zuv",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-17T09:20:51.749Z",
-    "finishedAt": "2026-11-17T09:21:04.260Z",
-    "durationSeconds": 13,
+    "finishedAt": "2026-11-17T09:21:08.713Z",
+    "durationSeconds": 17,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261117091821532-uv3ws57k",
       "phase": "details",
       "total": 57,
-      "completed": 46,
-      "remaining": 11,
+      "completed": 48,
+      "remaining": 9,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
       "finishedAt": ""
     },
-    "typeFailed": 3,
+    "typeFailed": 1,
     "typeTimeout": 0
   },
   "counts": {
@@ -49,8 +49,8 @@
       }
     ],
     "typeResults": {
-      "success": 54,
-      "failed": 3,
+      "success": 56,
+      "failed": 1,
       "timeout": 0
     },
     "gradeExtraInfo": {
@@ -3204,7 +3204,7 @@
     },
     {
       "stockId": "0902332A30261029W001",
-      "title": "エルグランド",
+      "title": "エルグランド ２５０ハイウェイスタープレミアムアーバンクロム",
       "description": "エルグランド",
       "carName": "エルグランド",
       "gradeName": "２５０ハイウェイスタープレミアムアーバンクロム",
@@ -3214,12 +3214,12 @@
       "seatCapacity": 1,
       "year": "2020年",
       "mileage": "346.7万K",
-      "color": "2.5",
+      "color": "パールホワイト",
       "inspection": "2027",
       "displacement": "2020cc",
       "bodyPrice": "346.7万円",
       "totalPrice": "352.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900100.jpg?1794907109",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900100.jpg?1794907266",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3230,8 +3230,20 @@
         "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W001&ScreenId=SIH_001",
         "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W001&StockStatus=00180002&ScreenId=CB101GR"
       ],
-      "types": [],
-      "typeKeys": [],
+      "types": [
+        "普通…",
+        "普通車",
+        "ミニバン",
+        "ステーションワゴン",
+        "スポーティ"
+      ],
+      "typeKeys": [
+        "普通…",
+        "普通車",
+        "ミニバン",
+        "ステーションワゴン",
+        "スポーティ"
+      ],
       "listResult": {
         "carName": true,
         "gradeName": false,
@@ -3247,19 +3259,19 @@
           "346.7万円"
         ]
       },
-      "updatedAt": "2026-11-17T01:10:06.628Z",
+      "updatedAt": "2026-11-17T09:21:08.713Z",
       "typeResult": {
         "status": 200,
-        "success": false,
+        "success": true,
         "containsFatalError": false,
         "timeout": false,
         "error": ""
       },
       "detailResult": {
         "success": true,
-        "freshTypes": false,
+        "freshTypes": true,
         "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W001&ScreenId=SIH_001",
-        "attempts": 4,
+        "attempts": 1,
         "makerName": true,
         "seatCapacity": true,
         "gradeName": true,
@@ -3267,12 +3279,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-17T09:18:29.996Z"
+      }
     },
     {
       "stockId": "0902332A30261112W005",
-      "title": "クラウンハイブリッド",
+      "title": "クラウンハイブリッド Ｇ Ｆｏｕｒ",
       "description": "クラウンハイブリッド",
       "carName": "クラウンハイブリッド",
       "gradeName": "Ｇ Ｆｏｕｒ",
@@ -3282,7 +3293,7 @@
       "seatCapacity": 1,
       "year": "2018年",
       "mileage": "3.9万K",
-      "color": "2.5",
+      "color": "カタログカラー ホワイトパールクリスタルシャイン｜10 ダークレッドマイカメタリック｜37 紅リッチレッドクリスタルシャインガラスフレーク｜15 夜霞ボルドーマイカメタリック｜37 天空ピュアブルーメ",
       "inspection": "00330002",
       "displacement": "2018cc",
       "bodyPrice": "360.8万円",
@@ -3298,8 +3309,20 @@
         "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
         "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W005&StockStatus=00180002&ScreenId=CB101GR"
       ],
-      "types": [],
-      "typeKeys": [],
+      "types": [
+        "普通…",
+        "普通車",
+        "セダン",
+        "EV・HV",
+        "スポーティ"
+      ],
+      "typeKeys": [
+        "普通…",
+        "普通車",
+        "セダン",
+        "EV・HV",
+        "スポーティ"
+      ],
       "listResult": {
         "carName": true,
         "gradeName": false,
@@ -3315,19 +3338,19 @@
           "360.8万円"
         ]
       },
-      "updatedAt": "2026-11-17T01:09:44.159Z",
+      "updatedAt": "2026-11-17T09:21:08.713Z",
       "typeResult": {
         "status": 200,
-        "success": false,
+        "success": true,
         "containsFatalError": false,
         "timeout": false,
         "error": ""
       },
       "detailResult": {
         "success": true,
-        "freshTypes": false,
+        "freshTypes": true,
         "url": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
-        "attempts": 4,
+        "attempts": 1,
         "makerName": true,
         "seatCapacity": true,
         "gradeName": true,
@@ -3335,8 +3358,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-17T09:18:29.996Z"
+      }
     },
     {
       "stockId": "0902332A30261106W001",
@@ -4077,104 +4099,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261029W001",
-          "title": "エルグランド",
-          "description": "エルグランド",
-          "carName": "エルグランド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2020年",
-          "mileage": "346.7万K",
-          "color": "2.5",
-          "inspection": "",
-          "displacement": "2020cc",
-          "bodyPrice": "346.7万円",
-          "totalPrice": "352.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900100.jpg?1794907109",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261029W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "352.2万円",
-              "346.7万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261112W005",
-          "title": "クラウンハイブリッド",
-          "description": "クラウンハイブリッド",
-          "carName": "クラウンハイブリッド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2018年",
-          "mileage": "3.9万K",
-          "color": "2.5",
-          "inspection": "",
-          "displacement": "2018cc",
-          "bodyPrice": "360.8万円",
-          "totalPrice": "368.2万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200500.jpg?1794907109",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W005&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W005&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "368.2万円",
-              "360.8万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261106W001",
           "title": "フォレスター",
           "description": "フォレスター",
@@ -4615,7 +4539,7 @@
         "attempts": 0
       }
     ],
-    "completed": 46,
+    "completed": 48,
     "total": 57,
     "failed": []
   }
