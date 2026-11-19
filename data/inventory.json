@@ -1,24 +1,24 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-19T23:56:53.631Z",
+  "updatedAt": "2026-11-19T23:57:07.578Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
     "success": false,
     "statusText": "分割更新中",
-    "runId": "20261119235616491-flcq86c9",
+    "runId": "20261119235701875-9aaan1wc",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-11-19T23:56:18.194Z",
-    "finishedAt": "2026-11-19T23:56:53.631Z",
-    "durationSeconds": 35,
+    "startedAt": "2026-11-19T23:57:03.732Z",
+    "finishedAt": "2026-11-19T23:57:07.578Z",
+    "durationSeconds": 4,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261119235425460-6xbkpjnj",
       "phase": "details",
       "total": 57,
-      "completed": 40,
-      "remaining": 17,
+      "completed": 42,
+      "remaining": 15,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2758,7 +2758,7 @@
       "displacement": "1.8L",
       "bodyPrice": "443.8万円",
       "totalPrice": "451.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261109/H/70009023323026110900100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261109/H/70009023323026110900100.jpg?1795132625",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261109W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261109001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2783,7 +2783,7 @@
         "EV・HV"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-19T17:29:14.550Z",
+      "updatedAt": "2026-11-19T23:57:07.578Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2803,12 +2803,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-19T23:54:33.211Z"
+      }
     },
     {
       "stockId": "0902332A30261116W001",
-      "title": "タント",
+      "title": "タント Ｌ ＳＡＩＩＩ",
       "description": "タント",
       "carName": "タント",
       "gradeName": "Ｌ ＳＡＩＩＩ",
@@ -2818,7 +2817,7 @@
       "seatCapacity": 1,
       "year": "2017年",
       "mileage": "5.4万K",
-      "color": "660",
+      "color": "ブラックマイカメタリック",
       "inspection": "2028",
       "displacement": "2017cc",
       "bodyPrice": "95.6万円",
@@ -2861,7 +2860,7 @@
           "95.6万円"
         ]
       },
-      "updatedAt": "2026-11-19T17:29:14.550Z",
+      "updatedAt": "2026-11-19T23:57:07.578Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2881,8 +2880,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-19T23:54:33.211Z"
+      }
     },
     {
       "stockId": "0902332A30261112W003",
@@ -4121,91 +4119,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261109W001",
-          "title": "ヴォクシー ハイブリッドＳ－Ｚ",
-          "description": "ヴォクシー ハイブリッドＳ－Ｚ ４ＷＤ 最上級グレード Ｐバックドア 両側パワースライドドア スペアキー有 パノラミックビューモニター ステアリングヒーター シートヒーター Ｆワイパーデアイサー ＡＣ１００Ｖ電源 オートハイビーム",
-          "carName": "ヴォクシー",
-          "gradeName": "ハイブリッドＳ－Ｚ",
-          "gradeExtraInfo": "",
-          "classificationName": "ZWR95W",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2026年",
-          "mileage": "0.4万K",
-          "color": "ＯＰプラチナホワイトパールマイカ",
-          "inspection": "車検整備付",
-          "displacement": "1.8L",
-          "bodyPrice": "443.8万円",
-          "totalPrice": "451.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261109/H/70009023323026110900100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261109W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261109001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261116W001",
-          "title": "タント",
-          "description": "タント",
-          "carName": "タント",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2017年",
-          "mileage": "5.4万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2017cc",
-          "bodyPrice": "95.6万円",
-          "totalPrice": "98.8万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111600100.jpg?1795132473",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261116W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261116W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261116W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261116W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261116W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "98.8万円",
-              "95.6万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261112W003",
           "title": "フィットハイブリッド",
           "description": "フィットハイブリッド",
@@ -4940,7 +4853,7 @@
         "attempts": 0
       }
     ],
-    "completed": 40,
+    "completed": 42,
     "total": 57,
     "failed": []
   }
