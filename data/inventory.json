@@ -1,24 +1,24 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-21T12:49:38.839Z",
+  "updatedAt": "2026-11-21T12:49:53.865Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
     "success": false,
     "statusText": "分割更新中",
-    "runId": "20261121124913029-uidy73r6",
+    "runId": "20261121124947011-dhn26kz0",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-11-21T12:49:14.547Z",
-    "finishedAt": "2026-11-21T12:49:38.839Z",
-    "durationSeconds": 24,
+    "startedAt": "2026-11-21T12:49:48.460Z",
+    "finishedAt": "2026-11-21T12:49:53.865Z",
+    "durationSeconds": 5,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261121124642812-jxd8ltcu",
       "phase": "details",
       "total": 57,
-      "completed": 50,
-      "remaining": 7,
+      "completed": 52,
+      "remaining": 5,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -3526,7 +3526,7 @@
     },
     {
       "stockId": "0902332A30261018W004",
-      "title": "ワゴンＲ",
+      "title": "ワゴンＲ ＦＸ－Ｅ",
       "description": "ワゴンＲ",
       "carName": "ワゴンＲ",
       "gradeName": "ＦＸ－Ｅ",
@@ -3536,12 +3536,12 @@
       "seatCapacity": 1,
       "year": "2014年",
       "mileage": "5.4万K",
-      "color": "660",
+      "color": "シルキーシルバーメタリック",
       "inspection": "00330002",
       "displacement": "2014cc",
       "bodyPrice": "48.3万円",
       "totalPrice": "52.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261018/H/70009023323026101800400.jpg?1795265214",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261018/H/70009023323026101800400.jpg?1795265391",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261018W004&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3579,7 +3579,7 @@
           "48.3万円"
         ]
       },
-      "updatedAt": "2026-11-21T04:04:56.867Z",
+      "updatedAt": "2026-11-21T12:49:53.865Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3599,12 +3599,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-21T12:46:55.061Z"
+      }
     },
     {
       "stockId": "0902332A30260930W001",
-      "title": "ハイエースバン",
+      "title": "ハイエースバン スーパーＧＬ ダークプライムＩＩ",
       "description": "ハイエースバン",
       "carName": "ハイエースバン",
       "gradeName": "スーパーＧＬ ダークプライムＩＩ",
@@ -3614,12 +3613,12 @@
       "seatCapacity": 1,
       "year": "2022年",
       "mileage": "6.9万K",
-      "color": "2.8",
+      "color": "ＯＰホワイトパールクリスタルシャイン",
       "inspection": "00330002",
       "displacement": "2022cc",
       "bodyPrice": "397.1万円",
       "totalPrice": "402.7万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260930/H/70009023323026093000100.jpg?1795265214",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260930/H/70009023323026093000100.jpg?1795265391",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260930W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3661,7 +3660,7 @@
           "397.1万円"
         ]
       },
-      "updatedAt": "2026-11-21T04:04:56.867Z",
+      "updatedAt": "2026-11-21T12:49:53.865Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3681,8 +3680,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-21T12:46:55.061Z"
+      }
     },
     {
       "stockId": "0902332A30261001W003",
@@ -4111,104 +4109,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261018W004",
-          "title": "ワゴンＲ",
-          "description": "ワゴンＲ",
-          "carName": "ワゴンＲ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2014年",
-          "mileage": "5.4万K",
-          "color": "660",
-          "inspection": "",
-          "displacement": "2014cc",
-          "bodyPrice": "48.3万円",
-          "totalPrice": "52.3万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261018/H/70009023323026101800400.jpg?1795265214",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261018W004&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W004&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W004&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261018W004&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261018W004&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "52.3万円",
-              "48.3万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260930W001",
-          "title": "ハイエースバン",
-          "description": "ハイエースバン",
-          "carName": "ハイエースバン",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2022年",
-          "mileage": "6.9万K",
-          "color": "2.8",
-          "inspection": "",
-          "displacement": "2022cc",
-          "bodyPrice": "397.1万円",
-          "totalPrice": "402.7万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260930/H/70009023323026093000100.jpg?1795265214",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260930W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260930W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260930W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260930W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260930W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "402.7万円",
-              "397.1万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261001W003",
           "title": "タント",
           "description": "タント",
@@ -4453,7 +4353,7 @@
         "attempts": 0
       }
     ],
-    "completed": 50,
+    "completed": 52,
     "total": 57,
     "failed": []
   }
