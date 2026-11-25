@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-25T22:39:52.009Z",
+  "updatedAt": "2026-11-25T22:39:55.797Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261125223933309-z5bnj77p",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-25T22:39:35.536Z",
-    "finishedAt": "2026-11-25T22:39:52.009Z",
-    "durationSeconds": 16,
+    "finishedAt": "2026-11-25T22:39:55.797Z",
+    "durationSeconds": 20,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261125223703589-9x4r1j45",
       "phase": "details",
       "total": 57,
-      "completed": 48,
-      "remaining": 9,
+      "completed": 50,
+      "remaining": 7,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -3347,7 +3347,7 @@
     },
     {
       "stockId": "0902332A30261112W005",
-      "title": "クラウンハイブリッド",
+      "title": "クラウンハイブリッド Ｇ Ｆｏｕｒ",
       "description": "クラウンハイブリッド",
       "carName": "クラウンハイブリッド",
       "gradeName": "Ｇ Ｆｏｕｒ",
@@ -3357,7 +3357,7 @@
       "seatCapacity": 1,
       "year": "2018年",
       "mileage": "3.9万K",
-      "color": "2018年",
+      "color": "カタログカラー ホワイトパールクリスタルシャイン｜10 ダークレッドマイカメタリック｜37 紅リッチレッドクリスタルシャインガラスフレーク｜15 夜霞ボルドーマイカメタリック｜37 天空ピュアブルーメ",
       "inspection": "00330002",
       "displacement": "2018cc",
       "bodyPrice": "360.8万円",
@@ -3402,7 +3402,7 @@
           "360.8万円"
         ]
       },
-      "updatedAt": "2026-11-25T13:13:28.184Z",
+      "updatedAt": "2026-11-25T22:39:55.797Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3422,12 +3422,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-25T22:37:13.962Z"
+      }
     },
     {
       "stockId": "0902332A30261106W001",
-      "title": "フォレスター",
+      "title": "フォレスター Ｓ－リミテッド",
       "description": "フォレスター",
       "carName": "フォレスター",
       "gradeName": "Ｓ－リミテッド",
@@ -3437,7 +3436,7 @@
       "seatCapacity": 1,
       "year": "2015年",
       "mileage": "6.5万K",
-      "color": "2015年",
+      "color": "パールホワイト",
       "inspection": "00330002",
       "displacement": "2015cc",
       "bodyPrice": "130.5万円",
@@ -3484,7 +3483,7 @@
           "130.5万円"
         ]
       },
-      "updatedAt": "2026-11-25T13:13:28.184Z",
+      "updatedAt": "2026-11-25T22:39:55.797Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3504,8 +3503,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-25T22:37:13.962Z"
+      }
     },
     {
       "stockId": "0902332A30261022W001",
@@ -4100,104 +4098,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261112W005",
-          "title": "クラウンハイブリッド",
-          "description": "クラウンハイブリッド",
-          "carName": "クラウンハイブリッド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2018年",
-          "mileage": "3.9万K",
-          "color": "2018年",
-          "inspection": "",
-          "displacement": "2018cc",
-          "bodyPrice": "360.8万円",
-          "totalPrice": "368.2万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200500.jpg?1795646233",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W005&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W005&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W005&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "368.2万円",
-              "360.8万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261106W001",
-          "title": "フォレスター",
-          "description": "フォレスター",
-          "carName": "フォレスター",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2015年",
-          "mileage": "6.5万K",
-          "color": "2015年",
-          "inspection": "",
-          "displacement": "2015cc",
-          "bodyPrice": "130.5万円",
-          "totalPrice": "138.2万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026110600100.jpg?1795646233",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261106W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261106W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261106W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261106W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261106W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "138.2万円",
-              "130.5万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261022W001",
           "title": "プリウス",
           "description": "プリウス",
@@ -4540,7 +4440,7 @@
         "attempts": 0
       }
     ],
-    "completed": 48,
+    "completed": 50,
     "total": 57,
     "failed": []
   }
