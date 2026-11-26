@@ -1,24 +1,24 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-26T23:24:30.406Z",
+  "updatedAt": "2026-11-26T23:24:45.126Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
     "success": false,
     "statusText": "分割更新中",
-    "runId": "20261126232404545-lkdsnni5",
+    "runId": "20261126232438488-ly6u6oqp",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-11-26T23:24:06.471Z",
-    "finishedAt": "2026-11-26T23:24:30.406Z",
-    "durationSeconds": 24,
+    "startedAt": "2026-11-26T23:24:40.363Z",
+    "finishedAt": "2026-11-26T23:24:45.126Z",
+    "durationSeconds": 5,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261126232207309-1kwaj8ki",
       "phase": "details",
       "total": 58,
-      "completed": 40,
-      "remaining": 18,
+      "completed": 42,
+      "remaining": 16,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -2758,7 +2758,7 @@
       "displacement": "660cc",
       "bodyPrice": "92.7万円",
       "totalPrice": "96.7万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260926/H/70009023323026092600100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260926/H/70009023323026092600100.jpg?1795735482",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260926W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260926001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2783,7 +2783,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-26T14:34:44.605Z",
+      "updatedAt": "2026-11-26T23:24:45.126Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2803,8 +2803,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-26T23:22:17.766Z"
+      }
     },
     {
       "stockId": "0902332A30261109W001",
@@ -2823,7 +2822,7 @@
       "displacement": "1.8L",
       "bodyPrice": "443.8万円",
       "totalPrice": "451.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261109/H/70009023323026110900100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261109/H/70009023323026110900100.jpg?1795735482",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261109W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261109001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -2848,7 +2847,7 @@
         "EV・HV"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-26T14:34:44.605Z",
+      "updatedAt": "2026-11-26T23:24:45.126Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -2868,8 +2867,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-26T23:22:17.766Z"
+      }
     },
     {
       "stockId": "0902332A30261126W001",
@@ -4173,78 +4171,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260926W001",
-          "title": "ワゴンＲ ハイブリッドＦＺ",
-          "description": "ワゴンＲ ハイブリッドＦＺ ハイブリッド ４ＷＤ フルセグＴＶ Ｂｌｕｅｔｏｏｔｈ オプションカラー 前２席シートヒーター ヘッドアップディスプレイ ミラーヒーター 衝突軽減装置 アイドリンストップ 車線逸脱防止警報",
-          "carName": "ワゴンＲ",
-          "gradeName": "ハイブリッドＦＺ",
-          "gradeExtraInfo": "",
-          "classificationName": "MH55S",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2017年",
-          "mileage": "6.9万K",
-          "color": "ＯＰスチールシルバーメタリック",
-          "inspection": "車検整備付",
-          "displacement": "660cc",
-          "bodyPrice": "92.7万円",
-          "totalPrice": "96.7万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260926/H/70009023323026092600100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260926W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260926W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260926001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261109W001",
-          "title": "ヴォクシー ハイブリッドＳ－Ｚ",
-          "description": "ヴォクシー ハイブリッドＳ－Ｚ ４ＷＤ 最上級グレード Ｐバックドア 両側パワースライドドア スペアキー有 パノラミックビューモニター ステアリングヒーター シートヒーター Ｆワイパーデアイサー ＡＣ１００Ｖ電源 オートハイビーム",
-          "carName": "ヴォクシー",
-          "gradeName": "ハイブリッドＳ－Ｚ",
-          "gradeExtraInfo": "",
-          "classificationName": "ZWR95W",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2026年",
-          "mileage": "0.4万K",
-          "color": "ＯＰプラチナホワイトパールマイカ",
-          "inspection": "車検整備付",
-          "displacement": "1.8L",
-          "bodyPrice": "443.8万円",
-          "totalPrice": "451.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261109/H/70009023323026110900100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261109W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261109W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261109001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261126W001",
           "title": "Ｎ－ＶＡＮ＋スタイル",
           "description": "Ｎ－ＶＡＮ＋スタイル",
@@ -5025,7 +4951,7 @@
         "attempts": 0
       }
     ],
-    "completed": 40,
+    "completed": 42,
     "total": 58,
     "failed": []
   }
