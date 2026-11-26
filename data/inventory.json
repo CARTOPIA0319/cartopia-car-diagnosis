@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-26T14:35:01.641Z",
+  "updatedAt": "2026-11-26T14:35:07.009Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261126143438900-yvaqpgu8",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-26T14:34:40.948Z",
-    "finishedAt": "2026-11-26T14:35:01.641Z",
-    "durationSeconds": 21,
+    "finishedAt": "2026-11-26T14:35:07.009Z",
+    "durationSeconds": 26,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261126143200717-mb5h5cgr",
       "phase": "details",
       "total": 58,
-      "completed": 44,
-      "remaining": 14,
+      "completed": 46,
+      "remaining": 12,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -3012,7 +3012,7 @@
     },
     {
       "stockId": "0902332A30261112W003",
-      "title": "フィットハイブリッド",
+      "title": "フィットハイブリッド Ｆパッケージ",
       "description": "フィットハイブリッド",
       "carName": "フィットハイブリッド",
       "gradeName": "Ｆパッケージ",
@@ -3022,7 +3022,7 @@
       "seatCapacity": 1,
       "year": "2014年",
       "mileage": "5.6万K",
-      "color": "2014年",
+      "color": "アラバスターシルバーメタリック",
       "inspection": "2027",
       "displacement": "2014cc",
       "bodyPrice": "73.6万円",
@@ -3067,7 +3067,7 @@
           "73.6万円"
         ]
       },
-      "updatedAt": "2026-11-26T04:34:07.510Z",
+      "updatedAt": "2026-11-26T14:35:07.009Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3087,12 +3087,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-26T14:32:14.609Z"
+      }
     },
     {
       "stockId": "0902332A30261117W001",
-      "title": "Ｎ－ＢＯＸスラッシュ",
+      "title": "Ｎ－ＢＯＸスラッシュ Ｇ・ターボＬインテリアカラーパッケージ",
       "description": "Ｎ－ＢＯＸスラッシュ",
       "carName": "Ｎ－ＢＯＸスラッシュ",
       "gradeName": "Ｇ・ターボＬインテリアカラーパッケージ",
@@ -3102,7 +3101,7 @@
       "seatCapacity": 1,
       "year": "2016年",
       "mileage": "7.2万K",
-      "color": "2016年",
+      "color": "ＯＰプレミアムホワイトパール",
       "inspection": "2027",
       "displacement": "2016cc",
       "bodyPrice": "99.6万円",
@@ -3147,7 +3146,7 @@
           "99.6万円"
         ]
       },
-      "updatedAt": "2026-11-26T04:34:13.085Z",
+      "updatedAt": "2026-11-26T14:35:07.009Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3167,8 +3166,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-26T14:32:14.609Z"
+      }
     },
     {
       "stockId": "0902332A30261112W001",
@@ -4169,104 +4167,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261112W003",
-          "title": "フィットハイブリッド",
-          "description": "フィットハイブリッド",
-          "carName": "フィットハイブリッド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2014年",
-          "mileage": "5.6万K",
-          "color": "2014年",
-          "inspection": "",
-          "displacement": "2014cc",
-          "bodyPrice": "73.6万円",
-          "totalPrice": "77.7万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111200300.jpg?1795703534",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261112W003&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W003&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261112W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261112W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "77.7万円",
-              "73.6万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261117W001",
-          "title": "Ｎ－ＢＯＸスラッシュ",
-          "description": "Ｎ－ＢＯＸスラッシュ",
-          "carName": "Ｎ－ＢＯＸスラッシュ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2016年",
-          "mileage": "7.2万K",
-          "color": "2016年",
-          "inspection": "",
-          "displacement": "2016cc",
-          "bodyPrice": "99.6万円",
-          "totalPrice": "102.1万円",
-          "imageUrl": "https://picture-referrer.goo-net.com/storage-motorgate-preview-product/70009023323026111700100.jpg?1795703534",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261117W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261117W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261117W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30261117W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261117W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "102.1万円",
-              "99.6万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261112W001",
           "title": "オーラ",
           "description": "オーラ",
@@ -4854,7 +4754,7 @@
         "attempts": 0
       }
     ],
-    "completed": 44,
+    "completed": 46,
     "total": 58,
     "failed": []
   }
