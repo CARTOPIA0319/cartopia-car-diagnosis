@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-27T23:47:52.577Z",
+  "updatedAt": "2026-11-27T23:47:57.872Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261127234736698-ynnbov1p",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-27T23:47:38.578Z",
-    "finishedAt": "2026-11-27T23:47:52.577Z",
-    "durationSeconds": 14,
+    "finishedAt": "2026-11-27T23:47:57.872Z",
+    "durationSeconds": 19,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261127234556952-nlufkxjp",
       "phase": "details",
       "total": 58,
-      "completed": 26,
-      "remaining": 32,
+      "completed": 28,
+      "remaining": 30,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -1826,7 +1826,7 @@
       "displacement": "660cc",
       "bodyPrice": "185.5万円",
       "totalPrice": "188.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261015/H/70009023323026101500100.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261015/H/70009023323026101500100.jpg?1795823275",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261015W001",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261015001&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1855,7 +1855,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-27T15:40:38.420Z",
+      "updatedAt": "2026-11-27T23:47:57.872Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1875,8 +1875,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-27T23:46:06.153Z"
+      }
     },
     {
       "stockId": "0902332A30260612W002",
@@ -1895,7 +1894,7 @@
       "displacement": "660cc",
       "bodyPrice": "144万円",
       "totalPrice": "147.8万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260612/H/70009023323026061200200.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260612/H/70009023323026061200200.jpg?1795823275",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260612W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260612002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -1922,7 +1921,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-27T15:40:38.420Z",
+      "updatedAt": "2026-11-27T23:47:57.872Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -1942,8 +1941,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-27T23:46:06.153Z"
+      }
     },
     {
       "stockId": "0902332A30260313W001",
@@ -4195,78 +4193,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261015W001",
-          "title": "ハスラー Ｊスタイルターボ",
-          "description": "ハスラー Ｊスタイルターボ ４ＷＤ ターボ ハイブリッド メーカーＯＰ９インチナビ 全方位カメラ パドルシフト アダプティブクルコン パワーモード パーキングソナー 前後ドラレコ 前列シートヒーター 純正１５インチＡＷ ＥＴＣ",
-          "carName": "ハスラー",
-          "gradeName": "Ｊスタイルターボ",
-          "gradeExtraInfo": "",
-          "classificationName": "MR52S",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2021年",
-          "mileage": "3.1万K",
-          "color": "オフブルーメタリックＩＩ",
-          "inspection": "検2028年03月",
-          "displacement": "660cc",
-          "bodyPrice": "185.5万円",
-          "totalPrice": "188.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261015/H/70009023323026101500100.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261015W001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261015W001&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261015W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261015W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261015W001&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261015W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261015001&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260612W002",
-          "title": "ハスラー ハイブリッドＸターボ",
-          "description": "ハスラー ハイブリッドＸターボ ４ＷＤ ターボ ハイブリッド アダクティブクルコン 前席シートヒーター パドルシフト パワーモード パーキングソナー 前後ドラレコ 純正切削アルミ ＬＥＤヘッドライト／フォグ Ｂｌｕｅｔｏｏｔｈ",
-          "carName": "ハスラー",
-          "gradeName": "ハイブリッドＸターボ",
-          "gradeExtraInfo": "",
-          "classificationName": "MR52S",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2021年",
-          "mileage": "6.7万K",
-          "color": "イエローＩＩ",
-          "inspection": "車検整備付",
-          "displacement": "660cc",
-          "bodyPrice": "144万円",
-          "totalPrice": "147.8万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260612/H/70009023323026061200200.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260612W002",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260612W002&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260612W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260612W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260612W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260612W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260612002&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260313W001",
           "title": "ハスラー ハイブリッドＧ",
           "description": "ハスラー ハイブリッドＧ ４ＷＤ デュアルカメラブレーキサポート オプションツートンカラー フルセグナビ エンジンスターター パーキングソナー 前席シートヒーター グリップコントロール ヒルディセントコントロール スノーモード",
@@ -5541,7 +5467,7 @@
         "attempts": 0
       }
     ],
-    "completed": 26,
+    "completed": 28,
     "total": 58,
     "failed": []
   }
