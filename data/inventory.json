@@ -1,28 +1,28 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-27T05:29:24.881Z",
+  "updatedAt": "2026-11-27T05:29:28.869Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
-    "success": false,
-    "statusText": "分割更新中",
+    "success": true,
+    "statusText": "全件更新完了",
     "runId": "20261127052910715-u3y0xhkv",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-27T05:29:12.633Z",
-    "finishedAt": "2026-11-27T05:29:24.881Z",
-    "durationSeconds": 12,
+    "finishedAt": "2026-11-27T05:29:28.869Z",
+    "durationSeconds": 16,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261127052552111-v4i58d1f",
-      "phase": "details",
+      "phase": "complete",
       "total": 58,
-      "completed": 56,
-      "remaining": 2,
+      "completed": 58,
+      "remaining": 0,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
-      "finishedAt": ""
+      "finishedAt": "2026-11-27T05:29:28.869Z"
     },
     "typeFailed": 1,
     "typeTimeout": 0
@@ -3972,7 +3972,7 @@
     },
     {
       "stockId": "0902332A30260809W003",
-      "title": "スペイド",
+      "title": "スペイド Ｘ",
       "description": "スペイド",
       "carName": "スペイド",
       "gradeName": "Ｘ",
@@ -3982,12 +3982,12 @@
       "seatCapacity": 1,
       "year": "2014年",
       "mileage": "2.1万K",
-      "color": "2014年",
+      "color": "ワインＭ",
       "inspection": "00330002",
       "displacement": "2014cc",
       "bodyPrice": "85.7万円",
       "totalPrice": "92.3万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900300.jpg?1795757161",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900300.jpg?1795757366",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260809W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -4027,7 +4027,7 @@
           "85.7万円"
         ]
       },
-      "updatedAt": "2026-11-26T23:25:35.514Z",
+      "updatedAt": "2026-11-27T05:29:28.869Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -4047,12 +4047,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-27T05:26:01.412Z"
+      }
     },
     {
       "stockId": "0902332A30260819W003",
-      "title": "デイズ",
+      "title": "デイズ Ｓ エマージェンシーブレーキ・レス",
       "description": "デイズ",
       "carName": "デイズ",
       "gradeName": "Ｓ エマージェンシーブレーキ・レス",
@@ -4062,12 +4061,12 @@
       "seatCapacity": 1,
       "year": "2018年",
       "mileage": "9.6万K",
-      "color": "2018年",
+      "color": "ブラックＰ",
       "inspection": "2027",
       "displacement": "2018cc",
       "bodyPrice": "40.7万円",
       "totalPrice": "43.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900300.jpg?1795757161",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900300.jpg?1795757366",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260819W003&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -4105,7 +4104,7 @@
           "40.7万円"
         ]
       },
-      "updatedAt": "2026-11-26T23:25:35.514Z",
+      "updatedAt": "2026-11-27T05:29:28.869Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -4125,8 +4124,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-27T05:26:01.412Z"
+      }
     }
   ],
   "lastFailedAt": "2026-10-27T00:07:43.240Z",
@@ -4135,7 +4133,7 @@
     "version": 2,
     "cycleId": "20261127052552111-v4i58d1f",
     "startedAt": "2026-11-27T05:25:54.247Z",
-    "phase": "details",
+    "phase": "complete",
     "publicLoaded": true,
     "publicCount": 42,
     "nextSavedPage": 2,
@@ -4154,108 +4152,10 @@
       }
     ],
     "listed": [],
-    "queue": [
-      {
-        "vehicle": {
-          "stockId": "0902332A30260809W003",
-          "title": "スペイド",
-          "description": "スペイド",
-          "carName": "スペイド",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2014年",
-          "mileage": "2.1万K",
-          "color": "2014年",
-          "inspection": "",
-          "displacement": "2014cc",
-          "bodyPrice": "85.7万円",
-          "totalPrice": "92.3万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260809/H/70009023323026080900300.jpg?1795757161",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260809W003&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260809W003&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260809W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260809W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260809W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "92.3万円",
-              "85.7万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260819W003",
-          "title": "デイズ",
-          "description": "デイズ",
-          "carName": "デイズ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2018年",
-          "mileage": "9.6万K",
-          "color": "2018年",
-          "inspection": "",
-          "displacement": "2018cc",
-          "bodyPrice": "40.7万円",
-          "totalPrice": "43.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260819/H/70009023323026081900300.jpg?1795757161",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260819W003&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260819W003&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260819W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260819W003&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260819W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "43.2万円",
-              "40.7万円"
-            ]
-          }
-        },
-        "attempts": 0
-      }
-    ],
-    "completed": 56,
+    "queue": [],
+    "completed": 58,
     "total": 58,
-    "failed": []
+    "failed": [],
+    "finishedAt": "2026-11-27T05:29:28.869Z"
   }
 }
