@@ -1,24 +1,24 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-27T05:26:41.508Z",
+  "updatedAt": "2026-11-27T05:26:55.342Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
     "success": false,
     "statusText": "分割更新中",
-    "runId": "20261127052552111-v4i58d1f",
+    "runId": "20261127052649554-rqyly4iw",
     "trigger": "GitHub Actions自動更新",
-    "startedAt": "2026-11-27T05:25:54.247Z",
-    "finishedAt": "2026-11-27T05:26:41.508Z",
-    "durationSeconds": 47,
+    "startedAt": "2026-11-27T05:26:51.470Z",
+    "finishedAt": "2026-11-27T05:26:55.342Z",
+    "durationSeconds": 4,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261127052552111-v4i58d1f",
       "phase": "details",
       "total": 58,
-      "completed": 10,
-      "remaining": 48,
+      "completed": 12,
+      "remaining": 46,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -764,7 +764,7 @@
       "displacement": "660cc",
       "bodyPrice": "122.3万円",
       "totalPrice": "126.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260414/H/70009023323026041400200.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260414/H/70009023323026041400200.jpg?1795757212",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260414W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260414002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -791,7 +791,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-26T23:22:58.994Z",
+      "updatedAt": "2026-11-27T05:26:55.342Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -811,8 +811,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-27T05:26:01.412Z"
+      }
     },
     {
       "stockId": "0902332A30261029W003",
@@ -831,7 +830,7 @@
       "displacement": "2.0L",
       "bodyPrice": "157万円",
       "totalPrice": "162.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900300.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900300.jpg?1795757213",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W003",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261029003&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -856,7 +855,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-26T23:22:58.994Z",
+      "updatedAt": "2026-11-27T05:26:55.342Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -876,8 +875,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-27T05:26:01.412Z"
+      }
     },
     {
       "stockId": "0902332A30261029W002",
@@ -4203,78 +4201,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260414W002",
-          "title": "ｅＫクロス Ｔ",
-          "description": "ｅＫクロス Ｔ ４ＷＤ ハイブリッド ターボ ツートーンカラー ハーフレザーシート 新品サマータイヤ組替済み 純正１５インチ切削アルミホイール 前席シートヒーター クリアランスソナー ＬＥＤヘッドライト フォグ",
-          "carName": "ｅＫクロス",
-          "gradeName": "Ｔ",
-          "gradeExtraInfo": "",
-          "classificationName": "B38W",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2019年",
-          "mileage": "6万K",
-          "color": "ナチュラルアイボリーメタリックＩＩ",
-          "inspection": "車検整備付",
-          "displacement": "660cc",
-          "bodyPrice": "122.3万円",
-          "totalPrice": "126.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260414/H/70009023323026041400200.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260414W002",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260414W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260414002&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30261029W003",
-          "title": "エクストレイル ２０Ｘ",
-          "description": "エクストレイル ２０Ｘ 切替式４ＷＤ 夏タイヤ新品組換え済み プロパイロット メーカーＯＰナビ パーキングアシスト デジタルインナーミラー 純正ドラレコ ＴＶキット パワーバックドア 純正１８インチ切削ＡＷ アラウンドビュー",
-          "carName": "エクストレイル",
-          "gradeName": "２０Ｘ",
-          "gradeExtraInfo": "",
-          "classificationName": "NT32",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2017年",
-          "mileage": "6.9万K",
-          "color": "パールホワイト",
-          "inspection": "検2028年09月",
-          "displacement": "2.0L",
-          "bodyPrice": "157万円",
-          "totalPrice": "162.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261029/H/70009023323026102900300.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261029W003",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W003&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261029W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261029003&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30261029W002",
           "title": "エブリイ Ｊリミテッド",
           "description": "エブリイ Ｊリミテッド ４ＷＤ ターボ 専用サイドデカール 前後ブラックバンパー 両側パワースライドドア ＬＥＤヘッドライト 純正ディスプレイオーディオ バックカメラ クリアランスソナー 衝突被害軽減ブレーキ ＵＳＢポート",
@@ -6135,7 +6061,7 @@
         "attempts": 0
       }
     ],
-    "completed": 10,
+    "completed": 12,
     "total": 58,
     "failed": []
   }
