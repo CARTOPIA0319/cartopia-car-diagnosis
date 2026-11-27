@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-27T15:42:10.812Z",
+  "updatedAt": "2026-11-27T15:42:15.489Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261127154200236-rx6jbzqc",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-27T15:42:02.436Z",
-    "finishedAt": "2026-11-27T15:42:10.812Z",
-    "durationSeconds": 8,
+    "finishedAt": "2026-11-27T15:42:15.489Z",
+    "durationSeconds": 13,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261127153859219-ra0xqwkf",
       "phase": "details",
       "total": 58,
-      "completed": 54,
-      "remaining": 4,
+      "completed": 56,
+      "remaining": 2,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -3816,7 +3816,7 @@
     },
     {
       "stockId": "0902332A30260930W001",
-      "title": "ハイエースバン",
+      "title": "ハイエースバン スーパーＧＬ ダークプライムＩＩ",
       "description": "ハイエースバン",
       "carName": "ハイエースバン",
       "gradeName": "スーパーＧＬ ダークプライムＩＩ",
@@ -3826,12 +3826,12 @@
       "seatCapacity": 1,
       "year": "2022年",
       "mileage": "6.9万K",
-      "color": "2022年",
+      "color": "ＯＰホワイトパールクリスタルシャイン",
       "inspection": "00330002",
       "displacement": "2022cc",
       "bodyPrice": "397.1万円",
       "totalPrice": "402.7万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260930/H/70009023323026093000100.jpg?1795793949",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260930/H/70009023323026093000100.jpg?1795794133",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260930W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3873,7 +3873,7 @@
           "397.1万円"
         ]
       },
-      "updatedAt": "2026-11-27T05:29:20.792Z",
+      "updatedAt": "2026-11-27T15:42:15.489Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3893,12 +3893,11 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-27T15:39:09.070Z"
+      }
     },
     {
       "stockId": "0902332A30260803W001",
-      "title": "ＸＶ",
+      "title": "ＸＶ ２．０ｉ－Ｓ アイサイト",
       "description": "ＸＶ",
       "carName": "ＸＶ",
       "gradeName": "２．０ｉ－Ｓ アイサイト",
@@ -3908,12 +3907,12 @@
       "seatCapacity": 1,
       "year": "2018年",
       "mileage": "6万K",
-      "color": "2018年",
+      "color": "クリスタルホワイトパール",
       "inspection": "2027",
       "displacement": "2018cc",
       "bodyPrice": "164.6万円",
       "totalPrice": "173.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260803/H/70009023323026080300100.jpg?1795793949",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260803/H/70009023323026080300100.jpg?1795794132",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260803W001&ScreenId=SIH_001",
       "gooUrl": "",
       "sourceStatus": "一時保存",
@@ -3957,7 +3956,7 @@
           "164.6万円"
         ]
       },
-      "updatedAt": "2026-11-27T05:29:24.881Z",
+      "updatedAt": "2026-11-27T15:42:15.489Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -3977,8 +3976,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-27T15:39:09.070Z"
+      }
     },
     {
       "stockId": "0902332A30260809W003",
@@ -4167,104 +4165,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30260930W001",
-          "title": "ハイエースバン",
-          "description": "ハイエースバン",
-          "carName": "ハイエースバン",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2022年",
-          "mileage": "6.9万K",
-          "color": "2022年",
-          "inspection": "",
-          "displacement": "2022cc",
-          "bodyPrice": "397.1万円",
-          "totalPrice": "402.7万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260930/H/70009023323026093000100.jpg?1795793949",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260930W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260930W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260930W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260930W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260930W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "402.7万円",
-              "397.1万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260803W001",
-          "title": "ＸＶ",
-          "description": "ＸＶ",
-          "carName": "ＸＶ",
-          "gradeName": "",
-          "gradeExtraInfo": "",
-          "classificationName": "",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2018年",
-          "mileage": "6万K",
-          "color": "2018年",
-          "inspection": "",
-          "displacement": "2018cc",
-          "bodyPrice": "164.6万円",
-          "totalPrice": "173.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260803/H/70009023323026080300100.jpg?1795793949",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260803W001&ScreenId=SIH_001",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260803W001&ScreenId=SIH_001",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260803W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/newregist/register?kbn=1&client_id=0902332&StockStatus=00180002&StockId=0902332A30260803W001&ScreenId=SIH_001",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260803W001&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "",
-          "sourceStatus": "一時保存",
-          "sourcePageUrl": "https://motorgate.jp/stock/savelist/index/2",
-          "types": [],
-          "typeKeys": [],
-          "listResult": {
-            "carName": true,
-            "gradeName": false,
-            "year": true,
-            "displacement": true,
-            "color": true,
-            "mileage": true,
-            "bodyPrice": true,
-            "totalPrice": true,
-            "imageUrl": true,
-            "priceCandidates": [
-              "173.2万円",
-              "164.6万円"
-            ]
-          }
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260809W003",
           "title": "スペイド",
           "description": "スペイド",
@@ -4362,7 +4262,7 @@
         "attempts": 0
       }
     ],
-    "completed": 54,
+    "completed": 56,
     "total": 58,
     "failed": []
   }
