@@ -1,6 +1,6 @@
 {
   "codeVersion": "resumable-batch-v14",
-  "updatedAt": "2026-11-27T23:46:42.732Z",
+  "updatedAt": "2026-11-27T23:46:50.762Z",
   "source": "motorgate",
   "updateMode": "resumable-batch",
   "lastUpdateStatus": {
@@ -9,16 +9,16 @@
     "runId": "20261127234556952-nlufkxjp",
     "trigger": "GitHub Actions自動更新",
     "startedAt": "2026-11-27T23:45:58.892Z",
-    "finishedAt": "2026-11-27T23:46:42.732Z",
-    "durationSeconds": 44,
+    "finishedAt": "2026-11-27T23:46:50.762Z",
+    "durationSeconds": 52,
     "error": "",
     "timeout": false,
     "progress": {
       "cycleId": "20261127234556952-nlufkxjp",
       "phase": "details",
       "total": 58,
-      "completed": 8,
-      "remaining": 50,
+      "completed": 10,
+      "remaining": 48,
       "failed": 0,
       "failedStockIds": [],
       "savedPagesRead": 2,
@@ -628,7 +628,7 @@
       "displacement": "2.0L",
       "bodyPrice": "213.7万円",
       "totalPrice": "222.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30261015/H/70009023323026101500300.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30261015/H/70009023323026101500300.jpg?1795823208",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261015W003",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261015003&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -659,7 +659,7 @@
         "スポーティ"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-27T15:39:35.176Z",
+      "updatedAt": "2026-11-27T23:46:50.761Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -679,8 +679,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-27T23:46:06.153Z"
+      }
     },
     {
       "stockId": "0902332A30260421W002",
@@ -699,7 +698,7 @@
       "displacement": "660cc",
       "bodyPrice": "125.3万円",
       "totalPrice": "129.2万円",
-      "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100200.jpg",
+      "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100200.jpg?1795823208",
       "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W002",
       "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260421002&area_cd=11",
       "sourceStatus": "掲載在庫",
@@ -726,7 +725,7 @@
         "特にこだわりはない"
       ],
       "listResult": null,
-      "updatedAt": "2026-11-27T15:39:35.176Z",
+      "updatedAt": "2026-11-27T23:46:50.761Z",
       "typeResult": {
         "status": 200,
         "success": true,
@@ -746,8 +745,7 @@
         "mileage": true,
         "color": true,
         "imageUrl": true
-      },
-      "listUpdatedAt": "2026-11-27T23:46:06.153Z"
+      }
     },
     {
       "stockId": "0902332A30260414W002",
@@ -4213,78 +4211,6 @@
     "queue": [
       {
         "vehicle": {
-          "stockId": "0902332A30261015W003",
-          "title": "ＸＶ アドバンス",
-          "description": "ＸＶ アドバンス ４ＷＤ ネイビーレザーシート 前席ヒーター付きメモリーパワーシート 純正ナビ サイド／バックカメラ ＥＴＣ２．０ アイサイト ＢＳＭ クルーズコントロール Ｘ－ＭＯＤＥ パドルシフト ＵＳＢポート",
-          "carName": "ＸＶ",
-          "gradeName": "アドバンス",
-          "gradeExtraInfo": "",
-          "classificationName": "GTE",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2021年",
-          "mileage": "5.3万K",
-          "color": "クリスタルホワイトパール",
-          "inspection": "車検整備付",
-          "displacement": "2.0L",
-          "bodyPrice": "213.7万円",
-          "totalPrice": "222.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30261015/H/70009023323026101500300.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30261015W003",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261015W003&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261015W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261015W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261015W003&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30261015W003&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230261015003&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
-          "stockId": "0902332A30260421W002",
-          "title": "ｅＫクロス Ｔ",
-          "description": "ｅＫクロス Ｔ ４ＷＤ ハイブリッド ターボ 純正９インチナビ デジタルインナーミラー アラウンドビューモニター 前席シートヒーター セーフティシールド 純正１５インチアルミ フルセグ Ｂｌｕｅｔｏｏｔｈ フォグ",
-          "carName": "ｅＫクロス",
-          "gradeName": "Ｔ",
-          "gradeExtraInfo": "",
-          "classificationName": "B38W",
-          "makerName": "",
-          "seatCapacity": null,
-          "year": "2019年",
-          "mileage": "5.2万K",
-          "color": "ホワイトパール",
-          "inspection": "車検整備付",
-          "displacement": "660cc",
-          "bodyPrice": "125.3万円",
-          "totalPrice": "129.2万円",
-          "imageUrl": "https://picture1.goo-net.com/7000902332/30260421/H/70009023323026042100200.jpg",
-          "detailUrl": "https://motorgate.jp/stock/detail?ClientId=0902332&StockId=0902332A30260421W002",
-          "editUrl": "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR",
-          "editUrls": [
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR",
-            "https://motorgate.jp/car/edit/new?kbn=1&ClientId=0902332&StockId=0902332A30260421W002&StockStatus=00180002&ScreenId=CB101GR"
-          ],
-          "gooUrl": "http://www.goo-net.com/php/search/spread.php?goo_car_id=700090233230260421002&area_cd=11",
-          "sourceStatus": "掲載在庫",
-          "sourcePageUrl": "",
-          "types": [],
-          "typeKeys": [],
-          "listResult": null
-        },
-        "attempts": 0
-      },
-      {
-        "vehicle": {
           "stockId": "0902332A30260414W002",
           "title": "ｅＫクロス Ｔ",
           "description": "ｅＫクロス Ｔ ４ＷＤ ハイブリッド ターボ ツートーンカラー ハーフレザーシート 新品サマータイヤ組替済み 純正１５インチ切削アルミホイール 前席シートヒーター クリアランスソナー ＬＥＤヘッドライト フォグ",
@@ -6207,7 +6133,7 @@
         "attempts": 0
       }
     ],
-    "completed": 8,
+    "completed": 10,
     "total": 58,
     "failed": []
   }
